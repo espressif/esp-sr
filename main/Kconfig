@@ -1,0 +1,79 @@
+menu "ESP Speech Recognition"
+
+choice SR_MODEL_SEL
+	prompt "Wake word engine"
+	default SR_MODEL_WN5_QUANT
+	help
+		Select the keyword spotting model to be used.
+
+config SR_MODEL_WN3_QUANT
+	bool "WakeNet 3 (quantized)"
+
+config SR_MODEL_WN4_QUANT
+	bool "WakeNet 4 (quantized)"
+
+config SR_MODEL_WN5_QUANT
+	bool "WakeNet 5 (quantized)"
+
+config SR_MODEL_WN6_QUANT
+	bool "WakeNet 6 (quantized)"
+
+endchoice
+
+choice SR_WAKE_WORD_SEL
+	prompt "Wake word name"
+	default SR_WN5_HILEXIN
+	help
+		Select the wake word to be used.
+
+config SR_WN3_HILEXIN
+	bool "hilexin (WakeNet3)"
+	depends on SR_MODEL_WN3_QUANT
+
+config SR_WN4_HILEXIN
+	bool "hilexin (WakeNet4)"
+	depends on SR_MODEL_WN4_QUANT
+
+config SR_WN5_HILEXIN
+	bool "hilexin (WakeNet5)"
+	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
+
+config SR_WN5_CUSTOMIZED_WORD
+	bool "customized word (WakeNet5)"
+	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
+
+config SR_WN6_HILEXIN
+	bool "hilexin (WakeNet6)"
+	depends on SR_MODEL_WN6_QUANT
+
+config SR_WN6_CUSTOMIZED_WORD
+	bool "customized word (WakeNet6)"
+	depends on SR_MODEL_WN6_QUANT || SR_MODEL_WN6_FLOAT 
+
+endchoice
+
+choice SR_MN_MODEL_SEL
+	prompt "speech commands recognition model to use"
+	default CONFIG_MN1_MODEL_QUANT
+	help
+		Select the model to be used.
+
+config SR_MN1_MODEL_QUANT
+	bool "MultiNet 1 (quantized)"
+
+endchoice
+
+choice SR_LANGUAGE_SEL
+	prompt "langugae"
+	default SR_MN1_CHINESE
+	help
+		Select the language to be used.
+
+config SR_MN1_CHINESE_QUANT
+	bool "chinese (MultiNet1)"
+	depends on SR_MN1_MODEL_QUANT
+
+endchoice
+
+
+endmenu
