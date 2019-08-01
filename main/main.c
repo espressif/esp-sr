@@ -8,12 +8,13 @@
 
 #include "wakenet_test.h"
 #include "multinet_test.h"
+
 void app_main()
 {
     // test wakenet
     wakenet_test();
     vTaskDelay(3000 / portTICK_PERIOD_MS);
 
-    // //test multinet
+    //test multinet
     multinet_test();
 }

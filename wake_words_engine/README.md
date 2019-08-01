@@ -1,6 +1,6 @@
 # WakeNet
 
-WakeNet, which is a wake words engine built upon neural network, is specially designed for low-power embedded MCUs. Now, the WakeNet model supports up to 5 wake wordss.
+WakeNet, which is a wake word engine built upon neural network, is specially designed for low-power embedded MCUs. Now, the WakeNet model supports up to 5 wake words.
 
 ## Overview
 
@@ -14,7 +14,7 @@ Please see the flow diagram of WakeNet below:
   The WakeNet uses [MFCC](https://en.wikipedia.org/wiki/Mel-frequency_cepstrum) to obtain the features of the input audio clip (16 KHz, 16 bit, single track). The window width and step width of each frame of the audio clip are both 30 ms. 
       
 - Neural Network:  
-  Now, the natural network structure has been updated to the sixth edition, among which,  
+  Now, the neural network structure has been updated to the sixth edition, among which,  
   - WakeNet1 and WakeNet2 had been out of use.
   - WakeNet3 and WakeNet4 are built upon the [CRNN](https://arxiv.org/abs/1703.05390) structure.
   - WakeNet5 and WakeNet6 are built upon the [Dilated Convolution](https://arxiv.org/pdf/1609.03499.pdf) structure.
@@ -71,18 +71,17 @@ Please see the flow diagram of WakeNet below:
 |Quantized WakeNet3|26 K|20 KB|29 ms|90 ms|
 |Quantised WakeNet4|53 K|22 KB|48 ms|90 ms|
 |Quantised WakeNet5|41 K|15 KB|7 ms|30 ms|
-|Quantised WakeNet6|41 K|20 KB|9 ms|30 ms|
 
 ### 2. Performance
 
-|Distance| Quiet | Stationary Noise (SNR = 0 ~ 10 dB)| Speech Noise (SNR = 0 ~ 10 dB)| AEC Interruption (-5 ~ -15 dB)|
+|Distance| Quiet | Stationary Noise (SNR = 5 ~ 10 dB)| Speech Noise (SNR = 5 ~ 10 dB)| AEC Interruption (-5 ~ -10 dB)|
 |:---:|:---:|:---:|:---:|:---:|
 |1 m|97%|90%|88%|89%|
 |3 m|95%|85%|75%|73%|
 
 False triggering rate: 1 time in 20 hours
   
-**Note**: We use the ESP32-LyraT-Mini development board and the WakeNet6 model in our test. The performance is limited because ESP32-LyraT-Mini only has one microphone. We expect a better recognition performance when more microphones are involved in the test.
+**Note**: We use the ESP32-LyraT-Mini development board and the WakeNet5 model in our test. The performance is limited because ESP32-LyraT-Mini only has one microphone. We expect a better recognition performance when more microphones are involved in the test.
 
 ## Wake Word Customization
 

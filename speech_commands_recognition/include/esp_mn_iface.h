@@ -10,9 +10,11 @@
  * @brief Initialze a model instance with specified model coefficient.
  *
  * @param coeff       The wakenet model coefficient.
+ * @param coeff        The wakenet model coefficient.
+ * @parm sample_length Audio length for speech recognition, in ms. The range of sample_length is 0~6000.
  * @returns Handle to the model data.
  */
-typedef model_iface_data_t* (*esp_mn_iface_op_create_t)(const model_coeff_getter_t *coeff);
+typedef model_iface_data_t* (*esp_mn_iface_op_create_t)(const model_coeff_getter_t *coeff, int sample_length);
 
 
 /**
@@ -26,6 +28,13 @@ typedef model_iface_data_t* (*esp_mn_iface_op_create_t)(const model_coeff_getter
  */
 typedef int (*esp_mn_iface_op_get_samp_chunksize_t)(model_iface_data_t *model);
 
+/**
+ * @brief Callback function type to fetch the number of frames recognized by the command word
+ *
+ * @param model       The model object to query
+ * @return The number of the frames recognized by the command word
+ */
+typedef int (*esp_mn_iface_op_get_samp_chunknum_t)(model_iface_data_t *model);
 
 /**
  * @brief Get the sample rate of the samples to feed to the detect function
@@ -34,20 +43,6 @@ typedef int (*esp_mn_iface_op_get_samp_chunksize_t)(model_iface_data_t *model);
  * @return The sample rate, in hz
  */
 typedef int (*esp_mn_iface_op_get_samp_rate_t)(model_iface_data_t *model);
-
-/**
- * @brief Add a command word and set its command ID.
- *
- * @param model           The model object to query.
- * @param command_id      The command id of this word.
- * @param phrase_spelling The chinese command word spelled using prescribed rules.
- * @param phrase_str      Auxiliary information of phrase. 
- * @return 1: setting success. 0: setting failure
- */
-typedef int (*esp_mn_iface_op_add_speech_commands_t)(model_iface_data_t *model, 
-                                                     int command_id,
-                                                     char *phrase_spelling, 
-                                                     char *phrase_str);
 
 /**
  * @brief Feed samples of an audio stream to the speech recognition model and detect if there is a speech command found.
@@ -72,7 +67,7 @@ typedef struct {
     esp_mn_iface_op_create_t create;
     esp_mn_iface_op_get_samp_rate_t get_samp_rate;
     esp_mn_iface_op_get_samp_chunksize_t get_samp_chunksize;
-    esp_mn_iface_op_add_speech_commands_t add_speech_commands;
+    esp_mn_iface_op_get_samp_chunknum_t get_samp_chunknum;
     esp_mn_iface_op_detect_t detect; 
     esp_mn_iface_op_destroy_t destroy;
 } esp_mn_iface_t;

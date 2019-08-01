@@ -50,7 +50,7 @@ wake word number = 1, word1 name = hilexin
 
 ### 1.3 Waking up the Board
 
-Find the pre-defined wake-up word of the board in the printed log. In this example, the wake-up word is “Hi Lexin" [Ləsɪ:n]. 
+Find the pre-defined wake word of the board in the printed log. In this example, the wake word is “Hi Lexin" [Ləsɪ:n]. 
 
 Then, say “Hi Lexin" ([Ləsɪ:n]) to wake up the board, which then wakes up and prints the following log:
 
@@ -65,7 +65,7 @@ Then, the board enters the Listening status, waiting for new speech commands.
 
 Currently, the MultiNet model already defined 20 speech commands, which can be seen in [MultiNet](README.md). 
 
-Now, you can give one speech command, for example, "turn on the air conditioner",
+Now, you can give one speech command, for example, “打开空调 (turn on the air conditioner)”,
 
 * If this command exists in the supported speech command list, the board prints out the command id of this command in its log: 
 
@@ -76,12 +76,12 @@ Now, you can give one speech command, for example, "turn on the air conditioner"
 	--------------END--------------
 
 	```
-* If this command does not exist in the supported speech command list, the board prints an error message of "can not recognize any speech commands" in its log: 
+* If this command does not exist in the supported speech command list, the board prints an error message of "cannot recognize any speech commands" in its log: 
 
 
 	```
 	-----------LISTENING-----------
-	can not recognize any speech commands
+	cannot recognize any speech commands
 	--------------END--------------
 
 	```
@@ -118,11 +118,11 @@ For details on the initialization of the ESP32-LyraT-Mini board, please see code
  
 If you want to choose other development boards other than ESP32-LyraT-Mini, please go to [esp-adf](https://github.com/espressif/esp-adf), which is Espressif's development framework for building audio applications based on ESP32 products, for more detailed information on hardware drivers.
 
-### 2.2 Wake-up by Keyword
+### 2.2 Wake-up by Wake Word
 
 The board enters the Waiting-for-wakeup status after waking up, during which the board will pick up audio data with the on-board microphone, and feed them to the **WakeNet** model frame by frame (30 ms, 16 KHz, 6 bit, mono).
 
-Currently, you cannot customize wake-up word yourself. Therefore, please contact us for such requests.
+Currently, you cannot customize wake word yourself. Therefore, please contact us for such requests.
 
 ### 2.3 Recognizing Speech Commands 
 

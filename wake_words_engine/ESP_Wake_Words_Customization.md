@@ -1,14 +1,14 @@
-# Espressif Speech Wake Words Customization Process
+# Espressif Speech Wake Word Customization Process
 
-#### Offline Wake Words Customization
+#### Offline Wake Word Customization
 
-Espressif provides users with the **Off-line Wake Words Customization** service, which allows users to use both publicly available Wake Wordss (such as "Hi Lexin", "Alexa", and "Espressif") and customized Wake Wordss. 
+Espressif provides users with the **Off-line Wake Word Customization** service, which allows users to use both publicly available Wake Words (such as "Hi Lexin", "Alexa", and "Espressif") and customized Wake Words. 
 
- 1. If you want to use publicly available Wake Wordss for commercial use, 
+ 1. If you want to use publicly available Wake Words for commercial use, 
 	- please check the Wake Words provided in ADF/ASR Demos;
-	- We will continue to provide more and more Wake Wordss that are free for commercial use.
+	- We will continue to provide more and more Wake Words that are free for commercial use.
 
- 2. If you want to use your own wake words, we can also provide the **Off-line Wake Words Customization** service.
+ 2. If you want to use your own wake words, we can also provide the **Off-line Wake Word Customization** service.
 	- If you are able to provide a training corpus meeting the requirements described in the following **Requirements on Corpus**. 
 		- We need two to three weeks for training and optimization.
 		- Service fee will be charged by Espressif in this case.
@@ -21,9 +21,9 @@ Espressif provides users with the **Off-line Wake Words Customization** service,
 	- For details on the fee and time required for customization, please email us at [sales@espressif.com](sales@espressif.com).
 		- We will agree on a reasonable plan based on how many wake words for customization and how large is your scale of product production.
 		 
- 3. About Espressif Wake Words Model
- 	- Now, a single wake words model can recognize up to five Wake Wordss
- 	- Normally, each Wake Words contains three to six syllables, such as "Hi Le xin" (3 syllables), “Alexa” (3 syllables), "小爱同学" (4 syllables).
+ 3. About Espressif Wake Word Model
+ 	- Now, a single wake word model can recognize up to five Wake Words
+ 	- Normally, each Wake Word contains three to six syllables, such as "Hi Le xin" (3 syllables), “Alexa” (3 syllables), "小爱同学" (4 syllables).
 	- Several wake words can be used in combination based on your actual requirement.
 
 #### Requirements on Corpus Texts
@@ -40,12 +40,12 @@ You can provide us your training corpus by preparing it yourself or purchasing o
 	- Sample size: no less than 500 people, among which,
 		- The number of males and females should be similar;
 		- The number of people in different age-group should be similar;
-		- The number of Children should be larger than 100 (If the child is one of your target users). 
+		- The number of children should be larger than 100 (If children are one of your target users). 
 	- Environment: 
 		- It's advise to collect your sample with a Hi-Fi microphone in a professional audio room, with an ambient noise lower than 40 dB.
 		- Each participant should  
-			- Position himself/herself at a distance of one meter from the microphone, and repeat the Wake Wordss for 15 times (5 times fast, 10 times normal);
-			- Position himself/herself at a distance of three meters from the microphone, and repeat the Wake Wordss for 15 times (5 times fast, 10 times normal);
+			- Position himself/herself at a distance of one meter from the microphone, and repeat the Wake Word for 15 times (5 times fast, 10 times normal);
+			- Position himself/herself at a distance of three meters from the microphone, and repeat the Wake Word for 15 times (5 times fast, 10 times normal);
 	- The naming of sample file should reflect the sex, age, and speech speed of the sample himself/herself. An example for naming your sample file is `female_age_fast_id.wav`. Or you can provide a separate form to record these information.
 
 #### Hardware Design and Test
@@ -71,7 +71,7 @@ You can provide us your training corpus by preparing it yourself or purchasing o
 		- Test the performance of the **Acoustic Echo Cancellation** algorithm
 		- Test the performance of the **Speech Enhancement** algorithm
 
-3. After you hardware design, it's advised to **send** 1 or 2 pieces of your hardware, so we can optimize its performance for wake words detection on a whole product level.
+3. After your hardware design, it's advised to **send** 1 or 2 pieces of your hardware, so we can optimize its performance for wake word detection on a whole product level.
 
 
 

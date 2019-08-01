@@ -80,6 +80,7 @@ qtp_t *dl_get_queue_itemq(dl_convq_queue_t *cq, int offset);
  * @return        Pointer of the element
  */
 qtp_t *dl_sigmoid_step_q(dl_convq_queue_t *cq, int offset);
+void dl_tanh_convq(dl_convq_queue_t *cq, int last_num);
 
 /**
  * @brief   Does a tanh operation on the one of element in the convolution queue.
@@ -109,7 +110,7 @@ fptp_t * dl_softmax_step_q(dl_convq_queue_t *cq, int offset, fptp_t *out);
  *        based on convolution queue.
  *
  * @Warning All input and output convolution queue and matrix should be allocated. The return pointer
- *          is first element of output queue and should not be freed separately.
+ *          is last element of output queue and should not be freed separately.
  *
  * @param in       Input fixed-point convolution queue
  * @param out      Output fixed-point convolution queue
@@ -121,8 +122,9 @@ fptp_t * dl_softmax_step_q(dl_convq_queue_t *cq, int offset, fptp_t *out);
  * @return         The result of atrous convolution
  */
 qtp_t *dl_atrous_conv1dq_step(dl_convq_queue_t *in, dl_convq_queue_t *out, int rate, int size,
+  dl_matrix2dq_t* kernel, dl_matrix2dq_t* bias, int shift);
+qtp_t *dl_atrous_conv1dq(dl_convq_queue_t *in, dl_convq_queue_t *out, int rate, int size,
                              dl_matrix2dq_t* kernel, dl_matrix2dq_t* bias, int shift);
-
 /**
  * @brief Fast implement of dilation layer as follows
  *
@@ -131,7 +133,7 @@ qtp_t *dl_atrous_conv1dq_step(dl_convq_queue_t *in, dl_convq_queue_t *out, int r
  *               |-> [filter(tanh)]  -|   
  *
  * @Warning All input and output convolution queue and matrix should be allocated. The return pointer
- *          is first element of output queue and should not be freed separately.
+ *          is last element of output queue and should not be freed separately.
  *
  * @param in              Input fixed-point convolution queue
  * @param out             Output fixed-point convolution queue
@@ -145,7 +147,11 @@ qtp_t *dl_atrous_conv1dq_step(dl_convq_queue_t *in, dl_convq_queue_t *out, int r
  * @gate_shift            Shift ratio used in gate operation between two 16-bit fixed point vector
  * @return                The result of dilation layer
  */
-qtp_t *dl_dilation_layer_q(dl_convq_queue_t *in, dl_convq_queue_t *out, int rate, int size,
+qtp_t *dl_dilation_layerq_step(dl_convq_queue_t *in, dl_convq_queue_t *out, int rate, int size,
+                          dl_matrix2dq_t* filter_kernel, dl_matrix2dq_t* filter_bias,
+                          dl_matrix2dq_t* gate_kernel, dl_matrix2dq_t* gate_bias, 
+                          int filter_shift, int gate_shift);
+qtp_t *dl_dilation_layerq(dl_convq_queue_t *in, dl_convq_queue_t *out, int rate, int size,
                           dl_matrix2dq_t* filter_kernel, dl_matrix2dq_t* filter_bias,
                           dl_matrix2dq_t* gate_kernel, dl_matrix2dq_t* gate_bias, 
                           int filter_shift, int gate_shift);

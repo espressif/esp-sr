@@ -8,6 +8,7 @@
 #include "dl_lib_coefgetter_if.h"
 #include "wakenet_test.h"
 #include "hilexin.h"
+#include <sys/time.h>
 
 static const esp_wn_iface_t *wakenet = &WAKENET_MODEL;
 static const model_coeff_getter_t *model_coeff_getter = &WAKENET_COEFF;
@@ -21,6 +22,8 @@ void wakenetTask(void *arg)
     assert(buffer);
 
     int chunks = 0;
+    struct timeval tv_start, tv_end;
+    gettimeofday(&tv_start, NULL);
     while (1) {
         if ((chunks + 1)*audio_chunksize * sizeof(int16_t) <= sizeof(hilexin)) {
             memcpy(buffer, hilexin + chunks * audio_chunksize * sizeof(int16_t), audio_chunksize * sizeof(int16_t));
@@ -34,6 +37,10 @@ void wakenetTask(void *arg)
         }
         chunks++;
     }
+    gettimeofday(&tv_end, NULL);
+    int tv_ms=(tv_end.tv_sec-tv_start.tv_sec)*1000+(tv_end.tv_usec-tv_start.tv_usec)/1000;
+    printf("Done! Took %d ms to parse %d ms worth of samples in %d iterations. CPU loading(single core):%.1f%%\n", 
+            tv_ms, chunks*30, chunks, tv_ms*1.0/chunks/3*10);
     printf("TEST FINISHED\n\n");
     vTaskDelete(NULL);
 }
