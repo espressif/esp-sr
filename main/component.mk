@@ -3,4 +3,4 @@
 #
 # (Uses default behaviour of compiling all source files in directory, adding 'include' to include path.)
 
-COMPONENT_DEPENDS := wake_words_engine
+COMPONENT_DEPENDS := wake_word_engine

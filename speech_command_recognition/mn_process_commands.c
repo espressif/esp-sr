@@ -6,7 +6,6 @@
 
 char *get_id_name(int i)
 {
-    // char command_phrase[128];
     if (i == 0)
         return MN_SPEECH_COMMAND_ID0;
     else if (i == 1)

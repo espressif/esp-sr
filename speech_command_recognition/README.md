@@ -24,7 +24,7 @@ Please see the flow diagram below:
 
 ### User-defined Command
 
-Currently, users can define their own speech commands in the `menuconfig`. You can refer to the method of adding speech commands in menuconfig->Component config > ESP Speech Recognition->Add speech commands, there are already 20 commands pre-stored in sdkconfig.
+Currently, users can define their own speech commands by using the command `make menuconfig`. You can refer to the method of adding speech commands in `menuconfig->Component config > ESP Speech Recognition->Add speech commands`, there are already 20 commands pre-stored in sdkconfig.
 
 |Command ID|Command|Command ID|Command|Command ID|Command|Command ID|Command|
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
@@ -40,11 +40,11 @@ MultiNet supports user-defined commands. You can add your own commands to MultiN
 
 Users can define their own speech commands in the `menuconfig` in Pinyin, for example:
 
-the command of “打开空调”, which means turn on the air conditioner, should be provided to the blank as "dai kai kong tiao".
+the command of “打开空调”, which means turn on the air conditioner, should be provided to the blank as "da kai kong tiao".
 
 - One speech commands ID can correspond to multiple speech command phrases;
 - Up to 100 speech commands ID or speech command phrases, including customized commands, are supported;
-- The corresponding multiple phrases in an ID need to be used ',' separated.
+- The corresponding multiple phrases for one Command ID need to be separated by ','.
 
 ### Basic Configuration
 
@@ -91,11 +91,11 @@ Define the following two variables before using the command recognition model:
        
   **Parameter**  
    
- 	model: The model object to query
+ 	model: The model object to query.
   
   **Return**
   
-    The amount of samples to feed the detection function
+    The amount of samples to feed the detection function.
 
 
 - `typedef int (*esp_mn_iface_op_get_samp_chunknum_t)(model_iface_data_t *model);`
@@ -106,25 +106,25 @@ Define the following two variables before using the command recognition model:
        
   **Parameter**  
    
- 	model: The model object to query
+ 	model: The model object to query.
   
   **Return**
   
-    The number of the frames recognized by the speech command  
+    The number of the frames recognized by the speech command.
     
 - `typedef int (*esp_mn_iface_op_get_samp_rate_t)(model_iface_data_t *model);`
 
    **Definition**  
    
- 	Get the sample rate of the samples to feed to the detection function
+ 	Get the sample rate of the samples to feed to the detection function.
 
   **Parameter**  
   
- 	model: The model object to query
+ 	model: The model object to query.
  
   **Return**  
   
- 	The sample rate, in Hz
+ 	The sample rate, in Hz.
 
 - `typedef float* (*esp_mn_iface_op_detect_t)(model_iface_data_t *model, int16_t *samples);`  
 
@@ -138,15 +138,15 @@ Define the following two variables before using the command recognition model:
     
   **Return**  
    
- 	* The command id, if a matching command is found
- 	* -1, if no matching command is found
+ 	* The command id, if a matching command is found.
+ 	* -1, if no matching command is found.
  
 - `typedef void (*esp_mn_iface_op_destroy_t)(model_iface_data_t *model);`  
 
    **Definition**  
   
-   Destroy a voiceprint recognition model
+   Destroy a voiceprint recognition model.
  
   **Parameters**  
   
-  model: Model object to destroy
+  model: Model object to destroy.
