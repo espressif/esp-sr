@@ -1,3 +1,16 @@
+// Copyright 2015-2019 Espressif Systems (Shanghai) PTE LTD
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 #ifndef DL_LIB_CONVQ_QUEUE_H
 #define DL_LIB_CONVQ_QUEUE_H
 
@@ -24,7 +37,7 @@ typedef struct {
  */
 dl_convq_queue_t *dl_convq_queue_alloc(int n, int c);
 
-void dl_convq_to_matrix2dq(dl_convq_queue_t *cq, dl_matrix2dq_t* out);
+void dl_convq_to_matrix2dq(dl_convq_queue_t *cq, dl_matrix2dq_t* out, int row);
 
 /**
  * @brief Free a fixed-point convolution queue
@@ -71,18 +84,6 @@ void dl_convq_queue_push_by_qmf(dl_convq_queue_t *cq, fptp_t* item, int m_bit, i
 qtp_t *dl_get_queue_itemq(dl_convq_queue_t *cq, int offset);
 
 /**
- * @brief   Does a sigmoid operation on the one of element in the convolution queue.
- *          Gets the pointer of element in the convolution queue by offset, and does a 
- *          sigmoid operation by this pointer, then return the pointer 
- *
- * @param cq      Input fixed-point convolution queue
- * @param offset  Offset from the front of the queue
- * @return        Pointer of the element
- */
-qtp_t *dl_sigmoid_step_q(dl_convq_queue_t *cq, int offset);
-void dl_tanh_convq(dl_convq_queue_t *cq, int last_num);
-
-/**
  * @brief   Does a tanh operation on the one of element in the convolution queue.
  *          Gets the pointer of element in the convolution queue by offset, and does a 
  *          tanh operation by this pointer, then return the pointer 
@@ -91,8 +92,19 @@ void dl_tanh_convq(dl_convq_queue_t *cq, int last_num);
  * @param offset  Offset from the front of the queue
  * @return        Pointer of the element
  */
-qtp_t *dl_tanh_step_q(dl_convq_queue_t *cq, int offset);
-qtp_t *dl_relu_step_q(dl_convq_queue_t *cq, fptp_t clip, int offset);
+void dl_tanh_convq(dl_convq_queue_t *cq, int last_num);
+
+/**
+ * @brief   Does a relu operation on the one of element in the convolution queue.
+ *          Gets the pointer of element in the convolution queue by offset, and does a 
+ *          relu operation by this pointer, then return the pointer 
+ *
+ * @param cq      Input fixed-point convolution queue
+ * @param offset  Offset from the front of the queue
+ * @return        Pointer of the element
+ */
+void dl_relu_convq(dl_convq_queue_t *cq, fptp_t clip, int last_num);
+
 /**
  * @brief   Does a softmax operation on the one of element in the convolution queue.
  *          Gets the pointer of element in the convolution queue by offset, input data
@@ -121,8 +133,6 @@ fptp_t * dl_softmax_step_q(dl_convq_queue_t *cq, int offset, fptp_t *out);
  * @param shift    Shift ratio used in dot operation between two 16-bit fixed point vector 
  * @return         The result of atrous convolution
  */
-qtp_t *dl_atrous_conv1dq_step(dl_convq_queue_t *in, dl_convq_queue_t *out, int rate, int size,
-  dl_matrix2dq_t* kernel, dl_matrix2dq_t* bias, int shift);
 qtp_t *dl_atrous_conv1dq(dl_convq_queue_t *in, dl_convq_queue_t *out, int rate, int size,
                              dl_matrix2dq_t* kernel, dl_matrix2dq_t* bias, int shift);
 /**
@@ -147,17 +157,13 @@ qtp_t *dl_atrous_conv1dq(dl_convq_queue_t *in, dl_convq_queue_t *out, int rate, 
  * @gate_shift            Shift ratio used in gate operation between two 16-bit fixed point vector
  * @return                The result of dilation layer
  */
-qtp_t *dl_dilation_layerq_step(dl_convq_queue_t *in, dl_convq_queue_t *out, int rate, int size,
-                          dl_matrix2dq_t* filter_kernel, dl_matrix2dq_t* filter_bias,
-                          dl_matrix2dq_t* gate_kernel, dl_matrix2dq_t* gate_bias, 
-                          int filter_shift, int gate_shift);
 qtp_t *dl_dilation_layerq(dl_convq_queue_t *in, dl_convq_queue_t *out, int rate, int size,
                           dl_matrix2dq_t* filter_kernel, dl_matrix2dq_t* filter_bias,
                           dl_matrix2dq_t* gate_kernel, dl_matrix2dq_t* gate_bias, 
                           int filter_shift, int gate_shift);
 
 dl_matrix2dq_t *dl_basic_lstm_layer1_q(const dl_convq_queue_t *in, dl_matrix2dq_t *state_c, dl_matrix2dq_t *state_h,
-                                   const dl_matrix2dq_t *weight, const dl_matrix2dq_t *bias, int shift);
+   const dl_matrix2dq_t *weight, const dl_matrix2dq_t *bias, int step, int shift);
 void test_atrous_convq(int size, int rate, int in_channel, int out_channel);
 
 #endif

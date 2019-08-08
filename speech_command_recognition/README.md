@@ -9,7 +9,7 @@ MultiNet uses the **MFCC features** of an audio clip as input, and the **phoneme
 ## Commands Recognition Process
 
 1. Add customized commands to the speech command queue.
-2. Prepare an audio clip of 30 ms (16 KHz, 6 bit, mono).
+2. Prepare an audio clip of 30 ms (16 KHz, 16 bit, mono).
 3. Input this audio to the MFCC model and get its **MFCC features**.
 4. Input the obtained **MFCC features** to MultiNet and get the output **phoneme**.
 5. Input the obtained **phoneme** to the Language model and get the output.

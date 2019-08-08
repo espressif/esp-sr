@@ -52,7 +52,6 @@ void wakenet_test()
 
     //Initialize wakenet model
     model_iface_data_t *model_data = wakenet->create(model_coeff_getter, DET_MODE_90);
-    int audio_chunksize = wakenet->get_samp_chunksize(model_data);
     printf("WakeNet RAM size: %d\nRAM size after WakeNet init: %d\n",
            start_size - heap_caps_get_free_size(MALLOC_CAP_8BIT), heap_caps_get_free_size(MALLOC_CAP_8BIT));
 

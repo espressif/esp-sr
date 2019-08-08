@@ -14,7 +14,6 @@ static const esp_mn_iface_t *multinet = &MULTINET_MODEL;
 void multinetTask(void *arg)
 {
     model_iface_data_t *model_data = arg;
-    int frequency = multinet->get_samp_rate(model_data);
     int audio_chunksize = multinet->get_samp_chunksize(model_data);
     int chunk_num = multinet->get_samp_chunknum(model_data);
     int16_t *buffer = malloc(audio_chunksize * sizeof(int16_t));
@@ -50,9 +49,8 @@ void multinet_test()
     model_iface_data_t *model_data = multinet->create(&MULTINET_COEFF, 6000);
 
     //define_speech_commands(multinet, model_data);
-    int audio_chunksize = multinet->get_samp_chunksize(model_data);
     printf("multinet RAM size: %d\nRAM size after multinet init: %d\n",
            start_size - heap_caps_get_free_size(MALLOC_CAP_8BIT), heap_caps_get_free_size(MALLOC_CAP_8BIT));
 
-    xTaskCreatePinnedToCore(&multinetTask, "multinet", 2 * 1024, (void*)model_data, 5, NULL, 0);
+    xTaskCreatePinnedToCore(&multinetTask, "multinet", 2 * 1024, (void*)model_data, 5, NULL, 1);
 }
