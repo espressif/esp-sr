@@ -8,6 +8,7 @@
 
 #include "wakenet_test.h"
 #include "multinet_test.h"
+#include "audio_process.h"
 
 void app_main()
 {
@@ -15,6 +16,10 @@ void app_main()
     wakenet_test();
     vTaskDelay(3000 / portTICK_PERIOD_MS);
 
-    //test multinet
+    // test multinet
     multinet_test();
+    vTaskDelay(3000 / portTICK_PERIOD_MS);
+
+    // test acoustic algorithm
+    audio_process_test();
 }
