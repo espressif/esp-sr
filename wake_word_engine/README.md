@@ -17,7 +17,8 @@ Please see the flow diagram of WakeNet below:
   Now, the neural network structure has been updated to the sixth edition, among which,  
   - WakeNet1 and WakeNet2 had been out of use.
   - WakeNet3 and WakeNet4 are built upon the [CRNN](https://arxiv.org/abs/1703.05390) structure.
-  - WakeNet5 and WakeNet6 are built upon the [Dilated Convolution](https://arxiv.org/pdf/1609.03499.pdf) structure.
+  - WakeNet5(WakeNet5X2,WakeNetX3) and WakeNet6 are built upon the [Dilated Convolution](https://arxiv.org/pdf/1609.03499.pdf) structure. 
+  Note that，The network structure of WakeNet5,WakeNet5X2 and WakeNet5X3 is same, but the parameter of WakeNetX2 and WakeNetX3 is more than WakeNet5. Please refer to [Resource Occupancy](#Resource Occupancy) for details.
 
          
 - Keyword Triggering Method  
@@ -71,6 +72,8 @@ Please see the flow diagram of WakeNet below:
 |Quantized WakeNet3|26 K|20 KB|29 ms|90 ms|
 |Quantised WakeNet4|53 K|22 KB|48 ms|90 ms|
 |Quantised WakeNet5|41 K|15 KB|7 ms|30 ms|
+|Quantised WakeNet5X2|41 K|15 KB|7 ms|30 ms|
+|Quantised WakeNet5X3|41 K|15 KB|7 ms|30 ms|
 
 ### 2. Performance
 

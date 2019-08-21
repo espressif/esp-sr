@@ -46,6 +46,14 @@ extern const esp_wn_iface_t esp_sr_wakenet6_quantized;
 #include "hilexin_wn5.h"
 #define WAKENET_COEFF get_coeff_hilexin_wn5
 
+#elif CONFIG_SR_WN5X2_HILEXIN & CONFIG_SR_MODEL_WN5_QUANT
+#include "hilexin_wn5X2.h"
+#define WAKENET_COEFF get_coeff_hilexin_wn5X2
+
+#elif CONFIG_SR_WN5X3_HILEXIN & CONFIG_SR_MODEL_WN5_QUANT
+#include "hilexin_wn5X3.h"
+#define WAKENET_COEFF get_coeff_hilexin_wn5X3
+
 #elif CONFIG_SR_WN6_HILEXIN
 #include "nihaoxiaoxin_wn6.h"
 #define WAKENET_COEFF get_coeff_nihaoxiaoxin_wn6
