@@ -1,9 +1,10 @@
 # esp_sr
 
-Espressif esp_sr provides basic algorithms for **Speech Recognition** applications. Now, this framework has two models:
+Espressif esp_sr provides basic algorithms for **Speech Recognition** applications. Now, this framework has three modules:
 
 * The wake word detection model [WakeNet](wake_word_engine/README.md)
 * The speech command recognition model [MultiNet](speech_command_recognition/README.md) 
+* Acoustic algorithm: AEC(Acoustic Echo Cancellation), VAD(Voice Activity Detection), AGC(Automatic Gain Control), NS(Noise Suppression)
 
 These algorithms are provided in the form of a component, so they can be integrated into your projects with minimum efforts.
 

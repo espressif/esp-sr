@@ -18,7 +18,7 @@ Please see the flow diagram of WakeNet below:
   - WakeNet1 and WakeNet2 had been out of use.
   - WakeNet3 and WakeNet4 are built upon the [CRNN](https://arxiv.org/abs/1703.05390) structure.
   - WakeNet5(WakeNet5X2,WakeNetX3) and WakeNet6 are built upon the [Dilated Convolution](https://arxiv.org/pdf/1609.03499.pdf) structure. 
-  Note that，The network structure of WakeNet5,WakeNet5X2 and WakeNet5X3 is same, but the parameter of WakeNetX2 and WakeNetX3 is more than WakeNet5. Please refer to [Resource Occupancy](#Resource Occupancy) for details.
+  Note that，The network structure of WakeNet5,WakeNet5X2 and WakeNet5X3 is same, but the parameter of WakeNetX2 and WakeNetX3 is more than WakeNet5. Please refer to [Resource Occupancy](#performance-test) for details.
 
          
 - Keyword Triggering Method  
@@ -67,24 +67,24 @@ Please see the flow diagram of WakeNet below:
 
 ### 1. Resource Occupancy(ESP32)
 
-|Model Type|Parameter Size|RAM|Average Running Time per Frame| Frame Length|
+|Model Type|Parameter Num|RAM|Average Running Time per Frame| Frame Length|
 |:---:|:---:|:---:|:---:|:---:|
 |Quantized WakeNet3|26 K|20 KB|29 ms|90 ms|
 |Quantised WakeNet4|53 K|22 KB|48 ms|90 ms|
-|Quantised WakeNet5|41 K|15 KB|7 ms|30 ms|
-|Quantised WakeNet5X2|41 K|15 KB|7 ms|30 ms|
-|Quantised WakeNet5X3|41 K|15 KB|7 ms|30 ms|
+|Quantised WakeNet5|41 K|15 KB|5.5 ms|30 ms|
+|Quantised WakeNet5X2|165 K|20 KB|10.5 ms|30 ms|
+|Quantised WakeNet5X3|371 K|24 KB|18 ms|30 ms|
 
 ### 2. Performance
 
-|Distance| Quiet | Stationary Noise (SNR = 5 ~ 10 dB)| Speech Noise (SNR = 5 ~ 10 dB)| AEC Interruption (-5 ~ -10 dB)|
+|Distance| Quiet | Stationary Noise (SNR = 5 dB)| Speech Noise (SNR = 5 dB)| AEC Interruption (-10 dB)|
 |:---:|:---:|:---:|:---:|:---:|
-|1 m|97%|90%|88%|89%|
-|3 m|95%|85%|75%|73%|
+|1 m|95%|88%|85%|89%|
+|3 m|90%|80%|75%|80%|
 
-False triggering rate: 1 time in 20 hours
+False triggering rate: 1 time in 12 hours
   
-**Note**: We use the ESP32-LyraT-Mini development board and the WakeNet5 model in our test. The performance is limited because ESP32-LyraT-Mini only has one microphone. We expect a better recognition performance when more microphones are involved in the test.
+**Note**: We use the ESP32-LyraT-Mini development board and the WakeNet5X2(hilexin) model in our test. The performance is limited because ESP32-LyraT-Mini only has one microphone. We expect a better recognition performance when more microphones are involved in the test.
 
 ## Wake Word Customization
 
