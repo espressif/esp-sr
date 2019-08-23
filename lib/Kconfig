@@ -46,6 +46,14 @@ config SR_WN5X3_HILEXIN
     bool "hilexin (WakeNet5X3)"
     depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
 
+config SR_WN5_NIHAOXIAOZHI
+	bool "nihaoxiaozhi (WakeNet5)"
+	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
+
+config SR_WN5X2_NIHAOXIAOZHI
+	bool "nihaoxiaozhi (WakeNet5X2)"
+	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
+
 config SR_WN5_CUSTOMIZED_WORD
 	bool "customized word (WakeNet5)"
 	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
