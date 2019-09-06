@@ -1,4 +1,4 @@
-# esp_sr
+# esp_sr [[中文]](./README_cn.md)
 
 Espressif esp_sr provides basic algorithms for **Speech Recognition** applications. Now, this framework has three modules:
 

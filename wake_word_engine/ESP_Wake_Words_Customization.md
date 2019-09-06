@@ -1,4 +1,4 @@
-# Espressif Speech Wake Word Customization Process
+# Espressif Speech Wake Word Customization Process [[中文]](./乐鑫语音唤醒词定制流程.md)
 
 #### Offline Wake Word Customization
 
