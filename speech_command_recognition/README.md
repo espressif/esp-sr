@@ -1,4 +1,4 @@
-# MultiNet Introduction
+# MultiNet Introduction [[中文]](./README_cn.md)
 
 MultiNet is a lightweight model specially designed based on [CRNN](https://arxiv.org/pdf/1703.05390.pdf) and [CTC](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.75.6306&rep=rep1&type=pdf) for the implementation of multi-command recognization with ESP32. Now, up to 100 speech commands, including customized commands, are supported. 
 

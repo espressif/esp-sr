@@ -1,4 +1,4 @@
-# WakeNet
+# WakeNet [[中文]](./README_cn.md)
 
 WakeNet, which is a wake word engine built upon neural network, is specially designed for low-power embedded MCUs. Now, the WakeNet model supports up to 5 wake words.
 
@@ -31,9 +31,9 @@ Please see the flow diagram of WakeNet below:
   
   Go to `make menuconfig`, navigate to `Component config` >> `ESP Speech Recognition` >> `Wake word engine`. See below:
    
-  	<center>
-  	<img src="../img/model_sel.png" width = "500" />
-  	</center>  
+ <center>
+ <img src="../img/model_sel.png" width = "500" />
+ </center>  
   
 
 - How to select the wake words   
