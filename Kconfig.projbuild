@@ -72,6 +72,23 @@ config SR_WN6_CUSTOMIZED_WORD
 
 endchoice
 
+choice SR_RUN_WN6_CORE
+
+    depends on SR_MODEL_WN6_QUANT || SR_MODEL_WN6_FLOAT 
+
+    prompt "ESP32 core to run WakeNet6"
+    default SR_RUN_WM6_CORE1
+    help
+        Select one ESP32 core to run WakeNet6.
+
+config SR_RUN_WN6_CORE0
+    bool "core 0"
+
+config SR_RUN_WN6_CORE1
+    bool "core 1"
+
+endchoice
+
 choice SR_MN_MODEL_SEL
 	prompt "speech commands recognition model to use"
 	default CONFIG_MN1_MODEL_FLOAT
@@ -85,6 +102,7 @@ config SR_MN1_MODEL_QUANT
 	bool "MultiNet 1 (quantized)"
 
 endchoice
+
 
 choice SR_LANGUAGE_SEL
 	prompt "langugae"
