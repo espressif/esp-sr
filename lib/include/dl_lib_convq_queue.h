@@ -16,6 +16,7 @@
 
 
 #include "dl_lib_matrixq.h"
+#include "dl_lib_conv_queue.h"
 
 //fixed-point convolution FIFO queue. 
 typedef struct {
@@ -135,6 +136,8 @@ fptp_t * dl_softmax_step_q(dl_convq_queue_t *cq, int offset, fptp_t *out);
  */
 qtp_t *dl_atrous_conv1dq(dl_convq_queue_t *in, dl_convq_queue_t *out, int rate, int size,
                              dl_matrix2dq_t* kernel, dl_matrix2dq_t* bias, int shift);
+qtp_t *dl_atrous_conv1dq_steps(dl_convq_queue_t *in, dl_convq_queue_t *out, int rate, int size,
+                             dl_matrix2dq_t* kernel, dl_matrix2dq_t* bias, int shift, int offset);
 /**
  * @brief Fast implement of dilation layer as follows
  *
@@ -165,5 +168,7 @@ qtp_t *dl_dilation_layerq(dl_convq_queue_t *in, dl_convq_queue_t *out, int rate,
 dl_matrix2dq_t *dl_basic_lstm_layer1_q(const dl_convq_queue_t *in, dl_matrix2dq_t *state_c, dl_matrix2dq_t *state_h,
    const dl_matrix2dq_t *weight, const dl_matrix2dq_t *bias, int step, int shift);
 void test_atrous_convq(int size, int rate, int in_channel, int out_channel);
+
+dl_conv_queue_t *dl_convq_queue_add(dl_convq_queue_t *cq1, dl_convq_queue_t *cq2);
 
 #endif
