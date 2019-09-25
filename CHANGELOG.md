@@ -1,5 +1,9 @@
 # Change log for esp-sr
 
+## 0.3.0(dev)
+add wakenet6
+support cmake
+
 ## 0.2.0
 add acoustic algorithm, include AEC, AGC, VAD ,NS  
 add wakenet5X2 and wakenet5X3  

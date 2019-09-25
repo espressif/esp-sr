@@ -54,11 +54,15 @@ config SR_WN5X2_NIHAOXIAOZHI
 	bool "nihaoxiaozhi (WakeNet5X2)"
 	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
 
+config SR_WN5X3_NIHAOXIAOXIN
+    bool "nihaoxiaoxin (WakeNet5X3)"
+    depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
+
 config SR_WN5_CUSTOMIZED_WORD
 	bool "customized word (WakeNet5)"
 	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
 
-config SR_WN6_HILEXIN
+config SR_WN6_NIHAOXIAOXIN
 	bool "nihaoxiaoxin (WakeNet6)"
 	depends on SR_MODEL_WN6_QUANT
 
@@ -68,32 +72,57 @@ config SR_WN6_CUSTOMIZED_WORD
 
 endchoice
 
-choice SR_MN_MODEL_SEL
-    prompt "speech commands recognition model to use"
-    default CONFIG_MN1_MODEL_FLOAT
-    help
-        Select the model to be used.
+choice SR_RUN_WN6_CORE
 
-config SR_MN1_MODEL_QUANT
-    bool "MultiNet 1 (quantized)"
+    depends on SR_MODEL_WN6_QUANT || SR_MODEL_WN6_FLOAT 
+
+    prompt "ESP32 core to run WakeNet6"
+    default SR_RUN_WM6_CORE1
+    help
+        Select one ESP32 core to run WakeNet6.
+
+config SR_RUN_WN6_CORE0
+    bool "core 0"
+
+config SR_RUN_WN6_CORE1
+    bool "core 1"
 
 endchoice
 
+choice SR_MN_MODEL_SEL
+	prompt "speech commands recognition model to use"
+	default CONFIG_MN1_MODEL_FLOAT
+	help
+		Select the model to be used.
+
+config SR_MN1_MODEL_FLOAT
+	bool "MultiNet 1 (float)"
+
+config SR_MN1_MODEL_QUANT
+	bool "MultiNet 1 (quantized)"
+
+endchoice
+
+
 choice SR_LANGUAGE_SEL
-    prompt "langugae"
-    default SR_MN1_CHINESE
-    help
-        Select the language to be used.
+	prompt "langugae"
+	default SR_MN1_CHINESE
+	help
+		Select the language to be used.
+
+config SR_MN1_CHINESE_FLOAT
+	bool "chinese (MultiNet1)"
+	depends on SR_MN1_MODEL_FLOAT
 
 config SR_MN1_CHINESE_QUANT
-    bool "chinese (MultiNet1)"
-    depends on SR_MN1_MODEL_QUANT
+	bool "chinese (MultiNet1)"
+	depends on SR_MN1_MODEL_QUANT
 
 endchoice
 
 config SPEECH_COMMANDS_NUM
     int "The number of speech commands"
-    default 0
+    default 20
     help
 	The number of the speech commands.
 
@@ -101,83 +130,83 @@ menu "Add speech commands"
 
 config SPEECH_COMMAND_ID0
     string "ID0"
-	default ""
+	default "da kai kong tiao"
 
 config SPEECH_COMMAND_ID1
     string "ID1"
-	default ""
+	default "guan bi kong tiao"
 
 config SPEECH_COMMAND_ID2
     string "ID2"
-	default ""
+	default "zeng da feng su"
 
 config SPEECH_COMMAND_ID3
     string "ID3"
-    default ""
+	default "jian xiao feng su"
 
 config SPEECH_COMMAND_ID4
     string "ID4"
-    default ""
+	default "sheng gao yi du"
 
 config SPEECH_COMMAND_ID5
     string "ID5"
-    default ""
+	default "jiang di yi du"
 
 config SPEECH_COMMAND_ID6
     string "ID6"
-    default ""
+	default "zhi re mo shi"
 
 config SPEECH_COMMAND_ID7
     string "ID7"
-    default ""
+	default "zhi leng mo shi"
 
 config SPEECH_COMMAND_ID8
     string "ID8"
-    default ""
+	default "song feng mo shi"
 
 config SPEECH_COMMAND_ID9
     string "ID9"
-    default ""
+	default "jie neng mo shi"
 
 config SPEECH_COMMAND_ID10
     string "ID10"
-    default ""
+	default "guan bi jie neng mo shi"
 
 config SPEECH_COMMAND_ID11
     string "ID11"
-    default ""
+	default "chu shi mo shi"
 
 config SPEECH_COMMAND_ID12
     string "ID12"
-    default ""
+	default "guan bi chu shi mo shi"
 
 config SPEECH_COMMAND_ID13
     string "ID13"
-    default ""
+	default "da kai lan ya"
 
 config SPEECH_COMMAND_ID14
     string "ID14"
-    default ""
+	default "guan bi lan ya"
 
 config SPEECH_COMMAND_ID15
     string "ID15"
-    default ""
+	default "bo fang ge qu"
 
 config SPEECH_COMMAND_ID16
     string "ID16"
-    default ""
+	default "zan ting bo fang"
 
 config SPEECH_COMMAND_ID17
     string "ID17"
-    default ""
+	default "ding shi yi xiao shi"
 
 config SPEECH_COMMAND_ID18
     string "ID18"
-    default ""
+	default "da kai dian deng"
 
 config SPEECH_COMMAND_ID19
     string "ID19"
-    default ""
+	default "guan bi dian deng"
 
 config SPEECH_COMMAND_ID20
     string "ID20"

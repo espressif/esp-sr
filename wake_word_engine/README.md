@@ -29,11 +29,11 @@ Please see the flow diagram of WakeNet below:
 
 - How to select the WakeNet model  
   
-  Go to `make menuconfig`, navigate to `Component config` >> `ESP Speech Recognition` >> `Wake word engine`. See below:
-   
- <center>
- <img src="../img/model_sel.png" width = "500" />
- </center>  
+  1. Go to `make menuconfig`, navigate to `Component config` >> `ESP Speech Recognition` >> `Wake word engine`. See below:  
+     <center> <img src="../img/model_sel.png" width = "500" /> </center>    
+  2. WakeNet6 is divided into two tasks， task1 is used to calculate speech recognition， the task2 is used to calculate neural network model. The ESP32 core used to calculate task2 can be selected by `Component config` >> `ESP Speech Recognition` >> `ESP32 core to run WakeNet6`    
+
+  
   
 
 - How to select the wake words   
@@ -74,6 +74,9 @@ Please see the flow diagram of WakeNet below:
 |Quantised WakeNet5|41 K|15 KB|5.5 ms|30 ms|
 |Quantised WakeNet5X2|165 K|20 KB|10.5 ms|30 ms|
 |Quantised WakeNet5X3|371 K|24 KB|18 ms|30 ms|
+|Quantised WakeNet6|378 K|45 KB|4ms(task1) + 25 ms(task2)|30 ms|  
+
+**Note**: Quantised WakeNet6 is split into two tasks, task1 is used to calculate speech features and task2 is used to calculate neural network model.
 
 ### 2. Performance
 
