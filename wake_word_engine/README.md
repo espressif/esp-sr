@@ -30,14 +30,16 @@ Please see the flow diagram of WakeNet below:
 - How to select the WakeNet model  
   
   1. Go to `make menuconfig`, navigate to `Component config` >> `ESP Speech Recognition` >> `Wake word engine`. See below:  
+  
      <center> <img src="../img/model_sel.png" width = "500" /> </center>    
+     
   2. WakeNet6 is divided into two tasks， task1 is used to calculate speech recognition， the task2 is used to calculate neural network model. The ESP32 core used to calculate task2 can be selected by `Component config` >> `ESP Speech Recognition` >> `ESP32 core to run WakeNet6`    
 
   
   
 
 - How to select the wake words   
-  Go to `make menuconfig`, and navigate to `Component config` >> `ESP Speech Recognition` >> `Wake words list`. See below:
+  Go to `make menuconfig`, and navigate to `Component config` >> `ESP Speech Recognition` >> `Wake words list`. See below:  
 
   <center>
   <img src="../img/word_sel.png" width = "500" />
