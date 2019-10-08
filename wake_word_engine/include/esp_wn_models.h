@@ -62,9 +62,17 @@ extern const esp_wn_iface_t esp_sr_wakenet6_quantized;
 #include "nihaoxiaozhi_wn5X2.h"
 #define WAKENET_COEFF get_coeff_nihaoxiaozhi_wn5X2
 
+#elif CONFIG_SR_WN5X3_NIHAOXIAOZHI & CONFIG_SR_MODEL_WN5_QUANT
+#include "nihaoxiaozhi_wn5X3.h"
+#define WAKENET_COEFF get_coeff_nihaoxiaozhi_wn5X3
+
 #elif CONFIG_SR_WN5X3_NIHAOXIAOXIN & CONFIG_SR_MODEL_WN5_QUANT
 #include "nihaoxiaoxin_wn5X3.h"
 #define WAKENET_COEFF get_coeff_nihaoxiaoxin_wn5X3
+
+#elif CONFIG_SR_WN5X3_HIJESON & CONFIG_SR_MODEL_WN5_QUANT
+#include "hijeson_wn5X3.h"
+#define WAKENET_COEFF get_coeff_hijeson_wn5X3
 
 #elif CONFIG_SR_WN6_NIHAOXIAOXIN
 #include "nihaoxiaoxin_wn6.h"
