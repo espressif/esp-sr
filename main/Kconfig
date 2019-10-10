@@ -54,6 +54,14 @@ config SR_WN5X2_NIHAOXIAOZHI
 	bool "nihaoxiaozhi (WakeNet5X2)"
 	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
 
+config SR_WN5X3_NIHAOXIAOZHI
+	bool "nihaoxiaozhi (WakeNet5X3)"
+	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
+
+config SR_WN5X3_HIJESON
+	bool "hi jeson (WakeNet5X3)"
+	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
+
 config SR_WN5X3_NIHAOXIAOXIN
     bool "nihaoxiaoxin (WakeNet5X3)"
     depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
