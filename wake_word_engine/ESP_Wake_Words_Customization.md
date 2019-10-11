@@ -2,7 +2,7 @@
 
 #### Offline Wake Word Customization
 
-Espressif provides users with the **Off-line Wake Word Customization** service, which allows users to use both publicly available Wake Words (such as "Hi Lexin", "Alexa", and "Espressif") and customized Wake Words. 
+Espressif provides users with the **Off-line Wake Word Customization** service, which allows users to use both publicly available Wake Words (such as "Hi Lexin", "ni hao xiao xin", "ni hao xiao zhi" and "Hi Jeson") and customized Wake Words. 
 
  1. If you want to use publicly available Wake Words for commercial use, 
 	- please check the Wake Words provided in ADF/ASR Demos;
