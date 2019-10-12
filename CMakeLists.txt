@@ -25,11 +25,14 @@ target_link_libraries(${COMPONENT_NAME}
     hilexin_wn5
     hilexin_wn5X2
     hilexin_wn5X3
-    customized_word_wn5
-    customized_word_wn6
+    hijeson_wn5X3
     nihaoxiaozhi_wn5
     nihaoxiaozhi_wn5X2
+    nihaoxiaozhi_wn5X3
     nihaoxiaoxin_wn6
+    nihaoxiaoxin_wn5X3
+    customized_word_wn5
+    customized_word_wn6
     multinet
     multinet1_ch
     esp_audio_processor
