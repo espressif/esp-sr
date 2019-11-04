@@ -36,6 +36,21 @@ typedef void* aec_handle_t;
  * @param frame_length      The length of the audio processing must be 16ms.
  *
  * @param filter_length     Number of samples of echo to cancel.
+ *
+ * @return
+ *         - NULL: Create failed
+ *         - Others: The instance of AEC
+ */
+aec_handle_t aec_create(int sample_rate, int frame_length, int filter_length);
+
+/**
+ * @brief Creates an instance to the AEC structure.
+ *
+ * @param sample_rate       The Sampling frequency (Hz) must be 16000.
+ *
+ * @param frame_length      The length of the audio processing must be 16ms.
+ *
+ * @param filter_length     Number of samples of echo to cancel.
  * 
  * @param nch               Number of input signal channel.
  *
@@ -43,8 +58,7 @@ typedef void* aec_handle_t;
  *         - NULL: Create failed
  *         - Others: The instance of AEC
  */
-aec_handle_t aec_create(int sample_rate, int frame_length, int filter_length, int nch);
-
+aec_handle_t aec_create_multimic(int sample_rate, int frame_length, int filter_length, int nch);
 
 /**
  * @brief Performs echo cancellation a frame, based on the audio sent to the speaker and frame from mic.

@@ -61,7 +61,7 @@ void AGCTask(void *arg)
 
 void AECTask(void *arg)
 {
-    aec_handle_t aec_inst = aec_create(AEC_SAMPLE_RATE, AEC_FRAME_LENGTH_MS, AEC_FILTER_LENGTH, 1);
+    aec_handle_t aec_inst = aec_create(AEC_SAMPLE_RATE, AEC_FRAME_LENGTH_MS, AEC_FILTER_LENGTH);
     int chunks = 0;
     int audio_chunksize = AEC_FRAME_LENGTH_MS * 16;
     int16_t *aec_in = malloc(audio_chunksize * sizeof(int16_t));
