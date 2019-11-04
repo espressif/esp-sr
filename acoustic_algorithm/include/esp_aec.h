@@ -21,26 +21,29 @@ extern "C" {
 #endif
 
 #define USE_AEC_FFT                      // Not kiss_fft
-#define AEC_SAMPLE_RATE 16000            // Only Support 16000Hz
+#define AEC_USE_SPIRAM      0
+#define AEC_SAMPLE_RATE     16000        // Only Support 16000Hz
 #define AEC_FRAME_LENGTH_MS 16           // Only support 16ms
-#define AEC_FILTER_LENGTH 1200           // Number of samples of echo to cancel
+#define AEC_FILTER_LENGTH   1200         // Number of samples of echo to cancel
 
 typedef void* aec_handle_t;
 
 /**
  * @brief Creates an instance to the AEC structure.
  *
- * @param sample_rate       The Sampling frequency (Hz) can be 8000, 16000.
+ * @param sample_rate       The Sampling frequency (Hz) must be 16000.
  *
- * @param frame_length      The length of the audio processing can be 10ms, 20ms, 30ms, default: 30.
+ * @param frame_length      The length of the audio processing must be 16ms.
  *
  * @param filter_length     Number of samples of echo to cancel.
+ * 
+ * @param nch               Number of input signal channel.
  *
  * @return
  *         - NULL: Create failed
  *         - Others: The instance of AEC
  */
-aec_handle_t aec_create(int sample_rate, int frame_length, int filter_length);
+aec_handle_t aec_create(int sample_rate, int frame_length, int filter_length, int nch);
 
 
 /**
@@ -57,7 +60,7 @@ aec_handle_t aec_create(int sample_rate, int frame_length, int filter_length);
  * @return None
  *
  */
-void aec_process(aec_handle_t inst, int16_t *indata, int16_t *refdata, int16_t *outdata);
+void aec_process(const aec_handle_t inst, int16_t *indata, int16_t *refdata, int16_t *outdata);
 
 /**
  * @brief Free the AEC instance

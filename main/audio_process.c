@@ -9,6 +9,7 @@
 #include "esp_aec.h"
 #include "esp_agc.h"
 #include "esp_vad.h"
+#include "esp_map.h"
 #include "audio_test_file.h"
 
 void NSTask(void *arg)
@@ -60,7 +61,7 @@ void AGCTask(void *arg)
 
 void AECTask(void *arg)
 {
-    aec_handle_t aec_inst = aec_create(AEC_SAMPLE_RATE, AEC_FRAME_LENGTH_MS, AEC_FILTER_LENGTH);
+    aec_handle_t aec_inst = aec_create(AEC_SAMPLE_RATE, AEC_FRAME_LENGTH_MS, AEC_FILTER_LENGTH, 1);
     int chunks = 0;
     int audio_chunksize = AEC_FRAME_LENGTH_MS * 16;
     int16_t *aec_in = malloc(audio_chunksize * sizeof(int16_t));
@@ -102,6 +103,34 @@ void VADTask(void *arg)
     vad_destroy(vad_inst);
     free(vad_in);
     printf("VAD test successfully\n\n");
+    vTaskDelete(NULL);    
+}
+
+void MAPTask(void *arg)
+{
+    mic_array_processor_t map_st = map_create(MAP_SAMPLE_RATE, MAP_FRAME_SIZE, THREE_MIC_CIRCLE, MAP_MIC_DISTANCE, MAP_AEC_ON, MAP_AEC_FILTER_LENGTH);
+    int chunks = 0;
+    int nch = 3;
+    int audio_chunksize = MAP_FRAME_SIZE * MAP_SAMPLE_RATE * 3 / 1000;
+    int16_t *map_in = malloc(audio_chunksize * sizeof(int16_t));
+    int16_t *map_ref = malloc(audio_chunksize / 3 * sizeof(int16_t));
+    int16_t *map_out = malloc(audio_chunksize / 3 * sizeof(int16_t));
+    while (1) {
+        if ((chunks + 1) * audio_chunksize * sizeof(int16_t) <= sizeof(audio_test_file)) {
+            memcpy(map_in, audio_test_file + chunks * audio_chunksize * sizeof(int16_t), audio_chunksize * sizeof(int16_t));
+            memset(map_ref, 0, audio_chunksize / 3 * sizeof(int16_t));
+            memset(map_out, 0, audio_chunksize / 3 * sizeof(int16_t));
+        } else {
+            break;
+        }
+        map_process(map_st, map_in, map_ref, map_out);
+        chunks++;
+    }
+    map_destory(map_st);
+    free(map_in);
+    free(map_ref);
+    free(map_out);
+    printf("MAP test successfully\n\n");
     printf("TEST3 FINISHED\n\n");
     vTaskDelete(NULL);    
 }
@@ -117,4 +146,6 @@ void audio_process_test()
     xTaskCreatePinnedToCore(&AECTask, "acoustic_echo_cancellation", 3 * 1024, NULL, 5, NULL, 0);
     vTaskDelay(1000 / portTICK_PERIOD_MS);
     xTaskCreatePinnedToCore(&VADTask, "voice_activity_detection", 3 * 1024, NULL, 5, NULL, 0);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    xTaskCreatePinnedToCore(&MAPTask, "mic_array_processing", 3 * 1024, NULL, 5, NULL, 0);
 }
