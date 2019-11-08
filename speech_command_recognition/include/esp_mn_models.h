@@ -3,24 +3,29 @@
 
 //Contains declarations of all available speech recognion models. Pair this up with the right coefficients and you have a model that can recognize
 //a specific phrase or word.
-extern const esp_mn_iface_t esp_sr_multinet1_quantized;
-
+extern const esp_mn_iface_t esp_sr_multinet1_quantized_cn;
+extern const esp_mn_iface_t esp_sr_multinet1_quantized_en;
 /*
  Configure network to use based on what's selected in menuconfig.
 */
-#if CONFIG_SR_MN1_MODEL_QUANT
-#define MULTINET_MODEL esp_sr_multinet1_quantized
-#else
-#error No valid neural network model selected.
-#endif
+// #if CONFIG_SR_MN1_MODEL_QUANT
+// #define MULTINET_MODEL esp_sr_multinet1_quantized
+// #else
+// #error No valid neural network model selected.
+// #endif
 
 
 /*
  Configure wake word to use based on what's selected in menuconfig.
 */
-#if CONFIG_SR_MN1_CHINESE_QUANT
+#if CONFIG_SR_MN1_CHINESE
 #include "multinet1_ch.h"
+#define MULTINET_MODEL esp_sr_multinet1_quantized_cn
 #define MULTINET_COEFF get_coeff_multinet1_ch
+#elif CONFIG_SR_MN1_ENGLISH
+#include "multinet1_en.h"
+#define MULTINET_MODEL esp_sr_multinet1_quantized_en
+#define MULTINET_COEFF get_coeff_multinet1_en
 #else
 #error No valid wake word selected.
 #endif

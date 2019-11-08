@@ -35,6 +35,7 @@ target_link_libraries(${COMPONENT_NAME}
     customized_word_wn6
     multinet
     multinet1_ch
+    multinet1_en
     esp_audio_processor
     )
 
