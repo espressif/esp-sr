@@ -24,7 +24,9 @@ Please see the flow diagram below:
 
 ### User-defined Command
 
-Currently, users can define their own speech commands by using the command `make menuconfig`. You can refer to the method of adding speech commands in `menuconfig->Component config > ESP Speech Recognition->Add speech commands`, there are already 20 commands pre-stored in sdkconfig.
+Currently, users can define their own speech commands by using the command `make menuconfig`. You can refer to the method of adding speech commands in `menuconfig->Component config > ESP Speech Recognition->Add speech commands`, there are already 20 chinese commands and 7 english commands pre-stored in sdkconfig.
+
+**Chinese**
 
 |Command ID|Command|Command ID|Command|Command ID|Command|Command ID|Command|
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
@@ -33,14 +35,31 @@ Currently, users can define their own speech commands by using the command `make
 |2|增大风速 (Give me more wind)|7|制冷模式 (Cooling mode)|12| 关闭除湿模式 (Disable dehumidifying mode)|17| 定时一小时 (Set timer to 1 hour)
 |3|减少风速 (Give me less wind)|8|送风模式 (Ventilating mode)|13| 打开蓝牙 (Enable the Bluetooth)|18| 打开电灯 (Turn on the light)
 |4| 升高一度 (Increase by one degree)|9|节能模式 (Power-saving mode)|10| 关闭蓝牙 (Disable the Bluetooth)|19| 关闭电灯 (Turn off the light)
- 
+
+**English**
+
+|Command ID|Command|Command ID|Command|
+|:---:|:---:|:---:|:---:|
+|0|turn on the light|4|red mode|
+|1|turn off the light|5|blue mode|
+|2|lighting mode|6|yellow mode|
+|3|reading mode|
+
 MultiNet supports user-defined commands. You can add your own commands to MultiNet. Note that the newly added command should obtain its command ID before it can be recognized by MultiNet. 
 
 ### Add Speech Command
 
-Users can define their own speech commands in the `menuconfig` in Pinyin, for example:
+Now, the MultiNet model predifine some speech commands. Users also can define their own speech commands and the number of speech commands ID in the `menuconfig -> Component config -> ESP Speech Recognition -> Add speech commands` and `The number of speech commands`. 
 
-the command of “打开空调”, which means turn on the air conditioner, should be provided to the blank as "da kai kong tiao".
+##### Chinese Speech Command Recognition
+
+The speech commands should be provided in Pinyin with spaces in between. For example, the command of “打开空调”, which means to turn on the air conditioner, should be provided as "da kai kong tiao".
+
+##### English Speech Command Recognition
+
+The speech commands should be provided in specific phonetic symbol with spaces in between. Please use the `general_label_EN/general_label_en.py` script in the tools directory of the skainet root directory to generate the phonetic symbols corresponding to the command words. For details, please refer to [the phonetic symbol generation method](https://github.com/espressif/esp-skainet/tree/master/tools/general_label_EN/README.md). 
+
+**Note:**
 
 - One speech commands ID can correspond to multiple speech command phrases;
 - Up to 100 speech commands ID or speech command phrases, including customized commands, are supported;

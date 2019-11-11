@@ -26,7 +26,9 @@ MultiNet 输入为音频经过 **MFCC** 处理后的特征值，输出为汉语/
 
 ### 命令词
 
-目前，用户可以使用 `make menuconfig` 命令来添加自定义命令词。可以通过 `menuconfig->Component config > ESP Speech Recognition->Add speech commands` 添加命令词，目前已经添加有 20 个命令词，如下表所示：
+目前，用户可以使用 `make menuconfig` 命令来添加自定义命令词。可以通过 `menuconfig->Component config > ESP Speech Recognition->Add speech commands` 添加命令词，目前已经添加有 20 个中文命令词和 7 个英文命令词，分别如下表所示：
+
+**中文**  
 
 |Command ID|命令词|Command ID|命令词|Command ID|命令词|Command ID|命令词|
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
@@ -36,14 +38,29 @@ MultiNet 输入为音频经过 **MFCC** 处理后的特征值，输出为汉语/
 |3|减少风速|8|送风模式|13| 打开蓝牙|18| 打开电灯
 |4| 升高一度|9|节能模式|10| 关闭蓝牙|19| 关闭电灯
 
+**英文**
+
+|Command ID|命令词|Command ID|命令词|
+|:---:|:---:|:---:|:---:|
+|0|turn on the light|4|red mode|
+|1|turn off the light|5|blue mode|
+|2|lighting mode|6|yellow mode|
+|3|reading mode|
+
 网络支持自定义命令词，用户可以将自己想要的设置的命令词加入 MultiNet，注意新添加的命令词需要有其的对应 Command ID 已便于 MultiNet 时候后输出。
 
 ### 添加自定义命令词
+目前，MultiNet 模型中已经预定义了一些命令词。用户可以通过 `menuconfig -> Component config -> ESP Speech Recognition -> Add speech commands` and `The number of speech commands`来定义自己的语音命令词和语音命令的数目。
 
-可以通过 `make menuconfig > Component config > ESP Speech Recognition->Add speech commands` 命令使用拼音添加对应的命令词，比如：
+##### 中文命令词识别
 
-当添加“打开空调”命令时，应该输入 "da kai kong tiao"，请注意：
+在填充命令词时应该使用拼音，并且每个字的拼音拼写间要间隔一个空格。比如“打开空调”，应该填入 "da kai kong tiao".
 
+##### 英文命令词识别
+
+在填充命令词时应该使用特定音标，请使用 skainet 根目录 `tools` 目录下的 `general_label_EN/general_label_en.py` 脚本生成命令词对应的音标，具体使用方法请参考 [音标生成方法](https://github.com/espressif/esp-skainet/tree/master/tools/general_label_EN/README.md) .
+
+**注意：**
 - 一个 Commnad ID 可以对应多个命令短语
 - 最多支持 100 个 Command ID 或者 命令短语
 - 同一个 Command ID 对应的几条命令短语之间应该由 "," 隔开
