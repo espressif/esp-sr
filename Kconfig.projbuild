@@ -99,7 +99,7 @@ endchoice
 
 choice SR_MN_MODEL_SEL
 	prompt "speech commands recognition model to use"
-	default CONFIG_SR_MN1_MODEL_QUANT
+	default SR_MN1_MODEL_QUANT
 	help
 		Select the model to be used.
 
