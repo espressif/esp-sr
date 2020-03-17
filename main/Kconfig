@@ -36,39 +36,39 @@ config SR_WN4_HILEXIN
 
 config SR_WN5_HILEXIN
 	bool "hilexin (WakeNet5)"
-	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
+	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
 
 config SR_WN5X2_HILEXIN
     bool "hilexin (WakeNet5X2)"
-    depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
+    depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
 
 config SR_WN5X3_HILEXIN
     bool "hilexin (WakeNet5X3)"
-    depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
+    depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
 
 config SR_WN5_NIHAOXIAOZHI
 	bool "nihaoxiaozhi (WakeNet5)"
-	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
+	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
 
 config SR_WN5X2_NIHAOXIAOZHI
 	bool "nihaoxiaozhi (WakeNet5X2)"
-	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
+	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
 
 config SR_WN5X3_NIHAOXIAOZHI
 	bool "nihaoxiaozhi (WakeNet5X3)"
-	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
+	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
 
 config SR_WN5X3_HIJESON
 	bool "hi jeson (WakeNet5X3)"
-	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
+	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
 
 config SR_WN5X3_NIHAOXIAOXIN
     bool "nihaoxiaoxin (WakeNet5X3)"
-    depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
+    depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
 
 config SR_WN5_CUSTOMIZED_WORD
 	bool "customized word (WakeNet5)"
-	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
+	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
 
 config SR_WN6_NIHAOXIAOXIN
 	bool "nihaoxiaoxin (WakeNet6)"
@@ -76,13 +76,13 @@ config SR_WN6_NIHAOXIAOXIN
 
 config SR_WN6_CUSTOMIZED_WORD
 	bool "customized word (WakeNet6)"
-	depends on SR_MODEL_WN6_QUANT || SR_MODEL_WN6_FLOAT 
+	depends on SR_MODEL_WN6_QUANT || SR_MODEL_WN6_FLOAT
 
 endchoice
 
 choice SR_RUN_WN6_CORE
 
-    depends on SR_MODEL_WN6_QUANT || SR_MODEL_WN6_FLOAT 
+    depends on SR_MODEL_WN6_QUANT || SR_MODEL_WN6_FLOAT
 
     prompt "ESP32 core to run WakeNet6"
     default SR_RUN_WM6_CORE1
@@ -110,7 +110,7 @@ endchoice
 
 
 choice SR_LANGUAGE_SEL
-	prompt "langugae"
+	prompt "language"
 	default SR_MN1_CHINESE
 	help
 		Select the language to be used.
