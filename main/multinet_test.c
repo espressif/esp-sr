@@ -30,6 +30,7 @@ void multinetTask(void *arg)
         if (chunks == chunk_num || command_id > -1) {
             if (command_id > -1) {
                 printf("MN test successfully, Commands ID: %d.\n", command_id);
+                break;
             } else {
                 printf("can not recognize any speech commands\n");
             }
@@ -37,6 +38,7 @@ void multinetTask(void *arg)
         }
     }
     printf("TEST2 FINISHED\n\n");
+    multinet->destroy(model_data);
     vTaskDelete(NULL);
 }
 

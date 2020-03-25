@@ -26,15 +26,15 @@ MultiNet 输入为音频经过 **MFCC** 处理后的特征值，输出为汉语/
 
 ### 命令词
 
-目前，用户可以使用 `make menuconfig` 命令来添加自定义命令词。可以通过 `menuconfig->Component config > ESP Speech Recognition->Add speech commands` 添加命令词，目前已经添加有 20 个中文命令词和 7 个英文命令词，分别如下表所示：
+目前，用户可以使用 `make menuconfig` 命令来添加自定义命令词。可以通过 `menuconfig -> ESP Speech Recognition->Add speech commands` 添加命令词，目前已经添加有 20 个中文命令词和 7 个英文命令词，分别如下表所示：
 
 **中文**  
 
 |Command ID|命令词|Command ID|命令词|Command ID|命令词|Command ID|命令词|
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-|0|打开空调|5|降低一度|10| 关闭节能模式|15| 播放歌曲
-|1|关闭空调|6|制热模式|11| 除湿模式|16| 暂停播放
-|2|增大风速|7|制冷模式|12| 关闭除湿模式|17| 定时一小时
+|0|打开空调|5|降低一度|10| 除湿模式|15| 播放歌曲
+|1|关闭空调|6|制热模式|11| 健康模式|16| 暂停播放
+|2|增大风速|7|制冷模式|12| 睡眠模式|17| 定时一小时
 |3|减少风速|8|送风模式|13| 打开蓝牙|18| 打开电灯
 |4| 升高一度|9|节能模式|10| 关闭蓝牙|19| 关闭电灯
 
@@ -49,8 +49,32 @@ MultiNet 输入为音频经过 **MFCC** 处理后的特征值，输出为汉语/
 
 网络支持自定义命令词，用户可以将自己想要的设置的命令词加入 MultiNet，注意新添加的命令词需要有其的对应 Command ID 已便于 MultiNet 时候后输出。
 
+### 命令词识别模式
+
+命令词识别支持两种基本模式：
+- SINGLE_RECOGNITION 模式
+
+ 即单次识别模式，当使用该模式时，用户在进行命令词识别时，必须将单独的单个命令词短语音频送入 MultiNet。  
+ 比如在唤醒后说出：打开电灯。则 MultiNet 会识别成功并返回对应的 Command ID。如果识别失败，必须等 sample_length 时长结束后才能进行下次识别。  
+ 当配合唤醒使用时，如果用户在唤醒后只需要识别一个关键字返回即可，推荐使用该模式。  
+ 
+- CONTINUOUS_RECOGNITION 模式
+
+ 即连续识别模式，当使用该模式时，用户可以将多个命令词连续送入 MultiNet。  
+ 比如在唤醒后，可以说出打开电灯，等待 MultiNet 识别成功返回后可以在 sample_length 内继续说出下一个命令词，比如 关闭电灯。  
+ 当配合唤醒使用时，如果用户在唤醒后需要连续识别多个命令词，推荐使用该模式。  
+ 
+用户可以通过 `menuconfig -> ESP Speech Recognition -> speech commands recognition mode after wake up` 来对以上两种模式进行切换，默认为 SINGLE_RECOGNITION 模式。
+
+注：CONTINUOUS_RECOGNITION 模式下对单个词的识别率略低于 SINGLE_RECOGNITION 模式下的单个词识别率。
+
+### 语言选择
+
+目前 MultiNet 支持中文和英文，目前英文只支持 SINGLE_RECOGNITION 模式。  
+用户可以通过 `menuconfig -> ESP Speech Recognition -> langugae` 进行选择。
+
 ### 添加自定义命令词
-目前，MultiNet 模型中已经预定义了一些命令词。用户可以通过 `menuconfig -> Component config -> ESP Speech Recognition -> Add speech commands` and `The number of speech commands`来定义自己的语音命令词和语音命令的数目。
+目前，MultiNet 模型中已经预定义了一些命令词。用户可以通过 `menuconfig -> ESP Speech Recognition -> Add speech commands` and `The number of speech commands`来定义自己的语音命令词和语音命令的数目。
 
 ##### 中文命令词识别
 
@@ -75,8 +99,8 @@ MultiNet 输入为音频经过 **MFCC** 处理后的特征值，输出为汉语/
         
 2. 生成模型句柄  
 
- 支持的语言和模型的有效性由模型参数决定，现在只支持中文命令。请在 `menuconfig` 中配置 `MULTINET_COEFF` 选项，并在代码中添加以下行以生成模型句柄。 6000 是语音识别的音频长度，以 ms 为单位，sample_length 的范围为 0~6000。  
-		model_iface_data_t *model_data = multinet->create(&MULTINET_COEFF, 6000);
+ 支持的语言和模型的有效性由模型参数决定，现在只支持中文命令。请在 `menuconfig` 中配置 `MULTINET_COEFF` 选项，并在代码中添加以下行以生成模型句柄。 sample_length 是语音识别的音频长度，以 ms 为单位，当使用 sample_length 的范围为 0~6000。  
+		model_iface_data_t *model_data = multinet->create(&MULTINET_COEFF, sample_length);
 
 ### API 参考
 
@@ -129,6 +153,17 @@ MultiNet 输入为音频经过 **MFCC** 处理后的特征值，输出为汉语/
   **Return**
   
     The number of the frames recognized by the speech command.
+    
+- `typedef int (*esp_mn_iface_op_set_det_threshold_t)(model_iface_data_t *model, float det_threshold);`    
+    
+   **Definition**  
+   
+ 	Set the detection threshold to manually abjust the probability.
+
+   **Parameter**  
+  
+   * model: The model object to query.  
+   * det_treshold The threshold to trigger speech commands, the range of det_threshold is 0.5~0.9999
     
 - `typedef int (*esp_mn_iface_op_get_samp_rate_t)(model_iface_data_t *model);`
 

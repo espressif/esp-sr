@@ -24,15 +24,15 @@ Please see the flow diagram below:
 
 ### User-defined Command
 
-Currently, users can define their own speech commands by using the command `make menuconfig`. You can refer to the method of adding speech commands in `menuconfig->Component config > ESP Speech Recognition->Add speech commands`, there are already 20 chinese commands and 7 english commands pre-stored in sdkconfig.
+Currently, users can define their own speech commands by using the command `make menuconfig`. You can refer to the method of adding speech commands in `menuconfig->ESP Speech Recognition->Add speech commands`, there are already 20 chinese commands and 7 english commands pre-stored in sdkconfig.
 
 **Chinese**
 
 |Command ID|Command|Command ID|Command|Command ID|Command|Command ID|Command|
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-|0|打开空调 (Turn on the air conditioner)|5|降低一度 (Decrease by one degree)|10| 关闭节能模式 (Disable power-saving mode)|15| 播放歌曲 (Play a song)
-|1|关闭空调 (Turn on the air conditioner)|6|制热模式 (Heating mode)|11| 除湿模式 (Dehumidifying mode)|16| 暂停播放 (Pause playing)
-|2|增大风速 (Give me more wind)|7|制冷模式 (Cooling mode)|12| 关闭除湿模式 (Disable dehumidifying mode)|17| 定时一小时 (Set timer to 1 hour)
+|0|打开空调 (Turn on the air conditioner)|5|降低一度 (Decrease by one degree)|10| 除湿模式 (Dehumidifying mode)|15| 播放歌曲 (Play a song)
+|1|关闭空调 (Turn on the air conditioner)|6|制热模式 (Heating mode)|11| 健康模式 (Healthy mode)|16| 暂停播放 (Pause playing)
+|2|增大风速 (Give me more wind)|7|制冷模式 (Cooling mode)|12| 睡眠模式 (Sleep mode)|17| 定时一小时 (Set timer to 1 hour)
 |3|减少风速 (Give me less wind)|8|送风模式 (Ventilating mode)|13| 打开蓝牙 (Enable the Bluetooth)|18| 打开电灯 (Turn on the light)
 |4| 升高一度 (Increase by one degree)|9|节能模式 (Power-saving mode)|10| 关闭蓝牙 (Disable the Bluetooth)|19| 关闭电灯 (Turn off the light)
 
