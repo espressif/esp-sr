@@ -54,7 +54,7 @@ typedef void* mase_handle_t;
  *         - NULL: Create failed
  *         - Others: An instance of MASE
  */
-mase_handle_t mase_create(int fs, int frame_size, int array_type, float mic_distance, int operating_mode, int filter_strength);
+mase_handle_t mase_create(int sample_rate, int frame_size, int array_type, float mic_distance, int operating_mode, int filter_strength);
 
 /**
  * @brief Performs mic array processing for one frame.
