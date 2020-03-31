@@ -16,7 +16,12 @@ target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/lib")
 target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/wake_word_engine")
 target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/speech_command_recognition")
 target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/acoustic_algorithm")
-target_link_libraries(${COMPONENT_TARGET} 
+
+IF (IDF_VER MATCHES "v4.")
+add_prebuilt_library(multinet "${CMAKE_CURRENT_SOURCE_DIR}/lib/libmultinet.a" PRIV_REQUIRES esp-sr) 
+ENDIF (IDF_VER MATCHES "v4.")
+
+target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
     dl_lib
     c_speech_features
     wakenet
@@ -36,7 +41,5 @@ target_link_libraries(${COMPONENT_TARGET}
     multinet
     multinet1_ch
     multinet1_en
-    esp_audio_processor
-    )
-
+    esp_audio_processor "-Wl,--end-group")
 
