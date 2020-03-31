@@ -67,7 +67,8 @@ mase_handle_t mase_create(int sample_rate, int frame_size, int array_type, float
  *
  * @return None
  *
- * @note Input is a multi-channel signal while the output is single-channel. For a 16-ms multi-channel input frame, the i-th point in the c-th channel should be indexed (i + c * 256).
+ * @note Input is a multi-channel signal while the output is single-channel. 
+ *       For a 16-ms multi-channel input frame, the i-th point in the c-th channel should be indexed (i + c * 256).
  *
  */
 void mase_process(mase_handle_t st, int16_t *in, int16_t *dsp_out);
