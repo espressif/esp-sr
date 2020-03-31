@@ -73,6 +73,8 @@ aec_handle_t aec_create_multimic(int sample_rate, int frame_length, int filter_l
  *
  * @return None
  *
+ * @note Output is of the same channel number as input. For a multi-channel 16-ms signal frame, the i-th point in the c-th channel should be indexed (i + c * 256).
+ *
  */
 void aec_process(const aec_handle_t inst, int16_t *indata, int16_t *refdata, int16_t *outdata);
 
