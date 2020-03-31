@@ -1,6 +1,6 @@
 # Acoustic Algorithm Introduction
 
-Acoustic algorithms provided in esp-sr include voice activity detection (VAD), adaptive gain control (AGC), acoustic echo cancellation (AEC), noise suppression (NS), and mic-array processing (MAP). VAD, AGC, AEC, and NS are supported with either single-mic and multi-mic development board, MAP is supported with multi-mic board only.
+Acoustic algorithms provided in esp-sr include voice activity detection (VAD), adaptive gain control (AGC), acoustic echo cancellation (AEC), noise suppression (NS), and mic-array speech enhancement (MASE). VAD, AGC, AEC, and NS are supported with either single-mic and multi-mic development board, MASE is supported with multi-mic board only.
 
 ## VAD
 
@@ -176,7 +176,7 @@ AEC suppresses echo of the sound played by the speaker of the board.
 
 ### Overview
 
-Single-channel speech enhancement. If multiple mics are available with the board, MAP is recommened for noise suppression.
+Single-channel speech enhancement. If multiple mics are available with the board, MASE is recommened for noise suppression.
 
 ### API Reference
 
@@ -216,52 +216,53 @@ Single-channel speech enhancement. If multiple mics are available with the board
 
     - inst: the NS handle to be destroyed.
 
-## MAP
+## MASE
 
 ### Overview
 
-Multi-mic array processing, including multi-mic AEC and noise suppression. Currently, 2-mic linear array and 3-mic circular array are supported.
+Multi-channel speech enhancement. Currently, 2-mic linear array and 3-mic circular array are supported.
 
 ### API Reference
 
-- `mic_array_processor_t map_create(int fs, int frame_size, int array_type, float mic_distance, bool aec_on, int filter_length)`
+- `mase_handle_t mase_create(int sample_rate, int frame_size, int array_type, float mic_distance, int operating_mode, int filter_strength)`
 
     **Definition**
 
-    Initialization of MAP handle.
+    Initialization of MASE handle.
 
     **Parameter**
 
-    - fs: signal sampling rate in Hz.
+    - sample_rate: signal sampling rate in Hz.
     - frame_size: signal frame length in ms.
     - array_type: 0 for 2-mic linear array and 1 for 3-mic circular array.
     - mic_distance: distance between two microphones in mm.
+    - operating_mode: 0 for normal mode and 1 for wake-up enhanced mode.
+    - filter_strength: strength of the mic-array speech enhancement, must be 0, 1, 2 or 3 (smaller number indicates better performance and larger hardware cost).
     - aec_on: true to enable and false to disable AEC.
     - filter_length: the length of adaptive filter in AEC.
 
     **Return**
 
-    Handle to MAP.
+    Handle to MASE.
 
-- `void map_process(mic_array_processor_t st, int16_t *in, int16_t *far_end, int16_t *dsp_out)`
+- `void mase_process(mase_handle_t st, int16_t *in, int16_t *dsp_out)`
 
     **Definition**
 
-    Processing of MAP for one frame.
+    Processing of MASE for one frame.
 
     **Parameter**
 
-    - st: MAP handle.
+    - st: MASE handle.
     - in: input multi-channel audio stream.
-    - far_end: reference signal to be cancelled from the input.
     - dsp_out: output single-channel audio stream.
 
-- `void map_destroy(mic_array_processor_t st)`
+- `void mase_destory(mase_handle_t st)`
 
     **Definition**
 
-    Destruction of a MAP handle.
+    Destruction of a MASE handle.
 
     **Parameter**
 
-    - inst: the MAP handle to be destroyed.
+    - inst: the MASE handle to be destroyed.
