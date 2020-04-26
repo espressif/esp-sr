@@ -11,7 +11,7 @@
  *
  * @param coeff       The wakenet model coefficient.
  * @param coeff        The wakenet model coefficient.
- * @parm sample_length Audio length for speech recognition, in ms. The range of sample_length is 0~6000.
+ * @parm sample_length Audio length for speech recognition, in ms.
  * @returns Handle to the model data.
  */
 typedef model_iface_data_t* (*esp_mn_iface_op_create_t)(const model_coeff_getter_t *coeff, int sample_length);
@@ -64,11 +64,17 @@ typedef int (*esp_mn_iface_op_detect_t)(model_iface_data_t *model, int16_t *samp
 
 
 /**
- * @brief Destroy a voiceprint recognition model
+ * @brief Destroy a speech commands recognition model
  *
  * @param model       The Model object to destroy
  */
 typedef void (*esp_mn_iface_op_destroy_t)(model_iface_data_t *model);
+
+/**
+ * @brief Reset the speech commands recognition model
+ *
+ */
+typedef void (*esp_mn_iface_op_reset_t)(void);
 
 typedef struct {
     esp_mn_iface_op_create_t create;
@@ -78,4 +84,5 @@ typedef struct {
     esp_mn_iface_op_set_det_threshold_t set_det_threshold;
     esp_mn_iface_op_detect_t detect; 
     esp_mn_iface_op_destroy_t destroy;
+    esp_mn_iface_op_reset_t reset;
 } esp_mn_iface_t;
