@@ -1,4 +1,5 @@
 #pragma once
+#include "esp_mn_iface.h"
 #define SPEECH_COMMANDS_NUM CONFIG_SPEECH_COMMANDS_NUM
 #if CONFIG_SR_CHINESE
 #define MN_SPEECH_COMMAND_ID0   CONFIG_CN_SPEECH_COMMAND_ID0
@@ -204,3 +205,4 @@
 #define MN_SPEECH_COMMAND_ID99   CONFIG_EN_SPEECH_COMMAND_ID99
 #endif
 char *get_id_name(int i);
+void reset_speech_commands(model_iface_data_t *model_data, char* command_str, char *err_phrase_id);

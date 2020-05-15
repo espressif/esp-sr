@@ -210,3 +210,14 @@ char *get_id_name(int i)
         return NULL;
 }
 
+void reset_speech_commands_v1(model_iface_data_t *model_data, char* command_str, char *err_phrase_id);
+void reset_speech_commands_v2(model_iface_data_t *model_data, char* command_str, char *err_phrase_id);
+
+void reset_speech_commands(model_iface_data_t *model_data, char* command_str, char *err_phrase_id)
+{
+#if CONFIG_SINGLE_RECOGNITION
+    reset_speech_commands_v1(model_data, command_str, err_phrase_id);
+#elif CONFIG_SR_CHINESE && CONFIG_CONTINUOUS_RECOGNITION
+    reset_speech_commands_v2(model_data, command_str, err_phrase_id);
+#endif
+}
