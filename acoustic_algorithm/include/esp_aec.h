@@ -89,7 +89,7 @@ void aec_process(const aec_handle_t inst, int16_t *indata, int16_t *refdata, int
 void aec_destroy(aec_handle_t inst);
 
 #ifdef __cplusplus
-extern "C" {
+}
 #endif
 
 #endif //_ESP_AEC_H_
