@@ -1,5 +1,8 @@
 # Change log for esp-sr
 
+## 0.7.0
+add chinese tts
+
 ## 0.6.0
 update multinet_cn_1.4 and add CONTINUOUS RECOGNITION mode  
 improve hilexin wakeNet5X3 model(v5)    

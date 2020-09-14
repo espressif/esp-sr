@@ -1,5 +1,7 @@
 set(COMPONENT_SRCS
     speech_command_recognition/mn_process_commands.c
+    esp-tts/esp_tts_wav/wav_decoder.c
+    esp-tts/esp_tts_wav/wav_encoder.c
     )
 
 set(COMPONENT_ADD_INCLUDEDIRS 
@@ -7,6 +9,8 @@ set(COMPONENT_ADD_INCLUDEDIRS
     wake_word_engine/include
     speech_command_recognition/include
     acoustic_algorithm/include
+    esp-tts/esp_tts_chinese/include
+    esp-tts/esp_tts_wav/
     )
 
 
@@ -16,6 +20,7 @@ target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/lib")
 target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/wake_word_engine")
 target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/speech_command_recognition")
 target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/acoustic_algorithm")
+target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese")
 
 IF (IDF_VER MATCHES "v4.")
 add_prebuilt_library(multinet "${CMAKE_CURRENT_SOURCE_DIR}/lib/libmultinet.a" PRIV_REQUIRES esp-sr) 
@@ -41,5 +46,7 @@ target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
     multinet
     multinet1_ch
     multinet1_en
+    esp_tts_chinese 
+    voice_set_xiaole 
+    voice_set_template
     esp_audio_processor "-Wl,--end-group")
-
