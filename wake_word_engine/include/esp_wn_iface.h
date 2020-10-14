@@ -27,6 +27,17 @@ typedef struct {
  */
 typedef model_iface_data_t* (*esp_wn_iface_op_create_t)(const model_coeff_getter_t *model_coeff, det_mode_t det_mode);
 
+/**
+ * @brief Function type to initialze a model instance with a detection mode and specified wake word coefficient
+ *
+ * Warning: Just wakeNet6 support this function to select which core to run neural network. 
+ * 
+ * @param det_mode    The wake words detection mode to trigger wake words, DET_MODE_90 or DET_MODE_95
+ * @param model_coeff The specified wake word model coefficient
+ * @param core        Core to run neural network
+ * @returns Handle to the model data
+ */
+typedef model_iface_data_t* (*esp_wn_iface_op_create_pinned_to_core_t)(const model_coeff_getter_t *model_coeff, det_mode_t det_mode, int core);
 
 /**
  * @brief Callback function type to fetch the amount of samples that need to be passed to the detect function
@@ -111,6 +122,7 @@ typedef void (*esp_wn_iface_op_destroy_t)(model_iface_data_t *model);
  */
 typedef struct {
     esp_wn_iface_op_create_t create;
+    esp_wn_iface_op_create_pinned_to_core_t create_pinned_to_core;
     esp_wn_iface_op_get_samp_chunksize_t get_samp_chunksize;
     esp_wn_iface_op_get_samp_rate_t get_samp_rate;
     esp_wn_iface_op_get_word_num_t get_word_num;

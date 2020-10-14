@@ -27,9 +27,9 @@ add_prebuilt_library(multinet "${CMAKE_CURRENT_SOURCE_DIR}/lib/libmultinet.a" PR
 ENDIF (IDF_VER MATCHES "v4.")
 
 target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
+    wakenet
     dl_lib
     c_speech_features
-    wakenet
     hilexin_wn3
     hilexin_wn4
     hilexin_wn5
