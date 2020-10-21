@@ -1,7 +1,5 @@
 set(COMPONENT_SRCS
     speech_command_recognition/mn_process_commands.c
-    esp-tts/esp_tts_wav/wav_decoder.c
-    esp-tts/esp_tts_wav/wav_encoder.c
     )
 
 set(COMPONENT_ADD_INCLUDEDIRS 
@@ -10,7 +8,6 @@ set(COMPONENT_ADD_INCLUDEDIRS
     speech_command_recognition/include
     acoustic_algorithm/include
     esp-tts/esp_tts_chinese/include
-    esp-tts/esp_tts_wav/
     )
 
 
