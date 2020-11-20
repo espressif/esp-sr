@@ -23,6 +23,7 @@ IF (IDF_VER MATCHES "v4.")
 add_prebuilt_library(multinet "${CMAKE_CURRENT_SOURCE_DIR}/lib/libmultinet.a" PRIV_REQUIRES esp-sr) 
 ENDIF (IDF_VER MATCHES "v4.")
 
+if(IDF_TARGET STREQUAL "esp32")
 target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
     wakenet
     dl_lib
@@ -47,3 +48,12 @@ target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
     voice_set_xiaole 
     voice_set_template
     esp_audio_processor "-Wl,--end-group")
+endif()
+
+if(IDF_TARGET STREQUAL "esp32s2")
+target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
+    esp_tts_chinese_esp32s2 
+    voice_set_xiaole_esp32s2
+    voice_set_template_esp32s2
+     "-Wl,--end-group")
+endif()
