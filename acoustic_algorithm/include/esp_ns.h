@@ -20,7 +20,8 @@
 extern "C" {
 #endif
 
-#define NS_FRAME_LENGTH_MS 30          //Supports 10ms, 20ms, 30ms
+#define NS_USE_SPIARM       0
+#define NS_FRAME_LENGTH_MS 10          //Supports 10ms
 
 /**
 * The Sampling frequency (Hz) must be 16000Hz
@@ -31,13 +32,14 @@ typedef void* ns_handle_t;
 /**
  * @brief Creates an instance to the NS structure.
  *
+ * @param mode            0: low cost, 1: Mild, 2: Medium, 3: Aggressive  
  * @param frame_length_ms The length of the audio processing can be 10ms, 20ms, 30ms.
  *
  * @return
  *         - NULL: Create failed
  *         - Others: The instance of NS
  */
-ns_handle_t ns_create(int frame_length_ms);
+ns_handle_t ns_create(int mode, int frame_length_ms);
 
 /**
  * @brief Feed samples of an audio stream to the NS and get the audio stream after Noise suppression.
@@ -64,7 +66,7 @@ void ns_process(ns_handle_t inst, int16_t *indata, int16_t *outdata);
 void ns_destroy(ns_handle_t inst);
 
 #ifdef __cplusplus
-}
+extern  }
 #endif
 
 #endif //_ESP_NS_H_
