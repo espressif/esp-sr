@@ -2,6 +2,8 @@
 
 ## 0.7.0
 add chinese tts
+update noise suppression v2
+update AEC v3
 
 ## 0.6.0
 update multinet_cn_1.4 and add CONTINUOUS RECOGNITION mode  

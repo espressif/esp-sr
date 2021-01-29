@@ -23,7 +23,7 @@ extern "C" {
 #define USE_AEC_FFT                      // Not kiss_fft
 #define AEC_USE_SPIRAM      0
 #define AEC_SAMPLE_RATE     16000        // Only Support 16000Hz
-#define AEC_FRAME_LENGTH_MS 16           // Only support 16ms
+#define AEC_FRAME_LENGTH_MS 16
 #define AEC_FILTER_LENGTH   1200         // Number of samples of echo to cancel
 
 typedef void* aec_handle_t;
@@ -61,6 +61,21 @@ aec_handle_t aec_create(int sample_rate, int frame_length, int filter_length);
 aec_handle_t aec_create_multimic(int sample_rate, int frame_length, int filter_length, int nch);
 
 /**
+ * @brief Creates an instance of more powerful AEC.
+ *
+ * @param frame_length      Length of input signal. Must be 16ms if mode is 0; otherwise could be 16ms or 32ms. Length of input signal to aec_process must be modified accordingly.
+ *
+ * @param nch               Number of microphones.
+ *
+ * @param mode              Mode of AEC (0 to 4), indicating aggressiveness and RAM allocation. 0: mild; 1 or 2: medium (1: internal RAM, 2: SPIRAM); 3 and 4: aggressive (3: internal RAM, 4: SPIRAM).
+ *
+ * @return
+ *         - NULL: Create failed
+ *         - Others: An Instance of AEC
+ */
+aec_handle_t aec_pro_create(int frame_length, int nch, int mode);
+
+/**
  * @brief Performs echo cancellation a frame, based on the audio sent to the speaker and frame from mic.
  *
  * @param inst        The instance of AEC.
@@ -72,8 +87,6 @@ aec_handle_t aec_create_multimic(int sample_rate, int frame_length, int filter_l
  * @param outdata     Returns near-end signal with echo removed.
  *
  * @return None
- *
- * @note Output is of the same channel number as input. For a multi-channel 16-ms signal frame, the i-th point in the c-th channel should be indexed (i + c * 256).
  *
  */
 void aec_process(const aec_handle_t inst, int16_t *indata, int16_t *refdata, int16_t *outdata);
