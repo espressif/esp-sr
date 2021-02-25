@@ -4,25 +4,19 @@
 //Contains declarations of all available speech recognion models. Pair this up with the right coefficients and you have a model that can recognize
 //a specific phrase or word.
 
-extern const esp_wn_iface_t esp_sr_wakenet3_quantized;
-extern const esp_wn_iface_t esp_sr_wakenet4_quantized;
 extern const esp_wn_iface_t esp_sr_wakenet5_quantized;
-extern const esp_wn_iface_t esp_sr_wakenet5_float;
-extern const esp_wn_iface_t esp_sr_wakenet6_quantized;
+extern const esp_wn_iface_t esp_sr_wakenet7_quantized;
+extern const esp_wn_iface_t esp_sr_wakenet7_quantized8;
 
 /*
  Configure network to use based on what's selected in menuconfig.
 */
-#if CONFIG_SR_MODEL_WN3_QUANT
-#define WAKENET_MODEL esp_sr_wakenet3_quantized
-#elif CONFIG_SR_MODEL_WN4_QUANT
-#define WAKENET_MODEL esp_sr_wakenet4_quantized
-#elif CONFIG_SR_MODEL_WN5_FLOAT
-#define WAKENET_MODEL esp_sr_wakenet5_float
-#elif CONFIG_SR_MODEL_WN5_QUANT
+#if CONFIG_SR_MODEL_WN5_QUANT
 #define WAKENET_MODEL esp_sr_wakenet5_quantized
-#elif CONFIG_SR_MODEL_WN6_QUANT
-#define WAKENET_MODEL esp_sr_wakenet6_quantized
+#elif CONFIG_SR_MODEL_WN7_QUANT
+#define WAKENET_MODEL esp_sr_wakenet7_quantized
+#elif CONFIG_SR_MODEL_WN7_QUANT8
+#define WAKENET_MODEL esp_sr_wakenet7_quantized8
 #else
 #error No valid neural network model selected.
 #endif
@@ -30,19 +24,7 @@ extern const esp_wn_iface_t esp_sr_wakenet6_quantized;
 /*
  Configure wake word to use based on what's selected in menuconfig.
 */
-#if CONFIG_SR_WN3_HILEXIN 
-#include "hilexin_wn3.h"
-#define WAKENET_COEFF get_coeff_hilexin_wn3
-
-#elif CONFIG_SR_WN4_HILEXIN
-#include "hilexin_wn4.h"
-#define WAKENET_COEFF get_coeff_hilexin_wn4
-
-#elif CONFIG_SR_WN5_HILEXIN & CONFIG_SR_MODEL_WN5_FLOAT
-#include "hilexin_wn5_float.h"
-#define WAKENET_COEFF get_coeff_hilexin_wn5_float
-
-#elif CONFIG_SR_WN5_HILEXIN & CONFIG_SR_MODEL_WN5_QUANT
+#if CONFIG_SR_WN5_HILEXIN & CONFIG_SR_MODEL_WN5_QUANT
 #include "hilexin_wn5.h"
 #define WAKENET_COEFF get_coeff_hilexin_wn5
 
@@ -74,17 +56,37 @@ extern const esp_wn_iface_t esp_sr_wakenet6_quantized;
 #include "hijeson_wn5X3.h"
 #define WAKENET_COEFF get_coeff_hijeson_wn5X3
 
-#elif CONFIG_SR_WN6_NIHAOXIAOXIN
-#include "nihaoxiaoxin_wn6.h"
-#define WAKENET_COEFF get_coeff_nihaoxiaoxin_wn6
-
 #elif CONFIG_SR_WN5_CUSTOMIZED_WORD
 #include "customized_word_wn5.h"
 #define WAKENET_COEFF get_coeff_customized_word_wn5
 
-#elif CONFIG_SR_WN6_CUSTOMIZED_WORD
-#include "customized_word_wn6.h"
-#define WAKENET_COEFF get_coeff_customized_word_wn6
+#elif CONFIG_SR_WN7_CUSTOMIZED_WORD
+#include "customized_word_wn7.h"
+#define WAKENET_COEFF get_coeff_customized_word_wn7
+
+#elif CONFIG_SR_WN7_XIAOAITONGXUE & CONFIG_SR_MODEL_WN7_QUANT
+#include "xiaoaitongxue_wn7.h"
+#define WAKENET_COEFF get_coeff_xiaoaitongxue_wn7
+
+#elif CONFIG_SR_WN7_XIAOAITONGXUE & CONFIG_SR_MODEL_WN7_QUANT8
+#include "xiaoaitongxue_wn7_q8.h"
+#define WAKENET_COEFF get_coeff_xiaoaitongxue_wn7_q8
+
+#elif CONFIG_SR_WN7_HILEXIN & CONFIG_SR_MODEL_WN7_QUANT
+#include "hilexin_wn7.h"
+#define WAKENET_COEFF get_coeff_hilexin_wn7
+
+#elif CONFIG_SR_WN7_HILEXIN & CONFIG_SR_MODEL_WN7_QUANT8
+#include "hilexin_wn7_q8.h"
+#define WAKENET_COEFF get_coeff_hilexin_wn7_q8
+
+#elif CONFIG_SR_WN7_ALEXA & CONFIG_SR_MODEL_WN7_QUANT
+#include "alexa_wn7.h"
+#define WAKENET_COEFF get_coeff_alexa_wn7
+
+#elif CONFIG_SR_WN7_ALEXA & CONFIG_SR_MODEL_WN7_QUANT8
+#include "alexa_wn7_q8.h"
+#define WAKENET_COEFF get_coeff_alexa_wn7_q8
 
 #else
 #error No valid wake word selected.

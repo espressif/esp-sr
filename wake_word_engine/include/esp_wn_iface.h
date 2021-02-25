@@ -10,7 +10,11 @@ typedef struct model_iface_data_t model_iface_data_t;
 //As a consequence also the false alarm rate goes up
 typedef enum {
 	DET_MODE_90 = 0,  //Normal, response accuracy rate about 90%
-	DET_MODE_95       //Aggressive, response accuracy rate about 95%
+	DET_MODE_95 = 1,       //Aggressive, response accuracy rate about 95%
+    DET_MODE_2CH_90 = 2,
+    DET_MODE_2CH_95 = 3,
+    DET_MODE_3CH_90 = 4,
+    DET_MODE_3CH_95 = 5,
 } det_mode_t;
 
 typedef struct {
@@ -28,18 +32,6 @@ typedef struct {
 typedef model_iface_data_t* (*esp_wn_iface_op_create_t)(const model_coeff_getter_t *model_coeff, det_mode_t det_mode);
 
 /**
- * @brief Function type to initialze a model instance with a detection mode and specified wake word coefficient
- *
- * Warning: Just wakeNet6 support this function to select which core to run neural network. 
- * 
- * @param det_mode    The wake words detection mode to trigger wake words, DET_MODE_90 or DET_MODE_95
- * @param model_coeff The specified wake word model coefficient
- * @param core        Core to run neural network
- * @returns Handle to the model data
- */
-typedef model_iface_data_t* (*esp_wn_iface_op_create_pinned_to_core_t)(const model_coeff_getter_t *model_coeff, det_mode_t det_mode, int core);
-
-/**
  * @brief Callback function type to fetch the amount of samples that need to be passed to the detect function
  *
  * Every speech recognition model processes a certain number of samples at the same time. This function
@@ -49,6 +41,17 @@ typedef model_iface_data_t* (*esp_wn_iface_op_create_pinned_to_core_t)(const mod
  * @return The amount of samples to feed the detect function
  */
 typedef int (*esp_wn_iface_op_get_samp_chunksize_t)(model_iface_data_t *model);
+
+/**
+ * @brief Callback function type to fetch the channel number of samples that need to be passed to the detect function
+ *
+ * Every speech recognition model processes a certain number of samples at the same time. This function
+ * can be used to query that amount. Note that the returned amount is in 16-bit samples, not in bytes.
+ *
+ * @param model The model object to query
+ * @return The amount of samples to feed the detect function
+ */
+typedef int (*esp_wn_iface_op_get_channel_num_t)(model_iface_data_t *model);
 
 
 /**
@@ -110,6 +113,23 @@ typedef float (*esp_wn_iface_op_get_det_threshold_t)(model_iface_data_t *model, 
 typedef int (*esp_wn_iface_op_detect_t)(model_iface_data_t *model, int16_t *samples);
 
 /**
+ * @brief Get the volume gain
+ *
+ * @param model The model object to query
+ * @param target_db  The target dB to calculate volume gain
+ * @returns the volume gain
+ */
+typedef float (*esp_wn_iface_op_get_vol_gain_t)(model_iface_data_t *model, float target_db);
+
+/**
+ * @brief Get the triggered channel index. Channel index starts from zero
+ *
+ * @param model The model object to query
+ * @return The channel index
+ */
+typedef int (*esp_wn_iface_op_get_triggered_channel_t)(model_iface_data_t *model);
+
+/**
  * @brief Destroy a speech recognition model
  *
  * @param model Model object to destroy
@@ -122,13 +142,15 @@ typedef void (*esp_wn_iface_op_destroy_t)(model_iface_data_t *model);
  */
 typedef struct {
     esp_wn_iface_op_create_t create;
-    esp_wn_iface_op_create_pinned_to_core_t create_pinned_to_core;
     esp_wn_iface_op_get_samp_chunksize_t get_samp_chunksize;
+    esp_wn_iface_op_get_channel_num_t get_channel_num;
     esp_wn_iface_op_get_samp_rate_t get_samp_rate;
     esp_wn_iface_op_get_word_num_t get_word_num;
     esp_wn_iface_op_get_word_name_t get_word_name;
     esp_wn_iface_op_set_det_threshold_t set_det_threshold;
     esp_wn_iface_op_get_det_threshold_t get_det_threshold;
+    esp_wn_iface_op_get_triggered_channel_t  get_triggered_channel;
+    esp_wn_iface_op_get_vol_gain_t get_vol_gain;
     esp_wn_iface_op_detect_t detect;
     esp_wn_iface_op_destroy_t destroy;
 } esp_wn_iface_t;

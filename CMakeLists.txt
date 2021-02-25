@@ -8,6 +8,7 @@ set(COMPONENT_ADD_INCLUDEDIRS
     speech_command_recognition/include
     acoustic_algorithm/include
     esp-tts/esp_tts_chinese/include
+    audio_front_end/include
     )
 
 
@@ -18,6 +19,7 @@ target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/wake_w
 target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/speech_command_recognition")
 target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/acoustic_algorithm")
 target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese")
+target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/audio_front_end")
 
 IF (IDF_VER MATCHES "v4.")
 add_prebuilt_library(multinet "${CMAKE_CURRENT_SOURCE_DIR}/lib/libmultinet.a" PRIV_REQUIRES esp-sr) 
@@ -28,7 +30,7 @@ ENDIF (IDF_VER MATCHES "v4.")
 if(IDF_TARGET STREQUAL "esp32")
 target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
     wakenet
-    dl_lib
+    dl_lib_esp32
     c_speech_features
     hilexin_wn3
     hilexin_wn4
@@ -58,4 +60,16 @@ target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
     voice_set_xiaole_esp32s2
     voice_set_template_esp32s2
      "-Wl,--end-group")
+endif()
+
+
+if(IDF_TARGET STREQUAL "esp32s3beta")
+target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
+    wakenet
+    dl_lib_esp32s3
+    c_speech_features
+    wakeword_model
+    customized_word_wn5
+    esp_audio_front_end
+    "-Wl,--end-group")
 endif()
