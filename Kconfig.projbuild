@@ -1,24 +1,37 @@
 menu "ESP Speech Recognition"
 
+choice NET_TO_USE_PRELOAD
+    prompt "Net to use acceleration"
+    default WAKENET_USE_PRELOAD
+    depends on IDF_TARGET_ESP32S3BETA
+    help
+        Select the Wake Word Engine to be used.
+
+config WAKENET_USE_PRELOAD
+    bool "wakenet"
+
+config MULTINET_USE_PRELOAD
+    bool "multinet"
+
+endchoice
+
 choice SR_MODEL_SEL
 	prompt "Wake word engine"
 	default SR_MODEL_WN5_QUANT
 	help
 		Select the Wake Word Engine to be used.
 
-config SR_MODEL_WN3_QUANT
-	bool "WakeNet 3 (quantized)"
-
-config SR_MODEL_WN4_QUANT
-	bool "WakeNet 4 (quantized)"
-
 config SR_MODEL_WN5_QUANT
-	bool "WakeNet 5 (quantized)"
+	bool "WakeNet 5 (quantized with 16-bit)"
 
-config SR_MODEL_WN6_QUANT
-	bool "WakeNet 6 (quantized)"
+config SR_MODEL_WN7_QUANT
+	bool "WakeNet 7 (quantized with 16-bit)"
+
+config SR_MODEL_WN7_QUANT8
+	bool "WakeNet 7 (quantized with 8-bit)"
 
 endchoice
+
 
 choice SR_WAKE_WORD_SEL
 	prompt "Wake word name"
@@ -26,62 +39,89 @@ choice SR_WAKE_WORD_SEL
 	help
 		Select the wake word to be used.
 
-config SR_WN3_HILEXIN
-	bool "hilexin (WakeNet3)"
-	depends on SR_MODEL_WN3_QUANT
-
-config SR_WN4_HILEXIN
-	bool "hilexin (WakeNet4)"
-	depends on SR_MODEL_WN4_QUANT
-
 config SR_WN5_HILEXIN
 	bool "hilexin (WakeNet5)"
-	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
+	depends on SR_MODEL_WN5_QUANT  
 
 config SR_WN5X2_HILEXIN
     bool "hilexin (WakeNet5X2)"
-    depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
+    depends on SR_MODEL_WN5_QUANT  
 
 config SR_WN5X3_HILEXIN
     bool "hilexin (WakeNet5X3)"
-    depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
+    depends on SR_MODEL_WN5_QUANT  
 
 config SR_WN5_NIHAOXIAOZHI
 	bool "nihaoxiaozhi (WakeNet5)"
-	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
+	depends on SR_MODEL_WN5_QUANT  
 
 config SR_WN5X2_NIHAOXIAOZHI
 	bool "nihaoxiaozhi (WakeNet5X2)"
-	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
+	depends on SR_MODEL_WN5_QUANT  
 
 config SR_WN5X3_NIHAOXIAOZHI
 	bool "nihaoxiaozhi (WakeNet5X3)"
-	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
+	depends on SR_MODEL_WN5_QUANT  
 
 config SR_WN5X3_HIJESON
 	bool "hi jeson (WakeNet5X3)"
-	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
+	depends on SR_MODEL_WN5_QUANT  
 
 config SR_WN5X3_NIHAOXIAOXIN
     bool "nihaoxiaoxin (WakeNet5X3)"
-    depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
+    depends on SR_MODEL_WN5_QUANT  
 
 config SR_WN5_CUSTOMIZED_WORD
 	bool "customized word (WakeNet5)"
-	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
+	depends on SR_MODEL_WN5_QUANT  
 
-config SR_WN6_NIHAOXIAOXIN
-	bool "nihaoxiaoxin (WakeNet6)"
-	depends on SR_MODEL_WN6_QUANT
+config SR_WN7_CUSTOMIZED_WORD
+	bool "customized word (WakeNet7)"
+	depends on SR_MODEL_WN7_QUANT || SR_MODEL_WN7_QUANT8
 
-config SR_WN6_CUSTOMIZED_WORD
-	bool "customized word (WakeNet6)"
-	depends on SR_MODEL_WN6_QUANT || SR_MODEL_WN6_FLOAT
+config SR_WN7_HILEXIN
+	bool "hilexin (WakeNet7)"
+	depends on SR_MODEL_WN7_QUANT || SR_MODEL_WN7_QUANT8
+
+config SR_WN7_XIAOAITONGXUE
+	bool "xiaoaitongxue (WakeNet7)"
+	depends on SR_MODEL_WN7_QUANT || SR_MODEL_WN7_QUANT8
+
+config SR_WN7_ALEXA
+	bool "alexa (WakeNet7)"
+	depends on SR_MODEL_WN7_QUANT || SR_MODEL_WN7_QUANT8
 
 endchoice
 
-
 choice SR_MN_MODEL_SEL
+    prompt "speech commands recognition model after wake up"
+    default MULTINET1
+    help
+        Select the model to be used.
+
+config MULTINET1
+    depends on SR_MODEL_WN5_QUANT  || SR_MODEL_WN6_QUANT
+    bool "MultiNet 1"
+
+config MULTINET2
+    depends on SR_MODEL_WN7_QUANT || SR_MODEL_WN7_QUANT8
+    bool "MultiNet 2"
+
+config MULTINET3
+    bool "MultiNet 3"
+
+config MULTINET4
+    bool "MultiNet 4"
+
+config MULTINET5
+    bool "MultiNet 5"
+
+config MULTINET6
+    bool "MultiNet 6"
+
+endchoice
+
+choice SR_MN_MODE_SEL
     prompt "speech commands recognition mode after wake up"
     default SINGLE_RECOGNITION
     help
@@ -96,7 +136,7 @@ config CONTINUOUS_RECOGNITION
 endchoice
 
 choice SR_LANGUAGE_SEL
-    prompt "language"
+    prompt "langugae"
     default SR_CHINESE
     help
         Select the language to be used.

@@ -76,6 +76,7 @@ typedef void (*esp_mn_iface_op_destroy_t)(model_iface_data_t *model);
  */
 typedef void (*esp_mn_iface_op_reset_t)(void);
 
+
 typedef struct {
     esp_mn_iface_op_create_t create;
     esp_mn_iface_op_get_samp_rate_t get_samp_rate;

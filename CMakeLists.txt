@@ -22,10 +22,10 @@ target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tt
 target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/audio_front_end")
 
 IF (IDF_VER MATCHES "v4.")
-add_prebuilt_library(multinet "${CMAKE_CURRENT_SOURCE_DIR}/lib/libmultinet.a" PRIV_REQUIRES esp-sr) 
 add_prebuilt_library(esp_audio_processor "${CMAKE_CURRENT_SOURCE_DIR}/acoustic_algorithm/libesp_audio_processor.a" PRIV_REQUIRES esp-sr) 
 add_prebuilt_library(wakenet "${CMAKE_CURRENT_SOURCE_DIR}/lib/libwakenet.a" PRIV_REQUIRES esp-sr) 
 ENDIF (IDF_VER MATCHES "v4.")
+add_prebuilt_library(multinet "${CMAKE_CURRENT_SOURCE_DIR}/lib/libmultinet.a" PRIV_REQUIRES esp-sr) 
 
 if(IDF_TARGET STREQUAL "esp32")
 target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
@@ -66,10 +66,13 @@ endif()
 if(IDF_TARGET STREQUAL "esp32s3beta")
 target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
     wakenet
+    esp-dsp
     dl_lib_esp32s3
     c_speech_features
     wakeword_model
-    customized_word_wn5
+    multinet_model
     esp_audio_front_end
+    esp_audio_processor
+    multinet
     "-Wl,--end-group")
 endif()

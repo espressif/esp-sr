@@ -36,7 +36,7 @@ typedef esp_afe_sr_data_t* (*esp_afe_sr_iface_op_create_t)(afe_sr_mode_t mode, i
  * @param afe The AFE_SR object to query
  * @return The amount of samples to feed the fetch function
  */
-typedef int (*esp_afe_sr_iface_op_get_frame_chunksize_t)(esp_afe_sr_data_t *afe);
+typedef int (*esp_afe_sr_iface_op_get_samp_chunksize_t)(esp_afe_sr_data_t *afe);
 
 /**
  * @brief Get the channel number of samples that need to be passed to the fetch function
@@ -62,7 +62,7 @@ typedef int (*esp_afe_sr_iface_op_get_samp_rate_t)(esp_afe_sr_data_t *afe);
  *
  * @param afe   The AFE_SR object to query
  * @param in    The input microphone signal, only support signed 16-bit @ 16 KHZ. The frame size can be queried by the 
- *              `get_frame_chunksize`. The channel number can be queried `get_channel_num`.
+ *              `get_samp_chunksize`. The channel number can be queried `get_channel_num`.
  * @return      The size of input
  */
 typedef int (*esp_afe_sr_iface_op_feed_t)(esp_afe_sr_data_t *afe, const int16_t* in);
@@ -73,7 +73,7 @@ typedef int (*esp_afe_sr_iface_op_feed_t)(esp_afe_sr_data_t *afe, const int16_t*
  * @Warning  The output is single channel data, no matter how many channels the input is.
  *
  * @param afe   The AFE_SR object to query
- * @param out   The output enhanced signal. The frame size can be queried by the `get_frame_chunksize`.
+ * @param out   The output enhanced signal. The frame size can be queried by the `get_samp_chunksize`.
  * @return      The style of output, -1: noise, 0: speech, 1: wake word 1, 2: wake word 2, ...
  */
 typedef int (*esp_afe_sr_iface_op_fetch_t)(esp_afe_sr_data_t *afe, int16_t* out);
@@ -138,7 +138,7 @@ typedef struct {
     esp_afe_sr_iface_op_create_t create;
     esp_afe_sr_iface_op_feed_t feed;
     esp_afe_sr_iface_op_fetch_t fetch;
-    esp_afe_sr_iface_op_get_frame_chunksize_t get_frame_chunksize;
+    esp_afe_sr_iface_op_get_samp_chunksize_t get_samp_chunksize;
     esp_afe_sr_iface_op_get_channel_num_t get_channel_num;
     esp_afe_sr_iface_op_get_samp_rate_t get_samp_rate;
     esp_afe_sr_iface_op_set_wakenet_t  set_wakenet; 
