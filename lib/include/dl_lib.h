@@ -16,9 +16,16 @@
 
 #include "dl_lib_matrix.h"
 #include "dl_lib_matrixq.h"
-
+#include "dl_lib_matrixq8.h"
 
 typedef int padding_state;
+
+#ifdef CONFIG_IDF_TARGET_ESP32S3
+void *dl_lib_calloc(int cnt, int size, int align);
+void *dl_lib_calloc_psram(int cnt, int size, int align);
+
+void dl_lib_free(void *d);
+#endif
 /**
  * @brief Does a fast version of the exp() operation on a floating point number.
  *
@@ -237,7 +244,7 @@ void dl_relu_q(const dl_matrix2dq_t *in, fptp_t clip, dl_matrix2dq_t *out);
  * @return Sigmoid output
  */
 int dl_sigmoid_op_q(const int in);
-
+int16_t dl_sigmoid_op_q8(const int16_t in);
 /**
  * @brief Does a sigmoid operation on a matrix, quantized version
  *
@@ -263,6 +270,21 @@ void dl_tanh_q(const dl_matrix2dq_t *in, dl_matrix2dq_t *out);
  * @return tanh output
  */
 int dl_tanh_op_q(int v);
+int16_t dl_tanh_op_q8(int16_t v);
+
+
+qtp_t dl_hard_sigmoid_op(qtp_t in, int exponent);
+qtp_t dl_hard_tanh_op(qtp_t in, int exponent);
+
+int16_t dl_table_tanh_op(int16_t in, int exponent);
+int16_t dl_table_sigmoid_op(int16_t in, int exponent);
+
+void dl_hard_sigmoid_q(const dl_matrix2dq_t *in, dl_matrix2dq_t *out);
+void dl_hard_tanh_q(const dl_matrix2dq_t *in, dl_matrix2dq_t *out);
+
+void dl_table_sigmoid_q(const dl_matrix2dq_t *in, dl_matrix2dq_t *out);
+void dl_table_tanh_q(const dl_matrix2dq_t *in, dl_matrix2dq_t *out);
+
 
 /**
  * @brief Filter out the number greater than clip in the matrix, quantized version

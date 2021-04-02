@@ -1,17 +1,26 @@
 menu "ESP Speech Recognition"
 
-choice NET_TO_USE_PRELOAD
+choice NET_TO_USE_ACCELERATION
     prompt "Net to use acceleration"
     default WAKENET_USE_PRELOAD
-    depends on IDF_TARGET_ESP32S3BETA
+    depends on IDF_TARGET_ESP32S3
     help
         Select the Wake Word Engine to be used.
 
 config WAKENET_USE_PRELOAD
-    bool "wakenet"
+    bool "wakenet_preload"
 
 config MULTINET_USE_PRELOAD
-    bool "multinet"
+    bool "multinet_preload"
+
+config WAKENET_USE_EDMA
+    bool "wakenet_edma"
+
+config MULTINET_USE_EDMA
+    bool "multinet_edma"
+
+config ALL_DISABLE
+    bool "all disable"
 
 endchoice
 
@@ -23,12 +32,15 @@ choice SR_MODEL_SEL
 
 config SR_MODEL_WN5_QUANT
 	bool "WakeNet 5 (quantized with 16-bit)"
+    depends on IDF_TARGET_ESP32
 
 config SR_MODEL_WN7_QUANT
 	bool "WakeNet 7 (quantized with 16-bit)"
+    depends on IDF_TARGET_ESP32S3
 
 config SR_MODEL_WN7_QUANT8
 	bool "WakeNet 7 (quantized with 8-bit)"
+    depends on IDF_TARGET_ESP32S3
 
 endchoice
 
@@ -41,97 +53,27 @@ choice SR_WAKE_WORD_SEL
 
 config SR_WN5_HILEXIN
 	bool "hilexin (WakeNet5)"
-	depends on SR_MODEL_WN5_QUANT  
-
-config SR_WN5X2_HILEXIN
-    bool "hilexin (WakeNet5X2)"
-    depends on SR_MODEL_WN5_QUANT  
+	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
 
 config SR_WN5X3_HILEXIN
     bool "hilexin (WakeNet5X3)"
-    depends on SR_MODEL_WN5_QUANT  
+    depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
 
-config SR_WN5_NIHAOXIAOZHI
-	bool "nihaoxiaozhi (WakeNet5)"
-	depends on SR_MODEL_WN5_QUANT  
-
-config SR_WN5X2_NIHAOXIAOZHI
-	bool "nihaoxiaozhi (WakeNet5X2)"
-	depends on SR_MODEL_WN5_QUANT  
-
-config SR_WN5X3_NIHAOXIAOZHI
-	bool "nihaoxiaozhi (WakeNet5X3)"
-	depends on SR_MODEL_WN5_QUANT  
-
-config SR_WN5X3_HIJESON
-	bool "hi jeson (WakeNet5X3)"
-	depends on SR_MODEL_WN5_QUANT  
-
-config SR_WN5X3_NIHAOXIAOXIN
-    bool "nihaoxiaoxin (WakeNet5X3)"
-    depends on SR_MODEL_WN5_QUANT  
+config SR_WN7_HILEXIN
+    bool "hilexin (WakeNet7)"
+    depends on SR_MODEL_WN7_QUANT
 
 config SR_WN5_CUSTOMIZED_WORD
 	bool "customized word (WakeNet5)"
-	depends on SR_MODEL_WN5_QUANT  
+	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
 
 config SR_WN7_CUSTOMIZED_WORD
 	bool "customized word (WakeNet7)"
-	depends on SR_MODEL_WN7_QUANT || SR_MODEL_WN7_QUANT8
-
-config SR_WN7_HILEXIN
-	bool "hilexin (WakeNet7)"
-	depends on SR_MODEL_WN7_QUANT || SR_MODEL_WN7_QUANT8
+	depends on SR_MODEL_WN7_QUANT 
 
 config SR_WN7_XIAOAITONGXUE
 	bool "xiaoaitongxue (WakeNet7)"
 	depends on SR_MODEL_WN7_QUANT || SR_MODEL_WN7_QUANT8
-
-config SR_WN7_ALEXA
-	bool "alexa (WakeNet7)"
-	depends on SR_MODEL_WN7_QUANT || SR_MODEL_WN7_QUANT8
-
-endchoice
-
-choice SR_MN_MODEL_SEL
-    prompt "speech commands recognition model after wake up"
-    default MULTINET1
-    help
-        Select the model to be used.
-
-config MULTINET1
-    depends on SR_MODEL_WN5_QUANT  || SR_MODEL_WN6_QUANT
-    bool "MultiNet 1"
-
-config MULTINET2
-    depends on SR_MODEL_WN7_QUANT || SR_MODEL_WN7_QUANT8
-    bool "MultiNet 2"
-
-config MULTINET3
-    bool "MultiNet 3"
-
-config MULTINET4
-    bool "MultiNet 4"
-
-config MULTINET5
-    bool "MultiNet 5"
-
-config MULTINET6
-    bool "MultiNet 6"
-
-endchoice
-
-choice SR_MN_MODE_SEL
-    prompt "speech commands recognition mode after wake up"
-    default SINGLE_RECOGNITION
-    help
-        Select the mode to be used.
-
-config SINGLE_RECOGNITION
-    bool "Single recognition"
-
-config CONTINUOUS_RECOGNITION
-    bool "Continuous recognition"
 
 endchoice
 
@@ -143,11 +85,37 @@ choice SR_LANGUAGE_SEL
 
 config SR_CHINESE
     bool "chinese"
-    depends on SINGLE_RECOGNITION || CONTINUOUS_RECOGNITION
 
 config SR_ENGLISH
     bool "english"
-    depends on SINGLE_RECOGNITION
+
+endchoice
+
+choice SR_MN_MODE_SEL
+    prompt "speech commands recognition model"
+    default CN_MULTINET3_SINGLE_RECOGNITION
+    help
+        Select the model to be used.
+
+config EN_MULTINET3_SINGLE_RECOGNITION
+    bool "english single recognition (MultiNet3)"
+    depends on SR_ENGLISH && IDF_TARGET_ESP32
+
+config CN_MULTINET2_SINGLE_RECOGNITION
+    bool "chinese single recognition (MultiNet2)"
+    depends on SR_CHINESE && IDF_TARGET_ESP32
+
+config CN_MULTINET2_CONTINUOUS_RECOGNITION
+    bool "chinese continuous recognition (MultiNet2)"
+    depends on SR_CHINESE && IDF_TARGET_ESP32
+
+config CN_MULTINET3_SINGLE_RECOGNITION
+    bool "chinese single recognition (MultiNet3)"
+    depends on SR_CHINESE && IDF_TARGET_ESP32S3
+
+config CN_MULTINET3_CONTINUOUS_RECOGNITION
+    bool "chinese continuous recognition (MultiNet3)"
+    depends on SR_CHINESE && IDF_TARGET_ESP32S3
 
 endchoice
 
@@ -237,7 +205,7 @@ config CN_SPEECH_COMMAND_ID14
 config CN_SPEECH_COMMAND_ID15
     string "ID15"
     depends on SR_CHINESE
-    default "bo fang ge qu"
+    default "kai shi bo fang"
 
 config CN_SPEECH_COMMAND_ID16
     string "ID16"

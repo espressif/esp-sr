@@ -16,6 +16,7 @@
 
 #include "dl_lib_matrix.h"
 #include "dl_lib_matrixq.h"
+#include "dl_lib_matrixq8.h"
 
 //Set this if the coefficient requested is a batch-normalization popvar matrix which needs to be preprocessed by
 //dl_batch_normalize_get_sqrtvar first.
@@ -58,8 +59,10 @@ memory for the returned matrices, when applicable.
 typedef struct {
     const dl_matrix2d_t* (*getter_f)(const char *name, void *arg, int hint);
     const dl_matrix2dq_t* (*getter_q)(const char *name, void *arg, int hint);
+    const dl_matrix2dq8_t* (*getter_q8)(const char *name, void *arg, int hint);
     void (*free_f)(const dl_matrix2d_t *m);
     void (*free_q)(const dl_matrix2dq_t *m);
+    void (*free_q8)(const dl_matrix2dq8_t *m);
     const model_info_t* (*getter_info)(void *arg);
     const alphabet_t* (*getter_alphabet)(void *arg);
 } model_coeff_getter_t;

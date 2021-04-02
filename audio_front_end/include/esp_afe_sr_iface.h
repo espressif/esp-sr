@@ -12,6 +12,7 @@ typedef struct esp_afe_sr_data_t esp_afe_sr_data_t;
 
 //Set AFE_SR mode
 typedef enum {
+    SR_MODE_MONO = -1,               //For mono, low memory consumption and CPU loading
 	SR_MODE_LOW_COST = 0,            //LOW_COST, low memory consumption and CPU loading
     SR_MODE_MEDIUM = 1,              //MEDIUM
 	SR_MODE_HIGH_PERF = 2,           //HIGH_PERF
@@ -57,10 +58,11 @@ typedef int (*esp_afe_sr_iface_op_get_samp_rate_t)(esp_afe_sr_data_t *afe);
 /**
  * @brief Feed samples of an audio stream to the AFE_SR
  *
- * @Warning  The input data should be arranged in the format of [CH0_0, CH1_0, ..., CHN_0, CH0_1, CH0_1, ..., CHN_1, ...].
+ * @Warning  The input data should be arranged in the format of [CH0_0, CH1_0, ..., CHN_0, CH0_1, CH1_1, ..., CHN_1, ...].
  *           The last channel is reference signal or far-end signal.
  *
- * @param afe   The AFE_SR object to query
+ * @param afe   The AFE_SR object to queryq
+ * 
  * @param in    The input microphone signal, only support signed 16-bit @ 16 KHZ. The frame size can be queried by the 
  *              `get_samp_chunksize`. The channel number can be queried `get_channel_num`.
  * @return      The size of input
@@ -138,7 +140,9 @@ typedef struct {
     esp_afe_sr_iface_op_create_t create;
     esp_afe_sr_iface_op_feed_t feed;
     esp_afe_sr_iface_op_fetch_t fetch;
-    esp_afe_sr_iface_op_get_samp_chunksize_t get_samp_chunksize;
+    // esp_afe_sr_iface_op_get_samp_chunksize_t get_samp_chunksize;
+    esp_afe_sr_iface_op_get_samp_chunksize_t get_feed_chunksize;
+    esp_afe_sr_iface_op_get_samp_chunksize_t get_fetch_chunksize;
     esp_afe_sr_iface_op_get_channel_num_t get_channel_num;
     esp_afe_sr_iface_op_get_samp_rate_t get_samp_rate;
     esp_afe_sr_iface_op_set_wakenet_t  set_wakenet; 
