@@ -98,7 +98,7 @@ typedef struct {
  * @return The matrix, or NULL if out of memory
  */
 dl_matrix2dq_t *dl_matrixq_alloc(int w, int h);
-
+dl_matrix2dq_t *dl_matrixq_alloc_psram(int w, int h);
 /**
  * @brief Convert a floating-point matrix to a quantized matrix
  *
@@ -107,7 +107,6 @@ dl_matrix2dq_t *dl_matrixq_alloc(int w, int h);
  * @Return The quantized version of the floating-point matrix
  */
 dl_matrix2dq_t *dl_matrixq_from_matrix2d(const dl_matrix2d_t *m, dl_matrix2dq_t *out);
-
 
 /**
  * TODO: DESCRIBE THIS FUNCTION
@@ -270,7 +269,7 @@ void dl_matrixq_sub(const dl_matrix2dq_t *a, const dl_matrix2dq_t *b, dl_matrix2
  * @param b     Second multiplicand
  * @param res   Multiplicated data. Can be equal to a or b to overwrite that matrix.
  */
-void dl_matrixq_mul(const dl_matrix2dq_t *a, const dl_matrix2dq_t *b, dl_matrix2dq_t *res);
+void dl_matrixq_mul( dl_matrix2dq_t *a,  dl_matrix2dq_t *b, dl_matrix2dq_t *res);
 
 /**
  * @brief Divide a pair of quantized matrices item-by-item: res=a/b

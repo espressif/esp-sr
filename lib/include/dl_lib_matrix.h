@@ -170,6 +170,7 @@ void dl_matrix_add_const(dl_matrix2d_t *subj, const fptp_t add);
  */
 dl_matrix2d_t *dl_matrix_concat(const dl_matrix2d_t *a, const dl_matrix2d_t *b);
 
+dl_matrix2d_t *dl_matrix_concat_h( dl_matrix2d_t *a, const dl_matrix2d_t *b);
 
 /**
  * @brief Print the contents of a matrix to stdout. Used for debugging.
@@ -230,7 +231,7 @@ inline static void dl_matrix_set(dl_matrix2d_t *m, const int x, const int y, fpt
     DL_ITM(m, x, y)=val;
 }
 
-
+void matrix_get_range(const dl_matrix2d_t *m, fptp_t *rmin, fptp_t *rmax);
 
 #endif
 

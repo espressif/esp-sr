@@ -27,30 +27,23 @@ add_prebuilt_library(wakenet "${CMAKE_CURRENT_SOURCE_DIR}/lib/libwakenet.a" PRIV
 ENDIF (IDF_VER MATCHES "v4.")
 add_prebuilt_library(multinet "${CMAKE_CURRENT_SOURCE_DIR}/lib/libmultinet.a" PRIV_REQUIRES esp-sr) 
 
+add_prebuilt_library(esp_audio_front_end "${CMAKE_CURRENT_SOURCE_DIR}/audio_front_end/libesp_audio_front_end.a" PRIV_REQUIRES esp-sr) 
+
 if(IDF_TARGET STREQUAL "esp32")
 target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
     wakenet
     dl_lib_esp32
     c_speech_features
-    hilexin_wn3
-    hilexin_wn4
     hilexin_wn5
-    hilexin_wn5X2
     hilexin_wn5X3
-    hijeson_wn5X3
-    nihaoxiaozhi_wn5
-    nihaoxiaozhi_wn5X2
-    nihaoxiaozhi_wn5X3
-    nihaoxiaoxin_wn6
-    nihaoxiaoxin_wn5X3
     customized_word_wn5
-    customized_word_wn6
     multinet
-    multinet1_ch
     multinet1_en
+    multinet2_ch
     esp_tts_chinese 
     voice_set_xiaole 
     voice_set_template
+    esp_audio_front_end
     esp_audio_processor "-Wl,--end-group")
 endif()
 
@@ -63,16 +56,19 @@ target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
 endif()
 
 
-if(IDF_TARGET STREQUAL "esp32s3beta")
+if(IDF_TARGET STREQUAL "esp32s3")
 target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
     wakenet
-    esp-dsp
+    hilexin_wn7
+    xiaoaitongxue_wn7
+    xiaoaitongxue_wn7_q8
+    customized_word_wn7
     dl_lib_esp32s3
     c_speech_features
-    wakeword_model
-    multinet_model
     esp_audio_front_end
     esp_audio_processor
     multinet
+    multinet3_en
+    multinet3_ch
     "-Wl,--end-group")
 endif()
