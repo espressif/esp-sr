@@ -12,10 +12,11 @@ typedef struct esp_afe_sr_data_t esp_afe_sr_data_t;
 
 //Set AFE_SR mode
 typedef enum {
-    SR_MODE_MONO = -1,               //For mono, low memory consumption and CPU loading
-	SR_MODE_LOW_COST = 0,            //LOW_COST, low memory consumption and CPU loading
-    SR_MODE_MEDIUM = 1,              //MEDIUM
-	SR_MODE_HIGH_PERF = 2,           //HIGH_PERF
+    SR_MODE_MONO_LOW_COST = 0,               // For mono, low memory consumption and CPU loading
+    SR_MODE_MONO_MEDIUM_COST = 1,            // LOW_COST for mono, low memory consumption and CPU loading
+    SR_MODE_STEREO_LOW_COST = 2,             // LOW_COST for stereo, low memory consumption and CPU loading
+    SR_MODE_STEREO_MEDIUM = 3,               // MEDIUM
+    SR_MODE_STEREO_HIGH_PERF = 4,            // //HIGH_PERF
 } afe_sr_mode_t;
 
 /**
@@ -140,7 +141,6 @@ typedef struct {
     esp_afe_sr_iface_op_create_t create;
     esp_afe_sr_iface_op_feed_t feed;
     esp_afe_sr_iface_op_fetch_t fetch;
-    // esp_afe_sr_iface_op_get_samp_chunksize_t get_samp_chunksize;
     esp_afe_sr_iface_op_get_samp_chunksize_t get_feed_chunksize;
     esp_afe_sr_iface_op_get_samp_chunksize_t get_fetch_chunksize;
     esp_afe_sr_iface_op_get_channel_num_t get_channel_num;
