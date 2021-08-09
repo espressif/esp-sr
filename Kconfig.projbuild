@@ -32,7 +32,6 @@ choice SR_MODEL_SEL
 
 config SR_MODEL_WN5_QUANT
 	bool "WakeNet 5 (quantized with 16-bit)"
-    depends on IDF_TARGET_ESP32
 
 config SR_MODEL_WN7_QUANT
 	bool "WakeNet 7 (quantized with 16-bit)"
@@ -51,17 +50,45 @@ choice SR_WAKE_WORD_SEL
 	help
 		Select the wake word to be used.
 
+config SR_WN3_HILEXIN
+	bool "hilexin (WakeNet3)"
+	depends on SR_MODEL_WN3_QUANT
+
+config SR_WN4_HILEXIN
+	bool "hilexin (WakeNet4)"
+	depends on SR_MODEL_WN4_QUANT
+
 config SR_WN5_HILEXIN
 	bool "hilexin (WakeNet5)"
 	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
+
+config SR_WN5X2_HILEXIN
+    bool "hilexin (WakeNet5X2)"
+    depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
 
 config SR_WN5X3_HILEXIN
     bool "hilexin (WakeNet5X3)"
     depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
 
-config SR_WN7_HILEXIN
-    bool "hilexin (WakeNet7)"
-    depends on SR_MODEL_WN7_QUANT
+config SR_WN5_NIHAOXIAOZHI
+	bool "nihaoxiaozhi (WakeNet5)"
+	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
+
+config SR_WN5X2_NIHAOXIAOZHI
+	bool "nihaoxiaozhi (WakeNet5X2)"
+	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
+
+config SR_WN5X3_NIHAOXIAOZHI
+	bool "nihaoxiaozhi (WakeNet5X3)"
+	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
+
+config SR_WN5X3_HIJESON
+	bool "hi jeson (WakeNet5X3)"
+	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
+
+config SR_WN5X3_NIHAOXIAOXIN
+    bool "nihaoxiaoxin (WakeNet5X3)"
+    depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT 
 
 config SR_WN5_CUSTOMIZED_WORD
 	bool "customized word (WakeNet5)"
@@ -74,6 +101,14 @@ config SR_WN7_CUSTOMIZED_WORD
 config SR_WN7_XIAOAITONGXUE
 	bool "xiaoaitongxue (WakeNet7)"
 	depends on SR_MODEL_WN7_QUANT || SR_MODEL_WN7_QUANT8
+
+config SR_WN7_ALEXA
+	bool "Alexa (WakeNet7)"
+	depends on SR_MODEL_WN7_QUANT || SR_MODEL_WN7_QUANT8
+
+config SR_WN7_HILEXIN
+    bool "hilexin (WakeNet7)"
+    depends on SR_MODEL_WN7_QUANT
 
 endchoice
 
@@ -97,9 +132,17 @@ choice SR_MN_MODE_SEL
     help
         Select the model to be used.
 
+config EN_MULTINET1_SINGLE_RECOGNITION
+    bool "english single recognition (MultiNet1)"
+    depends on SR_ENGLISH && IDF_TARGET_ESP32
+
 config EN_MULTINET3_SINGLE_RECOGNITION
     bool "english single recognition (MultiNet3)"
     depends on SR_ENGLISH && IDF_TARGET_ESP32
+
+config EN_MULTINET5_SINGLE_RECOGNITION
+    bool "english single recognition (MultiNet5)"
+    depends on SR_ENGLISH && IDF_TARGET_ESP32S3
 
 config CN_MULTINET2_SINGLE_RECOGNITION
     bool "chinese single recognition (MultiNet2)"

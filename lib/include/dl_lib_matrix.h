@@ -67,6 +67,14 @@ void dl_matrix_free(dl_matrix2d_t *m);
 void dl_matrix_zero(dl_matrix2d_t *m);
 
 /**
+ * @brief Copy the matrix into psram
+ * Copy the matrix from flash or iram/psram into psram
+ *
+ * @param m     Matrix to zero
+ */
+dl_matrix2d_t *dl_matrix_copy_to_psram(const dl_matrix2d_t *m);
+
+/**
  * @brief Generate a new matrix using a range of items from an existing matrix.
  * When using this, the data of the new matrix is not allocated/copied but it re-uses a pointer
  * to the existing data. Changing the data in the resulting matrix, as a result, will also change

@@ -30,6 +30,8 @@ typedef void* aec_handle_t;
 
 /**
  * @brief Creates an instance to the AEC structure.
+ * 
+ * @deprecated This API will be deprecated after version 1.0, please use aec_pro_create
  *
  * @param sample_rate       The Sampling frequency (Hz) must be 16000.
  *
@@ -45,6 +47,8 @@ aec_handle_t aec_create(int sample_rate, int frame_length, int filter_length);
 
 /**
  * @brief Creates an instance to the AEC structure.
+ * 
+ * @deprecated This API will be deprecated after version 1.0, please use aec_pro_create
  *
  * @param sample_rate       The Sampling frequency (Hz) must be 16000.
  *

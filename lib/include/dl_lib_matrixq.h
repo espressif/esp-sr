@@ -140,6 +140,13 @@ void dl_matrixq_free(dl_matrix2dq_t *m);
  */
 void dl_matrixq_zero(dl_matrix2dq_t *m);
 
+/**
+ * @brief Copy the matrix into psram
+ * Copy the matrix from flash or iram/psram into psram
+ *
+ * @param m     Matrix to copy
+ */
+dl_matrix2dq_t *dl_matrixq_copy_to_psram(const dl_matrix2dq_t *m);
 
 /**
  * @brief Do a dotproduct of two quantized matrices : res=a.b, Result is a fixed-point matrix.

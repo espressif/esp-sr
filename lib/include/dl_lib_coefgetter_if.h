@@ -17,6 +17,7 @@
 #include "dl_lib_matrix.h"
 #include "dl_lib_matrixq.h"
 #include "dl_lib_matrixq8.h"
+#include "cJSON.h"
 
 //Set this if the coefficient requested is a batch-normalization popvar matrix which needs to be preprocessed by
 //dl_batch_normalize_get_sqrtvar first.
@@ -65,6 +66,7 @@ typedef struct {
     void (*free_q8)(const dl_matrix2dq8_t *m);
     const model_info_t* (*getter_info)(void *arg);
     const alphabet_t* (*getter_alphabet)(void *arg);
+    const cJSON* (*getter_config)(void *arg);
 } model_coeff_getter_t;
 
 #endif

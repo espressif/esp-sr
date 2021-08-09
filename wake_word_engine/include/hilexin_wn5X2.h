@@ -6,4 +6,4 @@
 #include "dl_lib_matrixq.h"
 #include "dl_lib_matrixq8.h"
 
-extern const model_coeff_getter_t get_coeff_hilexin_wn5;
+extern const model_coeff_getter_t get_coeff_hilexin_wn5X2;

@@ -11,6 +11,9 @@ set(COMPONENT_ADD_INCLUDEDIRS
     audio_front_end/include
     )
 
+set(COMPONENT_REQUIRES
+    json
+    )
 
 register_component()
 
@@ -62,6 +65,8 @@ target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
     hilexin_wn7
     xiaoaitongxue_wn7
     xiaoaitongxue_wn7_q8
+    alexa_wn7
+    alexa_wn7_q8
     customized_word_wn7
     dl_lib_esp32s3
     c_speech_features

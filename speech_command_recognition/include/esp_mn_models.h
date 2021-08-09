@@ -8,6 +8,7 @@ extern const esp_mn_iface_t esp_sr_multinet3_single_quantized_en;
 extern const esp_mn_iface_t esp_sr_multinet2_single_quantized_cn;
 extern const esp_mn_iface_t esp_sr_multinet3_single_quantized_cn;
 extern const esp_mn_iface_t esp_sr_multinet3_continuous_quantized_cn;
+extern const esp_mn_iface_t esp_sr_multinet5_quantized;
 
 /*
  Configure wake word to use based on what's selected in menuconfig.
@@ -26,7 +27,8 @@ extern const esp_mn_iface_t esp_sr_multinet3_continuous_quantized_cn;
 #define MULTINET_MODEL esp_sr_multinet2_single_quantized_cn
 #define MULTINET_COEFF get_coeff_multinet2_ch
 #elif CONFIG_CN_MULTINET2_CONTINUOUS_RECOGNITION
-#error No valid wake word selected.
+
+
 #elif CONFIG_CN_MULTINET3_SINGLE_RECOGNITION
 #include "multinet3_ch.h"
 #define MULTINET_MODEL esp_sr_multinet3_single_quantized_cn
@@ -35,6 +37,10 @@ extern const esp_mn_iface_t esp_sr_multinet3_continuous_quantized_cn;
 #include "multinet3_ch.h"
 #define MULTINET_MODEL esp_sr_multinet3_continuous_quantized_cn
 #define MULTINET_COEFF get_coeff_multinet3_ch
+#elif CONFIG_EN_MULTINET5_SINGLE_RECOGNITION
+#include "multinet5_en.h"
+#define MULTINET_MODEL esp_sr_multinet5_quantized
+#define MULTINET_COEFF get_coeff_multinet5_en
 #else
 #error No valid wake word selected.
 #endif
