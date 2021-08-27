@@ -67,13 +67,14 @@ target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
     xiaoaitongxue_wn7_q8
     alexa_wn7
     alexa_wn7_q8
+    alexa_wn8
     customized_word_wn7
     dl_lib_esp32s3
     c_speech_features
     esp_audio_front_end
     esp_audio_processor
     multinet
-    multinet3_en
+    multinet5_en
     multinet3_ch
     "-Wl,--end-group")
 endif()

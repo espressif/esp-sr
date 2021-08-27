@@ -1,6 +1,6 @@
 #pragma once
 #include "stdint.h"
-#include "esp_err.h"
+// #include "esp_err.h"
 #include "dl_lib_coefgetter_if.h"
 #include "esp_wn_iface.h"
 // //Opaque model data container

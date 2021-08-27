@@ -7,6 +7,7 @@
 extern const esp_wn_iface_t esp_sr_wakenet5_quantized;
 extern const esp_wn_iface_t esp_sr_wakenet7_quantized;
 extern const esp_wn_iface_t esp_sr_wakenet7_quantized8;
+extern const esp_wn_iface_t esp_sr_wakenet8_quantized;
 
 /*
  Configure network to use based on what's selected in menuconfig.
@@ -17,6 +18,8 @@ extern const esp_wn_iface_t esp_sr_wakenet7_quantized8;
 #define WAKENET_MODEL esp_sr_wakenet7_quantized
 #elif CONFIG_SR_MODEL_WN7_QUANT8
 #define WAKENET_MODEL esp_sr_wakenet7_quantized8
+#elif CONFIG_SR_MODEL_WN8_QUANT
+#define WAKENET_MODEL esp_sr_wakenet8_quantized
 #else
 #error No valid neural network model selected.
 #endif
@@ -83,6 +86,10 @@ extern const esp_wn_iface_t esp_sr_wakenet7_quantized8;
 #elif CONFIG_SR_WN7_ALEXA & CONFIG_SR_MODEL_WN7_QUANT
 #include "alexa_wn7.h"
 #define WAKENET_COEFF get_coeff_alexa_wn7
+
+#elif CONFIG_SR_WN8_ALEXA & CONFIG_SR_MODEL_WN8_QUANT
+#include "alexa_wn8.h"
+#define WAKENET_COEFF get_coeff_alexa_wn8
 
 #elif CONFIG_SR_WN7_ALEXA & CONFIG_SR_MODEL_WN7_QUANT8
 #include "alexa_wn7_q8.h"

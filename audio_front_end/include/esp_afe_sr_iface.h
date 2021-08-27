@@ -12,11 +12,8 @@ typedef struct esp_afe_sr_data_t esp_afe_sr_data_t;
 
 //Set AFE_SR mode
 typedef enum {
-    SR_MODE_MONO_LOW_COST = 0,               // For mono, low memory consumption and CPU loading
-	SR_MODE_MONO_MEDIUM_COST = 1,            // LOW_COST for mono, low memory consumption and CPU loading
-    SR_MODE_STEREO_LOW_COST = 2,             // LOW_COST for stereo, low memory consumption and CPU loading
-	SR_MODE_STEREO_MEDIUM = 3,               // MEDIUM
-    SR_MODE_STEREO_HIGH_PERF = 4,            // //HIGH_PERF
+    SR_MODE_LOW_COST = 0,
+    SR_MODE_HIGH_PERF = 1
 } afe_sr_mode_t;
 
 /**

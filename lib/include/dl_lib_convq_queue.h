@@ -18,6 +18,7 @@
 #include "dl_lib_conv_queue.h"
 #include "dl_lib.h"
 
+
 //fixed-point convolution FIFO queue. 
 typedef struct {
     int n;           /*< the length of queue */
@@ -320,5 +321,6 @@ qtp_t *dl_dilation_layerq_mc_steps( dl_convq_queue_t **in,
 
 void test_atrous_convq(int size, int rate, int in_channel, int out_channel);
 void test_lstm_convq(int size, int in_dim, int lstm_cell);
+void dl_nn_tanh_i16(dl_convq_queue_t **cqm, int offset, int nch);
 
 #endif
