@@ -1,0 +1,18 @@
+multinet_g2p.py 脚本可以把文本转为可以被multinet识别的因素代号．
+1. 使用之前需要先安装en_g2p
+```
+pip install en_g2p
+```
+
+2. 运行脚本，将文本呢转化为所需音素代号
+```
+python multinet_g2p.py -t "hello word"
+----
+hello word  ->  ['h', 'c', 'L', 'b', ' ', 'W', 'k', 'D']
+
+```
+
+3. 将对应的短语的音素代号，添加到menuconfig即可
+
+
+
