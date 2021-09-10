@@ -16,6 +16,48 @@ typedef enum {
     SR_MODE_HIGH_PERF = 1
 } afe_sr_mode_t;
 
+// the output state of fetch function
+typedef enum {
+    AFE_FETCH_CHANNEL_VERIFIED = -2,  // wwe state: output channel is verified
+    AFE_FETCH_NOISE = -1,             // vad state: noise or silence
+    AFE_FETCH_SPEECH = 0,             // vad state: speech
+    AFE_FETCH_WWE_DETECTED = 1        // wwe state: wake word is detected
+} afe_fetch_mode_t;
+
+typedef struct {
+    bool aec_init;
+    bool se_init;
+    bool vad_init;
+    bool wakenet_init;
+    int vad_mode;
+    esp_wn_iface_t *wakenet_model;
+    model_coeff_getter_t *wakenet_coeff;
+    det_mode_t wakenet_mode;
+    afe_sr_mode_t afe_mode;
+    int afe_perferred_core;
+    int afe_perferred_priority;
+    int afe_ringbuf_size;
+    bool alloc_from_psram;
+    int agc_mode;
+} afe_config_t;
+
+#define AFE_CONFIG_DEFAULT() { \
+    .aec_init = true, \
+    .se_init = true, \
+    .vad_init = true, \
+    .wakenet_init = true, \
+    .vad_mode = 3, \
+    .wakenet_model = &WAKENET_MODEL, \
+    .wakenet_coeff = &WAKENET_COEFF, \
+    .wakenet_mode = DET_MODE_2CH_90, \
+    .afe_mode = SR_MODE_LOW_COST, \
+    .afe_perferred_core = 0, \
+    .afe_perferred_priority = 5, \
+    .afe_ringbuf_size = 50, \
+    .alloc_from_psram = true, \
+    .agc_mode = 1, \  
+}
+
 /**
  * @brief Function to initialze a AFE_SR instance with a specified mode
  * 
@@ -24,7 +66,15 @@ typedef enum {
  *                          If all task in AFE_SR can not run in real time by only one core, the another core would be used. 
  * @returns Handle to the AFE_SR data
  */
-typedef esp_afe_sr_data_t* (*esp_afe_sr_iface_op_create_t)(afe_sr_mode_t mode, int perferred_core);
+typedef esp_afe_sr_data_t* (*esp_afe_sr_iface_op_create_t)(afe_sr_mode_t mode, int perferred_cor);
+
+/**
+ * @brief Function to initialze a AFE_SR instance
+ * 
+ * @param afe_config        The config of AFE_SR
+ * @returns Handle to the AFE_SR data
+ */
+typedef esp_afe_sr_data_t* (*esp_afe_sr_iface_op_create_from_config_t)(afe_config_t *afe_config);
 
 /**
  * @brief Get the amount of each channel samples per frame that need to be passed to the function
@@ -74,9 +124,9 @@ typedef int (*esp_afe_sr_iface_op_feed_t)(esp_afe_sr_data_t *afe, const int16_t*
  *
  * @param afe   The AFE_SR object to query
  * @param out   The output enhanced signal. The frame size can be queried by the `get_samp_chunksize`.
- * @return      The style of output, -1: noise, 0: speech, 1: wake word 1, 2: wake word 2, ...
+ * @return      The state of output, please refer to the definition of `afe_fetch_mode_t`
  */
-typedef int (*esp_afe_sr_iface_op_fetch_t)(esp_afe_sr_data_t *afe, int16_t* out);
+typedef afe_fetch_mode_t (*esp_afe_sr_iface_op_fetch_t)(esp_afe_sr_data_t *afe, int16_t* out);
 
 /**
  * @brief Initial wakenet and wake words coefficient, or reset wakenet and wake words coefficient 
@@ -124,6 +174,22 @@ typedef int (*esp_afe_sr_iface_op_disable_aec_t)(esp_afe_sr_data_t *afe);
 typedef int (*esp_afe_sr_iface_op_enable_aec_t)(esp_afe_sr_data_t *afe);
 
 /**
+ * @brief Disable SE algorithm.
+ *
+ * @param afe          The AFE_SR object to query
+ * @return             0: fail, 1: success
+ */
+typedef int (*esp_afe_sr_iface_op_disable_se_t)(esp_afe_sr_data_t *afe);
+
+/**
+ * @brief Enable SE algorithm.
+ *
+ * @param afe          The AFE_SR object to query
+ * @return             0: fail, 1: success
+ */
+typedef int (*esp_afe_sr_iface_op_enable_se_t)(esp_afe_sr_data_t *afe);
+
+/**
  * @brief Destroy a AFE_SR instance
  *
  * @param afe         AFE_SR object to destroy
@@ -136,6 +202,7 @@ typedef void (*esp_afe_sr_iface_op_destroy_t)(esp_afe_sr_data_t *afe);
  */
 typedef struct {
     esp_afe_sr_iface_op_create_t create;
+    esp_afe_sr_iface_op_create_from_config_t create_from_config;
     esp_afe_sr_iface_op_feed_t feed;
     esp_afe_sr_iface_op_fetch_t fetch;
     esp_afe_sr_iface_op_get_samp_chunksize_t get_feed_chunksize;
@@ -147,5 +214,7 @@ typedef struct {
     esp_afe_sr_iface_op_enable_wakenet_t enable_wakenet;
     esp_afe_sr_iface_op_disable_aec_t disable_aec;
     esp_afe_sr_iface_op_enable_aec_t enable_aec;
+    esp_afe_sr_iface_op_disable_se_t disable_se;
+    esp_afe_sr_iface_op_enable_se_t enable_se;
     esp_afe_sr_iface_op_destroy_t destroy;
 } esp_afe_sr_iface_t;

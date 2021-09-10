@@ -152,6 +152,10 @@ config EN_MULTINET5_SINGLE_RECOGNITION
     bool "english single recognition (MultiNet5)"
     depends on SR_ENGLISH && IDF_TARGET_ESP32S3
 
+config EN_MULTINET5_SINGLE_RECOGNITION_QUANT8
+    bool "english single recognition (MultiNet5 quantized with 8-bit)"
+    depends on SR_ENGLISH && IDF_TARGET_ESP32S3
+
 config CN_MULTINET2_SINGLE_RECOGNITION
     bool "chinese single recognition (MultiNet2)"
     depends on SR_CHINESE && IDF_TARGET_ESP32

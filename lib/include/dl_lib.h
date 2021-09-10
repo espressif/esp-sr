@@ -38,7 +38,13 @@ void dl_lib_free(void *d);
  */
 fptp_t fast_exp(double x, int steps);
 
-
+/**
+ * @brief Does a fast version of the exp() operation on a floating point number.
+ *
+ * @param in Floating point input
+ * @return Exp()'ed output
+ */
+double fast_exp_pro(double x);
 
 /**
  * @brief Does a softmax operation on a matrix.

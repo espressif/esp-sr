@@ -75,6 +75,7 @@ target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
     esp_audio_processor
     multinet
     multinet5_en
+    multinet5_en_q8
     multinet3_ch
     "-Wl,--end-group")
 endif()

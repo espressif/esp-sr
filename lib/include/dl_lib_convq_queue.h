@@ -38,7 +38,7 @@ typedef struct {
  * @return      The convolution queue, or NULL if out of memory
  */
 dl_convq_queue_t *dl_convq_queue_alloc(int n, int c);
-
+dl_convq_queue_t *dl_convq_queue_alloc_from_psram(int n, int c);
 void dl_convq_to_matrix2dq(dl_convq_queue_t *cq, dl_matrix2dq_t* out, int row);
 
 /**
