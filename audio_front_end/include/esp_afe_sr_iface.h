@@ -55,7 +55,7 @@ typedef struct {
     .afe_perferred_priority = 5, \
     .afe_ringbuf_size = 50, \
     .alloc_from_psram = true, \
-    .agc_mode = 1, \  
+    .agc_mode = 2, \
 }
 
 /**
