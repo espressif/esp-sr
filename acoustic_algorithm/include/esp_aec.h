@@ -71,7 +71,7 @@ aec_handle_t aec_create_multimic(int sample_rate, int frame_length, int filter_l
  *
  * @param nch               Number of microphones.
  *
- * @param mode              Mode of AEC (0 to 4), indicating aggressiveness and RAM allocation. 0: mild; 1 or 2: medium (1: internal RAM, 2: SPIRAM); 3 and 4: aggressive (3: internal RAM, 4: SPIRAM).
+ * @param mode              Mode of AEC (0 to 5), indicating aggressiveness and RAM allocation. 0: mild; 1 or 2: medium (1: internal RAM, 2: SPIRAM); 3 and 4: aggressive (3: internal RAM, 4: SPIRAM); 5: agressive, accelerated for ESP32-S3.
  *
  * @return
  *         - NULL: Create failed
