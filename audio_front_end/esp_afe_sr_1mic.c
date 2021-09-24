@@ -142,6 +142,8 @@ static esp_afe_sr_data_t *afe_create_from_config(afe_config_t *afe_config)
             abort();
         }
         afe->agc_mode = afe_config->agc_mode;
+        if (afe->agc_mode > 3) afe->agc_mode = 3;
+        if (afe->agc_mode < 0) afe->agc_mode = 0;
     } else {
         afe->wn_nch = 1;
         afe->enable_wn = 0;
@@ -290,8 +292,9 @@ static int afe_fetch(esp_afe_sr_data_t *afe, int16_t *out)
         res = afe->wakenet->detect(afe->model_data, afe->buff_wn);
         //selector & gainer
         afe->channel_id = afe->wakenet->get_triggered_channel(afe->model_data);
-        if (res > 0 && afe->agc_mode) {
-            out_gain = afe->wakenet->get_vol_gain(afe->model_data, -5);
+        if (res > 0 && afe->agc_mode>=0) {
+            if (afe->agc_mode == 0) out_gain = 1;
+            else out_gain = afe->wakenet->get_vol_gain(afe->model_data, (afe->agc_mode-6));
         }
 
         int shift = afe->audio_chunksize * afe->channel_id;

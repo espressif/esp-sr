@@ -37,7 +37,7 @@ typedef struct {
     int afe_perferred_core;
     int afe_perferred_priority;
     int afe_ringbuf_size;
-    bool alloc_from_psram;
+    int alloc_from_psram;
     int agc_mode;
 } afe_config_t;
 
@@ -54,7 +54,7 @@ typedef struct {
     .afe_perferred_core = 0, \
     .afe_perferred_priority = 5, \
     .afe_ringbuf_size = 50, \
-    .alloc_from_psram = true, \
+    .alloc_from_psram = 1, \
     .agc_mode = 2, \
 }
 
