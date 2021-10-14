@@ -6,6 +6,7 @@
 
 char *get_id_name(int i)
 {
+#if defined CONFIG_USE_MULTINET
     if (i == 0)
         return MN_SPEECH_COMMAND_ID0;
     else if (i == 1)
@@ -208,6 +209,9 @@ char *get_id_name(int i)
         return MN_SPEECH_COMMAND_ID99;
     else
         return NULL;
+#else
+    return NULL;
+#endif
 }
 
 void reset_speech_commands_v1(model_iface_data_t *model_data, char* command_str, char *err_phrase_id);

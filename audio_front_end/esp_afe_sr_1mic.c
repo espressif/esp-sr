@@ -86,11 +86,17 @@ static esp_afe_sr_data_t *afe_create_from_config(afe_config_t *afe_config)
         afe->aec_filter_length = 4;
         afe->ref_vad_mode = 3;
         afe->aec_nch = afe->nch + 1;
-        afe->ref_vad_handle = vad_create(afe->vad_mode, 16000, 30);
-        afe->aec_tmp = dl_lib_calloc(afe->aec_frame_size * afe->aec_nch, sizeof(int16_t), 16);
+        afe->ref_vad_handle = vad_create(afe->ref_vad_mode, 16000, 30);
+
+        if (afe_config->alloc_from_psram) {
+            afe->aec_tmp = dl_lib_calloc_psram(afe->aec_frame_size * afe->aec_nch, sizeof(int16_t), 16);
+        } else {
+            afe->aec_tmp = dl_lib_calloc(afe->aec_frame_size * afe->aec_nch, sizeof(int16_t), 16);
+        }
+
         if (afe->mode == SR_MODE_LOW_COST) {
             afe->aec_handle = esp_aec3_728_init(afe->nch, afe->aec_frame_size,
-                                                afe->aec_filter_length, 1);
+                                                afe->aec_filter_length, afe_config->alloc_from_psram);
         } else {
             afe->aec_handle = esp_aec3_init(afe->nch, afe->aec_frame_size,
                                             afe->aec_filter_length, 1);
@@ -158,7 +164,11 @@ static esp_afe_sr_data_t *afe_create_from_config(afe_config_t *afe_config)
     /********************************************************/
     /**********************INIT OTRHERS**********************/
     /********************************************************/
-    afe->aec_in = dl_lib_calloc(afe->aec_frame_size * (afe->nch + 1), sizeof(int16_t), 16);
+    if (afe_config->alloc_from_psram) {
+        afe->aec_in = dl_lib_calloc_psram(afe->aec_frame_size * (afe->nch + 1) * sizeof(int16_t), 1, 16);
+    } else {
+        afe->aec_in = dl_lib_calloc(afe->aec_frame_size * (afe->nch + 1) * sizeof(int16_t), 1, 16);
+    }
     afe->ns_in = malloc(afe->ns_frame_size * afe->wn_nch * sizeof(int16_t));
     afe->ns_out = malloc(afe->ns_frame_size * afe->wn_nch * sizeof(int16_t));
     afe->rb_in_size = afe->aec_frame_size * afe->nch * afe_config->afe_ringbuf_size;
@@ -307,12 +317,17 @@ static int afe_fetch(esp_afe_sr_data_t *afe, int16_t *out)
         }
     }
 
-    // vad
-    if (afe->vad_handle != NULL) {
-        if (res <= 0) {
+    if (res == 0) {
+        // vad
+        if (afe->vad_handle != NULL) {
             res = vad_process(afe->vad_handle, out);
-            res -= 1;
         }
+        if (res == VAD_SILENCE) return AFE_FETCH_NOISE;
+        else return AFE_FETCH_SPEECH;
+    } else if (res == -1) {
+        return AFE_FETCH_CHANNEL_VERIFIED;
+    } else {
+        return AFE_FETCH_WWE_DETECTED;
     }
 
     return res;
@@ -412,7 +427,9 @@ static void afe_destory(esp_afe_sr_data_t *afe)
     }
     if (afe != NULL) {
         dl_lib_free(afe->aec_in);
+        dl_lib_free(afe->aec_tmp);
         free(afe->ns_in);
+        free(afe->ns_out);
         sr_rb_unint(afe->rb_in);
         sr_rb_unint(afe->rb_out);
 
