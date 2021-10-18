@@ -12,7 +12,7 @@ extern const esp_wn_iface_t esp_sr_wakenet8_quantized;
 /*
  Configure network to use based on what's selected in menuconfig.
 */
-#if defined CONFIG_USE_MULTINET
+#if defined CONFIG_USE_WAKENET
 #if CONFIG_SR_WN_MODEL_WN5_QUANT
 #define WAKENET_MODEL esp_sr_wakenet5_quantized
 #elif CONFIG_SR_WN_MODEL_WN7_QUANT
