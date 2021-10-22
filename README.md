@@ -1,4 +1,4 @@
-# esp_sr [[中文]](./README_cn.md)
+# esp_sr
 
 Espressif esp_sr provides basic algorithms for **Speech Recognition** applications. Now, this framework has three modules:
 
@@ -21,14 +21,13 @@ Espressif's speech command recognition model [MultiNet](speech_command_recogniti
 Currently, Espressif **MultiNet** supports up to 100 Chinese or English speech commands, such as “打开空调” (Turn on the air conditioner) and “打开卧室灯” (Turn on the bedroom light).
 
 
-## Acoustic algorithm
+## Audio Front End
 
-Espressif acoustic algorithm module is specially designed to improve speech recognition performance in far-field or noisy environments. 
+Espressif Audio Front-End [AFE](audio_front_end/README.md) integrates AEC (Acoustic Echo Cancellation),  VAD (Voice Activity Detection),BSS (Blind Source Separation) and NS (Noise Suppression).    
 
-Currently, MASE algorithm supports 2-mic linear array and 3-mic circular array.
+Our two-mic Audio Front-End (AFE) have been qualified as a “Software Audio Front-End Solution” for [Amazon Alexa Built-in devices](https://developer.amazon.com/en-US/alexa/solution-providers/dev-kits#software-audio-front-end-dev-kits).
 
 
 **In order to achieve optimal performance:**
 
-* Please refer to hardware design [ESP32_Korvo](https://github.com/espressif/esp-skainet/tree/master/docs/zh_CN/hw-reference/esp32/user-guide-esp32-korvo-v1.1.md) or [ESP32-LyraT-Mini](https://docs.espressif.com/projects/esp-adf/en/latest/get-started/get-started-esp32-lyrat-mini.html).
 * Please refer to software design [esp-skainet](https://github.com/espressif/esp-skainet).
