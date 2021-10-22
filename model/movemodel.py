@@ -2,6 +2,16 @@ import io
 import os
 import argparse
 
+def calculate_total_size(folder_path):
+    total_size = 0
+    for file_name in os.listdir(folder_path):
+        path = os.path.join(folder_path, file_name)
+        if os.path.isdir(path):
+            total_size = total_size + calculate_total_size(path)
+        if os.path.isfile(path):
+            total_size = total_size + os.path.getsize(path)
+    return total_size
+
 if __name__ == '__main__':
     # input parameter
     parser = argparse.ArgumentParser(description='Model generator tool')
@@ -40,6 +50,8 @@ elif "CONFIG_SR_WN_WN7_ALEXA" in WN_STRING and "CONFIG_SR_WN_MODEL_WN7_QUANT" in
     wakenet_model = 'alexa7'
 elif "CONFIG_SR_WN_WN8_ALEXA" in WN_STRING and "CONFIG_SR_WN_MODEL_WN8_QUANT" in WN_STRING:
     wakenet_model = 'alexa8'
+elif "CONFIG_SR_WN_WN8_HIESP" in WN_STRING and "CONFIG_SR_WN_MODEL_WN8_QUANT" in WN_STRING:
+    wakenet_model = 'hiesp8'
 else:
     print('choose no wakenet mode')
 
@@ -72,3 +84,6 @@ if wakenet_model != 'null':
 if multinet_model != 'null':
     os.system("cp %s %s -rf" % (multinet_model, target_model))
 os.system("cp %s %s" % (wakenet_model+'/_MODEL_INFO_', target_model))
+
+total_size = calculate_total_size(target_model)
+print("Recommended model partition size: ", str(int((total_size / 1024 + 500) / 4 ) * 4) + 'KB')

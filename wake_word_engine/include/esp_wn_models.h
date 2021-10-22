@@ -88,6 +88,9 @@ extern const esp_wn_iface_t esp_sr_wakenet8_quantized;
 #elif CONFIG_SR_WN_WN7_ALEXA & CONFIG_SR_WN_MODEL_WN7_QUANT8
 #define WAKENET_COEFF "alexa7q8"
 
+#elif CONFIG_SR_WN_WN8_HIESP & CONFIG_SR_WN_MODEL_WN8_QUANT
+#define WAKENET_COEFF "hiesp8"
+
 #else
 #error No valid wake word selected.
 #endif

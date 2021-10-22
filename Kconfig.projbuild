@@ -24,6 +24,17 @@ choice NET_TO_USE_ACCELERATION
 
 endchoice
 
+choice MODEL_DATA_PATH
+    prompt "model data path"
+    default MODEL_IN_SPIFFS
+
+    config MODEL_IN_SPIFFS
+        bool "spiffs partition"
+
+    config MODEL_IN_SDCARD
+        bool "SD Card"
+endchoice
+
 config USE_WAKENET
     bool "use wakenet"
     default "y"
@@ -61,23 +72,23 @@ choice SR_WN_WAKE_WORD_SEL
         Select the wake word to be used.
 
     config SR_WN_WN3_HILEXIN
-        bool "hilexin (WakeNet3)"
+        bool "Hi,Lexin (WakeNet3)"
         depends on SR_WN_MODEL_WN3_QUANT
 
     config SR_WN_WN4_HILEXIN
-        bool "hilexin (WakeNet4)"
+        bool "Hi,Lexin (WakeNet4)"
         depends on SR_WN_MODEL_WN4_QUANT
 
     config SR_WN_WN5_HILEXIN
-        bool "hilexin (WakeNet5)"
+        bool "Hi,Lexin (WakeNet5)"
         depends on SR_WN_MODEL_WN5_QUANT || SR_WN_MODEL_WN5_FLOAT 
 
     config SR_WN_WN5X2_HILEXIN
-        bool "hilexin (WakeNet5X2)"
+        bool "Hi,Lexin (WakeNet5X2)"
         depends on SR_WN_MODEL_WN5_QUANT || SR_WN_MODEL_WN5_FLOAT 
 
     config SR_WN_WN5X3_HILEXIN
-        bool "hilexin (WakeNet5X3)"
+        bool "Hi,Lexin (WakeNet5X3)"
         depends on SR_WN_MODEL_WN5_QUANT || SR_WN_MODEL_WN5_FLOAT 
 
     config SR_WN_WN5_NIHAOXIAOZHI
@@ -117,11 +128,15 @@ choice SR_WN_WAKE_WORD_SEL
         depends on SR_WN_MODEL_WN7_QUANT || SR_WN_MODEL_WN7_QUANT8
 
     config SR_WN_WN7_HILEXIN
-        bool "hilexin (WakeNet7)"
+        bool "Hi,Lexin (WakeNet7)"
         depends on SR_WN_MODEL_WN7_QUANT || SR_WN_MODEL_WN7_QUANT8
 
     config SR_WN_WN8_ALEXA
         bool "Alexa (WakeNet8)"
+        depends on SR_WN_MODEL_WN8_QUANT || SR_WN_MODEL_WN8_QUANT8
+
+    config SR_WN_WN8_HIESP
+        bool "Hi,ESP (WakeNet8)"
         depends on SR_WN_MODEL_WN8_QUANT || SR_WN_MODEL_WN8_QUANT8
 
 endchoice

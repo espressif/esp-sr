@@ -1,5 +1,6 @@
 set(COMPONENT_SRCS
     speech_command_recognition/mn_process_commands.c
+    model/model_path.c
     )
 
 set(COMPONENT_ADD_INCLUDEDIRS 
@@ -9,25 +10,15 @@ set(COMPONENT_ADD_INCLUDEDIRS
     acoustic_algorithm/include
     esp-tts/esp_tts_chinese/include
     audio_front_end/include
+    model
     )
 
 set(COMPONENT_REQUIRES
     json
+    spiffs
     )
 
 register_component()
-
-set(MVMODEL_EXE ${COMPONENT_PATH}/model/movemodel.py)
-
-add_custom_command(
-     OUTPUT ${COMPONENT_DIR}/model/target/_MODEL_INFO_
-     COMMENT "Running move model..."
-     COMMAND python ${MVMODEL_EXE} -d1 ${PROJECT_DIR} -d2 ${COMPONENT_PATH}
-     DEPENDS ${COMPONENT_DIR}/model/
-     VERBATIM)
-
-add_custom_target(model DEPENDS ${COMPONENT_DIR}/model/target/_MODEL_INFO_)
-add_dependencies(${COMPONENT_LIB} model)
 
 target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/lib")
 target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/wake_word_engine")
@@ -85,4 +76,18 @@ target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
     "-Wl,--end-group")
 endif()
 
-spiffs_create_partition_image(model ${COMPONENT_DIR}/model/target FLASH_IN_PROJECT DEPENDS ${COMPONENT_DIR}/model/target/_MODEL_INFO_)
+set(MVMODEL_EXE ${COMPONENT_PATH}/model/movemodel.py)
+
+if(CONFIG_MODEL_IN_SPIFFS AND CONFIG_USE_WAKENET)
+    add_custom_command(
+         OUTPUT ${COMPONENT_DIR}/model/target/_MODEL_INFO_
+         COMMENT "Running move model..."
+         COMMAND python ${MVMODEL_EXE} -d1 ${PROJECT_DIR} -d2 ${COMPONENT_PATH}
+         DEPENDS ${COMPONENT_DIR}/model/
+         VERBATIM)
+
+    add_custom_target(model DEPENDS ${COMPONENT_DIR}/model/target/_MODEL_INFO_)
+    add_dependencies(${COMPONENT_LIB} model)
+
+    spiffs_create_partition_image(model ${COMPONENT_DIR}/model/target FLASH_IN_PROJECT DEPENDS ${COMPONENT_DIR}/model/target/_MODEL_INFO_)
+endif()
