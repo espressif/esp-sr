@@ -27,14 +27,10 @@ target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/acoust
 target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese")
 target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/audio_front_end")
 
-IF (IDF_VER MATCHES "v4.")
 add_prebuilt_library(esp_audio_processor "${CMAKE_CURRENT_SOURCE_DIR}/acoustic_algorithm/libesp_audio_processor.a" PRIV_REQUIRES esp-sr) 
-add_prebuilt_library(wakenet "${CMAKE_CURRENT_SOURCE_DIR}/lib/libwakenet.a" PRIV_REQUIRES esp-sr) 
-ENDIF (IDF_VER MATCHES "v4.")
+add_prebuilt_library(wakenet "${CMAKE_CURRENT_SOURCE_DIR}/lib/libwakenet.a" PRIV_REQUIRES esp-sr)
 add_prebuilt_library(multinet "${CMAKE_CURRENT_SOURCE_DIR}/lib/libmultinet.a" PRIV_REQUIRES esp-sr) 
-
 add_prebuilt_library(esp_audio_front_end "${CMAKE_CURRENT_SOURCE_DIR}/audio_front_end/libesp_audio_front_end.a" PRIV_REQUIRES esp-sr) 
-
 add_prebuilt_library(hufzip "${CMAKE_CURRENT_SOURCE_DIR}/lib/libhufzip.a" PRIV_REQUIRES esp-sr) 
 
 if(IDF_TARGET STREQUAL "esp32")
