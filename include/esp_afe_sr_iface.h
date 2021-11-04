@@ -41,6 +41,25 @@ typedef struct {
     int agc_mode;
 } afe_config_t;
 
+
+#if CONFIG_IDF_TARGET_ESP32
+#define AFE_CONFIG_DEFAULT() { \
+    .aec_init = true, \
+    .se_init = true, \
+    .vad_init = true, \
+    .wakenet_init = true, \
+    .vad_mode = 3, \
+    .wakenet_model = &WAKENET_MODEL, \
+    .wakenet_coeff = &WAKENET_COEFF, \
+    .wakenet_mode = DET_MODE_90, \
+    .afe_mode = SR_MODE_HIGH_PERF, \
+    .afe_perferred_core = 0, \
+    .afe_perferred_priority = 5, \
+    .afe_ringbuf_size = 50, \
+    .alloc_from_psram = 1, \
+    .agc_mode = 2, \
+}
+#elif CONFIG_IDF_TARGET_ESP32S3
 #define AFE_CONFIG_DEFAULT() { \
     .aec_init = true, \
     .se_init = true, \
@@ -57,7 +76,7 @@ typedef struct {
     .alloc_from_psram = 1, \
     .agc_mode = 2, \
 }
-
+#endif
 /**
  * @brief Function to initialze a AFE_SR instance with a specified mode
  * 

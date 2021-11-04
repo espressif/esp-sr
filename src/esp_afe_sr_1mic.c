@@ -95,14 +95,20 @@ static esp_afe_sr_data_t *afe_create_from_config(afe_config_t *afe_config)
         }
 
         if (afe->mode == SR_MODE_LOW_COST) {
+#ifdef CONFIG_IDF_TARGET_ESP32S3
             afe->aec_handle = esp_aec3_728_init(afe->nch, afe->aec_frame_size,
                                                 afe->aec_filter_length, afe_config->alloc_from_psram);
+#else
+            printf("Not support SR_MODE_LOW_COST on ESP32\n");
+            afe->aec_handle = NULL;
+#endif
         } else {
             afe->aec_handle = esp_aec3_init(afe->nch, afe->aec_frame_size,
-                                            afe->aec_filter_length, 1);
+                                            afe->aec_filter_length, 0);
         }
     } else {
         afe->aec_frame_size = 512;
+        afe->aec_nch = afe->nch + 1;
         afe->aec_handle = NULL;
     }
 
@@ -159,7 +165,11 @@ static esp_afe_sr_data_t *afe_create_from_config(afe_config_t *afe_config)
         afe->wn_gain = 2;
         afe->agc_mode = 0;
     }
-    afe->buff_wn = malloc(afe->audio_chunksize * (afe->wn_nch + afe->wn_nch - afe->nch) * sizeof(int16_t));
+    if (afe_config->alloc_from_psram) {
+        afe->buff_wn = heap_caps_malloc(afe->audio_chunksize * (afe->wn_nch + afe->wn_nch - afe->nch) * sizeof(int16_t), MALLOC_CAP_SPIRAM);
+    } else {
+        afe->buff_wn = malloc(afe->audio_chunksize * (afe->wn_nch + afe->wn_nch - afe->nch) * sizeof(int16_t));
+    }
 
     /********************************************************/
     /**********************INIT OTRHERS**********************/
@@ -209,8 +219,10 @@ static int afe_feed(esp_afe_sr_data_t *afe, int16_t *in)
         if (frame_cnt++ < 4) ref_vad_res = 0;
 
         if (afe->mode == SR_MODE_LOW_COST) {
+#ifdef CONFIG_IDF_TARGET_ESP32S3
             esp_aec3_728_write_ref_vad(afe->aec_handle, ref_vad_res);
             esp_aec3_728_process(afe->aec_handle, afe->aec_in, afe->aec_in + afe->aec_frame_size, afe->aec_tmp);
+#endif
         } else if (afe->mode == SR_MODE_HIGH_PERF) {
             esp_aec3_write_ref_vad(afe->aec_handle, ref_vad_res);
             esp_aec3_process(afe->aec_handle, afe->aec_in, afe->aec_in + afe->aec_frame_size, afe->aec_tmp);
@@ -266,7 +278,9 @@ static void afe_se_task(void *arg)
                 }
             }
         }
-
+        // if (sr_rb_available(afe->rb_out) < afe->wn_nch * afe->ns_frame_size * sizeof(int16_t)) {
+        //     printf("ERROR! rb_out slow!!!\n");
+        // }
         sr_rb_write(afe->rb_out, afe->ns_in, afe->wn_nch * afe->ns_frame_size * sizeof(int16_t), 0);
     }
     printf("afe_se_task quit\n");
@@ -302,9 +316,9 @@ static int afe_fetch(esp_afe_sr_data_t *afe, int16_t *out)
         res = afe->wakenet->detect(afe->model_data, afe->buff_wn);
         //selector & gainer
         afe->channel_id = afe->wakenet->get_triggered_channel(afe->model_data);
-        if (res > 0 && afe->agc_mode>=0) {
+        if (res > 0 && afe->agc_mode >= 0) {
             if (afe->agc_mode == 0) out_gain = 1;
-            else out_gain = afe->wakenet->get_vol_gain(afe->model_data, (afe->agc_mode-6));
+            else out_gain = afe->wakenet->get_vol_gain(afe->model_data, (afe->agc_mode - 6));
         }
 
         int shift = afe->audio_chunksize * afe->channel_id;
@@ -435,8 +449,10 @@ static void afe_destory(esp_afe_sr_data_t *afe)
 
         if (afe->aec_handle != NULL) {
             if (afe->mode == SR_MODE_LOW_COST) {
+#ifdef CONFIG_IDF_TARGET_ESP32S3
                 vad_destroy(afe->ref_vad_handle);
                 esp_aec3_728_destroy(afe->aec_handle);
+#endif
             }
             else if (afe->mode == SR_MODE_HIGH_PERF) {
                 vad_destroy(afe->ref_vad_handle);
@@ -454,11 +470,11 @@ static void afe_destory(esp_afe_sr_data_t *afe)
 
         if (afe->wakenet != NULL) {
             afe->wakenet->destroy(afe->model_data);
-            if (afe->buff_wn != NULL) {
-                free(afe->buff_wn);
-            }
-
             afe->wakenet = NULL;
+        }
+        if (afe->buff_wn != NULL) {
+            free(afe->buff_wn);
+            afe->buff_wn = NULL;
         }
 
         if (afe->vad_handle != NULL) {

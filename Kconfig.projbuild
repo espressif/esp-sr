@@ -27,6 +27,7 @@ endchoice
 choice MODEL_DATA_PATH
     prompt "model data path"
     default MODEL_IN_SPIFFS
+    depends on IDF_TARGET_ESP32S3
 
     config MODEL_IN_SPIFFS
         bool "spiffs partition"
@@ -101,11 +102,7 @@ choice SR_WN_WAKE_WORD_SEL
 
     config SR_WN_WN5X3_NIHAOXIAOZHI
         bool "nihaoxiaozhi (WakeNet5X3)"
-        depends on SR_WN_MODEL_WN5_QUANT || SR_WN_MODEL_WN5_FLOAT 
-
-    config SR_WN_WN5X3_HIJESON
-        bool "hi jeson (WakeNet5X3)"
-        depends on SR_WN_MODEL_WN5_QUANT || SR_WN_MODEL_WN5_FLOAT 
+        depends on SR_WN_MODEL_WN5_QUANT || SR_WN_MODEL_WN5_FLOAT
 
     config SR_WN_WN5X3_NIHAOXIAOXIN
         bool "nihaoxiaoxin (WakeNet5X3)"
@@ -157,6 +154,7 @@ choice SR_MN_LANGUAGE_SEL
 
     config SR_MN_ENGLISH
         bool "english"
+        depends on IDF_TARGET_ESP32S3
 
 endchoice
 
@@ -185,10 +183,6 @@ choice SR_MN_MODE_SEL
 
     config SR_MN_CN_MULTINET2_SINGLE_RECOGNITION
         bool "chinese single recognition (MultiNet2)"
-        depends on SR_MN_CHINESE && IDF_TARGET_ESP32
-
-    config SR_MN_CN_MULTINET2_CONTINUOUS_RECOGNITION
-        bool "chinese continuous recognition (MultiNet2)"
         depends on SR_MN_CHINESE && IDF_TARGET_ESP32
 
     config SR_MN_CN_MULTINET3_SINGLE_RECOGNITION

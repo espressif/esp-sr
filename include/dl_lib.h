@@ -20,12 +20,11 @@
 
 typedef int padding_state;
 
-#ifdef CONFIG_IDF_TARGET_ESP32S3
 void *dl_lib_calloc(int cnt, int size, int align);
+
 void *dl_lib_calloc_psram(int cnt, int size, int align);
 
 void dl_lib_free(void *d);
-#endif
 /**
  * @brief Does a fast version of the exp() operation on a floating point number.
  *
