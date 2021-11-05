@@ -1,1122 +1,1204 @@
 menu "ESP Speech Recognition"
 
-choice SR_MODEL_SEL
-	prompt "Wake word engine"
-	default SR_MODEL_WN5_QUANT
-	help
-		Select the Wake Word Engine to be used.
-
-config SR_MODEL_WN3_QUANT
-	bool "WakeNet 3 (quantized)"
-
-config SR_MODEL_WN4_QUANT
-	bool "WakeNet 4 (quantized)"
-
-config SR_MODEL_WN5_QUANT
-	bool "WakeNet 5 (quantized)"
-
-config SR_MODEL_WN6_QUANT
-	bool "WakeNet 6 (quantized)"
-
-endchoice
-
-choice SR_WAKE_WORD_SEL
-	prompt "Wake word name"
-	default SR_WN5_HILEXIN
-	help
-		Select the wake word to be used.
-
-config SR_WN3_HILEXIN
-	bool "hilexin (WakeNet3)"
-	depends on SR_MODEL_WN3_QUANT
-
-config SR_WN4_HILEXIN
-	bool "hilexin (WakeNet4)"
-	depends on SR_MODEL_WN4_QUANT
-
-config SR_WN5_HILEXIN
-	bool "hilexin (WakeNet5)"
-	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
-
-config SR_WN5X2_HILEXIN
-    bool "hilexin (WakeNet5X2)"
-    depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
-
-config SR_WN5X3_HILEXIN
-    bool "hilexin (WakeNet5X3)"
-    depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
-
-config SR_WN5_NIHAOXIAOZHI
-	bool "nihaoxiaozhi (WakeNet5)"
-	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
-
-config SR_WN5X2_NIHAOXIAOZHI
-	bool "nihaoxiaozhi (WakeNet5X2)"
-	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
-
-config SR_WN5X3_NIHAOXIAOZHI
-	bool "nihaoxiaozhi (WakeNet5X3)"
-	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
-
-config SR_WN5X3_HIJESON
-	bool "hi jeson (WakeNet5X3)"
-	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
-
-config SR_WN5X3_NIHAOXIAOXIN
-    bool "nihaoxiaoxin (WakeNet5X3)"
-    depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
-
-config SR_WN5_CUSTOMIZED_WORD
-	bool "customized word (WakeNet5)"
-	depends on SR_MODEL_WN5_QUANT || SR_MODEL_WN5_FLOAT
-
-config SR_WN6_NIHAOXIAOXIN
-	bool "nihaoxiaoxin (WakeNet6)"
-	depends on SR_MODEL_WN6_QUANT
-
-config SR_WN6_CUSTOMIZED_WORD
-	bool "customized word (WakeNet6)"
-	depends on SR_MODEL_WN6_QUANT || SR_MODEL_WN6_FLOAT
-
-endchoice
-
-
-choice SR_MN_MODEL_SEL
-    prompt "speech commands recognition mode after wake up"
-    default SINGLE_RECOGNITION
+choice NET_TO_USE_ACCELERATION
+    prompt "Net to use acceleration"
+    default WAKENET_USE_PRELOAD
+    depends on IDF_TARGET_ESP32S3
     help
-        Select the mode to be used.
+        Select the Wake Word Engine to be used.
 
-config SINGLE_RECOGNITION
-    bool "Single recognition"
+    config WAKENET_USE_PRELOAD
+        bool "wakenet_preload"
 
-config CONTINUOUS_RECOGNITION
-    bool "Continuous recognition"
+    config MULTINET_USE_PRELOAD
+        bool "multinet_preload"
+
+    config WAKENET_USE_EDMA
+        bool "wakenet_edma"
+
+    config MULTINET_USE_EDMA
+        bool "multinet_edma"
+
+    config ALL_DISABLE
+        bool "all disable"
 
 endchoice
 
-choice SR_LANGUAGE_SEL
-    prompt "language"
-    default SR_CHINESE
+choice MODEL_DATA_PATH
+    prompt "model data path"
+    default MODEL_IN_SPIFFS
+    depends on IDF_TARGET_ESP32S3
+
+    config MODEL_IN_SPIFFS
+        bool "spiffs partition"
+
+    config MODEL_IN_SDCARD
+        bool "SD Card"
+endchoice
+
+config USE_WAKENET
+    bool "use wakenet"
+    default "y"
+
+choice SR_WN_MODEL_SEL
+    prompt "Wake word engine"
+    default SR_WN_MODEL_WN8_QUANT
+    depends on USE_WAKENET
+    help
+        Select the Wake Word Engine to be used.
+
+    config SR_WN_MODEL_WN5_QUANT
+        bool "WakeNet 5 (quantized with 16-bit)"
+
+    config SR_WN_MODEL_WN7_QUANT
+        bool "WakeNet 7 (quantized with 16-bit)"
+        depends on IDF_TARGET_ESP32S3
+
+    config SR_WN_MODEL_WN7_QUANT8
+        bool "WakeNet 7 (quantized with 8-bit)"
+        depends on IDF_TARGET_ESP32S3
+
+    config SR_WN_MODEL_WN8_QUANT
+        bool "WakeNet 8 (quantized with 16-bit)"
+        depends on IDF_TARGET_ESP32S3
+
+endchoice
+
+
+choice SR_WN_WAKE_WORD_SEL
+    prompt "Wake word name"
+    default SR_WN_WN5_HILEXIN
+    depends on USE_WAKENET
+    help
+        Select the wake word to be used.
+
+    config SR_WN_WN3_HILEXIN
+        bool "Hi,Lexin (WakeNet3)"
+        depends on SR_WN_MODEL_WN3_QUANT
+
+    config SR_WN_WN4_HILEXIN
+        bool "Hi,Lexin (WakeNet4)"
+        depends on SR_WN_MODEL_WN4_QUANT
+
+    config SR_WN_WN5_HILEXIN
+        bool "Hi,Lexin (WakeNet5)"
+        depends on SR_WN_MODEL_WN5_QUANT || SR_WN_MODEL_WN5_FLOAT 
+
+    config SR_WN_WN5X2_HILEXIN
+        bool "Hi,Lexin (WakeNet5X2)"
+        depends on SR_WN_MODEL_WN5_QUANT || SR_WN_MODEL_WN5_FLOAT 
+
+    config SR_WN_WN5X3_HILEXIN
+        bool "Hi,Lexin (WakeNet5X3)"
+        depends on SR_WN_MODEL_WN5_QUANT || SR_WN_MODEL_WN5_FLOAT 
+
+    config SR_WN_WN5_NIHAOXIAOZHI
+        bool "nihaoxiaozhi (WakeNet5)"
+        depends on SR_WN_MODEL_WN5_QUANT || SR_WN_MODEL_WN5_FLOAT 
+
+    config SR_WN_WN5X2_NIHAOXIAOZHI
+        bool "nihaoxiaozhi (WakeNet5X2)"
+        depends on SR_WN_MODEL_WN5_QUANT || SR_WN_MODEL_WN5_FLOAT 
+
+    config SR_WN_WN5X3_NIHAOXIAOZHI
+        bool "nihaoxiaozhi (WakeNet5X3)"
+        depends on SR_WN_MODEL_WN5_QUANT || SR_WN_MODEL_WN5_FLOAT
+
+    config SR_WN_WN5X3_NIHAOXIAOXIN
+        bool "nihaoxiaoxin (WakeNet5X3)"
+        depends on SR_WN_MODEL_WN5_QUANT || SR_WN_MODEL_WN5_FLOAT 
+
+    config SR_WN_WN5_CUSTOMIZED_WORD
+        bool "customized word (WakeNet5)"
+        depends on SR_WN_MODEL_WN5_QUANT || SR_WN_MODEL_WN5_FLOAT 
+
+    config SR_WN_WN7_CUSTOMIZED_WORD
+        bool "customized word (WakeNet7)"
+        depends on SR_WN_MODEL_WN7_QUANT 
+
+    config SR_WN_WN7_XIAOAITONGXUE
+        bool "xiaoaitongxue (WakeNet7)"
+        depends on SR_WN_MODEL_WN7_QUANT || SR_WN_MODEL_WN7_QUANT8
+
+    config SR_WN_WN7_ALEXA
+        bool "Alexa (WakeNet7)"
+        depends on SR_WN_MODEL_WN7_QUANT || SR_WN_MODEL_WN7_QUANT8
+
+    config SR_WN_WN7_HILEXIN
+        bool "Hi,Lexin (WakeNet7)"
+        depends on SR_WN_MODEL_WN7_QUANT || SR_WN_MODEL_WN7_QUANT8
+
+    config SR_WN_WN8_ALEXA
+        bool "Alexa (WakeNet8)"
+        depends on SR_WN_MODEL_WN8_QUANT || SR_WN_MODEL_WN8_QUANT8
+
+    config SR_WN_WN8_HIESP
+        bool "Hi,ESP (WakeNet8)"
+        depends on SR_WN_MODEL_WN8_QUANT || SR_WN_MODEL_WN8_QUANT8
+
+endchoice
+
+config USE_MULTINET
+    bool "use multinet"
+    default "y"
+
+choice SR_MN_LANGUAGE_SEL
+    prompt "langugae"
+    default SR_MN_CHINESE
+    depends on USE_MULTINET
     help
         Select the language to be used.
 
-config SR_CHINESE
-    bool "chinese"
-    depends on SINGLE_RECOGNITION || CONTINUOUS_RECOGNITION
+    config SR_MN_CHINESE
+        bool "chinese"
 
-config SR_ENGLISH
-    bool "english"
-    depends on SINGLE_RECOGNITION
+    config SR_MN_ENGLISH
+        bool "english"
+        depends on IDF_TARGET_ESP32S3
 
 endchoice
 
-config SPEECH_COMMANDS_NUM
-    int "The number of speech commands"
-    default 20
+choice SR_MN_MODE_SEL
+    prompt "speech commands recognition model"
+    default SR_MN_CN_MULTINET3_SINGLE_RECOGNITION
+    depends on USE_MULTINET
     help
-    The number of the speech commands.
+        Select the model to be used.
+
+    config SR_MN_EN_MULTINET1_SINGLE_RECOGNITION
+        bool "english single recognition (MultiNet1)"
+        depends on SR_MN_ENGLISH && IDF_TARGET_ESP32
+
+    config SR_MN_EN_MULTINET3_SINGLE_RECOGNITION
+        bool "english single recognition (MultiNet3)"
+        depends on SR_MN_ENGLISH && IDF_TARGET_ESP32
+
+    config SR_MN_EN_MULTINET5_SINGLE_RECOGNITION
+        bool "english single recognition (MultiNet5)"
+        depends on SR_MN_ENGLISH && IDF_TARGET_ESP32S3
+
+    config SR_MN_EN_MULTINET5_SINGLE_RECOGNITION_QUANT8
+        bool "english single recognition (MultiNet5 quantized with 8-bit)"
+        depends on SR_MN_ENGLISH && IDF_TARGET_ESP32S3
+
+    config SR_MN_CN_MULTINET2_SINGLE_RECOGNITION
+        bool "chinese single recognition (MultiNet2)"
+        depends on SR_MN_CHINESE && IDF_TARGET_ESP32
+
+    config SR_MN_CN_MULTINET3_SINGLE_RECOGNITION
+        bool "chinese single recognition (MultiNet3)"
+        depends on SR_MN_CHINESE && IDF_TARGET_ESP32S3
+
+    config SR_MN_CN_MULTINET3_CONTINUOUS_RECOGNITION
+        bool "chinese continuous recognition (MultiNet3)"
+        depends on SR_MN_CHINESE && IDF_TARGET_ESP32S3
+
+    config SR_MN_CN_MULTINET4_SINGLE_RECOGNITION
+        bool "chinese single recognition (MultiNet4)"
+        depends on SR_MN_CHINESE && IDF_TARGET_ESP32S3
+
+endchoice
 
 menu "Add speech commands"
 
 config CN_SPEECH_COMMAND_ID0
     string "ID0"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default "da kai kong tiao"
 
 config CN_SPEECH_COMMAND_ID1
     string "ID1"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default "guan bi kong tiao"
 
 config CN_SPEECH_COMMAND_ID2
     string "ID2"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default "zeng da feng su"
 
 config CN_SPEECH_COMMAND_ID3
     string "ID3"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default "jian xiao feng su"
 
 config CN_SPEECH_COMMAND_ID4
     string "ID4"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default "sheng gao yi du"
 
 config CN_SPEECH_COMMAND_ID5
     string "ID5"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default "jiang di yi du"
 
 config CN_SPEECH_COMMAND_ID6
     string "ID6"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default "zhi re mo shi"
 
 config CN_SPEECH_COMMAND_ID7
     string "ID7"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default "zhi leng mo shi"
 
 config CN_SPEECH_COMMAND_ID8
     string "ID8"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default "song feng mo shi"
 
 config CN_SPEECH_COMMAND_ID9
     string "ID9"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default "jie neng mo shi"
 
 config CN_SPEECH_COMMAND_ID10
     string "ID10"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default "chu shi mo shi"
 
 config CN_SPEECH_COMMAND_ID11
     string "ID11"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default "jian kang mo shi"
 
 config CN_SPEECH_COMMAND_ID12
     string "ID12"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default "shui mian mo shi"
 
 config CN_SPEECH_COMMAND_ID13
     string "ID13"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default "da kai lan ya"
 
 config CN_SPEECH_COMMAND_ID14
     string "ID14"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default "guan bi lan ya"
 
 config CN_SPEECH_COMMAND_ID15
     string "ID15"
-    depends on SR_CHINESE
-    default "bo fang ge qu"
+    depends on SR_MN_CHINESE
+    default "kai shi bo fang"
 
 config CN_SPEECH_COMMAND_ID16
     string "ID16"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default "zan ting bo fang"
 
 config CN_SPEECH_COMMAND_ID17
     string "ID17"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default "ding shi yi xiao shi"
 
 config CN_SPEECH_COMMAND_ID18
     string "ID18"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default "da kai dian deng"
 
 config CN_SPEECH_COMMAND_ID19
     string "ID19"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default "guan bi dian deng"
 
 config CN_SPEECH_COMMAND_ID20
     string "ID20"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID21
     string "ID21"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID22
     string "ID22"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID23
     string "ID23"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID24
     string "ID24"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID25
     string "ID25"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID26
     string "ID26"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID27
     string "ID27"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID28
     string "ID28"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID29
     string "ID29"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID30
     string "ID30"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID31
     string "ID31"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID32
     string "ID32"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID33
     string "ID33"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID34
     string "ID34"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID35
     string "ID35"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID36
     string "ID36"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID37
     string "ID37"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID38
     string "ID38"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID39
     string "ID39"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID40
     string "ID40"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID41
     string "ID41"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID42
     string "ID42"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID43
     string "ID43"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID44
     string "ID44"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID45
     string "ID45"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID46
     string "ID46"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID47
     string "ID47"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID48
     string "ID48"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID49
     string "ID49"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID50
     string "ID50"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID51
     string "ID51"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID52
     string "ID52"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID53
     string "ID53"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID54
     string "ID54"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID55
     string "ID55"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID56
     string "ID56"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID57
     string "ID57"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID58
     string "ID58"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID59
     string "ID59"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID60
     string "ID60"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID61
     string "ID61"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID62
     string "ID62"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID63
     string "ID63"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID64
     string "ID64"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID65
     string "ID65"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID66
     string "ID66"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID67
     string "ID67"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID68
     string "ID68"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID69
     string "ID69"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID70
     string "ID70"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID71
     string "ID71"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID72
     string "ID72"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID73
     string "ID73"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID74
     string "ID74"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID75
     string "ID75"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID76
     string "ID76"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID77
     string "ID77"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID78
     string "ID78"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID79
     string "ID79"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID80
     string "ID80"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID81
     string "ID81"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID82
     string "ID82"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID83
     string "ID83"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID84
     string "ID84"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID85
     string "ID85"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID86
     string "ID86"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID87
     string "ID87"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID88
     string "ID88"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID89
     string "ID89"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID90
     string "ID90"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID91
     string "ID91"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID92
     string "ID92"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID93
     string "ID93"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID94
     string "ID94"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID95
     string "ID95"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID96
     string "ID96"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID97
     string "ID97"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID98
     string "ID98"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config CN_SPEECH_COMMAND_ID99
     string "ID99"
-    depends on SR_CHINESE
+    depends on SR_MN_CHINESE
     default ""
 
 config EN_SPEECH_COMMAND_ID0
     string "ID0"
-    depends on SR_ENGLISH
-    default "T ER N AA N DH AH L AY T"
+    depends on SR_MN_ENGLISH
+    default "TfL Mm c qbK"
 
 config EN_SPEECH_COMMAND_ID1
     string "ID1"
-    depends on SR_ENGLISH
-    default "T ER N AO F DH AH L AY T"
+    depends on SR_MN_ENGLISH
+    default "Sgl c Sel"
 
 config EN_SPEECH_COMMAND_ID2
     string "ID2"
-    depends on SR_ENGLISH
-    default "L AY T IH NG M OW D"
+    depends on SR_MN_ENGLISH
+    default "PLd NoZ paNcL"
 
 config EN_SPEECH_COMMAND_ID3
     string "ID3"
-    depends on SR_ENGLISH
-    default "R EH D IH NG M OW D"
+    depends on SR_MN_ENGLISH
+    default "TkN nN Mi StNDBnKS"
 
 config EN_SPEECH_COMMAND_ID4
     string "ID4"
-    depends on SR_ENGLISH
-    default "R EH D M OW D"
+    depends on SR_MN_ENGLISH
+    default "TkN eF Mi StNDBnKS"
 
 config EN_SPEECH_COMMAND_ID5
     string "ID5"
-    depends on SR_ENGLISH
-    default "B L UW M OW D"
+    depends on SR_MN_ENGLISH
+    default "hicST VnLYoM"
 
 config EN_SPEECH_COMMAND_ID6
     string "ID6"
-    depends on SR_ENGLISH
-    default "Y EH L OW M OW D"
+    depends on SR_MN_ENGLISH
+    default "LbcST VnLYoM"
 
 config EN_SPEECH_COMMAND_ID7
     string "ID7"
-    depends on SR_ENGLISH
-    default ""
+    depends on SR_MN_ENGLISH
+    default "gNKRmS jc VnLYoM"
 
 config EN_SPEECH_COMMAND_ID8
     string "ID8"
-    depends on SR_ENGLISH
-    default ""
+    depends on SR_MN_ENGLISH
+    default "DgKRmS jc VnLYoM"
 
 config EN_SPEECH_COMMAND_ID9
     string "ID9"
-    depends on SR_ENGLISH
-    default ""
+    depends on SR_MN_ENGLISH
+    default "TkN nN jc TmVm"
 
 config EN_SPEECH_COMMAND_ID10
     string "ID10"
-    depends on SR_ENGLISH
-    default ""
+    depends on SR_MN_ENGLISH
+    default "TkN eF jc TmVm"
 
 config EN_SPEECH_COMMAND_ID11
     string "ID11"
-    depends on SR_ENGLISH
-    default ""
+    depends on SR_MN_ENGLISH
+    default "MdK Mm c Tm"
 
 config EN_SPEECH_COMMAND_ID12
     string "ID12"
-    depends on SR_ENGLISH
-    default ""
+    depends on SR_MN_ENGLISH
+    default "MdK Mm c KnFm"
 
 config EN_SPEECH_COMMAND_ID13
     string "ID13"
-    depends on SR_ENGLISH
-    default ""
+    depends on SR_MN_ENGLISH
+    default "TkN nN jc LiT"
 
 config EN_SPEECH_COMMAND_ID14
     string "ID14"
-    depends on SR_ENGLISH
-    default ""
+    depends on SR_MN_ENGLISH
+    default "TkN eF jc LiT"
 
 config EN_SPEECH_COMMAND_ID15
     string "ID15"
-    depends on SR_ENGLISH
-    default ""
+    depends on SR_MN_ENGLISH
+    default "pdNq jc KcLk To RfD"
 
 config EN_SPEECH_COMMAND_ID16
     string "ID16"
-    depends on SR_ENGLISH
-    default ""
+    depends on SR_MN_ENGLISH
+    default "pdNq jc KcLk To GRmN"
 
 config EN_SPEECH_COMMAND_ID17
     string "ID17"
-    depends on SR_ENGLISH
-    default ""
+    depends on SR_MN_ENGLISH
+    default "TkN nN eL jc LiTS"
 
 config EN_SPEECH_COMMAND_ID18
     string "ID18"
-    depends on SR_ENGLISH
-    default ""
+    depends on SR_MN_ENGLISH
+    default "TkN eF eL jc LiTS"
 
 config EN_SPEECH_COMMAND_ID19
     string "ID19"
-    depends on SR_ENGLISH
-    default ""
+    depends on SR_MN_ENGLISH
+    default "TkN nN jc fR KcNDgscNk"
 
 config EN_SPEECH_COMMAND_ID20
     string "ID20"
-    depends on SR_ENGLISH
-    default ""
+    depends on SR_MN_ENGLISH
+    default "TkN eF jc fR KcNDgscNk"
 
 config EN_SPEECH_COMMAND_ID21
     string "ID21"
-    depends on SR_ENGLISH
-    default ""
+    depends on SR_MN_ENGLISH
+    default "SfT jc TfMPRcpk To SgKSTmN DgGRmZ"
 
 config EN_SPEECH_COMMAND_ID22
     string "ID22"
-    depends on SR_ENGLISH
-    default ""
+    depends on SR_MN_ENGLISH
+    default "SfT jc TfMPRcpk To SfVcNTmN DgGRmZ"
 
 config EN_SPEECH_COMMAND_ID23
     string "ID23"
-    depends on SR_ENGLISH
-    default ""
+    depends on SR_MN_ENGLISH
+    default "SfT jc TfMPRcpk To dTmN DgGRmZ"
 
 config EN_SPEECH_COMMAND_ID24
     string "ID24"
-    depends on SR_ENGLISH
-    default ""
+    depends on SR_MN_ENGLISH
+    default "SfT jc TfMPRcpk To NiNTmN DgGRmZ"
 
 config EN_SPEECH_COMMAND_ID25
     string "ID25"
-    depends on SR_ENGLISH
-    default ""
+    depends on SR_MN_ENGLISH
+    default "SfT jc TfMPRcpk To TWfNTm DgGRmZ"
 
 config EN_SPEECH_COMMAND_ID26
     string "ID26"
-    depends on SR_ENGLISH
-    default ""
+    depends on SR_MN_ENGLISH
+    default "SfT jc TfMPRcpk To TWfNTm WcN DgGRmZ"
 
 config EN_SPEECH_COMMAND_ID27
     string "ID27"
-    depends on SR_ENGLISH
-    default ""
+    depends on SR_MN_ENGLISH
+    default "SfT jc TfMPRcpk To TWfNTm To DgGRmZ"
 
 config EN_SPEECH_COMMAND_ID28
     string "ID28"
-    depends on SR_ENGLISH
-    default ""
+    depends on SR_MN_ENGLISH
+    default "SfT jc TfMPRcpk To TWfNTm vRm DgGRmZ"
 
 config EN_SPEECH_COMMAND_ID29
     string "ID29"
-    depends on SR_ENGLISH
-    default ""
+    depends on SR_MN_ENGLISH
+    default "SfT jc TfMPRcpk To TWfNTm FeR DgGRmZ"
 
 config EN_SPEECH_COMMAND_ID30
     string "ID30"
-    depends on SR_ENGLISH
-    default ""
+    depends on SR_MN_ENGLISH
+    default "SfT jc TfMPRcpk To TWfNTm FiV DgGRmZ"
 
 config EN_SPEECH_COMMAND_ID31
     string "ID31"
-    depends on SR_ENGLISH
-    default ""
+    depends on SR_MN_ENGLISH
+    default "SfT jc TfMPRcpk To TWfNTm SgKS DgGRmZ"
 
 config EN_SPEECH_COMMAND_ID32
     string "ID32"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID33
     string "ID33"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID34
     string "ID34"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID35
     string "ID35"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID36
     string "ID36"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID37
     string "ID37"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID38
     string "ID38"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID39
     string "ID39"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID40
     string "ID40"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID41
     string "ID41"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID42
     string "ID42"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID43
     string "ID43"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID44
     string "ID44"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID45
     string "ID45"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID46
     string "ID46"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID47
     string "ID47"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID48
     string "ID48"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID49
     string "ID49"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID50
     string "ID50"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID51
     string "ID51"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID52
     string "ID52"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID53
     string "ID53"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID54
     string "ID54"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID55
     string "ID55"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID56
     string "ID56"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID57
     string "ID57"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID58
     string "ID58"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID59
     string "ID59"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID60
     string "ID60"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID61
     string "ID61"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID62
     string "ID62"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID63
     string "ID63"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID64
     string "ID64"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID65
     string "ID65"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID66
     string "ID66"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID67
     string "ID67"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID68
     string "ID68"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID69
     string "ID69"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID70
     string "ID70"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID71
     string "ID71"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID72
     string "ID72"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID73
     string "ID73"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID74
     string "ID74"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID75
     string "ID75"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID76
     string "ID76"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID77
     string "ID77"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID78
     string "ID78"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID79
     string "ID79"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID80
     string "ID80"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID81
     string "ID81"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID82
     string "ID82"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID83
     string "ID83"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID84
     string "ID84"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID85
     string "ID85"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID86
     string "ID86"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID87
     string "ID87"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID88
     string "ID88"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID89
     string "ID89"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID90
     string "ID90"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID91
     string "ID91"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID92
     string "ID92"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID93
     string "ID93"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID94
     string "ID94"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID95
     string "ID95"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID96
     string "ID96"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID97
     string "ID97"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID98
     string "ID98"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 config EN_SPEECH_COMMAND_ID99
     string "ID99"
-    depends on SR_ENGLISH
+    depends on SR_MN_ENGLISH
     default ""
 
 endmenu

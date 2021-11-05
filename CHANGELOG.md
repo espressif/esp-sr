@@ -1,5 +1,11 @@
 # Change log for esp-sr
 
+## 0.8.0
+support ESP32S3 chip
+add wakenet7 & update wakenet5 to support multi-channel detection
+remove wakenet6
+add AFE pipeline for speech recognition 
+
 ## 0.7.0
 add chinese tts
 update noise suppression v2
