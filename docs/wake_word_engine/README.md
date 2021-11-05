@@ -16,8 +16,8 @@ Please see the flow diagram of WakeNet below:
 - Neural Network:  
   Now, the neural network structure has been updated to the sixth edition, among which,  
   - WakeNet1 and WakeNet2 had been out of use.
-  - WakeNet3 and WakeNet4 are built upon the [CRNN](https://arxiv.org/abs/1703.05390) structure.
-  - WakeNet5(WakeNet5X2,WakeNetX3) and WakeNet6 are built upon the [Dilated Convolution](https://arxiv.org/pdf/1609.03499.pdf) structure. 
+  - WakeNet3 and WakeNet4 had been out of use.
+  - WakeNet5(WakeNet5X2,WakeNetX3), WakeNet7, WakeNet8 are built upon the [Dilated Convolution](https://arxiv.org/pdf/1609.03499.pdf) structure. 
   Note that，The network structure of WakeNet5,WakeNet5X2 and WakeNet5X3 is same, but the parameter of WakeNetX2 and WakeNetX3 is more than WakeNet5. Please refer to [Resource Occupancy](#performance-test) for details.
 
          
@@ -54,8 +54,12 @@ Please see the flow diagram of WakeNet below:
   
     ```
     typedef enum {
-	    DET_MODE_90 = 0,  //Normal, response accuracy rate about 90%
-	    DET_MODE_95       //Aggressive, response accuracy rate about 95%
+	    DET_MODE_90 = 0,      // Normal, 
+	    DET_MODE_95 = 1,      // Aggressive, 
+	    DET_MODE_2CH_90 = 2,  // 2 Channel detection, Normal mode 
+	    DET_MODE_2CH_95 = 3,  // 2 Channel detection, Aggressive mode
+	    DET_MODE_2CH_90 = 4,  // 3 Channel detection, Normal mode 
+	    DET_MODE_2CH_95 = 5,  // 3 Channel detection, Aggressive mode
     } det_mode_t;
     ```
     
@@ -71,25 +75,25 @@ Please see the flow diagram of WakeNet below:
 
 |Model Type|Parameter Num|RAM|Average Running Time per Frame| Frame Length|
 |:---:|:---:|:---:|:---:|:---:|
-|Quantized WakeNet3|26 K|20 KB|29 ms|90 ms|
-|Quantised WakeNet4|53 K|22 KB|48 ms|90 ms|
 |Quantised WakeNet5|41 K|15 KB|5.5 ms|30 ms|
 |Quantised WakeNet5X2|165 K|20 KB|10.5 ms|30 ms|
 |Quantised WakeNet5X3|371 K|24 KB|18 ms|30 ms|
-|Quantised WakeNet6|378 K|45 KB|4ms(task1) + 25 ms(task2)|30 ms|  
 
-**Note**: Quantised WakeNet6 is split into two tasks, task1 is used to calculate speech features and task2 is used to calculate neural network model.
+### 2. Resource Occupancy(ESP32S3)
+|Quantised WakeNet7_2CH|810 K|45 KB|10 ms|32 ms|
+|Quantised WakeNet8_2CH|821 K|50 KB|10 ms|32 ms|
+
 
 ### 2. Performance
 
-|Distance| Quiet | Stationary Noise (SNR = 5 dB)| Speech Noise (SNR = 5 dB)| AEC Interruption (-10 dB)|
+|Distance| Quiet | Stationary Noise (SNR = 4 dB)| Speech Noise (SNR = 4 dB)| AEC Interruption (-10 dB)|
 |:---:|:---:|:---:|:---:|:---:|
-|1 m|95%|88%|85%|89%|
-|3 m|90%|80%|75%|80%|
-
+|1 m|98%|96%|95%|95%|
+|3 m|98%|95%|94%|94%|
 False triggering rate: 1 time in 12 hours
+
   
-**Note**: We use the ESP32-LyraT-Mini development board and the WakeNet5X2(hilexin) model in our test. The performance is limited because ESP32-LyraT-Mini only has one microphone. We expect a better recognition performance when more microphones are involved in the test.
+**Note**: We use the ESP32-S3-Korvo V4.0 development board and the WakeNet8(Alexa) model in our test. 
 
 ## Wake Word Customization
 

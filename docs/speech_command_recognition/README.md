@@ -1,6 +1,6 @@
 # MultiNet Introduction [[中文]](./README_cn.md)
 
-MultiNet is a lightweight model specially designed based on [CRNN](https://arxiv.org/pdf/1703.05390.pdf) and [CTC](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.75.6306&rep=rep1&type=pdf) for the implementation of multi-command recognization with ESP32. Now, up to 100 speech commands, including customized commands, are supported. 
+MultiNet is a lightweight model specially designed based on [CRNN](https://arxiv.org/pdf/1703.05390.pdf) and [CTC](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.75.6306&rep=rep1&type=pdf) for the implementation of multi-command recognization. Now, up to 200 speech commands, including customized commands, are supported. 
 
 ## Overview
 
@@ -22,49 +22,6 @@ Please see the flow diagram below:
 
 ## User Guide
 
-### User-defined Command
-
-Currently, users can define their own speech commands by using the command `make menuconfig`. You can refer to the method of adding speech commands in `menuconfig->ESP Speech Recognition->Add speech commands`, there are already 20 chinese commands and 7 english commands pre-stored in sdkconfig.
-
-**Chinese**
-
-|Command ID|Command|Command ID|Command|Command ID|Command|Command ID|Command|
-|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-|0|打开空调 (Turn on the air conditioner)|5|降低一度 (Decrease by one degree)|10| 除湿模式 (Dehumidifying mode)|15| 播放歌曲 (Play a song)
-|1|关闭空调 (Turn on the air conditioner)|6|制热模式 (Heating mode)|11| 健康模式 (Healthy mode)|16| 暂停播放 (Pause playing)
-|2|增大风速 (Give me more wind)|7|制冷模式 (Cooling mode)|12| 睡眠模式 (Sleep mode)|17| 定时一小时 (Set timer to 1 hour)
-|3|减少风速 (Give me less wind)|8|送风模式 (Ventilating mode)|13| 打开蓝牙 (Enable the Bluetooth)|18| 打开电灯 (Turn on the light)
-|4| 升高一度 (Increase by one degree)|9|节能模式 (Power-saving mode)|10| 关闭蓝牙 (Disable the Bluetooth)|19| 关闭电灯 (Turn off the light)
-
-**English**
-
-|Command ID|Command|Command ID|Command|
-|:---:|:---:|:---:|:---:|
-|0|turn on the light|4|red mode|
-|1|turn off the light|5|blue mode|
-|2|lighting mode|6|yellow mode|
-|3|reading mode|
-
-MultiNet supports user-defined commands. You can add your own commands to MultiNet. Note that the newly added command should obtain its command ID before it can be recognized by MultiNet. 
-
-### Add Speech Command
-
-Now, the MultiNet model predifine some speech commands. Users also can define their own speech commands and the number of speech commands ID in the `menuconfig -> Component config -> ESP Speech Recognition -> Add speech commands` and `The number of speech commands`. 
-
-##### Chinese Speech Command Recognition
-
-The speech commands should be provided in Pinyin with spaces in between. For example, the command of “打开空调”, which means to turn on the air conditioner, should be provided as "da kai kong tiao".
-
-##### English Speech Command Recognition
-
-The speech commands should be provided in specific phonetic symbol with spaces in between. Please use the `general_label_EN/general_label_en.py` script in the tools directory of the skainet root directory to generate the phonetic symbols corresponding to the command words. For details, please refer to [the phonetic symbol generation method](https://github.com/espressif/esp-skainet/tree/master/tools/general_label_EN/README.md). 
-
-**Note:**
-
-- One speech commands ID can correspond to multiple speech command phrases;
-- Up to 100 speech commands ID or speech command phrases, including customized commands, are supported;
-- The corresponding multiple phrases for one Command ID need to be separated by ','.
-
 ### Basic Configuration
 
 Define the following two variables before using the command recognition model:
@@ -79,6 +36,42 @@ Define the following two variables before using the command recognition model:
 	   
 	`model_iface_data_t *model_data = multinet->create(&MULTINET_COEFF, 6000);`
 		
+
+### Modify Speech Commands
+
+For Chinese MultiNet, we use Pinyin without tone as units.
+For English MultiNet, we use international phonetic alphabet as unit. [multinet_g2p.py](../../tool/multinet_g2p.py) is used to convert English phrase into phonemes which can be recognized by multinet．
+Now, the MultiNet support two methods to modify speech commands.
+
+##### 1. menuconfig (before compilation)
+
+Users can define their own speech commands by `idf.py menuconfig -> ESP Speech Recognition -> add speech commands` 
+
+![add_speech_commands_ch](../img/add_speech_ch.png)
+![add_speech_commands_en](../img/add_speech_en.png)
+
+##### 2. reset API
+
+Users also can modify speech commands in the code.
+
+```
+// Chinese
+char err_id[200];
+char *ch_commands_str = "da kai dian deng,kai dian deng;guan bi dian deng,guan dian deng;guan deng;";
+multinet->reset(model_data, ch_commands_str, err_id);
+
+// English
+char *en_commands_en = "TfL Mm c qbK;Sgl c Sel;TkN nN jc LiT;TkN eF jc LiT";
+multinet->reset(model_data, en_commands_en, err_id);
+```
+
+**Note:**
+
+- One speech commands ID can correspond to multiple speech command phrases;
+- Up to 200 speech commands ID or speech command phrases, including customized commands, are supported;
+- Different Command IDs need to be separated by by ';'. The corresponding multiple phrases for one Command ID need to be separated by ','. 
+- `err_id` return the spelling that does not meet the requirements.
+
 ### API Reference
 
 #### Header   
@@ -159,6 +152,19 @@ Define the following two variables before using the command recognition model:
    
  	* The command id, if a matching command is found.
  	* -1, if no matching command is found.
+
+- `typedef void (*esp_mn_iface_op_reset_t)(model_iface_data_t *model, char *command_str, char *err_phrase_id);`  
+
+   **Definition**  
+  
+   Reset the speech commands.
+ 
+  **Parameters**  
+  
+  model: Model object to destroy.
+  command_str: The speech commands string. ';' is used to separate commands for different command ID. ',' is used to separate different phrases for same command ID.
+  err_phrase_id: Return incorrent spelling
+
  
 - `typedef void (*esp_mn_iface_op_destroy_t)(model_iface_data_t *model);`  
 
