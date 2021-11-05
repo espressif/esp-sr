@@ -1,4 +1,4 @@
-# MultiNet Introduction [[中文]](./README_cn.md)
+# MultiNet Introduction
 
 MultiNet is a lightweight model specially designed based on [CRNN](https://arxiv.org/pdf/1703.05390.pdf) and [CTC](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.75.6306&rep=rep1&type=pdf) for the implementation of multi-command recognization. Now, up to 200 speech commands, including customized commands, are supported. 
 
@@ -39,18 +39,23 @@ Define the following two variables before using the command recognition model:
 
 ### Modify Speech Commands
 
-For Chinese MultiNet, we use Pinyin without tone as units.
-For English MultiNet, we use international phonetic alphabet as unit. [multinet_g2p.py](../../tool/multinet_g2p.py) is used to convert English phrase into phonemes which can be recognized by multinet．
-Now, the MultiNet support two methods to modify speech commands.
+For Chinese MultiNet, we use Pinyin without tone as units.　
+For English MultiNet, we use international phonetic alphabet as unit. [multinet_g2p.py](../../tool/multinet_g2p.py) is used to convert English phrase into phonemes which can be recognized by multinet．　
+Now, the MultiNet support two methods to modify speech commands.　
 
-##### 1. menuconfig (before compilation)
+- 1.menuconfig (before compilation)
 
 Users can define their own speech commands by `idf.py menuconfig -> ESP Speech Recognition -> add speech commands` 
 
+Chinese predefined commands:　
+　
 ![add_speech_commands_ch](../img/add_speech_ch.png)
+
+English predefined commands:　　
+
 ![add_speech_commands_en](../img/add_speech_en.png)
 
-##### 2. reset API
+- 2.reset API (after compilation)
 
 Users also can modify speech commands in the code.
 
@@ -69,7 +74,7 @@ multinet->reset(model_data, en_commands_en, err_id);
 
 - One speech commands ID can correspond to multiple speech command phrases;
 - Up to 200 speech commands ID or speech command phrases, including customized commands, are supported;
-- Different Command IDs need to be separated by by ';'. The corresponding multiple phrases for one Command ID need to be separated by ','. 
+- Different Command IDs need to be separated by ';'. The corresponding multiple phrases for one Command ID need to be separated by ','. 
 - `err_id` return the spelling that does not meet the requirements.
 
 ### API Reference

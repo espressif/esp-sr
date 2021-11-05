@@ -1,4 +1,4 @@
-# WakeNet [[中文]](./README_cn.md)
+# WakeNet  
 
 WakeNet, which is a wake word engine built upon neural network, is specially designed for low-power embedded MCUs. Now, the WakeNet model supports up to 5 wake words.
 
@@ -80,6 +80,8 @@ Please see the flow diagram of WakeNet below:
 |Quantised WakeNet5X3|371 K|24 KB|18 ms|30 ms|
 
 ### 2. Resource Occupancy(ESP32S3)
+|Model Type|Parameter Num|RAM|Average Running Time per Frame| Frame Length|
+|:---:|:---:|:---:|:---:|:---:|
 |Quantised WakeNet7_2CH|810 K|45 KB|10 ms|32 ms|
 |Quantised WakeNet8_2CH|821 K|50 KB|10 ms|32 ms|
 
@@ -88,11 +90,11 @@ Please see the flow diagram of WakeNet below:
 
 |Distance| Quiet | Stationary Noise (SNR = 4 dB)| Speech Noise (SNR = 4 dB)| AEC Interruption (-10 dB)|
 |:---:|:---:|:---:|:---:|:---:|
-|1 m|98%|96%|95%|95%|
-|3 m|98%|95%|94%|94%|
+|1 m|98%|96%|94%|96%|
+|3 m|98%|94%|92%|94%|
+
 False triggering rate: 1 time in 12 hours
 
-  
 **Note**: We use the ESP32-S3-Korvo V4.0 development board and the WakeNet8(Alexa) model in our test. 
 
 ## Wake Word Customization
