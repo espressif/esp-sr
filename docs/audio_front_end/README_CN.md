@@ -23,10 +23,10 @@
 - 内部：AFE BSS/NS 算法处理
 - AFE fetch，返回处理过的音频数据和返回值， fetch 内部会进行 VAD 处理，如果用户设置 WakeNet 为 enable 状态，也会进行唤醒词的检测
 
-其中 `afe->feed()` 和 `afe->fetch()` 对用户可见，`Internal BSS Task` 对用户不可见。
+其中 `afe->feed()` 和 `afe->fetch()` 对用户可见，`Internal BSS/NS Task` 对用户不可见。
 
 > AEC 在 afe->feed() 函数中运行；  
-> BSS 为 AFE 内部独立 Task 进行处理；  
+> BSS/NS 为 AFE 内部独立 Task 进行处理；  
 > VAD 和 WakeNet 的结果通过 afe->fetch() 函数中获取。
 
 ### 选择 AFE handle
@@ -41,63 +41,31 @@
 
 		esp_afe_sr_iface_t *afe_handle = &esp_afe_sr_2mic;
 
-### 选择 AFE mode
-
-- 单麦
-
-    乐鑫 AFE 单麦场景目前支持 2 种工作模式，分别为：SR_MODE_MONO_LOW_COST, SR_MODE_MONO_MEDIUM_COST.  
-详细可见 afe_sr_mode_t 结构体。
-
-  - SR_MODE_MONO_LOW_COST  
- 
-    适用于单通道音频数据+一路回采数据，具有很低的内存消耗和 CPU 资源消耗，此时运行低复杂度 AEC 和低复杂度降噪算法。
-
-  - SR_MODE_MONO_MEDIUM_COST
-
-    适用于单通道音频数据+一路回采数据，具有较低的内存消耗和 CPU 资源消耗，此时运行低复杂度 AEC 和中等复杂度降噪算法。
-
-- 双麦
-
-    乐鑫 AFE 双麦场景目前支持 3 种工作模式，分别为：SR_MODE_STEREO_LOW_COST, SR_MODE_STEREO_MEDIUM, SR_MODE_STEREO_HIGH_PERF.  
-详细可见 afe_sr_mode_t 结构体。
-
-  - SR_MODE_STEREO_LOW_COST
-
-    适用于双通道音频数据 + 一路回采数据，AEC 采用复杂度较低的算法， BSS 采用低复杂度算法
- 
-  - SR_MODE_STEREO_MEDIUM
-
-    适用于双通道音频数据 + 一路回采数据，AEC 采用复杂度较高的算法， BSS 采样低复杂度算法
- 
-  - SR_MODE_STEREO_HIGH_PERF
-
-    适用于双通道音频数据 + 一路回采数据，AEC 和 BSS 均采用复杂度较高的模式
-
 ### 输入音频
 
-- 当 AFE 单麦场景
+- AFE 单麦场景
 
-  - 输入音频格式为 16KHz, 16bit, 双通道（1个通道为 mic 数据，另一个通道为参考回路）
-  - 数据帧长为 16ms, 用户可以使用 `afe->get_feed_chunksize` 来获取需要的采样点数目（采样点数据类型为 int16）
-     
-   注意：此处得到数据量大小为单通道音频。
+	- 输入音频格式为 16KHz, 16bit, 双通道（1个通道为 mic 数据，另一个通道为参考回路）
+	- 数据帧长为 32ms, 用户可以使用 `afe->get_feed_chunksize` 来获取需要的采样点数目（采样点数据类型为 int16）
  
  数据排布如下：
  
  <img src="../img/AFE_mode_0.png" height = "100" align=center />  
 
-- 当 AFE 双麦场景
+- AFE 双麦场景
 
- - 输入音频格式为 16KHz, 16bit, 三通道
- - 数据帧长为 32ms, 用户可以使用 `afe->get_feed_chunksize` 来获取需要填充的数据量
+	- 输入音频格式为 16KHz, 16bit, 三通道
+	- 数据帧长为 32ms, 用户可以使用 `afe->get_feed_chunksize` 来获取需要填充的数据量
 
  数据排布如下：
  
   <img src="../img/AFE_mode_other.png" height = "70" align=center />  
 
+注意：换算成数据量大小为：`afe->get_feed_chunksize * 通道数 * sizeof(short)` 
+
 ### AEC 简介
 
-AEC (Acoustic Echo Cancellation) 算法最多支持双通道处理，能够有效的去除 mic 输入信号中的自身播放回声。从而可以在自身播放音乐的情况下进行很好的语音识别等应用。
+AEC (Acoustic Echo Cancellation) 算法最多支持双麦处理，能够有效的去除 mic 输入信号中的自身播放声音。从而可以在自身播放音乐的情况下进行很好的语音识别等应用。
 
 ### NS 简介
 
@@ -125,7 +93,7 @@ AFE 的输出音频为单通道数据，在 WakeNet 开启的情况下，AFE 会
 
 ### 1. 定义 afe_handle
 
-`afe_handle` 是用户后续使用 afe 操作的相关句柄。用户需要根据单麦和双麦场景选择对应的 `afe_handle`。
+`afe_handle` 是用户后续调用 afe 接口的函数句柄。用户需要根据单麦和双麦场景选择对应的 `afe_handle`。
 
 单麦场景：
 
@@ -135,104 +103,163 @@ AFE 的输出音频为单通道数据，在 WakeNet 开启的情况下，AFE 会
 
 	esp_afe_sr_iface_t *afe_handle = &esp_afe_sr_2mic;
 
-### 2. 创建 afe_handle
+### 2. 配置 afe
 
-用户使用 `afe_handle->create()` 函数来初始化在第一步中创建的 `afe_handle`。
+获取 afe 的配置：
+
+	afe_config_t afe_config = AFE_CONFIG_DEFAULT();
+
+可在宏`AFE_CONFIG_DEFAULT()`中调整各算法模块的使能及其相应参数: 
 
 ```
-typedef esp_afe_sr_data_t* (*esp_afe_sr_iface_op_create_t)(afe_sr_mode_t mode, int perferred_core);
-
-- param mode              The mode of AFE_SR 
-- param perferred_core    The perferred core to be pinned for BSS Task. 
-- returns Handle to the AFE_SR data
+#define AFE_CONFIG_DEFAULT() { \
+    .aec_init = true, \
+    .se_init = true, \
+    .vad_init = true, \
+    .wakenet_init = true, \
+    .vad_mode = 3, \
+    .wakenet_model = &WAKENET_MODEL, \
+    .wakenet_coeff = &WAKENET_COEFF, \
+    .wakenet_mode = DET_MODE_2CH_90, \
+    .afe_mode = SR_MODE_HIGH_PERF, \
+    .afe_perferred_core = 0, \
+    .afe_perferred_priority = 5, \
+    .afe_ringbuf_size = 50, \
+    .alloc_from_psram = 1, \
+    .agc_mode = 2, \
+}
 ```
 
-调用 `afe_handle->create()` 时使用的两个形参如上。用户可以根据实际应用的需求来设置不同的 AFE 模式和 AFE 内部 BSS Task 运行的 CPU 核数。
+- aec_init: AEC 算法是否使能。
 
-注意：ESP32 系列的音频开发板，例如 ESP32-LyraT-Mini，AFE 模式只能选择 `SR_MODE_MONO_LOW_COST` 或者 `SR_MODE_MONO_MEDIUM_COST`， 即单通道模式。
+- se_init: BSS/NS 算法是否使能。
 
-### 3. 设置 WakeNet
+- vad_init: VAD 是否使能。
 
-对用户而言，设置 WakeNet 可以分为两步：  
-- 使用 `make menuconfig` 来选择相应的唤醒模型，详见：[WakeNet](https://github.com/espressif/esp-sr/tree/b9504e35485b60524977a8df9ff448ca89cd9d62/wake_word_engine)
+- wakenet_init: 唤醒是否使能。
 
-- 调用 `afe_handle->set_wakenet(afe_data, &WAKENET_MODEL, &WAKENET_COEFF);` 来初始化 WakeNet.
+- vad_mode: VAD 检测的操作模式，越大越激进。
+
+- wakenet_model/wakenet_coeff/wakenet_mode: 使用 `make menuconfig` 来选择相应的唤醒模型，详见：[WakeNet](https://github.com/espressif/esp-sr/tree/b9504e35485b60524977a8df9ff448ca89cd9d62/wake_word_engine)
+
+- afe_mode: 乐鑫 AFE 目前支持 2 种工作模式，分别为：SR_MODE_LOW_COST, SR_MODE_HIGH_PERF。详细可见 afe_sr_mode_t 枚举。
+
+	- SR_MODE_LOW_COST: 量化版本，占用资源较少。
+
+	- SR_MODE_HIGH_PERF: 非量化版本，占用资源较多。
+	
+        **ESP32 芯片，只支持模式 SR_MODE_HIGH_PERF;   
+        ESP32S3 芯片，两种模式均支持 **
+
+- afe_perferred_core: AFE 内部 BSS/NS 算法，运行在哪个 CPU 核。
+
+- afe_ringbuf_size: 内部 ringbuf 大小的配置。
+
+- alloc_from_psram: 是否优先从外部 psram 分配内存。可配置三个值：
+
+	- 0: 从内部ram分配。
+	
+	- 1: 部分从外部psram分配。
+	
+	- 2: 绝大部分从外部psram分配
+	
+- agc_mode: 将音频线性放大的 level 配置（[0,3]）,0 表示无放大
+
+### 3. 创建 afe_data
+
+用户使用 `afe_handle->create_from_config(&afe_config)` 函数来获得数据句柄，这将会在afe内部使用，传入的参数即为上面第2步中获得的配置。
+
+```
+/**
+ * @brief Function to initialze a AFE_SR instance
+ * 
+ * @param afe_config        The config of AFE_SR
+ * @returns Handle to the AFE_SR data
+ */
+typedef esp_afe_sr_data_t* (*esp_afe_sr_iface_op_create_from_config_t)(afe_config_t *afe_config);
+
+```
 
 ### 4. feed 音频数据
 
-在初始化 AFE 和 WakeNet 完成后，用户需要将音频数据使用 `afe->feed()` 函数输入到 AFE 中进行处理。
+在初始化 AFE 和 WakeNet 完成后，用户需要将音频数据使用 `afe_handle->feed()` 函数输入到 AFE 中进行处理。
 
 输入的音频大小和排布格式可以参考 **输入音频** 这一步骤。
 
 ```
+/**
+ * @brief Feed samples of an audio stream to the AFE_SR
+ *
+ *
+ * @param afe   The AFE_SR data handle
+ * 
+ * @param in    The input microphone signal, only support signed 16-bit @ 16 KHZ. The frame size can be queried by the 
+ *              `get_samp_chunksize`. The channel number can be queried `get_channel_num`.
+ * @return      The size of input
+ */
 typedef int (*esp_afe_sr_iface_op_feed_t)(esp_afe_sr_data_t *afe, const int16_t* in);
-
-- param afe   The AFE_SR object to queryq
-- param in    The input microphone signal, only support signed 16-bit @ 16 KHZ. The frame size can be queried by the `get_samp_chunksize`. The channel number can be queried `get_channel_num`.
-- return      The size of input
 
 ```
 
 获取音频通道数：
 
-使用 `afe->get_channel_num()` 函数可以获取需要传入 `afe->feed()` 函数的 mic 数据通道数。（不含参考回路通道）
+使用 `afe_handle->get_channel_num()` 函数可以获取需要传入 `afe_handle->feed()` 函数的 mic 数据通道数。（不含参考回路通道）
 
 ```
+/**
+ * @brief Get the channel number of samples that need to be passed to the fetch function
+ * 
+ * @param afe The AFE_SR object to query
+ * @return The amount of channel number
+ */
 typedef int (*esp_afe_sr_iface_op_get_channel_num_t)(esp_afe_sr_data_t *afe);
-- param afe The AFE_SR object to query
-- return The amount of samples to feed the fetch function
 ```
 
 ### 5. fetch 音频数据
 
-用户调用 `afe->fetch()` 函数可以获取处理完成的单通道音频。  
+用户调用 `afe_handle->fetch()` 函数可以获取处理完成的单通道音频。  
 
-fetch 的数据采样点数目（采样点数据类型为 int16）可以通过 `afe->get_fetch_chunksize` 获取。
+fetch 的数据采样点数目（采样点数据类型为 int16）可以通过 `afe_handle->get_fetch_chunksize` 获取。
 
 ```
+/**
+ * @brief Get the amount of each channel samples per frame that need to be passed to the function
+ *
+ * Every speech enhancement AFE_SR processes a certain number of samples at the same time. This function
+ * can be used to query that amount. Note that the returned amount is in 16-bit samples, not in bytes.
+ *
+ * @param afe The AFE_SR object to query
+ * @return The amount of samples to feed the fetch function
+ */
 typedef int (*esp_afe_sr_iface_op_get_samp_chunksize_t)(esp_afe_sr_data_t *afe);
-- param afe The AFE_SR object to query
-- param out   The output enhanced signal. The frame size can be queried by the `get_samp_chunksize`.
-- return      The style of output, -1: noise, 0: speech, 1: wake word 1, 2: wake word 2, ...
 ```
 
-用户需要注意 `afe->fetch()` 的返回值：
-- -1: noise
-- 0: speech
-- 1: wake word 1
-- 2: wake word 2
+用户需要注意 `afe_handle->fetch()` 的返回值：
+
+- AFE_FETCH_CHANNEL_VERIFIED: 音频通道确认 (单麦唤醒，不返回该值)
+- AFE_FETCH_NOISE: 侦测到噪声
+- AFE_FETCH_SPEECH: 侦测到语音
+- AFE_FETCH_WWE_DETECTED: 侦测到唤醒词
 - ...
 
 ```
-typedef int (*esp_afe_sr_iface_op_fetch_t)(esp_afe_sr_data_t *afe, int16_t* out);
-- param afe   The AFE_SR object to query
-- param out   The output enhanced signal. The frame size can be queried by the `get_samp_chunksize`.
-- return      The style of output, -1: noise, 0: speech, 1: wake word 1, 2: wake word 2, ...
+/**
+ * @brief fetch enhanced samples of an audio stream from the AFE_SR
+ *
+ * @Warning  The output is single channel data, no matter how many channels the input is.
+ *
+ * @param afe   The AFE_SR object to query
+ * @param out   The output enhanced signal. The frame size can be queried by the `get_samp_chunksize`.
+ * @return      The state of output, please refer to the definition of `afe_fetch_mode_t`
+ */
+typedef afe_fetch_mode_t (*esp_afe_sr_iface_op_fetch_t)(esp_afe_sr_data_t *afe, int16_t* out);
 ```
 
 ### 6. WakeNet 使用
 
-用户使用 AFE 中 WakeNet 大体可以分为以下三种情况：
-
-- 不使用 WakeNet
-
-当用户不使用 WakeNet 时可以选择不初始化 WakeNet，即不需要调用：  
-
-	afe_handle->set_wakenet(afe_data, &WAKENET_MODEL, &WAKENET_COEFF);
-
-- 使用 WakeNet
-
-用户使用 WakeNet 则需要先使用 `make menuconfig` 来配置相应的唤醒词信息。然后调用：  
-
-	afe_handle->set_wakenet(afe_data, &WAKENET_MODEL, &WAKENET_COEFF);
-    
-则可以通过 `afe->fetch()` 函数来获取是否识别到唤醒词。
-
-- 使用 WakeNet 但是在唤醒后暂时停止 WakeNet
-
 当用户在唤醒后需要进行其他操作，比如离线或在线语音识别，这时候可以暂停 WakeNet 的运行，从而减轻 CPU 的资源消耗。  
 
-用户可以调用 `afe->disable_wakenet(afe_data)` 来停止 WakeNet。 当后续应用结束后又可以调用 `afe->enable_wakenet(afe_data)` 来开启 WakeNet。
+用户可以调用 `afe_handle->disable_wakenet(afe_data)` 来停止 WakeNet。 当后续应用结束后又可以调用 `afe_handle->enable_wakenet(afe_data)` 来开启 WakeNet。
 
 ### 7. AEC 使用
 
