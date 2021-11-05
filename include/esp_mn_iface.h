@@ -74,7 +74,7 @@ typedef void (*esp_mn_iface_op_destroy_t)(model_iface_data_t *model);
  * @brief Reset the speech commands recognition model
  *
  */
-typedef void (*esp_mn_iface_op_reset_t)(model_iface_data_t *model_data, char *command_str, char *err_phrase_id);
+typedef void (*esp_mn_iface_op_reset_t)(model_iface_data_t *model, char *command_str, char *err_phrase_id);
 
 
 typedef struct {
