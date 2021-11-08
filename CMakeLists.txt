@@ -4,6 +4,7 @@ set(COMPONENT_SRCS
     )
 
 set(COMPONENT_ADD_INCLUDEDIRS 
+    esp-tts/esp_tts_chinese/include
     include
     )
 
@@ -42,6 +43,7 @@ if(IDF_TARGET STREQUAL "esp32")
         voice_set_template
         "-Wl,--end-group")
 elseif(${IDF_TARGET} STREQUAL "esp32s2")
+    target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese")
     target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
         esp_tts_chinese_esp32s2 
         voice_set_xiaole_esp32s2
