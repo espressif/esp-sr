@@ -5,7 +5,7 @@ Espressif esp_sr provides basic algorithms for **Speech Recognition** applicatio
 * The wake word detection model [WakeNet](docs/wake_word_engine/README.md)
 * The speech command recognition model [MultiNet](docs/speech_command_recognition/README.md) 
 * Audio Front-End [AFE](docs/audio_front_end/README.md)
-* The txt to speech model [esp-tts](esp-tts/README.md)
+* The test to speech model [esp-tts](esp-tts/README.md)
 
 These algorithms are provided in the form of a component, so they can be integrated into your projects with minimum efforts. 
 
