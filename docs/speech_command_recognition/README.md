@@ -43,19 +43,17 @@ For Chinese MultiNet, we use Pinyin without tone as units.　
 For English MultiNet, we use international phonetic alphabet as unit. [multinet_g2p.py](../../tool/multinet_g2p.py) is used to convert English phrase into phonemes which can be recognized by multinet．　
 Now, the MultiNet support two methods to modify speech commands.　
 
-- 1.menuconfig (before compilation)
+#### 1.menuconfig (before compilation)
 
 Users can define their own speech commands by `idf.py menuconfig -> ESP Speech Recognition -> add speech commands` 
 
-Chinese predefined commands:　
-　
+**Chinese predefined commands:**  
 ![add_speech_commands_ch](../img/add_speech_ch.png)
 
-English predefined commands:　　
-
+**English predefined commands:**  
 ![add_speech_commands_en](../img/add_speech_en.png)
 
-- 2.reset API (after compilation)
+#### 2.reset API (on the fly)
 
 Users also can modify speech commands in the code.
 
