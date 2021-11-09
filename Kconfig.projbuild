@@ -49,6 +49,7 @@ choice SR_WN_MODEL_SEL
 
     config SR_WN_MODEL_WN5_QUANT
         bool "WakeNet 5 (quantized with 16-bit)"
+        depends on IDF_TARGET_ESP32
 
     config SR_WN_MODEL_WN7_QUANT
         bool "WakeNet 7 (quantized with 16-bit)"
