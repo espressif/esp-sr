@@ -38,7 +38,10 @@ ENDIF (IDF_VERSION_MAJOR GREATER 3)
         customized_word_wn5
         multinet2_ch
         esp_audio_processor 
-        esp_audio_front_end 
+        esp_audio_front_end
+        esp_tts_chinese 
+        voice_set_xiaole
+        voice_set_template
         "-Wl,--end-group")
 elseif(${IDF_TARGET} STREQUAL "esp32s2")
     target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese")
