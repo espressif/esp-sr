@@ -1,5 +1,6 @@
 #include "stdio.h"
 #include "sdkconfig.h"
+#include "esp_spiffs.h"
 
 char *get_model_base_path(void)
 {
@@ -14,7 +15,6 @@ char *get_model_base_path(void)
 
 void srmodel_spiffs_init(void)
 {
-    #include "esp_spiffs.h"
     printf("Initializing SPIFFS\n");
 
     esp_vfs_spiffs_conf_t conf = {
