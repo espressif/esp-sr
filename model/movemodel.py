@@ -78,11 +78,11 @@ print(multinet_model)
 target_model = model_path + '/target'
 if not os.path.exists(target_model):
     os.makedirs(target_model)
-os.system("rm %s/* -rf" % target_model)
+os.system("rm -rf %s/*" % target_model)
 if wakenet_model != 'null':
-    os.system("cp %s %s -rf" % (wakenet_model, target_model))
+    os.system("cp -rf %s %s" % (wakenet_model, target_model))
 if multinet_model != 'null':
-    os.system("cp %s %s -rf" % (multinet_model, target_model))
+    os.system("cp -rf %s %s" % (multinet_model, target_model))
 os.system("cp %s %s" % (wakenet_model+'/_MODEL_INFO_', target_model))
 
 total_size = calculate_total_size(target_model)
