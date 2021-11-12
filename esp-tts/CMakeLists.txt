@@ -22,3 +22,10 @@ target_link_libraries(${COMPONENT_TARGET} INTERFACE
     voice_set_template_esp32s2
     )
 endif()
+
+if(IDF_TARGET STREQUAL "esp32s3")
+target_link_libraries(${COMPONENT_TARGET} INTERFACE
+    esp_tts_chinese_esp32s3
+    voice_set_xiaole_esp32s3
+    )
+endif()
