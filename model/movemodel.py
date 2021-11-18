@@ -83,7 +83,7 @@ if wakenet_model != 'null':
     os.system("cp -rf %s %s" % (wakenet_model, target_model))
 if multinet_model != 'null':
     os.system("cp -rf %s %s" % (multinet_model, target_model))
-os.system("cp %s %s" % (wakenet_model+'/_MODEL_INFO_', target_model))
+# os.system("cp %s %s" % (wakenet_model+'/_MODEL_INFO_', target_model))
 
 total_size = calculate_total_size(target_model)
 print("Recommended model partition size: ", str(int((total_size / 1024 + 500) / 4 ) * 4) + 'KB')
