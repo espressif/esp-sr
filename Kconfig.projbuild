@@ -62,6 +62,10 @@ choice SR_WN_MODEL_SEL
     config SR_WN_MODEL_WN8_QUANT
         bool "WakeNet 8 (quantized with 16-bit)"
         depends on IDF_TARGET_ESP32S3
+    
+    config SR_WN_MODEL_WN8_QUANT8
+        bool "WakeNet 8 (quantized with 8-bit)"
+        depends on IDF_TARGET_ESP32S3
 
 endchoice
 
@@ -131,7 +135,7 @@ choice SR_WN_WAKE_WORD_SEL
 
     config SR_WN_WN8_ALEXA
         bool "Alexa (WakeNet8)"
-        depends on SR_WN_MODEL_WN8_QUANT || SR_WN_MODEL_WN8_QUANT8
+        depends on SR_WN_MODEL_WN8_QUANT 
 
     config SR_WN_WN8_HIESP
         bool "Hi,ESP (WakeNet8)"
@@ -174,13 +178,9 @@ choice SR_MN_MODE_SEL
         bool "english single recognition (MultiNet3)"
         depends on SR_MN_ENGLISH && IDF_TARGET_ESP32
 
-    config SR_MN_EN_MULTINET5_SINGLE_RECOGNITION
-        bool "english single recognition (MultiNet5)"
-        depends on SR_MN_ENGLISH && IDF_TARGET_ESP32S3
-
     config SR_MN_EN_MULTINET5_SINGLE_RECOGNITION_QUANT8
-        bool "english single recognition (MultiNet5 quantized with 8-bit)"
-        depends on SR_MN_ENGLISH && IDF_TARGET_ESP32S3
+        bool "english recognition (MultiNet5 quantized with 8-bit, depends on WakeNet8)"
+        depends on SR_MN_ENGLISH && IDF_TARGET_ESP32S3 && (SR_WN_MODEL_WN8_QUANT || SR_WN_MODEL_WN8_QUANT8)
 
     config SR_MN_CN_MULTINET2_SINGLE_RECOGNITION
         bool "chinese single recognition (MultiNet2)"

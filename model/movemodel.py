@@ -50,6 +50,8 @@ elif "CONFIG_SR_WN_WN7_ALEXA" in WN_STRING and "CONFIG_SR_WN_MODEL_WN7_QUANT" in
     wakenet_model = 'alexa7'
 elif "CONFIG_SR_WN_WN8_ALEXA" in WN_STRING and "CONFIG_SR_WN_MODEL_WN8_QUANT" in WN_STRING:
     wakenet_model = 'alexa8'
+elif "CONFIG_SR_WN_WN8_HIESP" in WN_STRING and "CONFIG_SR_WN_MODEL_WN8_QUANT8" in WN_STRING:
+    wakenet_model = 'hiesp8q8'
 elif "CONFIG_SR_WN_WN8_HIESP" in WN_STRING and "CONFIG_SR_WN_MODEL_WN8_QUANT" in WN_STRING:
     wakenet_model = 'hiesp8'
 else:

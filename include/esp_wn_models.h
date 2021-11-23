@@ -8,7 +8,7 @@ extern const esp_wn_iface_t esp_sr_wakenet5_quantized;
 extern const esp_wn_iface_t esp_sr_wakenet7_quantized;
 extern const esp_wn_iface_t esp_sr_wakenet7_quantized8;
 extern const esp_wn_iface_t esp_sr_wakenet8_quantized;
-
+extern const esp_wn_iface_t esp_sr_wakenet8_quantized8;
 /*
  Configure network to use based on what's selected in menuconfig.
 */
@@ -21,6 +21,8 @@ extern const esp_wn_iface_t esp_sr_wakenet8_quantized;
 #define WAKENET_MODEL esp_sr_wakenet7_quantized8
 #elif CONFIG_SR_WN_MODEL_WN8_QUANT
 #define WAKENET_MODEL esp_sr_wakenet8_quantized
+#elif CONFIG_SR_WN_MODEL_WN8_QUANT8
+#define WAKENET_MODEL esp_sr_wakenet8_quantized8
 #else
 #error No valid neural network model selected.
 #endif
@@ -90,6 +92,9 @@ extern const esp_wn_iface_t esp_sr_wakenet8_quantized;
 
 #elif CONFIG_SR_WN_WN8_HIESP & CONFIG_SR_WN_MODEL_WN8_QUANT
 #define WAKENET_COEFF "hiesp8"
+
+#elif CONFIG_SR_WN_WN8_HIESP & CONFIG_SR_WN_MODEL_WN8_QUANT8
+#define WAKENET_COEFF "hiesp8q8"
 
 #else
 #error No valid wake word selected.
