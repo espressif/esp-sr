@@ -73,7 +73,7 @@ typedef struct {
     .afe_perferred_core = 0, \
     .afe_perferred_priority = 5, \
     .afe_ringbuf_size = 50, \
-    .alloc_from_psram = 1, \
+    .alloc_from_psram = 2, \
     .agc_mode = 2, \
 }
 #endif
