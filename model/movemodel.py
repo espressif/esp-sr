@@ -1,7 +1,7 @@
 import io
 import os
 import argparse
-
+import shutil
 def calculate_total_size(folder_path):
     total_size = 0
     for file_name in os.listdir(folder_path):
@@ -69,22 +69,18 @@ elif "CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION" in MN_STRING:
 else:
     print('choose no multinet mode')
 
-if wakenet_model != 'null':
-    wakenet_model = model_path + '/wakenet_model/' + wakenet_model
-if multinet_model != 'null':
-    multinet_model = model_path + '/multinet_model/' + multinet_model
-
 print(wakenet_model)
 print(multinet_model)
 
 target_model = model_path + '/target'
-if not os.path.exists(target_model):
-    os.makedirs(target_model)
-os.system("rm -rf %s/*" % target_model)
+
+shutil.rmtree(target_model)
+os.makedirs(target_model)
 if wakenet_model != 'null':
-    os.system("cp -rf %s %s" % (wakenet_model, target_model))
+    shutil.copytree(model_path + '/wakenet_model/' + wakenet_model, target_model+'/'+wakenet_model)
 if multinet_model != 'null':
-    os.system("cp -rf %s %s" % (multinet_model, target_model))
+    shutil.copytree(model_path + '/multinet_model/' + multinet_model, target_model+'/'+multinet_model)
+
 # os.system("cp %s %s" % (wakenet_model+'/_MODEL_INFO_', target_model))
 
 total_size = calculate_total_size(target_model)
