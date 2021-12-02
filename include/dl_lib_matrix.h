@@ -14,9 +14,16 @@
 #ifndef DL_LIB_MATRIX_H
 #define DL_LIB_MATRIX_H
 
-#if CONFIG_BT_SHARE_MEM_REUSE
+#ifdef ESP_PLATFORM
 #include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "freertos/queue.h"
+#include "esp_system.h"
 #endif
+
+// #ifdef CONFIG_IDF_TARGET_ESP32S3
+// #include "dl_tie728_bzero.h"
+// #endif
 
 typedef float fptp_t;
 

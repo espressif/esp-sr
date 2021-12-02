@@ -1,29 +1,5 @@
 menu "ESP Speech Recognition"
 
-choice NET_TO_USE_ACCELERATION
-    prompt "Net to use acceleration"
-    default WAKENET_USE_PRELOAD
-    depends on IDF_TARGET_ESP32S3
-    help
-        Select the Wake Word Engine to be used.
-
-    config WAKENET_USE_PRELOAD
-        bool "wakenet_preload"
-
-    config MULTINET_USE_PRELOAD
-        bool "multinet_preload"
-
-    config WAKENET_USE_EDMA
-        bool "wakenet_edma"
-
-    config MULTINET_USE_EDMA
-        bool "multinet_edma"
-
-    config ALL_DISABLE
-        bool "all disable"
-
-endchoice
-
 choice MODEL_DATA_PATH
     prompt "model data path"
     default MODEL_IN_SPIFFS
@@ -702,6 +678,506 @@ config CN_SPEECH_COMMAND_ID99
     depends on SR_MN_CHINESE
     default ""
 
+config CN_SPEECH_COMMAND_ID100
+    string "ID100"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID101
+    string "ID101"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID102
+    string "ID102"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID103
+    string "ID103"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID104
+    string "ID104"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID105
+    string "ID105"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID106
+    string "ID106"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID107
+    string "ID107"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID108
+    string "ID108"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID109
+    string "ID109"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID110
+    string "ID110"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID111
+    string "ID111"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID112
+    string "ID112"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID113
+    string "ID113"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID114
+    string "ID114"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID115
+    string "ID115"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID116
+    string "ID116"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID117
+    string "ID117"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID118
+    string "ID118"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID119
+    string "ID119"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID120
+    string "ID120"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID121
+    string "ID121"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID122
+    string "ID122"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID123
+    string "ID123"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID124
+    string "ID124"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID125
+    string "ID125"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID126
+    string "ID126"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID127
+    string "ID127"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID128
+    string "ID128"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID129
+    string "ID129"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID130
+    string "ID130"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID131
+    string "ID131"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID132
+    string "ID132"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID133
+    string "ID133"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID134
+    string "ID134"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID135
+    string "ID135"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID136
+    string "ID136"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID137
+    string "ID137"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID138
+    string "ID138"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID139
+    string "ID139"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID140
+    string "ID140"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID141
+    string "ID141"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID142
+    string "ID142"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID143
+    string "ID143"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID144
+    string "ID144"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID145
+    string "ID145"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID146
+    string "ID146"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID147
+    string "ID147"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID148
+    string "ID148"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID149
+    string "ID149"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID150
+    string "ID150"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID151
+    string "ID151"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID152
+    string "ID152"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID153
+    string "ID153"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID154
+    string "ID154"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID155
+    string "ID155"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID156
+    string "ID156"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID157
+    string "ID157"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID158
+    string "ID158"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID159
+    string "ID159"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID160
+    string "ID160"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID161
+    string "ID161"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID162
+    string "ID162"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID163
+    string "ID163"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID164
+    string "ID164"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID165
+    string "ID165"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID166
+    string "ID166"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID167
+    string "ID167"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID168
+    string "ID168"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID169
+    string "ID169"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID170
+    string "ID170"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID171
+    string "ID171"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID172
+    string "ID172"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID173
+    string "ID173"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID174
+    string "ID174"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID175
+    string "ID175"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID176
+    string "ID176"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID177
+    string "ID177"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID178
+    string "ID178"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID179
+    string "ID179"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID180
+    string "ID180"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID181
+    string "ID181"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID182
+    string "ID182"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID183
+    string "ID183"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID184
+    string "ID184"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID185
+    string "ID185"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID186
+    string "ID186"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID187
+    string "ID187"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID188
+    string "ID188"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID189
+    string "ID189"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID190
+    string "ID190"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID191
+    string "ID191"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID192
+    string "ID192"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID193
+    string "ID193"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID194
+    string "ID194"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID195
+    string "ID195"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID196
+    string "ID196"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID197
+    string "ID197"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID198
+    string "ID198"
+    depends on SR_MN_CHINESE
+    default ""
+
+config CN_SPEECH_COMMAND_ID199
+    string "ID199"
+    depends on SR_MN_CHINESE
+    default ""
+
 config EN_SPEECH_COMMAND_ID0
     string "ID0"
     depends on SR_MN_ENGLISH
@@ -1199,6 +1675,506 @@ config EN_SPEECH_COMMAND_ID98
 
 config EN_SPEECH_COMMAND_ID99
     string "ID99"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID100
+    string "ID100"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID101
+    string "ID101"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID102
+    string "ID102"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID103
+    string "ID103"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID104
+    string "ID104"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID105
+    string "ID105"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID106
+    string "ID106"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID107
+    string "ID107"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID108
+    string "ID108"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID109
+    string "ID109"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID110
+    string "ID110"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID111
+    string "ID111"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID112
+    string "ID112"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID113
+    string "ID113"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID114
+    string "ID114"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID115
+    string "ID115"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID116
+    string "ID116"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID117
+    string "ID117"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID118
+    string "ID118"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID119
+    string "ID119"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID120
+    string "ID120"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID121
+    string "ID121"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID122
+    string "ID122"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID123
+    string "ID123"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID124
+    string "ID124"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID125
+    string "ID125"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID126
+    string "ID126"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID127
+    string "ID127"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID128
+    string "ID128"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID129
+    string "ID129"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID130
+    string "ID130"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID131
+    string "ID131"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID132
+    string "ID132"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID133
+    string "ID133"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID134
+    string "ID134"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID135
+    string "ID135"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID136
+    string "ID136"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID137
+    string "ID137"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID138
+    string "ID138"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID139
+    string "ID139"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID140
+    string "ID140"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID141
+    string "ID141"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID142
+    string "ID142"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID143
+    string "ID143"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID144
+    string "ID144"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID145
+    string "ID145"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID146
+    string "ID146"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID147
+    string "ID147"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID148
+    string "ID148"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID149
+    string "ID149"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID150
+    string "ID150"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID151
+    string "ID151"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID152
+    string "ID152"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID153
+    string "ID153"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID154
+    string "ID154"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID155
+    string "ID155"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID156
+    string "ID156"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID157
+    string "ID157"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID158
+    string "ID158"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID159
+    string "ID159"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID160
+    string "ID160"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID161
+    string "ID161"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID162
+    string "ID162"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID163
+    string "ID163"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID164
+    string "ID164"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID165
+    string "ID165"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID166
+    string "ID166"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID167
+    string "ID167"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID168
+    string "ID168"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID169
+    string "ID169"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID170
+    string "ID170"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID171
+    string "ID171"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID172
+    string "ID172"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID173
+    string "ID173"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID174
+    string "ID174"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID175
+    string "ID175"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID176
+    string "ID176"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID177
+    string "ID177"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID178
+    string "ID178"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID179
+    string "ID179"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID180
+    string "ID180"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID181
+    string "ID181"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID182
+    string "ID182"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID183
+    string "ID183"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID184
+    string "ID184"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID185
+    string "ID185"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID186
+    string "ID186"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID187
+    string "ID187"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID188
+    string "ID188"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID189
+    string "ID189"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID190
+    string "ID190"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID191
+    string "ID191"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID192
+    string "ID192"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID193
+    string "ID193"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID194
+    string "ID194"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID195
+    string "ID195"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID196
+    string "ID196"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID197
+    string "ID197"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID198
+    string "ID198"
+    depends on SR_MN_ENGLISH
+    default ""
+
+config EN_SPEECH_COMMAND_ID199
+    string "ID199"
     depends on SR_MN_ENGLISH
     default ""
 

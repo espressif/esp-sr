@@ -207,6 +207,206 @@ char *get_id_name(int i)
         return MN_SPEECH_COMMAND_ID98;
     else if (i == 99)
         return MN_SPEECH_COMMAND_ID99;
+    else if (i == 100)
+        return MN_SPEECH_COMMAND_ID100;
+    else if (i == 101)
+        return MN_SPEECH_COMMAND_ID101;
+    else if (i == 102)
+        return MN_SPEECH_COMMAND_ID102;
+    else if (i == 103)
+        return MN_SPEECH_COMMAND_ID103;
+    else if (i == 104)
+        return MN_SPEECH_COMMAND_ID104;
+    else if (i == 105)
+        return MN_SPEECH_COMMAND_ID105;
+    else if (i == 106)
+        return MN_SPEECH_COMMAND_ID106;
+    else if (i == 107)
+        return MN_SPEECH_COMMAND_ID107;
+    else if (i == 108)
+        return MN_SPEECH_COMMAND_ID108;
+    else if (i == 109)
+        return MN_SPEECH_COMMAND_ID109;
+    else if (i == 110)
+        return MN_SPEECH_COMMAND_ID110;
+    else if (i == 111)
+        return MN_SPEECH_COMMAND_ID111;
+    else if (i == 112)
+        return MN_SPEECH_COMMAND_ID112;
+    else if (i == 113)
+        return MN_SPEECH_COMMAND_ID113;
+    else if (i == 114)
+        return MN_SPEECH_COMMAND_ID114;
+    else if (i == 115)
+        return MN_SPEECH_COMMAND_ID115;
+    else if (i == 116)
+        return MN_SPEECH_COMMAND_ID116;
+    else if (i == 117)
+        return MN_SPEECH_COMMAND_ID117;
+    else if (i == 118)
+        return MN_SPEECH_COMMAND_ID118;
+    else if (i == 119)
+        return MN_SPEECH_COMMAND_ID119;
+    else if (i == 120)
+        return MN_SPEECH_COMMAND_ID120;
+    else if (i == 121)
+        return MN_SPEECH_COMMAND_ID121;
+    else if (i == 122)
+        return MN_SPEECH_COMMAND_ID122;
+    else if (i == 123)
+        return MN_SPEECH_COMMAND_ID123;
+    else if (i == 124)
+        return MN_SPEECH_COMMAND_ID124;
+    else if (i == 125)
+        return MN_SPEECH_COMMAND_ID125;
+    else if (i == 126)
+        return MN_SPEECH_COMMAND_ID126;
+    else if (i == 127)
+        return MN_SPEECH_COMMAND_ID127;
+    else if (i == 128)
+        return MN_SPEECH_COMMAND_ID128;
+    else if (i == 129)
+        return MN_SPEECH_COMMAND_ID129;
+    else if (i == 130)
+        return MN_SPEECH_COMMAND_ID130;
+    else if (i == 131)
+        return MN_SPEECH_COMMAND_ID131;
+    else if (i == 132)
+        return MN_SPEECH_COMMAND_ID132;
+    else if (i == 133)
+        return MN_SPEECH_COMMAND_ID133;
+    else if (i == 134)
+        return MN_SPEECH_COMMAND_ID134;
+    else if (i == 135)
+        return MN_SPEECH_COMMAND_ID135;
+    else if (i == 136)
+        return MN_SPEECH_COMMAND_ID136;
+    else if (i == 137)
+        return MN_SPEECH_COMMAND_ID137;
+    else if (i == 138)
+        return MN_SPEECH_COMMAND_ID138;
+    else if (i == 139)
+        return MN_SPEECH_COMMAND_ID139;
+    else if (i == 140)
+        return MN_SPEECH_COMMAND_ID140;
+    else if (i == 141)
+        return MN_SPEECH_COMMAND_ID141;
+    else if (i == 142)
+        return MN_SPEECH_COMMAND_ID142;
+    else if (i == 143)
+        return MN_SPEECH_COMMAND_ID143;
+    else if (i == 144)
+        return MN_SPEECH_COMMAND_ID144;
+    else if (i == 145)
+        return MN_SPEECH_COMMAND_ID145;
+    else if (i == 146)
+        return MN_SPEECH_COMMAND_ID146;
+    else if (i == 147)
+        return MN_SPEECH_COMMAND_ID147;
+    else if (i == 148)
+        return MN_SPEECH_COMMAND_ID148;
+    else if (i == 149)
+        return MN_SPEECH_COMMAND_ID149;
+    else if (i == 150)
+        return MN_SPEECH_COMMAND_ID150;
+    else if (i == 151)
+        return MN_SPEECH_COMMAND_ID151;
+    else if (i == 152)
+        return MN_SPEECH_COMMAND_ID152;
+    else if (i == 153)
+        return MN_SPEECH_COMMAND_ID153;
+    else if (i == 154)
+        return MN_SPEECH_COMMAND_ID154;
+    else if (i == 155)
+        return MN_SPEECH_COMMAND_ID155;
+    else if (i == 156)
+        return MN_SPEECH_COMMAND_ID156;
+    else if (i == 157)
+        return MN_SPEECH_COMMAND_ID157;
+    else if (i == 158)
+        return MN_SPEECH_COMMAND_ID158;
+    else if (i == 159)
+        return MN_SPEECH_COMMAND_ID159;
+    else if (i == 160)
+        return MN_SPEECH_COMMAND_ID160;
+    else if (i == 161)
+        return MN_SPEECH_COMMAND_ID161;
+    else if (i == 162)
+        return MN_SPEECH_COMMAND_ID162;
+    else if (i == 163)
+        return MN_SPEECH_COMMAND_ID163;
+    else if (i == 164)
+        return MN_SPEECH_COMMAND_ID164;
+    else if (i == 165)
+        return MN_SPEECH_COMMAND_ID165;
+    else if (i == 166)
+        return MN_SPEECH_COMMAND_ID166;
+    else if (i == 167)
+        return MN_SPEECH_COMMAND_ID167;
+    else if (i == 168)
+        return MN_SPEECH_COMMAND_ID168;
+    else if (i == 169)
+        return MN_SPEECH_COMMAND_ID169;
+    else if (i == 170)
+        return MN_SPEECH_COMMAND_ID170;
+    else if (i == 171)
+        return MN_SPEECH_COMMAND_ID171;
+    else if (i == 172)
+        return MN_SPEECH_COMMAND_ID172;
+    else if (i == 173)
+        return MN_SPEECH_COMMAND_ID173;
+    else if (i == 174)
+        return MN_SPEECH_COMMAND_ID174;
+    else if (i == 175)
+        return MN_SPEECH_COMMAND_ID175;
+    else if (i == 176)
+        return MN_SPEECH_COMMAND_ID176;
+    else if (i == 177)
+        return MN_SPEECH_COMMAND_ID177;
+    else if (i == 178)
+        return MN_SPEECH_COMMAND_ID178;
+    else if (i == 179)
+        return MN_SPEECH_COMMAND_ID179;
+    else if (i == 180)
+        return MN_SPEECH_COMMAND_ID180;
+    else if (i == 181)
+        return MN_SPEECH_COMMAND_ID181;
+    else if (i == 182)
+        return MN_SPEECH_COMMAND_ID182;
+    else if (i == 183)
+        return MN_SPEECH_COMMAND_ID183;
+    else if (i == 184)
+        return MN_SPEECH_COMMAND_ID184;
+    else if (i == 185)
+        return MN_SPEECH_COMMAND_ID185;
+    else if (i == 186)
+        return MN_SPEECH_COMMAND_ID186;
+    else if (i == 187)
+        return MN_SPEECH_COMMAND_ID187;
+    else if (i == 188)
+        return MN_SPEECH_COMMAND_ID188;
+    else if (i == 189)
+        return MN_SPEECH_COMMAND_ID189;
+    else if (i == 190)
+        return MN_SPEECH_COMMAND_ID190;
+    else if (i == 191)
+        return MN_SPEECH_COMMAND_ID191;
+    else if (i == 192)
+        return MN_SPEECH_COMMAND_ID192;
+    else if (i == 193)
+        return MN_SPEECH_COMMAND_ID193;
+    else if (i == 194)
+        return MN_SPEECH_COMMAND_ID194;
+    else if (i == 195)
+        return MN_SPEECH_COMMAND_ID195;
+    else if (i == 196)
+        return MN_SPEECH_COMMAND_ID196;
+    else if (i == 197)
+        return MN_SPEECH_COMMAND_ID197;
+    else if (i == 198)
+        return MN_SPEECH_COMMAND_ID198;
+    else if (i == 199)
+        return MN_SPEECH_COMMAND_ID199;
     else
         return NULL;
 #else

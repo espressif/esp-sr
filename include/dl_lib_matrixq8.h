@@ -16,6 +16,8 @@
 
 #include <stdint.h>
 #include "dl_lib_matrix.h"
+#include "dl_lib.h"
+#include "dl_lib_matrixq.h"
 
 typedef int8_t q8tp_t;
 
@@ -48,6 +50,15 @@ dl_matrix2dq8_t *dl_matrixq8_alloc(int w, int h);
  * @param m     Matrix to free
  */
 void dl_matrixq8_free(dl_matrix2dq8_t *m);
+
+/**
+ * @brief Copy a quantized matrix
+ * Copy a quantized matrix from flash or iram/psram
+ *
+ * @param m     Matrix to copy
+ */
+dl_matrix2dq8_t *dl_matrixq8_copy_to_psram(const dl_matrix2dq8_t *m);
+
 /**
  * @brief Convert a floating-point matrix to a quantized matrix
  *

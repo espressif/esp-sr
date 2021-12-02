@@ -20,11 +20,12 @@
 
 
 //fixed-point convolution FIFO queue. 
+//[nch, n, c]
 typedef struct {
     int n;           /*< the length of queue */
-    int c;           /*< the channel number of queue element*/
+    int c;           /*< the number of queue element*/
     int front;       /*< the front(top) position of queue */
-    int flag;        /*< not used */
+    int nch;         /*< the multiple of queue*/
     int exponent;    /*< The values in items should be multiplied by pow(2,exponent) 
                          to get the real values */
     qtp_t *itemq;    /*< Pointer to item array */
@@ -34,11 +35,41 @@ typedef struct {
  * @brief Allocate a fixed-point convolution queue
  *
  * @param n     The length of queue
- * @param c     The channel number of elements in the queue
+ * @param c     The number of elements in the queue
  * @return      The convolution queue, or NULL if out of memory
  */
 dl_convq_queue_t *dl_convq_queue_alloc(int n, int c);
+
+/**
+ * @brief Allocate a fixed-point convolution queue from PSRAM
+ *
+ * @param n     The length of queue
+ * @param c     The number of elements in the queue
+ * @return      The convolution queue, or NULL if out of memory
+ */
 dl_convq_queue_t *dl_convq_queue_alloc_from_psram(int n, int c);
+
+/**
+ * @brief Allocate a fixed-point multi-channel convolution queue
+ *
+ * @param n     The length of queue
+ * @param c     The number of elements in the queue
+ * @param nch   The channel of conv queue
+ * @return      The convolution queue, or NULL if out of memory
+ */
+dl_convq_queue_t *dl_convq_queue_alloc_mc(int n, int c, int nch);
+
+/**
+ * @brief Allocate a fixed-point multi-channel convolution queue from PSRAM
+ *
+ * @param n     The length of queue
+ * @param c     The number of elements in the queue
+ * @param nch   The channel of conv queue
+ * @return      The convolution queue, or NULL if out of memory
+ */
+dl_convq_queue_t *dl_convq_queue_alloc_mc_from_psram(int n, int c, int nch);
+
+
 void dl_convq_to_matrix2dq(dl_convq_queue_t *cq, dl_matrix2dq_t* out, int row);
 
 /**
@@ -47,6 +78,13 @@ void dl_convq_to_matrix2dq(dl_convq_queue_t *cq, dl_matrix2dq_t* out, int row);
  * @param cq     The fixed-point convolution queue to free
  */
 void dl_convq_queue_free(dl_convq_queue_t *cq);
+
+/**
+ * @brief Set itemq of convolution queue to 0
+ *
+ * @param cq     The fixed-point convolution queue point
+ */
+void dl_convq_queue_bzero(dl_convq_queue_t *cq);
 
 /**
  * @brief Move the front pointer of queue forward, 
@@ -88,6 +126,16 @@ dl_conv_queue_t *dl_queue_from_convq(dl_convq_queue_t *cq1);
  * @return          Pointer of the element
  */
 inline qtp_t *dl_get_queue_itemq(dl_convq_queue_t *cq, int last_num);
+
+/**
+ * @brief   Get the pointer of element in the queue by offset
+ *
+ * @param cq        Input fixed-point convolution queue
+ * @param offset    Offset from the front of the queue
+ * @param ch        Channel index of convolution queue 
+ * @return          Pointer of the element
+ */
+qtp_t *dl_get_queue_itemq_mc(dl_convq_queue_t *cq, int offset, int ch);
 
 /**
  * @brief   Does a tanh operation on the one of element in the convolution queue.
@@ -321,6 +369,7 @@ qtp_t *dl_dilation_layerq_mc_steps( dl_convq_queue_t **in,
 
 void test_atrous_convq(int size, int rate, int in_channel, int out_channel);
 void test_lstm_convq(int size, int in_dim, int lstm_cell);
-void dl_nn_tanh_i16(dl_convq_queue_t **cqm, int offset, int nch);
-
+void dl_nn_tanh_i162(dl_convq_queue_t **cqm, int offset, int nch);
+void dl_copy_queue_item_by_qmf(dl_convq_queue_t *cq, fptp_t* item, int m_bit, int f_bit, int offset, int ch);
+void dl_convq_queue_mc_bzero(dl_convq_queue_t **cqm, int nch);
 #endif

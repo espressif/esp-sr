@@ -40,10 +40,17 @@ typedef int (*esp_mn_iface_op_get_samp_chunknum_t)(model_iface_data_t *model);
  * @brief Set the detection threshold to manually abjust the probability 
  *
  * @param model The model object to query
- * @param det_treshold The threshold to trigger speech commands, the range of det_threshold is 0.5~0.9999
+ * @param det_treshold The threshold to trigger speech commands, the range of det_threshold is 0.0~0.9999
  */
 typedef int (*esp_mn_iface_op_set_det_threshold_t)(model_iface_data_t *model, float det_threshold);
-
+/**
+ * @brief Set the detection threshold to manually abjust the probability 
+ *
+ * @param model The model object to query
+ * @param speech_command_id The ID of speech command
+ * @param det_treshold The threshold to trigger speech commands, the range of det_threshold is 0.0~0.9999
+ */
+typedef int (*esp_mn_iface_op_set_command_det_threshold_t)(model_iface_data_t *model, int speech_command_id, float det_threshold);
 /**
  * @brief Get the sample rate of the samples to feed to the detect function
  *
@@ -74,7 +81,7 @@ typedef void (*esp_mn_iface_op_destroy_t)(model_iface_data_t *model);
  * @brief Reset the speech commands recognition model
  *
  */
-typedef void (*esp_mn_iface_op_reset_t)(model_iface_data_t *model, char *command_str, char *err_phrase_id);
+typedef void (*esp_mn_iface_op_reset_t)(model_iface_data_t *model_data, char *command_str, char *err_phrase_id);
 
 
 typedef struct {
@@ -83,6 +90,7 @@ typedef struct {
     esp_mn_iface_op_get_samp_chunksize_t get_samp_chunksize;
     esp_mn_iface_op_get_samp_chunknum_t get_samp_chunknum;
     esp_mn_iface_op_set_det_threshold_t set_det_threshold;
+    esp_mn_iface_op_set_command_det_threshold_t set_command_det_threshold;
     esp_mn_iface_op_detect_t detect; 
     esp_mn_iface_op_destroy_t destroy;
     esp_mn_iface_op_reset_t reset;
