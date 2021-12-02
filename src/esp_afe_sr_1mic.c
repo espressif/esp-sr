@@ -64,6 +64,12 @@ struct esp_afe_sr_data_t {
 static bool afe_task_flag = true;
 static EventGroupHandle_t events = NULL;
 
+static int16_t channelDataAmpAdjust(int16_t data, float factor)
+{
+    int valueCh = (int)(data * factor);
+    return (int16_t)(((valueCh)>(32767) ? (32767) : (valueCh)<-(32768) ? -(32768) : (valueCh)));
+}
+
 static esp_afe_sr_data_t *afe_create_from_config(afe_config_t *afe_config)
 {
     esp_afe_sr_data_t *afe = malloc(sizeof(esp_afe_sr_data_t));
@@ -75,6 +81,7 @@ static esp_afe_sr_data_t *afe_create_from_config(afe_config_t *afe_config)
     afe->enable_aec = 1;
     afe->channel_id = 0;
     int ns_frame_len_ms = 32;
+    afe_task_flag = true;
 
     events = xEventGroupCreate();
 
@@ -168,7 +175,7 @@ static esp_afe_sr_data_t *afe_create_from_config(afe_config_t *afe_config)
     if (afe_config->alloc_from_psram) {
         afe->buff_wn = heap_caps_malloc(afe->audio_chunksize * (afe->wn_nch + afe->wn_nch - afe->nch) * sizeof(int16_t), MALLOC_CAP_SPIRAM);
     } else {
-        afe->buff_wn = malloc(afe->audio_chunksize * (afe->wn_nch + afe->wn_nch - afe->nch) * sizeof(int16_t));
+        afe->buff_wn = heap_caps_malloc(afe->audio_chunksize * (afe->wn_nch + afe->wn_nch - afe->nch) * sizeof(int16_t), MALLOC_CAP_INTERNAL);
     }
 
     /********************************************************/
@@ -176,11 +183,14 @@ static esp_afe_sr_data_t *afe_create_from_config(afe_config_t *afe_config)
     /********************************************************/
     if (afe_config->alloc_from_psram) {
         afe->aec_in = dl_lib_calloc_psram(afe->aec_frame_size * (afe->nch + 1) * sizeof(int16_t), 1, 16);
+        afe->ns_in = heap_caps_malloc(afe->ns_frame_size * afe->wn_nch * sizeof(int16_t), MALLOC_CAP_SPIRAM);
+        afe->ns_out = heap_caps_malloc(afe->ns_frame_size * afe->wn_nch * sizeof(int16_t), MALLOC_CAP_SPIRAM);
     } else {
         afe->aec_in = dl_lib_calloc(afe->aec_frame_size * (afe->nch + 1) * sizeof(int16_t), 1, 16);
+        afe->ns_in = heap_caps_malloc(afe->ns_frame_size * afe->wn_nch * sizeof(int16_t), MALLOC_CAP_INTERNAL);
+        afe->ns_out = heap_caps_malloc(afe->ns_frame_size * afe->wn_nch * sizeof(int16_t), MALLOC_CAP_INTERNAL);
     }
-    afe->ns_in = malloc(afe->ns_frame_size * afe->wn_nch * sizeof(int16_t));
-    afe->ns_out = malloc(afe->ns_frame_size * afe->wn_nch * sizeof(int16_t));
+
     afe->rb_in_size = afe->aec_frame_size * afe->nch * afe_config->afe_ringbuf_size;
     afe->rb_out_size = afe->ns_frame_size * afe->wn_nch * afe_config->afe_ringbuf_size;
 
@@ -206,6 +216,8 @@ static esp_afe_sr_data_t *afe_create(afe_sr_mode_t mode, int perferred_core)
 
 static int afe_feed(esp_afe_sr_data_t *afe, int16_t *in)
 {
+    if (!afe_task_flag) return;
+
     int ref_vad_res = 0;
 
     if (afe->aec_handle != NULL && afe->enable_aec == 1) {
@@ -294,6 +306,7 @@ static int afe_fetch(esp_afe_sr_data_t *afe, int16_t *out)
     static float out_gain = 1.0;
     int res = 0;
 
+    if (!afe_task_flag) return;
     sr_rb_read(afe->rb_out, afe->buff_wn, afe->wn_nch * afe->audio_chunksize * sizeof(int16_t), portMAX_DELAY);
 
 
@@ -301,14 +314,14 @@ static int afe_fetch(esp_afe_sr_data_t *afe, int16_t *out)
 
         if (afe->wn_nch - afe->nch == 1) {
             for (int i = 0; i < afe->audio_chunksize; i++) {
-                out[i] = afe->buff_wn[afe->wn_nch * i] * afe->wn_gain;
-                int ret = afe->buff_wn[afe->wn_nch * i + 1] * afe->wn_gain;
+                out[i] = channelDataAmpAdjust(afe->buff_wn[afe->wn_nch * i], (float)afe->wn_gain);
+                int ret = channelDataAmpAdjust(afe->buff_wn[afe->wn_nch * i + 1], (float)afe->wn_gain);
                 afe->buff_wn[i] = ret;
             }
             memcpy(afe->buff_wn + afe->audio_chunksize, out, afe->audio_chunksize * sizeof(int16_t));
         } else {
             for (int i = 0; i < afe->audio_chunksize; i++) {
-                int ret = afe->buff_wn[i] * afe->wn_gain; //channel 1
+                int ret = channelDataAmpAdjust(afe->buff_wn[i], (float)afe->wn_gain); //channel 1
                 afe->buff_wn[i] = ret;
             }
         }
@@ -318,16 +331,16 @@ static int afe_fetch(esp_afe_sr_data_t *afe, int16_t *out)
         afe->channel_id = afe->wakenet->get_triggered_channel(afe->model_data);
         if (res > 0 && afe->agc_mode >= 0) {
             if (afe->agc_mode == 0) out_gain = 1;
-            else out_gain = afe->wakenet->get_vol_gain(afe->model_data, (afe->agc_mode - 6));
+            else out_gain = afe->wakenet->get_vol_gain(afe->model_data, (afe->agc_mode - 6)) * afe->wn_gain;
         }
 
         int shift = afe->audio_chunksize * afe->channel_id;
         for (int i = 0; i < afe->audio_chunksize; i++) {
-            out[i] = afe->buff_wn[i + shift] * out_gain;
+            out[i] = afe->buff_wn[i + shift];
         }
     } else {
         for (int i = 0; i < afe->audio_chunksize; i++) {
-            out[i] = afe->buff_wn[afe->wn_nch * i + afe->channel_id] * out_gain;
+            out[i] = channelDataAmpAdjust(afe->buff_wn[afe->wn_nch * i + afe->channel_id], (float)out_gain);
         }
     }
 
@@ -428,11 +441,13 @@ static int afe_enable_se(esp_afe_sr_data_t *afe)
 static void afe_destory(esp_afe_sr_data_t *afe)
 {
     afe_task_flag = false;
+    vTaskDelay(10 / portTICK_PERIOD_MS);
     sr_rb_abort(afe->rb_in, 1);
     sr_rb_abort(afe->rb_out, 1);
     EventBits_t bits = xEventGroupWaitBits(events, AFE_DESTROY_BIT, true, false, portMAX_DELAY);
 
     vEventGroupDelete(events);
+    events = NULL;
 
     if (bits & AFE_DESTROY_BIT) {
         printf("afe task destroy finished\n");

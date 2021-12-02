@@ -24,6 +24,12 @@ typedef enum {
     AFE_FETCH_WWE_DETECTED = 1        // wwe state: wake word is detected
 } afe_fetch_mode_t;
 
+typedef enum {
+    AFE_PSRAM_LOW_COST = 1,
+    AFE_PSRAM_MEDIA_COST = 2,
+    AFE_PSRAM_HIGH_COST = 3
+} afe_use_psram_mode_t;
+
 typedef struct {
     bool aec_init;
     bool se_init;
@@ -73,7 +79,7 @@ typedef struct {
     .afe_perferred_core = 0, \
     .afe_perferred_priority = 5, \
     .afe_ringbuf_size = 50, \
-    .alloc_from_psram = 2, \
+    .alloc_from_psram = AFE_PSRAM_MEDIA_COST, \
     .agc_mode = 2, \
 }
 #endif
