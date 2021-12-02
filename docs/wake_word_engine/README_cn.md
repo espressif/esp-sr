@@ -24,6 +24,9 @@ WakeNet的流程图如下：
 - keyword trigger method：  
   对连续的音频流，为准确判断关键词的触发，我们通过计算若干帧内识别结果的平均值M，来判断触发。当M大于大于指定阈值，发出触发的命令。
 
+以下表格展示在不同芯片上的模型支持：
+
+![wakent_model](../img/WakeNet_model.png)
 
 ## API introduction
 

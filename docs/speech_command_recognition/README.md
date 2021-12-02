@@ -6,6 +6,10 @@ MultiNet is a lightweight model specially designed based on [CRNN](https://arxiv
 
 MultiNet uses the **MFCC features** of an audio clip as input, and the **phonemes** (Chinese or English) as output. By comparing the output phonemes, the relevant Chinese or English command is identified.
 
+The following table shows the model support of Espressif SoCs:
+
+![multinet_model](../img/MultiNet_model.png)
+
 ## Commands Recognition Process
 
 1. Add customized commands to the speech command queue.

@@ -24,6 +24,9 @@ Please see the flow diagram of WakeNet below:
 - Keyword Triggering Method  
   For continuous audio stream, we calculate the average recognition results (M) for several frames and generate a smoothing prediction result, to improve the accuracy of keyword triggering. Only when the M value is larger than the set threshold, a triggering command is sent.  
 
+The following table shows the model support of Espressif SoCs:
+
+![wakent_model](../img/WakeNet_model.png)
 
 ## API Introduction
 
