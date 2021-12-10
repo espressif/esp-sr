@@ -9,8 +9,8 @@ typedef struct model_iface_data_t model_iface_data_t;
 //The probability of being wake words is increased with increasing mode, 
 //As a consequence also the false alarm rate goes up
 typedef enum {
-	DET_MODE_90 = 0,  //Normal, response accuracy rate about 90%
-	DET_MODE_95 = 1,       //Aggressive, response accuracy rate about 95%
+	DET_MODE_90 = 0,       // Normal
+	DET_MODE_95 = 1,       // Aggressive
     DET_MODE_2CH_90 = 2,
     DET_MODE_2CH_95 = 3,
     DET_MODE_3CH_90 = 4,
@@ -130,6 +130,13 @@ typedef float (*esp_wn_iface_op_get_vol_gain_t)(model_iface_data_t *model, float
 typedef int (*esp_wn_iface_op_get_triggered_channel_t)(model_iface_data_t *model);
 
 /**
+ * @brief Clean all states of model
+ *
+ * @param model The model object to query
+ */
+typedef void (*esp_wn_iface_op_clean_t)(model_iface_data_t *model);
+
+/**
  * @brief Destroy a speech recognition model
  *
  * @param model Model object to destroy
@@ -152,5 +159,6 @@ typedef struct {
     esp_wn_iface_op_get_triggered_channel_t  get_triggered_channel;
     esp_wn_iface_op_get_vol_gain_t get_vol_gain;
     esp_wn_iface_op_detect_t detect;
+    esp_wn_iface_op_clean_t clean;
     esp_wn_iface_op_destroy_t destroy;
 } esp_wn_iface_t;

@@ -20,11 +20,12 @@
 #include "dl_lib_conv_queue.h"
 #include "dl_lib_convq_queue.h"
 
+//[nch, n, c]
 typedef struct {
     int n;           /*< the length of queue */
-    int c;           /*< the channel number of queue element*/
+    int c;           /*< the number of queue element*/
     int front;       /*< the front(top) position of queue */
-    int flag;        /*< not used */
+    int nch;         /*< the channel of queue */
     int exponent;    /*< The values in items should be multiplied by pow(2,exponent) 
                          to get the real values */
     q8tp_t *itemq;    /*< Pointer to item array */
@@ -34,10 +35,20 @@ typedef struct {
  * @brief Allocate a fixed-point convolution queue
  *
  * @param n     The length of queue
- * @param c     The channel number of elements in the queue
+ * @param c     The number of elements in the queue
  * @return      The convolution queue, or NULL if out of memory
  */
 dl_convq8_queue_t *dl_convq8_queue_alloc(int n, int c);
+
+/**
+ * @brief Allocate a fixed-point convolution queue
+ *
+ * @param n     The length of queue
+ * @param c     The number of elements in the queue
+ * @param c     The channel of queue
+ * @return      The convolution queue, or NULL if out of memory
+ */
+dl_convq8_queue_t *dl_convq8_queue_alloc_mc(int n, int c, int nch);
 
 /**
  * @brief Free a fixed-point convolution queue
@@ -45,6 +56,13 @@ dl_convq8_queue_t *dl_convq8_queue_alloc(int n, int c);
  * @param cq     The fixed-point convolution queue to free
  */
 void dl_convq8_queue_free(dl_convq8_queue_t *cq);
+
+/**
+ * @brief Set itemq of convolution queue to 0
+ *
+ * @param cq     The fixed-point convolution queue to free
+ */
+void dl_convq8_queue_bzero(dl_convq8_queue_t *cqm);
 
 /**
  * @brief  Insert the float-point element at the end of queue.
@@ -65,6 +83,16 @@ void dl_convq8_queue_push_by_qmf(dl_convq8_queue_t *cq, fptp_t* item, int m_bit,
  * @return        Pointer of the element
  */
 q8tp_t *dl_get_queue_itemq8(dl_convq8_queue_t *cq, int offset);
+
+/**
+ * @brief   Get the pointer of element in the queue by offset
+ *
+ * @param cq      Input fixed-point convolution queue
+ * @param offset  Offset from the front of the queue
+ * @param ch      Channel index of queue
+ * @return        Pointer of the element
+ */
+q8tp_t *dl_get_queue_itemq8_mc(dl_convq8_queue_t *cq, int offset, int ch);
 
 /**
  * @brief Fast and quantised implement for 1D atrous convolution (a.k.a. convolution with holes or dilated convolution)
@@ -120,7 +148,7 @@ void dl_dilation_layerq8_steps(dl_convq8_queue_t *in, dl_convq8_queue_t *out, in
 
 dl_conv_queue_t *dl_convq8_queue_add(dl_convq8_queue_t *cq1, dl_convq8_queue_t *cq2);
 
-
+int8_t dl_sigmoid_lutq8(int in);
 /**
  * @brief Allocate a 8-bit fixed-point Multi-Channel convolution queue
  *
@@ -215,6 +243,8 @@ void dl_dilation_layerq8_mc_steps(dl_convq8_queue_t **in, dl_convq8_queue_t **ou
                                     dl_matrix2dq8_t* filter_kernel, dl_matrix2dq8_t* filter_bias,
                                     dl_matrix2dq8_t* gate_kernel, dl_matrix2dq8_t* gate_bias,
                                     int offset, int prenum);    
+
+void dl_convq8_queue_mc_bzero(dl_convq8_queue_t **cqm, int nch);
 
 void print_convq8(dl_convq8_queue_t *cq, int offset);
 void print_convq(dl_convq_queue_t *cq, int offset);
