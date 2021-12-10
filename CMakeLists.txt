@@ -1,20 +1,20 @@
-set(COMPONENT_SRCS
-    src/mn_process_commands.c
-    src/model_path.c
-    )
-
-set(COMPONENT_ADD_INCLUDEDIRS 
-    esp-tts/esp_tts_chinese/include
-    include
-    )
-
-set(COMPONENT_REQUIRES
-    json
-    spiffs
-    )
-
-register_component()
 if(IDF_TARGET STREQUAL "esp32")
+    set(COMPONENT_ADD_INCLUDEDIRS 
+        esp-tts/esp_tts_chinese/include
+        include/esp32
+        )
+    set(COMPONENT_SRCS
+        src/mn_process_commands.c
+        src/model_path.c
+        )
+
+    set(COMPONENT_REQUIRES
+        json
+        spiffs
+        )
+
+    register_component()
+
     target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32")
     target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese")
 IF (IDF_VERSION_MAJOR GREATER 3)
@@ -44,6 +44,21 @@ ENDIF (IDF_VERSION_MAJOR GREATER 3)
         voice_set_template
         "-Wl,--end-group")
 elseif(${IDF_TARGET} STREQUAL "esp32s2")
+    set(COMPONENT_ADD_INCLUDEDIRS 
+        esp-tts/esp_tts_chinese/include
+        include/esp32
+        )
+    set(COMPONENT_SRCS
+        src/mn_process_commands.c
+        src/model_path.c
+        )
+
+    set(COMPONENT_REQUIRES
+        json
+        spiffs
+        )
+
+    register_component()
     target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese")
     target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
         esp_tts_chinese_esp32s2 
@@ -51,6 +66,21 @@ elseif(${IDF_TARGET} STREQUAL "esp32s2")
         voice_set_template_esp32s2
          "-Wl,--end-group")
 elseif(${IDF_TARGET} STREQUAL "esp32s3")
+    set(COMPONENT_ADD_INCLUDEDIRS 
+        esp-tts/esp_tts_chinese/include
+        include/esp32s3
+        )
+    set(COMPONENT_SRCS
+        src/mn_process_commands.c
+        src/model_path.c
+        )
+
+    set(COMPONENT_REQUIRES
+        json
+        spiffs
+        )
+
+    register_component()
     target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32s3")
     target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese")
 
