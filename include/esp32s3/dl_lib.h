@@ -332,7 +332,8 @@ int16_t dl_tanh_op_q8(int16_t v);
 
 void load_mat_psram_mn4(void);
 void load_mat_psram_mn3(void);
-
+void free_mat_psram_mn4(void);
+void free_mat_psram_mn3(void);
 qtp_t dl_hard_sigmoid_op(qtp_t in, int exponent);
 qtp_t dl_hard_tanh_op(qtp_t in, int exponent);
 
