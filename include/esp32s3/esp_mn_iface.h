@@ -80,6 +80,14 @@ typedef int (*esp_mn_iface_op_get_samp_rate_t)(model_iface_data_t *model);
  */
 typedef int (*esp_mn_iface_op_detect_t)(model_iface_data_t *model, int16_t *samples);
 
+/**
+ * @brief Get the phrase if command word is detected
+ *
+ * @param model       The model object to query.
+ * 
+ * @return The phrase id, return the phrase if command word is detected.
+ */
+typedef int (*esp_mn_iface_op_get_det_phrase_id_t)(model_iface_data_t *model);
 
 /**
  * @brief Destroy a speech commands recognition model
@@ -103,6 +111,7 @@ typedef struct {
     esp_mn_iface_op_set_det_threshold_t set_det_threshold;
     esp_mn_iface_op_set_command_det_threshold_t set_command_det_threshold;
     esp_mn_iface_op_get_command_det_threshold_t get_command_det_threshold;
+    esp_mn_iface_op_get_det_phrase_id_t get_det_phrase_id;
     esp_mn_iface_op_detect_t detect; 
     esp_mn_iface_op_destroy_t destroy;
     esp_mn_iface_op_reset_t reset;
