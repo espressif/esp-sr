@@ -36,8 +36,8 @@ typedef struct {
     bool vad_init;
     bool wakenet_init;
     int vad_mode;
-    esp_wn_iface_t *wakenet_model;
-    model_coeff_getter_t *wakenet_coeff;
+    const esp_wn_iface_t *wakenet_model;
+    const model_coeff_getter_t *wakenet_coeff;
     det_mode_t wakenet_mode;
     afe_sr_mode_t afe_mode;
     int afe_perferred_core;
