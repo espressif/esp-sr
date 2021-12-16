@@ -39,9 +39,9 @@ extern const esp_mn_iface_t esp_sr_multinet5_quantized8;
 #elif CONFIG_SR_MN_CN_MULTINET3_CONTINUOUS_RECOGNITION
 #define MULTINET_MODEL esp_sr_multinet3_continuous_quantized_cn
 #define MULTINET_COEFF "mn3cn"
-#elif CONFIG_SR_MN_CN_MULTINET5_SINGLE_RECOGNITION
+#elif CONFIG_SR_MN_CN_MULTINET4_5_SINGLE_RECOGNITION
 #define MULTINET_MODEL esp_sr_multinet4_single_quantized_cn
-#define MULTINET_COEFF "mn5cn"
+#define MULTINET_COEFF "mn4_5cn"
 #elif CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION
 #define MULTINET_MODEL esp_sr_multinet5_quantized
 #define MULTINET_COEFF "mn5en"

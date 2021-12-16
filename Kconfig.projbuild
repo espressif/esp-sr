@@ -141,7 +141,7 @@ endchoice
 
 choice SR_MN_MODE_SEL
     prompt "speech commands recognition model"
-    default SR_MN_CN_MULTINET5_SINGLE_RECOGNITION
+    default SR_MN_CN_MULTINET4_5_SINGLE_RECOGNITION
     depends on USE_MULTINET
     help
         Select the model to be used.
@@ -174,8 +174,8 @@ choice SR_MN_MODE_SEL
         bool "chinese single recognition (MultiNet4)"
         depends on SR_MN_CHINESE && IDF_TARGET_ESP32S3
 
-    config SR_MN_CN_MULTINET5_SINGLE_RECOGNITION
-        bool "chinese single recognition (MultiNet5)"
+    config SR_MN_CN_MULTINET4_5_SINGLE_RECOGNITION
+        bool "chinese single recognition (MultiNet4.5)"
         depends on SR_MN_CHINESE && IDF_TARGET_ESP32S3
 
 endchoice
