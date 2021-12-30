@@ -16,7 +16,7 @@ if(IDF_TARGET STREQUAL "esp32")
     register_component()
 
     target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32")
-    target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese")
+    target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese/esp32")
 IF (IDF_VERSION_MAJOR GREATER 3)
     add_prebuilt_library(esp_audio_processor "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32/libesp_audio_processor.a" PRIV_REQUIRES esp-sr)
     add_prebuilt_library(wakenet "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32/libwakenet.a" PRIV_REQUIRES esp-sr)
@@ -41,7 +41,6 @@ ENDIF (IDF_VERSION_MAJOR GREATER 3)
         esp_audio_front_end
         esp_tts_chinese 
         voice_set_xiaole
-        voice_set_template
         "-Wl,--end-group")
 elseif(${IDF_TARGET} STREQUAL "esp32s2")
     set(COMPONENT_ADD_INCLUDEDIRS 
@@ -59,11 +58,10 @@ elseif(${IDF_TARGET} STREQUAL "esp32s2")
         )
 
     register_component()
-    target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese")
+    target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese/esp32s2")
     target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
-        esp_tts_chinese_esp32s2 
-        voice_set_xiaole_esp32s2
-        voice_set_template_esp32s2
+        esp_tts_chinese
+        voice_set_xiaole
          "-Wl,--end-group")
 elseif(${IDF_TARGET} STREQUAL "esp32s3")
     set(COMPONENT_ADD_INCLUDEDIRS 
@@ -82,7 +80,7 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
 
     register_component()
     target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32s3")
-    target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese")
+    target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese/esp32s3")
 
     add_prebuilt_library(esp_audio_processor "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32s3/libesp_audio_processor.a" PRIV_REQUIRES esp-sr)
     add_prebuilt_library(wakenet "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32s3/libwakenet.a" PRIV_REQUIRES esp-sr)
@@ -98,8 +96,8 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
         esp_audio_front_end
         esp_audio_processor
         multinet
-        esp_tts_chinese_esp32s3
-        voice_set_xiaole_esp32s3
+        esp_tts_chinese
+        voice_set_xiaole
         "-Wl,--end-group")
 
     set(MVMODEL_EXE ${COMPONENT_PATH}/model/movemodel.py)
