@@ -76,7 +76,8 @@ print(multinet_model)
 
 target_model = model_path + '/target'
 
-shutil.rmtree(target_model)
+if os.path.exists(target_model):
+    shutil.rmtree(target_model)
 os.makedirs(target_model)
 if wakenet_model != 'null':
     shutil.copytree(model_path + '/wakenet_model/' + wakenet_model, target_model+'/'+wakenet_model)
