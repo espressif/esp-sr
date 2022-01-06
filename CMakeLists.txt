@@ -108,7 +108,7 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
          DEPENDS ${COMPONENT_DIR}/model/
          VERBATIM)
 
-    add_custom_target(model DEPENDS ${COMPONENT_DIR}/model/target/_MODEL_INFO_)
+    add_custom_target(model)
     add_dependencies(${COMPONENT_LIB} model)
 
     idf_build_get_property(idf_path IDF_PATH)
