@@ -5,7 +5,7 @@ COMPONENT_SRCDIRS := src
 
 
 LIB_FILES := $(shell ls $(COMPONENT_PATH)/lib/$(IDF_TARGET)/lib*.a) \
-             $(shell ls $(COMPONENT_PATH)/esp-tts/esp_tts_chinese/lib*.a)
+             $(shell ls $(COMPONENT_PATH)/esp-tts/esp_tts_chinese/esp32/lib*.a)
 
 LIBS := $(patsubst lib%.a,-l%,$(LIB_FILES))
 
