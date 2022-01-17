@@ -97,11 +97,30 @@ typedef int (*esp_mn_iface_op_get_det_phrase_id_t)(model_iface_data_t *model);
 typedef void (*esp_mn_iface_op_destroy_t)(model_iface_data_t *model);
 
 /**
- * @brief Reset the speech commands recognition model
+ * @brief Reset the speech commands
+ *
+ * @param model_data       The model object to query.
+ * @param command_str      The string of new commands.
+ * @param err_phrase_id    Wrong phrase ID string.
  *
  */
 typedef void (*esp_mn_iface_op_reset_t)(model_iface_data_t *model_data, char *command_str, char *err_phrase_id);
 
+/**
+ * @brief Reset the speech commands recognition model
+ *
+ * @param model_data       The model object to query.
+ *
+ */
+typedef void (*esp_mn_iface_op_wakenet_reset_t)(model_iface_data_t *model_data);
+
+/**
+ * @brief Close the log print
+ *
+ * @param model_data       The model object to query.
+ *
+ */
+typedef void (*esp_mn_iface_op_close_log_t)(model_iface_data_t *model_data);
 
 typedef struct {
     esp_mn_iface_op_create_t create;
@@ -115,4 +134,6 @@ typedef struct {
     esp_mn_iface_op_detect_t detect; 
     esp_mn_iface_op_destroy_t destroy;
     esp_mn_iface_op_reset_t reset;
+    esp_mn_iface_op_wakenet_reset_t wakenet_reset;
+    esp_mn_iface_op_close_log_t close_log;
 } esp_mn_iface_t;
