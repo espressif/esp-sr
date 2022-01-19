@@ -48,6 +48,8 @@ elif "CONFIG_SR_WN_WN7_ALEXA" in WN_STRING and "CONFIG_SR_WN_MODEL_WN7_QUANT8" i
     wakenet_model = 'alexa7q8'
 elif "CONFIG_SR_WN_WN7_ALEXA" in WN_STRING and "CONFIG_SR_WN_MODEL_WN7_QUANT" in WN_STRING:
     wakenet_model = 'alexa7'
+elif "CONFIG_SR_WN_WN8_HILEXIN" in WN_STRING and "CONFIG_SR_WN_MODEL_WN8_QUANT" in WN_STRING:
+    wakenet_model = 'hilexin8'
 elif "CONFIG_SR_WN_WN8_ALEXA" in WN_STRING and "CONFIG_SR_WN_MODEL_WN8_QUANT" in WN_STRING:
     wakenet_model = 'alexa8'
 elif "CONFIG_SR_WN_WN8_HIESP" in WN_STRING and "CONFIG_SR_WN_MODEL_WN8_QUANT8" in WN_STRING:
@@ -75,7 +77,6 @@ print(wakenet_model)
 print(multinet_model)
 
 target_model = model_path + '/target'
-
 if os.path.exists(target_model):
     shutil.rmtree(target_model)
 os.makedirs(target_model)

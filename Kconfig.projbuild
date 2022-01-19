@@ -108,6 +108,10 @@ choice SR_WN_WAKE_WORD_SEL
     config SR_WN_WN7_HILEXIN
         bool "Hi,Lexin (WakeNet7)"
         depends on SR_WN_MODEL_WN7_QUANT || SR_WN_MODEL_WN7_QUANT8
+    
+    config SR_WN_WN8_HILEXIN
+        bool "Hi,Lexin (WakeNet8)"
+        depends on SR_WN_MODEL_WN8_QUANT 
 
     config SR_WN_WN8_ALEXA
         bool "Alexa (WakeNet8)"
@@ -177,7 +181,6 @@ choice SR_MN_MODE_SEL
     config SR_MN_CN_MULTINET4_5_SINGLE_RECOGNITION
         bool "chinese single recognition (MultiNet4.5)"
         depends on SR_MN_CHINESE && IDF_TARGET_ESP32S3
-
 endchoice
 
 menu "Add speech commands"

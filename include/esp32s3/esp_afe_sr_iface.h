@@ -2,6 +2,7 @@
 #include "stdint.h"
 #include "esp_wn_iface.h"
 #include "esp_wn_models.h"
+#include "esp_vad.h"
 
 //AFE: Audio Front-End 
 //SR:  Speech Recognition
@@ -18,33 +19,48 @@ typedef enum {
 
 // the output state of fetch function
 typedef enum {
-    AFE_FETCH_CHANNEL_VERIFIED = -2,  // wwe state: output channel is verified
-    AFE_FETCH_NOISE = -1,             // vad state: noise or silence
-    AFE_FETCH_SPEECH = 0,             // vad state: speech
-    AFE_FETCH_WWE_DETECTED = 1        // wwe state: wake word is detected
+    AFE_FETCH_ERROR = -3,                   // fetch empty data, retry it
+    AFE_FETCH_CHANNEL_VERIFIED = -2,        // wwe state: output channel is verified
+    AFE_FETCH_NOISE = -1,                   // vad state: noise or silence
+    AFE_FETCH_SPEECH = 0,                   // vad state: speech
+    AFE_FETCH_WWE_DETECTED = 1              // wwe state: wake word is detected
 } afe_fetch_mode_t;
 
 typedef enum {
-    AFE_PSRAM_LOW_COST = 1,
-    AFE_PSRAM_MEDIA_COST = 2,
-    AFE_PSRAM_HIGH_COST = 3
+    AFE_PSRAM_LOW_COST = 0,
+    AFE_PSRAM_MIDDLE_COST = 1,
+    AFE_PSRAM_HIGH_COST = 2
 } afe_use_psram_mode_t;
+
+typedef enum {
+    AFE_MN_PEAK_AGC_MODE_1 = -5,            // The peak amplitude of audio fed to multinet is -5dB
+    AFE_MN_PEAK_AGC_MODE_2 = -4,            // The peak amplitude of audio fed to multinet is -4dB
+    AFE_MN_PEAK_AGC_MODE_3 = -3,            // The peak amplitude of audio fed to multinet is -3dB
+    AFE_MN_PEAK_NO_AGC = 0,                 // There is no agc gain
+} afe_mn_peak_agc_mode_t;
+
+typedef struct {
+    int total_ch_num;                       // total channel num. It must be: total_ch_num = mic_num + ref_num
+    int mic_num;                            // mic channel num
+    int ref_num;                            // reference channel num
+} afe_pcm_config_t;
 
 typedef struct {
     bool aec_init;
     bool se_init;
     bool vad_init;
     bool wakenet_init;
-    int vad_mode;
-    const esp_wn_iface_t *wakenet_model;
-    const model_coeff_getter_t *wakenet_coeff;
+    vad_mode_t vad_mode;                    // The value can be: VAD_MODE_0, VAD_MODE_1, VAD_MODE_2, VAD_MODE_3, VAD_MODE_4
+    esp_wn_iface_t *wakenet_model;
+    model_coeff_getter_t *wakenet_coeff;
     det_mode_t wakenet_mode;
     afe_sr_mode_t afe_mode;
     int afe_perferred_core;
     int afe_perferred_priority;
     int afe_ringbuf_size;
-    int alloc_from_psram;
-    int agc_mode;
+    afe_use_psram_mode_t alloc_from_psram;
+    afe_mn_peak_agc_mode_t agc_mode;
+    afe_pcm_config_t pcm_config;            // Config the channel num of original data which is fed to the afe feed function.
 } afe_config_t;
 
 
@@ -54,7 +70,7 @@ typedef struct {
     .se_init = true, \
     .vad_init = true, \
     .wakenet_init = true, \
-    .vad_mode = 3, \
+    .vad_mode = VAD_MODE_3, \
     .wakenet_model = &WAKENET_MODEL, \
     .wakenet_coeff = &WAKENET_COEFF, \
     .wakenet_mode = DET_MODE_90, \
@@ -62,8 +78,11 @@ typedef struct {
     .afe_perferred_core = 0, \
     .afe_perferred_priority = 5, \
     .afe_ringbuf_size = 50, \
-    .alloc_from_psram = 1, \
-    .agc_mode = 2, \
+    .alloc_from_psram = AFE_PSRAM_MIDDLE_COST, \
+    .agc_mode = AFE_MN_PEAK_AGC_MODE_2, \
+    .pcm_config.total_ch_num = 2, \
+    .pcm_config.mic_num = 1, \
+    .pcm_config.ref_num = 1, \
 }
 #elif CONFIG_IDF_TARGET_ESP32S3
 #define AFE_CONFIG_DEFAULT() { \
@@ -71,7 +90,7 @@ typedef struct {
     .se_init = true, \
     .vad_init = true, \
     .wakenet_init = true, \
-    .vad_mode = 3, \
+    .vad_mode = VAD_MODE_3, \
     .wakenet_model = &WAKENET_MODEL, \
     .wakenet_coeff = &WAKENET_COEFF, \
     .wakenet_mode = DET_MODE_2CH_90, \
@@ -79,8 +98,11 @@ typedef struct {
     .afe_perferred_core = 0, \
     .afe_perferred_priority = 5, \
     .afe_ringbuf_size = 50, \
-    .alloc_from_psram = AFE_PSRAM_MEDIA_COST, \
-    .agc_mode = 2, \
+    .alloc_from_psram = AFE_PSRAM_HIGH_COST, \
+    .agc_mode = AFE_MN_PEAK_AGC_MODE_2, \
+    .pcm_config.total_ch_num = 3, \
+    .pcm_config.mic_num = 2, \
+    .pcm_config.ref_num = 1, \
 }
 #endif
 /**
@@ -113,10 +135,18 @@ typedef esp_afe_sr_data_t* (*esp_afe_sr_iface_op_create_from_config_t)(afe_confi
 typedef int (*esp_afe_sr_iface_op_get_samp_chunksize_t)(esp_afe_sr_data_t *afe);
 
 /**
- * @brief Get the channel number of samples that need to be passed to the fetch function
+ * @brief Get the total channel number which be config
  * 
  * @param afe The AFE_SR object to query
- * @return The amount of samples to feed the fetch function
+ * @return The amount of total channels
+ */
+typedef int (*esp_afe_sr_iface_op_get_total_channel_num_t)(esp_afe_sr_data_t *afe);
+
+/**
+ * @brief Get the mic channel number which be config
+ * 
+ * @param afe The AFE_SR object to query
+ * @return The amount of mic channels
  */
 typedef int (*esp_afe_sr_iface_op_get_channel_num_t)(esp_afe_sr_data_t *afe);
 
@@ -232,6 +262,7 @@ typedef struct {
     esp_afe_sr_iface_op_fetch_t fetch;
     esp_afe_sr_iface_op_get_samp_chunksize_t get_feed_chunksize;
     esp_afe_sr_iface_op_get_samp_chunksize_t get_fetch_chunksize;
+    esp_afe_sr_iface_op_get_total_channel_num_t get_total_channel_num;
     esp_afe_sr_iface_op_get_channel_num_t get_channel_num;
     esp_afe_sr_iface_op_get_samp_rate_t get_samp_rate;
     esp_afe_sr_iface_op_set_wakenet_t  set_wakenet; 
@@ -243,3 +274,5 @@ typedef struct {
     esp_afe_sr_iface_op_enable_se_t enable_se;
     esp_afe_sr_iface_op_destroy_t destroy;
 } esp_afe_sr_iface_t;
+
+extern esp_afe_sr_iface_t esp_afe_sr;

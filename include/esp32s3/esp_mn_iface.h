@@ -1,20 +1,33 @@
 #pragma once
 #include "stdint.h"
-// #include "esp_err.h"
 #include "dl_lib_coefgetter_if.h"
 #include "esp_wn_iface.h"
-// //Opaque model data container
-// typedef struct model_iface_data_t model_iface_data_t;
+
+// Return all possible recognition results
+#define ESP_MN_RESULT_MAX_NUM 5
+typedef enum {
+	ESP_MN_STATE_DETECTING = 0,     // detecting
+	ESP_MN_STATE_DETECTED = 1,      // detected
+    ESP_MN_STATE_TIMEOUT = 2,       // time out
+} esp_mn_state_t;
+
+typedef struct{
+    esp_mn_state_t state;
+    int num;                // The number of phrase in list, num<=5. When num=0, no phrase is recognized.
+    int command_id[ESP_MN_RESULT_MAX_NUM];     // The list of command id.
+    int phrase_id[ESP_MN_RESULT_MAX_NUM];      // The list of phrase id.
+    float prob[ESP_MN_RESULT_MAX_NUM];         // The list of probability.
+} esp_mn_results_t;
 
 /**
  * @brief Initialze a model instance with specified model coefficient.
  *
  * @param coeff       The wakenet model coefficient.
- * @param coeff        The wakenet model coefficient.
+ * @param duration    The duration (ms) to trigger the timeout
  * @parm sample_length Audio length for speech recognition, in ms.
  * @returns Handle to the model data.
  */
-typedef model_iface_data_t* (*esp_mn_iface_op_create_t)(const model_coeff_getter_t *coeff, int sample_length);
+typedef model_iface_data_t* (*esp_mn_iface_op_create_t)(const model_coeff_getter_t *coeff, int duration);
 
 
 /**
@@ -96,15 +109,21 @@ typedef int (*esp_mn_iface_op_get_det_phrase_id_t)(model_iface_data_t *model);
  */
 typedef void (*esp_mn_iface_op_destroy_t)(model_iface_data_t *model);
 
+
 /**
- * @brief Reset the speech commands
- *
- * @param model_data       The model object to query.
- * @param command_str      The string of new commands.
- * @param err_phrase_id    Wrong phrase ID string.
+ * @brief Reset the speech commands recognition model
  *
  */
 typedef void (*esp_mn_iface_op_reset_t)(model_iface_data_t *model_data, char *command_str, char *err_phrase_id);
+
+/**
+ * @brief Get recognition results 
+ *
+ * @param model       The Model object to destroy
+ * 
+ * @return The current results.
+ */
+typedef esp_mn_results_t* (*esp_mn_iface_op_get_results_t)(model_iface_data_t *model);
 
 /**
  * @brief Reset the speech commands recognition model
@@ -134,6 +153,7 @@ typedef struct {
     esp_mn_iface_op_detect_t detect; 
     esp_mn_iface_op_destroy_t destroy;
     esp_mn_iface_op_reset_t reset;
+    esp_mn_iface_op_get_results_t get_results;
     esp_mn_iface_op_wakenet_reset_t wakenet_reset;
     esp_mn_iface_op_close_log_t close_log;
 } esp_mn_iface_t;
