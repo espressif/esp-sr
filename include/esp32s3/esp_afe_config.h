@@ -15,9 +15,9 @@ typedef enum {
 } afe_sr_mode_t;
 
 typedef enum {
-    AFE_MEMORY_ALLOC_MORE_INTERNAL = 0,             // malloc with more internal ram
-    AFE_MEMORY_ALLOC_INTERNAL_PSRAM_BALANCE = 1,    // malloc with internal ram and psram in balance
-    AFE_MEMORY_ALLOC_MORE_PSRAM = 2                 // malloc with more psram
+    AFE_MEMORY_ALLOC_MORE_INTERNAL = 1,             // malloc with more internal ram
+    AFE_MEMORY_ALLOC_INTERNAL_PSRAM_BALANCE = 2,    // malloc with internal ram and psram in balance
+    AFE_MEMORY_ALLOC_MORE_PSRAM = 3                 // malloc with more psram
 } afe_memory_alloc_mode_t;
 
 typedef enum {
