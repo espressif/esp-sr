@@ -12,6 +12,24 @@ choice MODEL_DATA_PATH
         bool "SD Card"
 endchoice
 
+
+config USE_AFE
+	bool "use afe"
+	default "y"
+
+choice AFE_INTERFACE_SEL
+	prompt "Afe interface selection"
+	default AFE_INTERFACE_V1
+	depends on USE_AFE
+	help
+		Select the afe interface to be used.
+
+	config AFE_INTERFACE_V1
+		bool "afe interface v1"
+
+endchoice
+
+
 config USE_WAKENET
     bool "use wakenet"
     default "y"
