@@ -35,43 +35,33 @@ with io.open(sdkconfig_path, "r") as f:
         if 'CONFIG_SR_MN' in label and label[0] != '#':
             MN_STRING += label
 
-wakenet_model = 'null'
-if "CONFIG_SR_WN_WN7_XIAOAITONGXUE" in WN_STRING and "CONFIG_SR_WN_MODEL_WN7_QUANT8" in WN_STRING:
-    wakenet_model = 'xiaoaitongxue7q8'
-elif "CONFIG_SR_WN_WN7_XIAOAITONGXUE" in WN_STRING and "CONFIG_SR_WN_MODEL_WN7_QUANT" in WN_STRING:
-    wakenet_model = 'xiaoaitongxue7'
-elif "CONFIG_SR_WN_WN7_HILEXIN" in WN_STRING and "CONFIG_SR_WN_MODEL_WN7_QUANT8" in WN_STRING:
-    wakenet_model = 'hilexin7q8'
-elif "CONFIG_SR_WN_WN7_HILEXIN" in WN_STRING and "CONFIG_SR_WN_MODEL_WN7_QUANT" in WN_STRING:
-    wakenet_model = 'hilexin7'
-elif "CONFIG_SR_WN_WN7_ALEXA" in WN_STRING and "CONFIG_SR_WN_MODEL_WN7_QUANT8" in WN_STRING:
-    wakenet_model = 'alexa7q8'
-elif "CONFIG_SR_WN_WN7_ALEXA" in WN_STRING and "CONFIG_SR_WN_MODEL_WN7_QUANT" in WN_STRING:
-    wakenet_model = 'alexa7'
-elif "CONFIG_SR_WN_WN8_HILEXIN" in WN_STRING and "CONFIG_SR_WN_MODEL_WN8_QUANT" in WN_STRING:
-    wakenet_model = 'hilexin8'
-elif "CONFIG_SR_WN_WN8_ALEXA" in WN_STRING and "CONFIG_SR_WN_MODEL_WN8_QUANT" in WN_STRING:
-    wakenet_model = 'alexa8'
-elif "CONFIG_SR_WN_WN8_HIESP" in WN_STRING and "CONFIG_SR_WN_MODEL_WN8_QUANT8" in WN_STRING:
-    wakenet_model = 'hiesp8q8'
-elif "CONFIG_SR_WN_WN8_HIESP" in WN_STRING and "CONFIG_SR_WN_MODEL_WN8_QUANT" in WN_STRING:
-    wakenet_model = 'hiesp8'
-else:
-    print('choose no wakenet mode')
+wakenet_model = []
+if "CONFIG_SR_WN_WN7Q8_XIAOAITONGXUE" in WN_STRING and len(wakenet_model) < 2:
+    wakenet_model.append('xiaoaitongxue7q8')
+if "CONFIG_SR_WN_WN7_XIAOAITONGXUE" in WN_STRING and len(wakenet_model) < 2:
+    wakenet_model.append('xiaoaitongxue7')
+if "CONFIG_SR_WN_WN7Q8_HILEXIN" in WN_STRING and len(wakenet_model) < 2:
+    wakenet_model.append('hilexin7q8')
+if "CONFIG_SR_WN_WN8_HILEXIN" in WN_STRING and len(wakenet_model) < 2:
+    wakenet_model.append('hilexin8')
+if "CONFIG_SR_WN_WN8_ALEXA" in WN_STRING and len(wakenet_model) < 2:
+    wakenet_model.append('alexa8')
+if "CONFIG_SR_WN_WN8Q8_HIESP" in WN_STRING and len(wakenet_model) < 2:
+    wakenet_model.append('hiesp8q8')
+if "CONFIG_SR_WN_WN8_HIESP" in WN_STRING and len(wakenet_model) < 2:
+    wakenet_model.append('hiesp8')
 
-multinet_model = 'null'
-if "CONFIG_SR_MN_CN_MULTINET3_SINGLE_RECOGNITION" in MN_STRING or "CONFIG_SR_MN_CN_MULTINET3_CONTINUOUS_RECOGNITION" in MN_STRING:
-    multinet_model = 'mn3cn'
-elif "CONFIG_SR_MN_CN_MULTINET4_SINGLE_RECOGNITION" in MN_STRING:
-    multinet_model = 'mn4cn'
-elif "CONFIG_SR_MN_CN_MULTINET4_5_SINGLE_RECOGNITION" in MN_STRING:
-    multinet_model = 'mn4_5cn'
-elif "CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION_QUANT8" in MN_STRING:
-    multinet_model = 'mn5q8en'
-elif "CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION" in MN_STRING:
-    multinet_model = 'mn5en'
-else:
-    print('choose no multinet mode')
+multinet_model = []
+if "CONFIG_SR_MN_CN_MULTINET3_SINGLE_RECOGNITION" in MN_STRING and len(multinet_model) < 2:
+    multinet_model.append('mn3cn')
+if "CONFIG_SR_MN_CN_MULTINET4_SINGLE_RECOGNITION" in MN_STRING and len(multinet_model) < 2:
+    multinet_model.append('mn4cn')
+if "CONFIG_SR_MN_CN_MULTINET4_5_SINGLE_RECOGNITION" in MN_STRING and len(multinet_model) < 2:
+    multinet_model.append('mn4_5cn')
+if "CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION_QUANT8" in MN_STRING and len(multinet_model) < 2:
+    multinet_model.append('mn5q8en')
+if "CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION" in MN_STRING and len(multinet_model) < 2:
+    multinet_model.append('mn5en')
 
 print(wakenet_model)
 print(multinet_model)
@@ -80,12 +70,14 @@ target_model = model_path + '/target'
 if os.path.exists(target_model):
     shutil.rmtree(target_model)
 os.makedirs(target_model)
-if wakenet_model != 'null':
-    shutil.copytree(model_path + '/wakenet_model/' + wakenet_model, target_model+'/'+wakenet_model)
-if multinet_model != 'null':
-    shutil.copytree(model_path + '/multinet_model/' + multinet_model, target_model+'/'+multinet_model)
+if len(wakenet_model) != 0:
+    for wakenet_model_item in wakenet_model:
+        shutil.copytree(model_path + '/wakenet_model/' + wakenet_model_item, target_model+'/'+wakenet_model_item)
+if len(multinet_model) != 0:
+    for multinet_model_item in multinet_model:
+        shutil.copytree(model_path + '/multinet_model/' + multinet_model_item, target_model+'/'+multinet_model_item)
 
 # os.system("cp %s %s" % (wakenet_model+'/_MODEL_INFO_', target_model))
 
 total_size = calculate_total_size(target_model)
-print("Recommended model partition size: ", str(int((total_size / 1024 + 500) / 4 ) * 4) + 'KB')
+print("Recommended model partition size: ", str(int((total_size / 1024 + 900) / 4 ) * 4) + 'KB')

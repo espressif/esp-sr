@@ -104,14 +104,11 @@ typedef afe_fetch_mode_t (*esp_afe_sr_iface_op_fetch_t)(esp_afe_sr_data_t *afe, 
  * @brief Initial wakenet and wake words coefficient, or reset wakenet and wake words coefficient 
  *        when wakenet has been initialized.  
  *
- * @param afe          The AFE_SR object to query
- * @param wakenet      The pointer of wakenet
- * @param model_coeff  The coefficient of wake word model
+ * @param afe                The AFE_SR object to query
+ * @param wakenet_word       The wakenet word, should be DEFAULT_WAKE_WORD or EXTRA_WAKE_WORD
  * @return             0: fail, 1: success
  */
-typedef int (*esp_afe_sr_iface_op_set_wakenet_t)(esp_afe_sr_data_t *afe,
-                                                  esp_wn_iface_t *wakenet, 
-                                                  const model_coeff_getter_t *model_coeff);
+typedef int (*esp_afe_sr_iface_op_set_wakenet_t)(esp_afe_sr_data_t *afe, esp_wn_word_t wakenet_word);
 
 /**
  * @brief Disable wakenet model.
