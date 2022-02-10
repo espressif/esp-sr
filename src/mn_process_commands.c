@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "sdkconfig.h"
+#include "esp_log.h"
 #include "mn_process_commands.h"
 
 char *get_id_name_cn(int i)
@@ -887,6 +888,49 @@ esp_wn_model_t get_second_wake_word(void)
 #else
     printf("There is no wake word model!\n");
     return NO_WAKE_WORD;
+#endif
+}
+
+void check_chip_config(void)
+{
+#ifdef CONFIG_IDF_TARGET_ESP32S3
+#ifndef CONFIG_ESP32S3_DEFAULT_CPU_FREQ_240
+    ESP_LOGE("SR_SYS", "CPU freq should be 240MHz");
+#endif
+
+#ifndef CONFIG_ESPTOOLPY_FLASHFREQ_80M
+    ESP_LOGE("SR_SYS", "Flash freq should be 240MHz");
+#endif
+
+#ifndef CONFIG_SPIRAM_SPEED_80M
+    ESP_LOGE("SR_SYS", "PSRAM freq should be 80MHz");
+#endif
+
+#ifndef CONFIG_ESP32S3_DATA_CACHE_64KB
+    ESP_LOGE("SR_SYS", "Data cache should be 64KB");
+#endif
+
+#ifndef CONFIG_ESP32S3_DATA_CACHE_LINE_64B
+    ESP_LOGE("SR_SYS", "Data cache line should be 64B");
+#endif
+#elif CONFIG_IDF_TARGET_ESP32
+#ifndef CONFIG_ESP32_DEFAULT_CPU_FREQ_240
+    ESP_LOGE("SR_SYS", "CPU freq should be 240MHz");
+#endif
+
+#ifndef CONFIG_SPIRAM_SPEED_80M
+    ESP_LOGE("SR_SYS", "PSRAM freq should be 80MHz");
+#endif
+
+#ifndef CONFIG_ESPTOOLPY_FLASHFREQ_80M
+    ESP_LOGE("SR_SYS", "Flash freq should be 80MHz");
+#endif
+
+#ifndef CONFIG_ESPTOOLPY_FLASHMODE_QIO
+    ESP_LOGE("SR_SYS", "Flash mode should be QIO");
+#endif
+#else
+    ESP_LOGE("SR_SYS", "ESP-SR-AFE only support ESP32/ESP32S3");
 #endif
 }
 

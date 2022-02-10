@@ -16,17 +16,6 @@ extern const esp_mn_iface_t esp_sr_multinet5_quantized8;
  Configure wake word to use based on what's selected in menuconfig.
 */
 #if defined CONFIG_USE_MULTINET
-#if CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION
-#define MULTINET_MODEL_EN esp_sr_multinet5_quantized
-#define MULTINET_COEFF_EN "mn5en"
-#define MULTINET_MODEL esp_sr_multinet5_quantized
-#define MULTINET_COEFF "mn5en"
-#elif CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION_QUANT8
-#define MULTINET_MODEL_EN esp_sr_multinet5_quantized8
-#define MULTINET_COEFF_EN "mn5q8en"
-#define MULTINET_MODEL esp_sr_multinet5_quantized8
-#define MULTINET_COEFF "mn5q8en"
-#endif
 
 #if CONFIG_SR_MN_CN_MULTINET2_SINGLE_RECOGNITION
 #include "multinet2_ch.h"
@@ -45,6 +34,23 @@ extern const esp_mn_iface_t esp_sr_multinet5_quantized8;
 #define MULTINET_MODEL esp_sr_multinet4_single_quantized_cn
 #define MULTINET_COEFF "mn4_5cn"
 #endif
+
+#if CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION
+#define MULTINET_MODEL_EN esp_sr_multinet5_quantized
+#define MULTINET_COEFF_EN "mn5en"
+#ifndef MULTINET_MODEL
+#define MULTINET_MODEL esp_sr_multinet5_quantized
+#define MULTINET_COEFF "mn5en"
+#endif
+#elif CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION_QUANT8
+#define MULTINET_MODEL_EN esp_sr_multinet5_quantized8
+#define MULTINET_COEFF_EN "mn5q8en"
+#ifndef MULTINET_MODEL
+#define MULTINET_MODEL esp_sr_multinet5_quantized8
+#define MULTINET_COEFF "mn5q8en"
+#endif
+#endif
+
 #else
 #define MULTINET_MODEL "NULL"
 #define MULTINET_COEFF "NULL"

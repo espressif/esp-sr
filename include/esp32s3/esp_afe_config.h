@@ -41,7 +41,7 @@ typedef struct {
     bool voice_communication_init;
     vad_mode_t vad_mode;                    // The value can be: VAD_MODE_0, VAD_MODE_1, VAD_MODE_2, VAD_MODE_3, VAD_MODE_4
     esp_wn_iface_t *wakenet_model;
-    model_coeff_getter_t *wakenet_coeff;
+    void *wakenet_coeff;
     det_mode_t wakenet_mode;
     afe_sr_mode_t afe_mode;
     int afe_perferred_core;
@@ -82,8 +82,8 @@ typedef struct {
     .wakenet_init = true, \
     .voice_communication_init = false, \
     .vad_mode = VAD_MODE_3, \
-    .wakenet_model = &WAKENET_MODEL, \
-    .wakenet_coeff = &WAKENET_COEFF, \
+    .wakenet_model = (esp_wn_iface_t *)&WAKENET_MODEL, \
+    .wakenet_coeff = (void *)&WAKENET_COEFF, \
     .wakenet_mode = DET_MODE_2CH_90, \
     .afe_mode = SR_MODE_LOW_COST, \
     .afe_perferred_core = 0, \
