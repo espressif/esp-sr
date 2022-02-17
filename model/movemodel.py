@@ -54,13 +54,14 @@ if "CONFIG_SR_WN_WN8_HIESP" in WN_STRING and len(wakenet_model) < 2:
 multinet_model = []
 if "CONFIG_SR_MN_CN_MULTINET3_SINGLE_RECOGNITION" in MN_STRING and len(multinet_model) < 2:
     multinet_model.append('mn3cn')
-if "CONFIG_SR_MN_CN_MULTINET4_SINGLE_RECOGNITION" in MN_STRING and len(multinet_model) < 2:
+elif "CONFIG_SR_MN_CN_MULTINET4_SINGLE_RECOGNITION" in MN_STRING and len(multinet_model) < 2:
     multinet_model.append('mn4cn')
-if "CONFIG_SR_MN_CN_MULTINET4_5_SINGLE_RECOGNITION" in MN_STRING and len(multinet_model) < 2:
+elif "CONFIG_SR_MN_CN_MULTINET4_5_SINGLE_RECOGNITION" in MN_STRING and len(multinet_model) < 2:
     multinet_model.append('mn4_5cn')
+
 if "CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION_QUANT8" in MN_STRING and len(multinet_model) < 2:
     multinet_model.append('mn5q8en')
-if "CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION" in MN_STRING and len(multinet_model) < 2:
+elif "CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION" in MN_STRING and len(multinet_model) < 2:
     multinet_model.append('mn5en')
 
 print(wakenet_model)

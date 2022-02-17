@@ -5,6 +5,7 @@
 
 // Return all possible recognition results
 #define ESP_MN_RESULT_MAX_NUM 5
+#define ESP_MN_MAX_PHRASE_NUM 200
 typedef enum {
 	ESP_MN_STATE_DETECTING = 0,     // detecting
 	ESP_MN_STATE_DETECTED = 1,      // detected
@@ -18,6 +19,11 @@ typedef struct{
     int phrase_id[ESP_MN_RESULT_MAX_NUM];      // The list of phrase id.
     float prob[ESP_MN_RESULT_MAX_NUM];         // The list of probability.
 } esp_mn_results_t;
+
+typedef struct{
+    int16_t err_id_num;
+    int16_t err_id[ESP_MN_MAX_PHRASE_NUM];
+} esp_mn_phrase_err_id_t;
 
 /**
  * @brief Initialze a model instance with specified model coefficient.
@@ -109,17 +115,21 @@ typedef int (*esp_mn_iface_op_get_det_phrase_id_t)(model_iface_data_t *model);
  */
 typedef void (*esp_mn_iface_op_destroy_t)(model_iface_data_t *model);
 
-
 /**
- * @brief Reset the speech commands recognition model
+ * @brief Reset the speech commands
  *
+ * @param model_data       The model object to query.
+ * @param command_str      The string of new commands.
+ * @param command_id       -1 means modify all commands with new command_str, 0-200 means modify the corresponding command
+ *
+ * @return The error ID structure
  */
-typedef void (*esp_mn_iface_op_reset_t)(model_iface_data_t *model_data, char *command_str, char *err_phrase_id);
+typedef esp_mn_phrase_err_id_t* (*esp_mn_iface_op_reset_t)(model_iface_data_t *model_data, char *command_str, int command_id);
 
 /**
  * @brief Get recognition results 
  *
- * @param model       The Model object to destroy
+ * @param model       The Model object to query
  * 
  * @return The current results.
  */
