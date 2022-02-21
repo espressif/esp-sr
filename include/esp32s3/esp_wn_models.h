@@ -95,8 +95,8 @@ extern const esp_wn_iface_t esp_sr_wakenet8_quantized8;
 #define WAKENET_MODEL esp_sr_wakenet7_quantized
 #define WAKENET_COEFF "hilexin7"
 
-#elif CONFIG_SR_WN_WN7_HILEXIN_FIRST || CONFIG_SR_WN_WN7_HILEXIN_SECOND
-#define WAKENET_MODEL esp_sr_wakenet7_quantized
+#elif CONFIG_SR_WN_WN7Q8_HILEXIN_FIRST || CONFIG_SR_WN_WN7Q8_HILEXIN_SECOND
+#define WAKENET_MODEL esp_sr_wakenet7_quantized8
 #define WAKENET_COEFF "hilexin7q8"
 
 #elif CONFIG_SR_WN_WN7_ALEXA_FIRST || CONFIG_SR_WN_WN7_ALEXA_SECOND
