@@ -28,77 +28,25 @@ The following table shows the model support of Espressif SoCs:
 
 ![wakent_model](../img/WakeNet_model.png)
 
-## API Introduction
+## Use WakeNet
 
 - How to select the WakeNet model  
   
-  1. Go to `make menuconfig`, navigate to `Component config` >> `ESP Speech Recognition` >> `Wake word engine`. See below:  
+  Please refer to  [Flash model 介绍](../flash_model/README.md).
   
-     <center> <img src="../img/model_sel.png" width = "500" /> </center>    
-     
-  2. WakeNet6 is divided into two tasks， task1 is used to calculate speech recognition， the task2 is used to calculate neural network model. The ESP32 core used to calculate task2 can be selected by `Component config` >> `ESP Speech Recognition` >> `ESP32 core to run WakeNet6`    
+- How to run WakeNet
 
+  WakeNet is currently included in the [AFE](../audio_front_end/README.md), which is running by default, and returns the detect results through the AFE fetch interface.
   
+  If users wants to close WakeNet, please use:
   
+  ```
+  afe_config.wakenet_init = False.
+  ```
 
-- How to select the wake words   
-  Go to `make menuconfig`, and navigate to `Component config` >> `ESP Speech Recognition` >> `Wake words list`. See below:  
-
-  <center>
-  <img src="../img/word_sel.png" width = "500" />
-  </center>
-
-  Note that, the `customized word` option only supports WakeNet5 and WakeNet6. WakeNet3 and WakeNet4 are only compatible with earlier versions. If you want to use your own wake words, please overwrite existing models in `wake_word_engine` directory with your own words model.
-
-- How to set the triggering threshold  
-  1. The triggering threshold (0, 0.9999) for wake word can be set to adjust the accuracy of the wake words model. The threshold can be configured separately for each wake words if there are more than one words supported in a model. 
-  2. The smaller the triggering threshold is, the higher the risk of false triggering is (and vice versa). Please configure your threshold according to your applications.   
-  3. The wake word engine predefines two thresholds for each wake word during the initialization. See below:
-  
-    ```
-    typedef enum {
-	    DET_MODE_90 = 0,      // Normal, 
-	    DET_MODE_95 = 1,      // Aggressive, 
-	    DET_MODE_2CH_90 = 2,  // 2 Channel detection, Normal mode 
-	    DET_MODE_2CH_95 = 3,  // 2 Channel detection, Aggressive mode
-	    DET_MODE_2CH_90 = 4,  // 3 Channel detection, Normal mode 
-	    DET_MODE_2CH_95 = 5,  // 3 Channel detection, Aggressive mode
-    } det_mode_t;
-    ```
-    
-  4. Use the `set_det_threshold()` function to configure the thresholds for different wake words after the initialization.
-  
-- How to get the sampling rate and frame size.
-  - Use `get_samp_rate` to get the sampling rate of the audio stream to be recognized.
-  - Use `get_samp_chunksize` to get the sampling point of each frame. The encoding of audio data is `signed 16-bit int`.
-  
 ## Performance Test
 
-### 1. Resource Occupancy(ESP32)
-
-|Model Type|Parameter Num|RAM|Average Running Time per Frame| Frame Length|
-|:---:|:---:|:---:|:---:|:---:|
-|Quantised WakeNet5|41 K|15 KB|5.5 ms|30 ms|
-|Quantised WakeNet5X2|165 K|20 KB|10.5 ms|30 ms|
-|Quantised WakeNet5X3|371 K|24 KB|18 ms|30 ms|
-
-### 2. Resource Occupancy(ESP32S3)
-|Model Type|Parameter Num|RAM|Average Running Time per Frame| Frame Length|
-|:---:|:---:|:---:|:---:|:---:|
-|Quantised WakeNet7_2CH|810 K|45 KB|10 ms|32 ms|
-|Quantised WakeNet8_2CH|821 K|50 KB|10 ms|32 ms|
-
-
-### 2. Performance
-
-|Distance| Quiet | Stationary Noise (SNR = 4 dB)| Speech Noise (SNR = 4 dB)| AEC Interruption (-10 dB)|
-|:---:|:---:|:---:|:---:|:---:|
-|1 m|98%|96%|94%|96%|
-|3 m|98%|94%|92%|94%|
-
-False triggering rate: 1 time in 12 hours
-
-**Note**: We use the ESP32-S3-Korvo V4.0 development board and the WakeNet8(Alexa) model in our test. 
+Please refer to [Performance_test](../performance_test/README.md).
 
 ## Wake Word Customization
 

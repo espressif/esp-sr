@@ -1,184 +1,297 @@
 # MultiNet Introduction
 
-MultiNet is a lightweight model specially designed based on [CRNN](https://arxiv.org/pdf/1703.05390.pdf) and [CTC](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.75.6306&rep=rep1&type=pdf) for the implementation of multi-command recognization. Now, up to 200 speech commands, including customized commands, are supported. 
+MultiNet is a lightweight model designed to realize speech commands recognition offline on ESP32 series. Now, up to 200 speech commands, including customized commands, are supported. 
 
-## Overview
+> Support Chinese and English speech commands recognition (esp32s3 is required for English speech commands recognition)  
+> Support user-defined commands  
+> Support adding / deleting / modifying commands during operation  
+> Up to 200 commands are supported  
+> It supports single recognition and continuous recognition  
+> Lightweight and low resource consumption  
+> Low delay, within 500ms  
+> Support online Chinese and English model switching (esp32s3 only)  
+> The model is partitioned separately to support users to apply OTA  
 
-MultiNet uses the **MFCC features** of an audio clip as input, and the **phonemes** (Chinese or English) as output. By comparing the output phonemes, the relevant Chinese or English command is identified.
+## 1. Overview
+
+The MultiNet input is the audio processed by the audio-front-end algorithm (AFE), with the format of 16KHz, 16bit and mono. By recognizing the audio, you can correspond to the corresponding Chinese characters or English words.
 
 The following table shows the model support of Espressif SoCs:
 
 ![multinet_model](../img/MultiNet_model.png)
 
-## Commands Recognition Process
+Note: the model ending with Q8 represents the 8bit version of the model, means more lightweight.
 
-1. Add customized commands to the speech command queue.
-2. Prepare an audio clip of 30 ms (16 KHz, 16 bit, mono).
-3. Input this audio to the MFCC model and get its **MFCC features**.
-4. Input the obtained **MFCC features** to MultiNet and get the output **phoneme**.
-5. Input the obtained **phoneme** to the Language model and get the output.
-6. Compare the output against the existing speech commands one by one, and output the Command ID of the matching command (if any).
+## 2. Commands Recognition Process
 
 Please see the flow diagram below:
 
 ![speech_command-recognition-system](../img/multinet_workflow.png)
 
 
-## User Guide
+## 3. User Guide
 
-### Basic Configuration
+### 3.1 Requirements of speech commands
 
-Define the following two variables before using the command recognition model:
+- The recommended length of Chinese is generally 4-6 Chinese characters. Too short leads to high false recognition rate and too long is inconvenient for users to remember
+- The recommended length of English is generally 4-6 words
+- Mixed Chinese and English is not supported in command words
+- Currently, up to 200 command words are supported
+- The command word cannot contain Arabic numerals and special characters
+- Avoid common command words like "hello"
+- The greater the pronunciation difference of each Chinese character / word in the command word, the better the performance
 
-1. Model version  
-	The model version has been configured in `menuconfig` to facilitate your development. Please configure in `menuconfig` and add the following line in your code:  
-	
-	`static const esp_mn_iface_t *multinet = &MULTINET_MODEL;`
-	
-2. Model parameter  
-	The language supported and the effectiveness of the model is determined by model parameters. Now only commands in Chinese are supported. Please configure the `MULTINET_COEFF` option in `menuconfig` and add the following line in your code to generate the model handle. The 6000 is the audio length for speech recognition, in ms, the range of sample_length is 0~6000.
-	   
-	`model_iface_data_t *model_data = multinet->create(&MULTINET_COEFF, 6000);`
-		
+### 3.2 Speech commands customization method
 
-### Modify Speech Commands
+> Support a variety of speech commands customization methods  
+> Support dynamic addition / deletion / modification of speech commands
 
-For Chinese MultiNet, we use Pinyin without tone as units.　
-For English MultiNet, we use international phonetic alphabet as unit. [multinet_g2p.py](../../tool/multinet_g2p.py) is used to convert English phrase into phonemes which can be recognized by multinet．　
-Now, the MultiNet support two methods to modify speech commands.　
+#### 3.2.1 Format of Speech commands
 
-#### 1.menuconfig (before compilation)
+Speech commands string need to meet specific formats, as follows:
 
-Users can define their own speech commands by `idf.py menuconfig -> ESP Speech Recognition -> add speech commands` 
+- Chines
 
-**Chinese predefined commands:**  
-![add_speech_commands_ch](../img/add_speech_ch.png)
-
-**English predefined commands:**  
-![add_speech_commands_en](../img/add_speech_en.png)
-
-#### 2.reset API (on the fly)
-
-Users also can modify speech commands in the code.
-
-```
-// Chinese
-char err_id[200];
-char *ch_commands_str = "da kai dian deng,kai dian deng;guan bi dian deng,guan dian deng;guan deng;";
-multinet->reset(model_data, ch_commands_str, err_id);
-
-// English
-char *en_commands_en = "TfL Mm c qbK;Sgl c Sel;TkN nN jc LiT;TkN eF jc LiT";
-multinet->reset(model_data, en_commands_en, err_id);
-```
-
-**Note:**
-
-- One speech commands ID can correspond to multiple speech command phrases;
-- Up to 200 speech commands ID or speech command phrases, including customized commands, are supported;
-- Different Command IDs need to be separated by ';'. The corresponding multiple phrases for one Command ID need to be separated by ','. 
-- `err_id` return the spelling that does not meet the requirements.
-
-### API Reference
-
-#### Header   
-- esp_mn_iface.h
-- esp_mn_models.h
-
-#### Function
-
-- `typedef model_iface_data_t* (*esp_mn_iface_op_create_t)(const model_coeff_getter_t *coeff, int sample_length);`  
-
-  **Definition**  
-   
- 	Easy function type to initialize a model instance with a coefficient.
-    
-  **Parameter**  
-   
- 	* coeff: The coefficient for speech commands recognition.  
- 	* sample_length: Audio length for speech recognition, in ms. The range of sample_length is 0~6000.
-    
-  **Return**  
- 	  
- 	Handle to the model data.
-
-- `typedef int (*esp_mn_iface_op_get_samp_chunksize_t)(model_iface_data_t *model);`
-
-   **Definition**  
-   
-	 Callback function type to fetch the amount of samples that need to be passed to the detection function. Every speech recognition model processes a certain number of samples at the same time. This function can be used to query the amount. Note that the returned amount is in 16-bit samples, not in bytes.
-       
-  **Parameter**  
-   
- 	model: The model object to query.
+  Chinese speech commands need to use Chinese Pinyin, and there should be a space between the Pinyin spelling of each word. For example, "打开空调" should be written as "da kai kong tiao", "打开绿色灯" should be written as "da kai lv se deng".  
   
-  **Return**
+  In addition, we also provide corresponding tools for users to convert Chinese characters into pinyin. See details:
+
+- English
+
+  English speech commands need to be represented by specific phonetic symbols. The phonetic symbols of each word are separated by spaces, such as "turn on the light", which needs to be written as "TkN nN jc LiT".
   
-    The amount of samples to feed the detection function.
+  **We provide specific conversion rules and tools. For details, please refer to the English G2P [tool](../tool/multinet_g2p.py).**
 
+#### 3.2.2 Set speech commands offline
 
-- `typedef int (*esp_mn_iface_op_get_samp_chunknum_t)(model_iface_data_t *model);`
+Multinet supports flexible speech commands setting methods. No matter which way users set speech commands (code / network / file), they only need to call the corresponding API.
 
-   **Definition**  
-   
-	 Callback function type to fetch the number of frames recognized by the speech command.
-       
-  **Parameter**  
-   
- 	model: The model object to query.
+Here we provide two methods of adding speech commands:
+
+- Use `menuconfig`
+
+  Users can refer to the example in ESP-Skainet, users can define their own speech commands by `idf.py menuconfig -> ESP Speech Recognition-> Add Chinese speech commands/Add English speech commands`.
   
-  **Return**
-  
-    The number of the frames recognized by the speech command.
-    
-- `typedef int (*esp_mn_iface_op_get_samp_rate_t)(model_iface_data_t *model);`
+    ![menuconfig_add_speech_commands](../img/menuconfig_add_speech_commands.png)
 
-   **Definition**  
-   
- 	Get the sample rate of the samples to feed to the detection function.
-
-  **Parameter**  
-  
- 	model: The model object to query.
+  Please note that a single `Command ID` can support multiple phrases. For example, "da kai kong tiao" and "kai kong tiao" have the same meaning, you can write them in the entry corresponding to the same command ID, and separate the adjacent entries with the English character "," without spaces before and after ",".
  
-  **Return**  
-  
- 	The sample rate, in Hz.
+  Then call the following API:
 
-- `typedef float* (*esp_mn_iface_op_detect_t)(model_iface_data_t *model, int16_t *samples);`  
+    ```
+    /**
+    * @brief Update the speech commands of MultiNet by menuconfig
+    *
+    * @param multinet            The multinet handle
+    *
+    * @param model_data          The model object to query
+    *
+    * @param langugae            The language of MultiNet
+    *
+    * @return
+    *     - ESP_OK                  Success
+    *     - ESP_ERR_INVALID_STATE   Fail
+    */
+    esp_err_t esp_mn_commands_update_from_sdkconfig(esp_mn_iface_t *multinet, const model_iface_data_t *model_data);
+    ```
 
-   **Definition**
+- Add speech commands in the code
+
+  Users can refer to example in ESP-Skainet for this method of adding speech commands.
+
+  In this method, users directly set the speech command words in the code and transmits them to multinet. In the actual development and products, the user can transmit the required speech commands through various possible ways such as network / UART / SPI and change the speech commands.
+
+#### 3.2.3 Set speech commands online
+
+MultiNet supports online dynamic addition / deletion / modification of speech commands during operation, without changing models or adjusting parameters. For details, please refer to the example in ESP-Skainet.
+
+Users only need to call the following APIs:
+
+ ```
+    /**
+    * @brief Initialze the Speech Commands link of MultiNet
+    *
+    * @return
+    *     - ESP_OK                  Success
+    *     - ESP_ERR_NO_MEM          No memory
+    *     - ESP_ERR_INVALID_STATE   The Speech Commands link has been initialized
+    */
+    esp_err_t esp_mn_commands_init(void);
  
-    Easy function type to initialize a model instance with a coefficient.
-    
-  **Parameter**  
+    /**
+    * @brief Add one speech commands with phoneme and command ID
+    *
+    * @param command_id      The command ID
+    *
+    * @param phoneme_string  The phoneme string of the speech commands
+    *
+    * @return
+    *     - ESP_OK                  Success
+    *     - ESP_ERR_INVALID_STATE   Fail
+    */
+    esp_err_t esp_mn_commands_add(int command_id, char *phoneme_string);
 
-    coeff: The coefficient for speech commands recognition.  
+    /**
+    * @brief Modify one speech commands with new phoneme
+    *
+    * @param old_phoneme_string  The old phoneme string of the speech commands
+    *
+    * @param new_phoneme_string  The new phoneme string of the speech commands
+    *
+    * @return
+    *     - ESP_OK                  Success
+    *     - ESP_ERR_INVALID_STATE   Fail
+    */
+    esp_err_t esp_mn_commands_modify(char *old_phoneme_string, char *new_phoneme_string);
+
+    /**
+    * @brief Remove one speech commands by phoneme
+    *
+    * @param phoneme_string  The phoneme string of the speech commands
+    *
+    * @return
+    *     - ESP_OK                  Success
+    *     - ESP_ERR_INVALID_STATE   Fail
+    */
+    esp_err_t esp_mn_commands_remove(char *phoneme_string);
+ 
+    /**
+    * @brief Update the speech commands of MultiNet, must be used after [add/remove/modify] the speech commands
+    *
+    * @param multinet            The multinet handle
+    *
+    * @param model_data          The model object to query
+    *
+    * @return
+    *     - ESP_OK                  Success
+    *     - ESP_ERR_INVALID_STATE   Fail
+    */
+    esp_err_t esp_mn_commands_update(const esp_mn_iface_t *multinet, const model_iface_data_t *model_data);
+ ```
+
+## 4. Run speech commands recognition
+
+Speech commands recognition needs to be run together with the audio front-end (AFE) in esp-sr (WakeNet needs to be enabled in AFE). For the use of AFE, please refer to the document:
+
+[AFE 介绍及使用](../audio_front_end/README_CN.md)  
+
+### 4.1 MultiNet Initialization
+
+Before using MultiNet, you need to define the following variables:
+
+- Model version
+
+  Users need to declare the following model versions in the code. Users can directly use this in the following ways without changing it.
+  
+    ```
+     const esp_mn_iface_t *multinet = &MULTINET_MODEL;  
+    ```
     
-  **Return**  
+- Model handle
+
+  The users needs to use the `create` interface to generate the model handle `model_data` for subsequent operations.
+  
+    ```
+     model_iface_data_t *model_data = multinet->create(&MULTINET_COEFF, time_out_time_ms);
+   ```
    
- 	* The command id, if a matching command is found.
- 	* -1, if no matching command is found.
+   - MULTINET_COEFF: Model parameters can be filled in directly without modifying
+   - time_out_time_ms: The waiting exit time when the speech commands cannot be detected by MultiNet. The unit is `ms`. it supports customization. The recommended range is [5000, 10000]
 
-- `typedef void (*esp_mn_iface_op_reset_t)(model_iface_data_t *model, char *command_str, char *err_phrase_id);`  
+- Set speech commands
 
-   **Definition**  
+  Please refer #3.
+
+### 4.2 Run MultiNet
+
+When users uses AFE and enables wakenet, then can use MultiNet. And there are the following requirements:
+
+> The frame length of MultiNet is equal to the AFE fetch frame length  
+> The audio format supported is 16KHz, 16bit, mono. The data obtained by AFE fetch is also in this format
+
+- Get the frame length that needs to be passed into MultiNet
+
+   ```
+   int mu_chunksize = multinet->get_samp_chunksize(model_data);
+   ```
+   
+- MultiNet detect
   
-   Reset the speech commands.
+  We send the data from AFE fetch to the following API:
+  
+   ```
+    esp_mn_state_t mn_state = multinet->detect(model_data, buff);
+   ```
  
-  **Parameters**  
-  
-  model: Model object to destroy.
-  command_str: The speech commands string. ';' is used to separate commands for different command ID. ',' is used to separate different phrases for same command ID.
-  err_phrase_id: Return incorrent spelling
+    The lengthof `buff` is `mu_chunksize * sizeof(int16_t)`.
 
- 
-- `typedef void (*esp_mn_iface_op_destroy_t)(model_iface_data_t *model);`  
+### 4.3 The detect result of MultiNet
 
-   **Definition**  
+Speech commands recognition supports two basic modes:
+
+> Single recognition  
+> Continuous recognition
+
+Speech command recognition must be used with WakeNet. After wake-up, MultiNet detection can be run.
+
+When the MultiNet is running, it will return the recognition status of the current frame in real time `mn_state`, which is currently divided into the following identification states:
+
+- ESP_MN_STATE_DETECTING
+
+  This status indicates that the MultiNet is detecting but target speech command word has not been recognized.
   
-   Destroy a voiceprint recognition model.
+- ESP_MN_STATE_DETECTED
+
+  This status indicates that the target speech command has been recognized. At this time, the user can call `get_results` interface obtains the identification results.
+  
+   ```
+   esp_mn_results_t *mn_result = multinet->get_results(model_data);
+   ```
  
-  **Parameters**  
+  The information identifying the result is stored in the return value of the `get_result` API, the data type of the return value is as follows:
+
+   ```
+   typedef struct{
+      esp_mn_state_t state;
+      int num;                // The number of phrase in list, num<=5. When num=0, no phrase is recognized.
+      int phrase_id[ESP_MN_RESULT_MAX_NUM];      // The list of phrase id.
+      float prob[ESP_MN_RESULT_MAX_NUM];         // The list of probability.
+   } esp_mn_results_t;
+   ```
+ 
+     - `state` is the recognition status of the current frame
+     - `num` means the number of recognized commands, `num` <= 5, up to 5 possible results are returned
+     - `phrase_id` means the Phrase ID of speech commands
+     - `prob` meaNS the recognition probability of the recognized entries, which is arranged from large to small
+
+  Users can use `phrase_id[0]` and `prob[0]` get the recognition result with the highest probability.
   
-  model: Model object to destroy.
+  - ESP_MN_STATE_TIMEOUT
+
+  This status means that the speech commands has not been detected for a long time and will exit automatically. Wait for the next wake-up.
+
+Therefore:  
+Exit the speech recognition when the return status is `ESP_MN_STATE_DETECTED`, it is single recognition mode;  
+Exit the speech recognition when the return status is `ESP_MN_STATE_TIMEOUT`, it is continuous recognition mode;
+
+## 5. Other configurations
+
+### 5.1 Threshold setting
+
+MultiNet supports set or get the threshold of each speech command, which can help users optimize recognition performance.
+
+- Get the threshold of one speech commands
+
+  ```
+  multinet->get_command_det_threshold(model_data, phrase_id);
+  ```
+
+- Set the threshold of one speech commands
+
+  When setting the threshold, users are advised to get the threshold first and increase or decrease it appropriately on the basis of the original threshold.
+
+  The threshold range is (0, 1).
+ 
+   ```
+   multinet->set_command_det_threshold(model_data, phrase_id, threshold);
+   ```

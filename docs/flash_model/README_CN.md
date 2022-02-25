@@ -15,6 +15,8 @@ ESP32S3：
 从而在 ESP32S3 上可以：
 
 - 大大减小用户应用 APP BIN 的大小
+- 支持选择最多两个唤醒词
+- 支持中文和英文命令词识别在线切换
 - 方便用户进行 OTA
 - 支持从 SD 卡读取和更换模型，更加便捷且可以缩减项目使用的模组 Flash 大小
 - 当用户进行开发时，当修改不涉及模型时，可以避免每次烧录模型数据，大大缩减烧录时间，提高开发效率
@@ -25,63 +27,85 @@ ESP32S3：
 
 ![overview](../img/model-1.png)
 
-### 1.1 Net to use acceleration
-
-该选项可以配置模型的加速方式，用户无须修改，请保持默认配置。
-
-### 1.2 model data path
+### 1.1 model data path
 
 该选项只在 ESP32S3 上可用，表示模型数据的存储位置，支持选择 `spiffs partition` 或 `SD Card`。
 
 - `spiffs partition` 表示模型数据存储在 Flash spiffs 分区中，模型数据将会从 Flash spiffs 分区中加载
 - `SD Card` 表示模型数据存储在 SD 卡中，模型数据将会从 SD Card 中加载
 
+### 1.2 use afe
+
+该选项需要打开，用户无须修改，请保持默认配置。
+
 ### 1.3 use wakenet
 
 此选项默认打开，当用户只使用 AEC 或者 BSS 等，无须运行 WakeNet 或 MultiNet 时，请关闭次选项，将会在一些情况下减小工程固件的大小。
 
-- Wake word engine
- 
- 唤醒模型引擎选择。  
+- First Wake word
 
+ 首选唤醒词选择，请用户根据需要在选项中选择相应的唤醒词。
+ 
  ESP32 支持：
  
- - WakeNet 5 (quantized with 16-bit)
+ - WakeNet 5 (quantized with 16-bit) 系列
  
  ESP32S3 支持：
  
- - WakeNet 7 (quantized with 16-bit)
- - WakeNet 7 (quantized with 8-bit)
- - WakeNet 8 (quantized with 16-bit)
+ - WakeNet 7 (quantized with 16-bit) 系列
+ - WakeNet 7 (quantized with 8-bit) 系列
+ - WakeNet 8 (quantized with 16-bit) 系列
 
-- Wake word name
+- Second Wake wod
 
- 唤醒词选择，每个唤醒引擎支持的唤醒词有所不同，用户可以自行选择。
+ 备选唤醒词语，请用户根据需要在选项中选择相应的唤醒词  
  
+ **注：该选项只支持 ESP32S3，即 ESP32S3 支持最多选择两个唤醒词，支持用户在代码中进行切换。**
+
 更多细节请参考 [WakeNet](../wake_word_engine/README.md) 。
  
 ### 1.4 use multinet
 
 此选项默认打开。当用户只使用 WakeNet 或者其他算法模块时，请关闭此选项，将会在一些情况下减小工程固件的大小。
 
-- langugae
+ESP32 芯片只支持中文命令词识别。ESP32S3 支持中文和英文命令词识别，且支持中英文识别模型切换。
 
- 命令词识别语言选择，ESP32 只支持中文，ESP32S3 支持中文或英文。
+- Chinese Speech Commands Model
+
+ 中文命令词识别模型选择。  
  
-- speech commands recognition model
-
- 命令词识别模型选择。  
  ESP32 支持：
  
+ - None
  - chinese single recognition (MultiNet2)
  
  ESP32S3 支持：
  
- - chinese single recognition (MultiNet3)
- - chinese continuous recognition (MultiNet3)
- - chinese single recognition (MultiNet4)
+ - None
+ - chinese single recognition (MultiNet4.5)
+ - chinese single recognition (MultiNet4.5 quantized with 8-bit)
 
-- Add speech commands
+
+- English Speech Commands Model
+
+ 英文命令词识别模型选择。  
+ 
+ 该选项不支持 ESP32。
+ 
+ ESP32S3 支持：
+ 
+ - None
+ - english recognition (MultiNet5 quantized with 8-bit, depends on WakeNet8)
+
+
+- Add Chinese speech commands
+
+ 当用户在 `Chinese Speech Commands Model` 中选择非 `None` 时，需要在该项处添加中文命令词。
+ 
+
+- Add English speech commands
+
+ 当用户在 `English Speech Commands Model` 中选择非 `None` 时，需要在该项处添加中文命令词。
 
 用户按照需求自定义添加命令词，具体请参考 [MultiNet](../speech_command_recognition/README.md) 。
 
@@ -149,6 +173,6 @@ ESP32S3：
  
 - 初始化 SD 卡
 
- 用户需要初始化 SD 卡，来使系统能够记载 SD 卡，如果用户使用 esp-skainet，可以直接调用 `sd_card_mount("/sdcard")` 来初始化其支持开发板的 SD 卡。否则，需要自己编写。
+ 用户需要初始化 SD 卡，来使系统能够记载 SD 卡，如果用户使用 esp-skainet，可以直接调用 `esp_sdcard_init("/sdcard", num);` 来初始化其支持开发板的 SD 卡。否则，需要自己编写。
 
 完成以上操作后，便可以进行工程的烧录。
