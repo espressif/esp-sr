@@ -16,7 +16,7 @@ VAD takes an audio stream as input, and outputs the prediction that a frame of t
 
 #### Function
 
-- `vad_handle_t vad_create(vad_mode_t vad_mode, int sample_rate_hz, int one_frame_ms)`
+- `vad_handle_t vad_create(vad_mode_t vad_mode)`
 
 	**Definition**
 
@@ -24,15 +24,13 @@ VAD takes an audio stream as input, and outputs the prediction that a frame of t
 
 	**Parameter**
 
-	- vad_mode: operating mode of VAD, integer ranging from 1 to 5, larger value indicates more aggressive VAD.
-    - sample_rate_hz: audio sampling rate in Hz.
-    - one_frame_ms: frame length in ms.
+	- vad_mode: operating mode of VAD, VAD_MODE_0 to VAD_MODE_4, larger value indicates more aggressive VAD.
 
     **Return**
 
     Handle to VAD.
 
-- `vad_state_t vad_process(vad_handle_t inst, int16_t *data)`
+- `vad_state_t vad_process(vad_handle_t inst, int16_t *data, int sample_rate_hz, int one_frame_ms);`
 
     **Definition**
 
@@ -42,10 +40,13 @@ VAD takes an audio stream as input, and outputs the prediction that a frame of t
 
     - inst: VAD handle.
     - data: buffer to save both input and output audio stream.
+    - sample_rate_hz: The Sampling frequency (Hz) can be 32000, 16000, 8000, default: 16000.
+    - one_frame_ms: The length of the audio processing can be 10ms, 20ms, 30ms, default: 30.
 
-    **Return**
+  **Return**
 
-    VAD handle.
+    - VAD_SILENCE if no voice
+    - VAD_SPEECH  if voice is detected
 
 - `void vad_destroy(vad_handle_t inst)`
 
@@ -67,26 +68,26 @@ AGC keeps the volume of audio signal at a stable level to avoid the situation th
 
 - `void *esp_agc_open(int agc_mode, int sample_rate)`
 
-    **Definition**
+  **Definition**
 
     Initialization of AGC handle.
 
-    **Parameter**
+  **Parameter**
 
     - agc_mode: operating mode of AGC, 3 to enable AGC and 0 to disable it.
     - sample_rate: sampling rate of audio signal.
 
-    **Return**
+  **Return**
 
     - AGC handle.
 
 - `int esp_agc_process(void *agc_handle, short *in_pcm, short *out_pcm, int frame_size, int sample_rate)`
 
-    **Definition**
+  **Definition**
 
     Pocessing of AGC for one frame.
 
-    **Parameter**
+  **Parameter**
 
     - agc_handle: AGC handle.
     - in_pcm: input audio stream.
@@ -94,7 +95,7 @@ AGC keeps the volume of audio signal at a stable level to avoid the situation th
     - frame_size: signal frame length in ms.
     - sample_rate: signal sampling rate in Hz.
 
-    **Return**
+  **Return**
 
     Return 0 if AGC processing succeeds, -1 if fails; -2 and -3 indicate invalid input of sample_rate and frame_size, respectively.
 
@@ -180,15 +181,16 @@ Single-channel speech enhancement. If multiple mics are available with the board
 
 ### API Reference
 
-- `ns_handle_t ns_create(int frame_length_ms)`
+- `ns_handle_t ns_pro_create(int frame_length, int mode)`
 
     **Definition**
 
-    Initialization of NS handle.
+    Creates an instance of the more powerful noise suppression algorithm.
 
     **Parameter**
 
     - frame_length_ms: audio frame length in ms.
+    - mode: 0: Mild, 1: Medium, 2: Aggressive  
 
     **Return**
 
@@ -215,54 +217,3 @@ Single-channel speech enhancement. If multiple mics are available with the board
     **Parameter**
 
     - inst: the NS handle to be destroyed.
-
-## MASE
-
-### Overview
-
-Multi-channel speech enhancement. Currently, 2-mic linear array and 3-mic circular array are supported.
-
-### API Reference
-
-- `mase_handle_t mase_create(int sample_rate, int frame_size, int array_type, float mic_distance, int operating_mode, int filter_strength)`
-
-    **Definition**
-
-    Initialization of MASE handle.
-
-    **Parameter**
-
-    - sample_rate: signal sampling rate in Hz.
-    - frame_size: signal frame length in ms.
-    - array_type: 0 for 2-mic linear array and 1 for 3-mic circular array.
-    - mic_distance: distance between two microphones in mm.
-    - operating_mode: 0 for normal mode and 1 for wake-up enhanced mode.
-    - filter_strength: strength of the mic-array speech enhancement, must be 0, 1, 2 or 3 (smaller number indicates better performance and larger hardware cost).
-    - aec_on: true to enable and false to disable AEC.
-    - filter_length: the length of adaptive filter in AEC.
-
-    **Return**
-
-    Handle to MASE.
-
-- `void mase_process(mase_handle_t st, int16_t *in, int16_t *dsp_out)`
-
-    **Definition**
-
-    Processing of MASE for one frame.
-
-    **Parameter**
-
-    - st: MASE handle.
-    - in: input multi-channel audio stream.
-    - dsp_out: output single-channel audio stream.
-
-- `void mase_destory(mase_handle_t st)`
-
-    **Definition**
-
-    Destruction of a MASE handle.
-
-    **Parameter**
-
-    - inst: the MASE handle to be destroyed.

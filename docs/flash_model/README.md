@@ -15,6 +15,8 @@ ESP32S3:
 So that on ESP32S3 you can:
 
 - Greatly reduce the size of the user application APP BIN
+- Supports the selection of up to two wake words
+- Support online switching of Chinese and English Speech Command Recognition
 - Convenient for users to perform OTA
 - Supports reading and changing models from SD card, which is more convenient and can reduce the size of module Flash used in the project
 - When the user is developing the code, when the modification does not involve the model, it can avoid flashing the model data every time, greatly reducing the flashing time and improving the development efficiency
@@ -25,65 +27,86 @@ Run `idf.py menuconfig` navigate to `ESP Speech Recognition`:
 
 ![overview](../img/model-1.png)
 
-### 1.1 Net to use acceleration
-
-This option can configure the acceleration mode of the model, the user does not need to modify it, please keep the default configuration.
-
-### 1.2 model data path
+### 1.1 model data path
 
 This option is only available on ESP32S3. It indicates the storage location of the model data. It supports the choice of `spiffs partition` or `SD Card`.
 
 - `spiffs partition` means that the model data is stored in the Flash spiffs partition, and the model data will be loaded from the Flash spiffs partition
 - `SD Card` means that the model data is stored in the SD card, and the model data will be loaded from the SD Card
 
+### 1.2 use afe
+
+This option needs to be turned on. Users do not need to modify it. Please keep the default configuration.
+
 ### 1.3 use wakenet
 
 This option is turned on by default. When the user only uses `AEC` or `BSS`, etc., and does not need to run `WakeNet` or `MultiNet`, please turn off this option, which will reduce the size of the project firmware in some cases.
 
-- Wake word engine
- 
- Wake word model engine selection.  
+- First Wake word
 
- ESP32 supports:
+ Select the first wake word. Please select the corresponding wake word in the options as needed.
+
+ ESP32 支持：
+
+  - WakeNet 5 (quantized with 16-bit)
  
- - WakeNet 5 (quantized with 16-bit)
- 
- ESP32S3 supports:
- 
+ ESP32S3 支持：
+
  - WakeNet 7 (quantized with 16-bit)
  - WakeNet 7 (quantized with 8-bit)
  - WakeNet 8 (quantized with 16-bit)
 
-- Wake word name
+- Second Wake wod
 
- Wake-up word selection, the wake-up words supported by each wake-up engine are different.
+ For second wake word, please select the corresponding wake-up words in the options as needed.
  
+ **Note: this option only supports ESP32S3, ESP32S3 supports the selection of up to two wake words and supports the user to switch in the code.**
+
 For more details, please refer to [WakeNet](../wake_word_engine/README.md) .
  
 ### 1.4 use multinet
 
 This option is turned on by default. When users only use WakeNet or other algorithm modules, please turn off this option, which will reduce the size of the project firmware in some cases.
 
-- langugae
+ESP32 chip only supports Chinese Speech Commands Recognition. 
 
- Speech commands recognition language selection, ESP32 only supports Chinese, ESP32S3 supports Chinese or English.
- 
-- speech commands recognition model
+ESP32S3 supports Chinese and English Speech Commands Recognition, and supports Chinese and English recognition model switching.
 
- model selection.  
+- Chinese Speech Commands Model
+
+ Chinese Speech Commands Recognition model selection.
+
  ESP32 supports:
- 
- - chinese single recognition (MultiNet2)
- 
- ESP32S3 supports:
- 
- - chinese single recognition (MultiNet3)
- - chinese continuous recognition (MultiNet3)
- - chinese single recognition (MultiNet4)
 
-- Add speech commands
+  - None
+  - chinese single recognition (MultiNet2)
+ 
+ ESP32S3 支持：
 
-Users add speech commands according to their needs.
+  - None
+  - chinese single recognition (MultiNet4.5)
+  - chinese single recognition (MultiNet4.5 quantized with 8-bit)
+
+
+- English Speech Commands Model
+
+ English Speech Commands Recognition model selection.
+ 
+ This option does not support ESP32.
+
+ ESP32S3 Supports：
+
+  - None
+  - english recognition (MultiNet5 quantized with 8-bit, depends on WakeNet8)
+
+
+- Add Chinese speech commands
+
+ The user needs to add Chinese Speech Command words to this item when `Chinese Speech Commands Model` is not `None`.
+
+- Add English speech commands
+
+ The user needs to add English Speech Command words to this item when `Chinese Speech Commands Model` is not `None`.
 
 For more details, please refer to [MultiNet](../speech_command_recognition/README.md) .
 
