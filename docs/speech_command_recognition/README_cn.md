@@ -110,69 +110,8 @@ MultiNet 支持多种且灵活的命令词设置方式，用户无论通过那�
  
  MultiNet 支持在运行过程中在线动态添加/删除/修改命令词，该过程无须更换模型和调整参数。具体可以参考 ESP-Skainet 中 example。
  
- 只需用户调用以下 API 即可：
+ 具体API说明请参考　[esp_mn_speech_commands](../../src/esp_mn_speech_commands.h)：
  
- ```
-    /**
-    * @brief Initialze the Speech Commands link of MultiNet
-    *
-    * @return
-    *     - ESP_OK                  Success
-    *     - ESP_ERR_NO_MEM          No memory
-    *     - ESP_ERR_INVALID_STATE   The Speech Commands link has been initialized
-    */
-    esp_err_t esp_mn_commands_init(void);
- 
-    /**
-    * @brief Add one speech commands with phoneme and command ID
-    *
-    * @param command_id      The command ID
-    *
-    * @param phoneme_string  The phoneme string of the speech commands
-    *
-    * @return
-    *     - ESP_OK                  Success
-    *     - ESP_ERR_INVALID_STATE   Fail
-    */
-    esp_err_t esp_mn_commands_add(int command_id, char *phoneme_string);
-
-    /**
-    * @brief Modify one speech commands with new phoneme
-    *
-    * @param old_phoneme_string  The old phoneme string of the speech commands
-    *
-    * @param new_phoneme_string  The new phoneme string of the speech commands
-    *
-    * @return
-    *     - ESP_OK                  Success
-    *     - ESP_ERR_INVALID_STATE   Fail
-    */
-    esp_err_t esp_mn_commands_modify(char *old_phoneme_string, char *new_phoneme_string);
-
-    /**
-    * @brief Remove one speech commands by phoneme
-    *
-    * @param phoneme_string  The phoneme string of the speech commands
-    *
-    * @return
-    *     - ESP_OK                  Success
-    *     - ESP_ERR_INVALID_STATE   Fail
-    */
-    esp_err_t esp_mn_commands_remove(char *phoneme_string);
- 
-    /**
-    * @brief Update the speech commands of MultiNet, must be used after [add/remove/modify] the speech commands
-    *
-    * @param multinet            The multinet handle
-    *
-    * @param model_data          The model object to query
-    *
-    * @return
-    *     - ESP_OK                  Success
-    *     - ESP_ERR_INVALID_STATE   Fail
-    */
-    esp_err_t esp_mn_commands_update(const esp_mn_iface_t *multinet, const model_iface_data_t *model_data);
- ```
 
 ## 4. 运行命令词识别
 
@@ -184,30 +123,10 @@ MultiNet 支持多种且灵活的命令词设置方式，用户无论通过那�
 
 ### 4.1 MultiNet 初始化
 
-在使用命令词识别模型前首先需要定义以下变量：  
-
-- 模型版本声明
-
-    用户需要在代码中声明以下模型版本，用户直接按以下方式使用，无须更改。
-
-    ```
-     const esp_mn_iface_t *multinet = &MULTINET_MODEL;  
-    ```
-
-- 生成模型句柄  
-
-    用户需要使用 `create` 接口生成模型句柄`model_data`，以供后续操作。
- 
-    ```
-     model_iface_data_t *model_data = multinet->create(&MULTINET_COEFF, time_out_time_ms);
-   ```
- 
-   - MULTINET_COEFF： 模型参数，用户无须更改，直接填入
-   - time_out_time_ms：当 MultiNet 检测不到命令词时的等待退出时间, 单位为 `ms`，支持自定义，建议范围为 [5000, 10000]
-
+- 模型加载与初始化　　　
+  请参考[flash_model](../flash_model/README_CN.md)
 
 - 设置命令词
-
  请参考上文 #3。
 
 ### 4.2 MultiNet 运行
@@ -289,19 +208,4 @@ MultiNet 支持多种且灵活的命令词设置方式，用户无论通过那�
 
 ### 5.1 阈值设置
 
-MultiNet 支持对每个命令词的阈值进行设置或者查看，可以帮助用户更好的进行识别调优。
-
-- 获取某个命令词的阈值
-
-  ```
-  multinet->get_command_det_threshold(model_data, phrase_id);
-  ```
-
-- 设置某个命令词的阈值
-
-   用户在设置阈值的时候，建议先获取其阈值，在原本阈值基础上进行合适的增减。  
-   `threshold` 范围为 (0, 1)。
- 
-   ```
-   multinet->set_command_det_threshold(model_data, phrase_id, threshold);
-   ```
+　　该功能仍在开发中．

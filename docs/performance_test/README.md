@@ -34,10 +34,10 @@
 
 ### 2.2 Resource Occupancy(ESP32S3)
 
-|Model Type|Parameter Num|RAM|Average Running Time per Frame| Frame Length|
+|Model Type|RAM|PSRAM|Average Running Time per Frame| Frame Length|
 |:---:|:---:|:---:|:---:|:---:|
-|Quantised WakeNet7_2CH|810 K|45 KB|10 ms|32 ms|
-|Quantised WakeNet8_2CH|821 K|50 KB|10 ms|32 ms|
+|Quantised WakeNet8 @ 2 channel|50 KB|1640 KB|10 ms|32 ms|
+|Quantised WakeNet9 @ 2 channel|16 KB|320 KB|4 ms|32 ms|
 
 ### 2.3 Performance
 
@@ -62,13 +62,13 @@ False triggering rate: 1 time in 12 hours
 
 |Model Type|Internal RAM|PSRAM|Average Running Time per Frame| Frame Length|
 |:---:|:---:|:---:|:---:|:---:|
-|MultiNet 4.5|16.8KB|1866 KB|18 ms|32 ms|
-|MultiNet 4.5 Q8|10.5 KB|1009 KB|11 ms|32 ms|
-|MultiNet 5 Q8|||||
+|MultiNet 4|16.8KB|1866 KB|18 ms|32 ms|
+|MultiNet 4 Q8|10.5 KB|1009 KB|11 ms|32 ms|
+|MultiNet 5 Q8|14 KB||12 ms|32 ms|
 
 ### 2.3 Performance with AFE
 
 |Model Type|Distance| Quiet | Stationary Noise (SNR = 4 dB)| Speech Noise (SNR = 4 dB)|
 |:---:|:---:|:---:|:---:|:---:|:---:|
-|MultiNet 4.5|3 m|98%|93%|92%|
-|MultiNet 4.5 Q8|3 m|94%|92%|91%|
+|MultiNet 4|3 m|98%|93%|92%|
+|MultiNet 4 Q8|3 m|94%|92%|91%|

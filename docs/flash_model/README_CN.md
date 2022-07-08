@@ -40,27 +40,15 @@ ESP32S3：
 
 ### 1.3 use wakenet
 
-此选项默认打开，当用户只使用 AEC 或者 BSS 等，无须运行 WakeNet 或 MultiNet 时，请关闭次选项，将会在一些情况下减小工程固件的大小。
-
-- First Wake word
-
- 首选唤醒词选择，请用户根据需要在选项中选择相应的唤醒词。
- 
- ESP32 支持：
- 
- - WakeNet 5 (quantized with 16-bit) 系列
- 
- ESP32S3 支持：
- 
- - WakeNet 7 (quantized with 16-bit) 系列
- - WakeNet 7 (quantized with 8-bit) 系列
- - WakeNet 8 (quantized with 16-bit) 系列
-
-- Second Wake wod
-
- 备选唤醒词语，请用户根据需要在选项中选择相应的唤醒词  
- 
- **注：该选项只支持 ESP32S3，即 ESP32S3 支持最多选择两个唤醒词，支持用户在代码中进行切换。**
+此选项默认打开，当用户只使用 AEC 或者 BSS 等，无须运行 WakeNet 或 MultiNet 时，请关闭次选项，将会减小工程固件的大小。
+- 根据menuconfig列表选择唤醒词模型，`ESP Speech Recognition -> Select wake words`.　括号中为唤醒词模型的名字，你需要在代码用名字切换，初始化wakenet. 
+![select wake wake](../img/wn_menu1.png)  
+- 如果想加载多个唤醒词，以便在代码中进行唤醒词的切换，首选选择'Load Multiple Wake Words'  
+![multi wake wake](../img/wn_menu2.png)  
+然后按照列表选择多个唤醒词:  
+![multi wake wake](../img/wn_menu3.png)
+  
+ **注：多唤醒词选项只支持 ESP32S3，具体根据客户硬件flash容量，选择合适数量的唤醒词。**
 
 更多细节请参考 [WakeNet](../wake_word_engine/README.md) 。
  
@@ -112,16 +100,16 @@ ESP32 芯片只支持中文命令词识别。ESP32S3 支持中文和英文命令
 ## 2. 模型使用
 
 当用户完成以上的配置选择后，应用层请参考 esp-skainet 进行初始化和使用。这里介绍一下模型数据加载在用户工程中的代码实现。
+也可以参考代码　[model_path.c](../../src/model_path.c)
 
 ### 2.1 使用 ESP32
 
 当用户使用 ESP32 时，由于只支持从 Flash 中直接加载模型数据，因此代码中模型数据会自动按照地址从 Flash 中读取所需数据。
+为了和ESP32S3进行兼容，代码中模型的初始化方法是和ESP32S3相同的，可参考下面ESP32S3的模型加载API．
 
 ### 2.2 使用 ESP32S3
 
 #### 2.2.1 模型数据存储在 SPIFFS
-
-当用户配置 #1.2 模型数据存储位置是 `spiffs partition` 时，用户需要：
 
 - 编写分区表：
 
@@ -134,19 +122,14 @@ ESP32 芯片只支持中文命令词识别。ESP32S3 支持中文和英文命令
    Recommended model partition size: 500K
    ```
 - 初始化 spiffs 分区
- 
- **直接调用提供的 API**：用户可以直接调用 `srmodel_spiffs_init()` API 来初始化 spiffs。  
- 
- **自行编写**：当用户需要在 spiffs 分区同时存放其他文件，如 web 网页时，可以自行编写 spiffs 初始化函数，需要注意 `esp_vfs_spiffs_conf`的配置：
- 
- - base_path：模型的存储 `base_path` 为 `srmodel`，不可更改
- - partition_label：模型的分区 label 为 `model`，需要和 上述分区表中的 `Name` 保持一致
+ **调用提供的 API**：用户可以直接调用 `esp_srmodel_init()` API 来初始化 spiffs，并返回spiffs中的模型。  
+   - base_path：模型的存储 `base_path` 为 `srmodel`，不可更改
+   - partition_label：模型的分区 label 为 `model`，需要和 上述分区表中的 `Name` 保持一致
    
-完成上述配置后，模型会在工程编译完成后自动生成 `model.bin`，并在用户烧写时候烧写到 spiffs 分区。  
+完成上述配置后，模型会在工程编译完成后自动生成 `model.bin`，并在用户调用`idf.py flash`时烧写到 spiffs 分区。  
 
-**<font color=red>注：当用户更改模型后，再次编译前请务必进行 `idf.py clean`</font>**
 
-#### 2.2.1 模型存储在 SD Card
+#### 2.2.２ 模型存储在 SD Card
 
 当用户配置 #1.2 模型数据存储位置是 `SD Card` 时，用户需要：
 
@@ -176,3 +159,37 @@ ESP32 芯片只支持中文命令词识别。ESP32S3 支持中文和英文命令
  用户需要初始化 SD 卡，来使系统能够记载 SD 卡，如果用户使用 esp-skainet，可以直接调用 `esp_sdcard_init("/sdcard", num);` 来初始化其支持开发板的 SD 卡。否则，需要自己编写。
 
 完成以上操作后，便可以进行工程的烧录。
+
+#### 2.2.３ 代码中模型初始化与使用
+``` 
+    //
+    // step1: initialize spiffs and return models in spiffs
+    // 
+    srmodel_list_t *models = esp_srmodel_init();
+
+    //
+    // step2: select the specific model by keywords
+    //
+    char *wn_name = esp_srmodel_filter(models, ESP_WN_PREFIX, NULL); // select wakenet model
+    char *nm_name = esp_srmodel_filter(models, ESP_MN_PREFIX, NULL); // select multinet model
+    char *alexa_wn_name  = esp_srmodel_filter(models, ESP_WN_PREFIX, "alexa"); // select wakenet with "alexa" wake word.
+    char *en_mn_name  = esp_srmodel_filter(models, ESP_MN_PREFIX, ESP_MN_ENGLISH); // select english multinet model
+    char *cn_mn_name  = esp_srmodel_filter(models, ESP_MN_PREFIX, ESP_MN_CHINESE); // select english multinet model
+    
+    // It also works if you use the model name directly in your code.
+    char *my_wn_name = "wn9_hilexin"  
+    // we recommend you to check that it is loaded correctly
+    if (!esp_srmodel_exists(models, my_wn_name))
+        printf("%s can not be loaded correctly\n")
+
+    //
+    // step3: initialize model
+    //
+    esp_wn_iface_t *wakenet = esp_wn_handle_from_name(wn_name);
+    model_iface_data_t *wn_model_data = wakenet->create(wn_name, DET_MODE_2CH_90);
+
+    esp_mn_iface_t *multinet = esp_mn_handle_from_name(mn_name);
+    model_iface_data_t *mn_model_data = multinet->create(mn_name, 6000);
+
+```
+

@@ -40,27 +40,14 @@ This option needs to be turned on. Users do not need to modify it. Please keep t
 
 ### 1.3 use wakenet
 
-This option is turned on by default. When the user only uses `AEC` or `BSS`, etc., and does not need to run `WakeNet` or `MultiNet`, please turn off this option, which will reduce the size of the project firmware in some cases.
+This option is turned on by default. When the user only uses `AEC` or `BSS`, etc., and does not need to run `WakeNet` or `MultiNet`, please turn off this option, which will reduce the size of the project firmware.
 
-- First Wake word
-
- Select the first wake word. Please select the corresponding wake word in the options as needed.
-
- ESP32 支持：
-
-  - WakeNet 5 (quantized with 16-bit)
- 
- ESP32S3 支持：
-
- - WakeNet 7 (quantized with 16-bit)
- - WakeNet 7 (quantized with 8-bit)
- - WakeNet 8 (quantized with 16-bit)
-
-- Second Wake wod
-
- For second wake word, please select the corresponding wake-up words in the options as needed.
- 
- **Note: this option only supports ESP32S3, ESP32S3 supports the selection of up to two wake words and supports the user to switch in the code.**
+- Select wake words by menuconfig, `ESP Speech Recognition -> Select wake words`. The model name of wake word in parentheses is used to initialize wakenet handle.   
+  ![select wake wake](../img/wn_menu1.png)  
+- If you want to select multiple wake words, please select `Load Multiple Wake Words` ( **Note this option only supports ESP32S3**)
+![multi wake wake](../img/wn_menu2.png)  
+  Then you can select multiple wake words at the same time  
+![multi wake wake](../img/wn_menu3.png)
 
 For more details, please refer to [WakeNet](../wake_word_engine/README.md) .
  
@@ -112,19 +99,16 @@ For more details, please refer to [MultiNet](../speech_command_recognition/READM
 
 ## 2. How to use
 
-After the user completes the above configuration choices, please refer to esp-skainet to initialize and use the application layer. Here is an introduction to the code implementation of model data loading in the project.
+Here is an introduction to the code implementation of model data loading in the project. If you want get more detailes, please refer to esp-skainet examples.
 
-### 2.1 Use ESP32
+### 2.1.1 ESP32  
 
-When the user uses ESP32, since it only supports loading the model data directly from the Flash, the model data in the code will automatically read the required data from the Flash according to the address.
+When the user uses ESP32, since it only supports loading the model data directly from the Flash, the model data in the code will automatically read the required data from the Flash according to the address.  
+Now The ESP32S3 API is compatible with ESP32. You can refer to the ESP32S3 method to load and initialize the model.
 
-### 2.2 Use ESP32S3
+### 2.1.2  ESP32S3  
 
-#### 2.2.1 Model data in SPIFFS
-
-When the user configuration #1.2 model data storage location is `spiffs partition`, the user needs to:
-
-- Write a partition table:
+- Step1: Write a partition table:
 
    ```
    model,  data, spiffs,         , SIZE,
@@ -134,46 +118,45 @@ When the user configuration #1.2 model data storage location is `spiffs partitio
    ```
    Recommended model partition size: 500K
    ```
+    After completing the above configuration, the project will automatically generate `model.bin` after the project is compiled, and flash it to the spiffs partition. 
 
-- Initialize the spiffs partition
- 
- **Use the provided API**: User can use `srmodel_spiffs_init()` API to initialize spiffs.  
- 
- **Write by yourself**: When users need to store other files in the spiffs partition at the same time, such as web pages, they can write the spiffs initialization function by themselves. Pay attention to the configuration of `esp_vfs_spiffs_conf`:
- 
- - base_path: The model storage `base_path` is `srmodel` and cannot be changed
- - partition_label: The partition label of the model is `model`, which needs to be consistent with the `Name` in the above partition table
+- Step2: Initialize the spiffs partition
+  User can use `esp_srmodel_init()` API to initialize spiffs and return all loaded models.  
+    - base_path: The model storage `base_path` is `srmodel` and cannot be changed
+    - partition_label: The partition label of the model is `model`, which needs to be consistent with the `Name` in the above partition table
    
-After completing the above configuration, the project will automatically generate `model.bin` after the project is compiled, and flash it to the spiffs partition. 
+    **<font color=red>Note: After the user changes the model, be sure to run `idf.py clean` before compiling again.</font>**
 
-**<font color=red>Note: After the user changes the model, be sure to run `idf.py clean` before compiling again.</font>**
+## 2.2 ESP32S3  
+``` 
+    //
+    // step1: initialize spiffs and return models in spiffs
+    // 
+    srmodel_list_t *models = esp_srmodel_init();
 
-#### 2.2.1 Model data in SD Card
+    //
+    // step2: select the specific model by keywords
+    //
+    char *wn_name = esp_srmodel_filter(models, ESP_WN_PREFIX, NULL); // select wakenet model
+    char *nm_name = esp_srmodel_filter(models, ESP_MN_PREFIX, NULL); // select multinet model
+    char *alexa_wn_name  = esp_srmodel_filter(models, ESP_WN_PREFIX, "alexa"); // select wakenet with "alexa" wake word.
+    char *en_mn_name  = esp_srmodel_filter(models, ESP_MN_PREFIX, ESP_MN_ENGLISH); // select english multinet model
+    char *cn_mn_name  = esp_srmodel_filter(models, ESP_MN_PREFIX, ESP_MN_CHINESE); // select english multinet model
+    
+    // It also works if you use the model name directly in your code.
+    char *my_wn_name = "wn9_hilexin"  
+    // we recommend you to check that it is loaded correctly
+    if (!esp_srmodel_exists(models, my_wn_name))
+        printf("%s can not be loaded correctly\n")
 
-When the user configuration #1.2 model data storage location is `SD Card`, the user needs to:
+    //
+    // step3: initialize model
+    //
+    esp_wn_iface_t *wakenet = esp_wn_handle_from_name(wn_name);
+    model_iface_data_t *wn_model_data = wakenet->create(wn_name, DET_MODE_2CH_90);
 
-- Manually move model data
+    esp_mn_iface_t *multinet = esp_mn_handle_from_name(mn_name);
+    model_iface_data_t *mn_model_data = multinet->create(mn_name, 6000);
 
- Move the model to SDCard. After the user completes the above configuration, you can compile first. After compiling, copy the files in the `ESP-SR_PATH/model/target/` directory to the root directory of the SD card.
- 
-- Custom model path
+```
 
-  If the user wants to place the model in the specified folder, he can modify the `get_model_base_path()` function by himself, located in `ESP-SR_PATH/model/model_path.c`.
-  For example, if the specified folder is `espmodel` in the SD card directory, the function can be modified to:
- 
-    ```
-     char *get_model_base_path(void)
-    {
-        #if defined CONFIG_MODEL_IN_SDCARD
-            return "sdcard/espmodel";
-        #elif defined CONFIG_MODEL_IN_SPIFFS
-            return "srmodel";
-        #else
-            return NULL;
-        #endif
-    }
-    ```
- 
-- Initialize the SD card
-
- The user needs to initialize the SD card to enable the system to record the SD card. The user can directly call `sd_card_mount("/sdcard")` to initialize the SD card that supports the development board if use esp-skainet. Otherwise, you need to write it yourself.

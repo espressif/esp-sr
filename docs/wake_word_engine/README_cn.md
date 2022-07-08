@@ -15,9 +15,9 @@ WakeNet的流程图如下：
 
 - neural network：  
   神经网络结构已经更新到第6版，其中：  
-  - wakeNet1和wakeNet2已经停止使用。
-  - wakeNet3和wakeNet4基于[CRNN](https://arxiv.org/abs/1703.05390)结构。
-  - WakeNet5(WakeNet5X2,WakeNetX3) 和 WakeNet7 和 WakeNet8 基于 the [Dilated Convolution](https://arxiv.org/pdf/1609.03499.pdf) 结构。
+  - wakeNet1,wakeNet2,wakeNet3,wakeNet4已经停止使用。
+  - wakeNet5应用于ESP32芯片。
+  - wakeNet8和wakeNet9应用于ESP32S3芯片，模型基于　[Dilated Convolution](https://arxiv.org/pdf/1609.03499.pdf) 结构。
   
   注意，WakeNet5,WakeNet5X2 和 WakeNet5X3 的网络结构一致，但是 WakeNet5X2 和 WakeNet5X3 的参数比 WakeNet5 要多。请参考 [性能测试](#性能测试) 来获取更多细节。
          

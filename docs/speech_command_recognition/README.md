@@ -105,69 +105,8 @@ Here we provide two methods of adding speech commands:
 
 MultiNet supports online dynamic addition / deletion / modification of speech commands during operation, without changing models or adjusting parameters. For details, please refer to the example in ESP-Skainet.
 
-Users only need to call the following APIs:
+Please refer to [esp_mn_speech_commands](../../src/esp_mn_speech_commands.h) for details of APIs:
 
- ```
-    /**
-    * @brief Initialze the Speech Commands link of MultiNet
-    *
-    * @return
-    *     - ESP_OK                  Success
-    *     - ESP_ERR_NO_MEM          No memory
-    *     - ESP_ERR_INVALID_STATE   The Speech Commands link has been initialized
-    */
-    esp_err_t esp_mn_commands_init(void);
- 
-    /**
-    * @brief Add one speech commands with phoneme and command ID
-    *
-    * @param command_id      The command ID
-    *
-    * @param phoneme_string  The phoneme string of the speech commands
-    *
-    * @return
-    *     - ESP_OK                  Success
-    *     - ESP_ERR_INVALID_STATE   Fail
-    */
-    esp_err_t esp_mn_commands_add(int command_id, char *phoneme_string);
-
-    /**
-    * @brief Modify one speech commands with new phoneme
-    *
-    * @param old_phoneme_string  The old phoneme string of the speech commands
-    *
-    * @param new_phoneme_string  The new phoneme string of the speech commands
-    *
-    * @return
-    *     - ESP_OK                  Success
-    *     - ESP_ERR_INVALID_STATE   Fail
-    */
-    esp_err_t esp_mn_commands_modify(char *old_phoneme_string, char *new_phoneme_string);
-
-    /**
-    * @brief Remove one speech commands by phoneme
-    *
-    * @param phoneme_string  The phoneme string of the speech commands
-    *
-    * @return
-    *     - ESP_OK                  Success
-    *     - ESP_ERR_INVALID_STATE   Fail
-    */
-    esp_err_t esp_mn_commands_remove(char *phoneme_string);
- 
-    /**
-    * @brief Update the speech commands of MultiNet, must be used after [add/remove/modify] the speech commands
-    *
-    * @param multinet            The multinet handle
-    *
-    * @param model_data          The model object to query
-    *
-    * @return
-    *     - ESP_OK                  Success
-    *     - ESP_ERR_INVALID_STATE   Fail
-    */
-    esp_err_t esp_mn_commands_update(const esp_mn_iface_t *multinet, const model_iface_data_t *model_data);
- ```
 
 ## 4. Run speech commands recognition
 
@@ -177,26 +116,8 @@ Speech commands recognition needs to be run together with the audio front-end (A
 
 ### 4.1 MultiNet Initialization
 
-Before using MultiNet, you need to define the following variables:
+- Initialize multinet model  
 
-- Model version
-
-  Users need to declare the following model versions in the code. Users can directly use this in the following ways without changing it.
-  
-    ```
-     const esp_mn_iface_t *multinet = &MULTINET_MODEL;  
-    ```
-    
-- Model handle
-
-  The users needs to use the `create` interface to generate the model handle `model_data` for subsequent operations.
-  
-    ```
-     model_iface_data_t *model_data = multinet->create(&MULTINET_COEFF, time_out_time_ms);
-   ```
-   
-   - MULTINET_COEFF: Model parameters can be filled in directly without modifying
-   - time_out_time_ms: The waiting exit time when the speech commands cannot be detected by MultiNet. The unit is `ms`. it supports customization. The recommended range is [5000, 10000]
 
 - Set speech commands
 
@@ -276,22 +197,5 @@ Exit the speech recognition when the return status is `ESP_MN_STATE_TIMEOUT`, it
 
 ## 5. Other configurations
 
-### 5.1 Threshold setting
-
-MultiNet supports set or get the threshold of each speech command, which can help users optimize recognition performance.
-
-- Get the threshold of one speech commands
-
-  ```
-  multinet->get_command_det_threshold(model_data, phrase_id);
-  ```
-
-- Set the threshold of one speech commands
-
-  When setting the threshold, users are advised to get the threshold first and increase or decrease it appropriately on the basis of the original threshold.
-
-  The threshold range is (0, 1).
- 
-   ```
-   multinet->set_command_det_threshold(model_data, phrase_id, threshold);
-   ```
+### 5.1 Threshold setting 
+    This function is still under development.
