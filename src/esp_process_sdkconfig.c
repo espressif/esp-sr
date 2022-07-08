@@ -892,11 +892,9 @@ esp_err_t esp_mn_commands_update_from_sdkconfig(esp_mn_iface_t *multinet, const 
 #else
         ESP_LOGE(TAG, "Incorrect language");
 #endif
-
+        if (command_str == NULL) continue;
         command_str_len = strlen(command_str);
-        if (command_str_len <= 0) {
-            continue;
-        }
+        if (command_str_len <= 0) continue;
 
         char *command_str_temp = calloc(command_str_len + 1, 1);
         memcpy(command_str_temp, command_str, command_str_len);

@@ -4,7 +4,8 @@ if(IDF_TARGET STREQUAL "esp32")
         include/esp32
         )
     set(COMPONENT_SRCS
-        src/mn_process_commands.c
+        src/esp_mn_speech_commands.c
+        src/esp_process_sdkconfig.c
         src/model_path.c
         )
 
@@ -48,7 +49,8 @@ elseif(${IDF_TARGET} STREQUAL "esp32s2")
         include/esp32
         )
     set(COMPONENT_SRCS
-        src/mn_process_commands.c
+        src/esp_process_sdkconfig.c
+        src/esp_mn_speech_commands.c
         src/model_path.c
         )
 
@@ -69,7 +71,8 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
         include/esp32s3
         )
     set(COMPONENT_SRCS
-        src/mn_process_commands.c
+        src/esp_mn_speech_commands.c
+        src/esp_process_sdkconfig.c
         src/model_path.c
         )
 
