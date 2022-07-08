@@ -36,33 +36,37 @@ with io.open(sdkconfig_path, "r") as f:
             MN_STRING += label
 
 wakenet_model = []
-if "CONFIG_SR_WN_WN7Q8_XIAOAITONGXUE" in WN_STRING and len(wakenet_model) < 2:
-    wakenet_model.append('xiaoaitongxue7q8')
-if "CONFIG_SR_WN_WN7_XIAOAITONGXUE" in WN_STRING and len(wakenet_model) < 2:
-    wakenet_model.append('xiaoaitongxue7')
-if "CONFIG_SR_WN_WN7Q8_HILEXIN" in WN_STRING and len(wakenet_model) < 2:
-    wakenet_model.append('hilexin7q8')
-if "CONFIG_SR_WN_WN8_HILEXIN" in WN_STRING and len(wakenet_model) < 2:
-    wakenet_model.append('hilexin8')
-if "CONFIG_SR_WN_WN8_ALEXA" in WN_STRING and len(wakenet_model) < 2:
-    wakenet_model.append('alexa8')
-if "CONFIG_SR_WN_WN8Q8_HIESP" in WN_STRING and len(wakenet_model) < 2:
-    wakenet_model.append('hiesp8q8')
-if "CONFIG_SR_WN_WN8_HIESP" in WN_STRING and len(wakenet_model) < 2:
-    wakenet_model.append('hiesp8')
+if "CONFIG_SR_WN_WN7Q8_XIAOAITONGXUE" in WN_STRING:
+    wakenet_model.append('wn7q8_xiaoaitongxue')
+if "CONFIG_SR_WN_WN7_XIAOAITONGXUE" in WN_STRING:
+    wakenet_model.append('wn7_xiaoaitongxue')
+if "CONFIG_SR_WN_WN8_HILEXIN" in WN_STRING:
+    wakenet_model.append('wn8_hilexin')
+if "CONFIG_SR_WN_WN8_ALEXA" in WN_STRING:
+    wakenet_model.append('wn8_alexa')
+if "CONFIG_SR_WN_WN8_HIESP" in WN_STRING:
+    wakenet_model.append('wn8_hiesp')
+if "CONFIG_SR_WN_WN9_XIAOAITONGXUE" in WN_STRING:
+    wakenet_model.append('wn9_xiaoaitongxue')
+if "CONFIG_SR_WN_WN9_HILEXIN" in WN_STRING:
+    wakenet_model.append('wn9_hilexin')
+if "CONFIG_SR_WN_WN9_ALEXA" in WN_STRING:
+    wakenet_model.append('wn9_alexa')
+if "CONFIG_SR_WN_WN9_HIESP" in WN_STRING:
+    wakenet_model.append('wn9_hiesp')
 
 multinet_model = []
 if "CONFIG_SR_MN_CN_MULTINET3_SINGLE_RECOGNITION" in MN_STRING and len(multinet_model) < 2:
-    multinet_model.append('mn3cn')
-elif "CONFIG_SR_MN_CN_MULTINET4_SINGLE_RECOGNITION" in MN_STRING and len(multinet_model) < 2:
-    multinet_model.append('mn4cn')
+    multinet_model.append('mn3_cn')
+elif "CONFIG_SR_MN_CN_MULTINET4_5_SINGLE_RECOGNITION_QUANT8" in MN_STRING:
+    multinet_model.append('mn4q8_cn')
 elif "CONFIG_SR_MN_CN_MULTINET4_5_SINGLE_RECOGNITION" in MN_STRING and len(multinet_model) < 2:
-    multinet_model.append('mn4_5cn')
+    multinet_model.append('mn4_cn')
 
 if "CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION_QUANT8" in MN_STRING and len(multinet_model) < 2:
-    multinet_model.append('mn5q8en')
+    multinet_model.append('mn5q8_en')
 elif "CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION" in MN_STRING and len(multinet_model) < 2:
-    multinet_model.append('mn5en')
+    multinet_model.append('mn5_en')
 
 print(wakenet_model)
 print(multinet_model)
