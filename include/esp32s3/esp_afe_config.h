@@ -39,16 +39,17 @@ typedef struct {
     bool vad_init;
     bool wakenet_init;
     bool voice_communication_init;
+    bool voip_agc_init;                     // AGC swich for voice communication
+    int voip_agc_gain;                      // AGC gain(dB) for voice communication
     vad_mode_t vad_mode;                    // The value can be: VAD_MODE_0, VAD_MODE_1, VAD_MODE_2, VAD_MODE_3, VAD_MODE_4
-    esp_wn_iface_t *wakenet_model;
-    void *wakenet_coeff;
+    char *wakenet_model_name;               // The model name of wakenet
     det_mode_t wakenet_mode;
     afe_sr_mode_t afe_mode;
     int afe_perferred_core;
     int afe_perferred_priority;
     int afe_ringbuf_size;
     afe_memory_alloc_mode_t memory_alloc_mode;
-    afe_mn_peak_agc_mode_t agc_mode;
+    afe_mn_peak_agc_mode_t agc_mode;        // The agc mode for ASR
     afe_pcm_config_t pcm_config;            // Config the channel num of original data which is fed to the afe feed function.
 } afe_config_t;
 
@@ -60,9 +61,10 @@ typedef struct {
     .vad_init = true, \
     .wakenet_init = true, \
     .voice_communication_init = false, \
+    .voip_agc_init = false, \
+    .voip_agc_gain = 15, \
     .vad_mode = VAD_MODE_3, \
-    .wakenet_model = &WAKENET_MODEL, \
-    .wakenet_coeff = &WAKENET_COEFF, \
+    .wakenet_model_name = NULL, \
     .wakenet_mode = DET_MODE_90, \
     .afe_mode = SR_MODE_HIGH_PERF, \
     .afe_perferred_core = 0, \
@@ -81,9 +83,10 @@ typedef struct {
     .vad_init = true, \
     .wakenet_init = true, \
     .voice_communication_init = false, \
+    .voip_agc_init = false, \
+    .voip_agc_gain = 15, \
     .vad_mode = VAD_MODE_3, \
-    .wakenet_model = (esp_wn_iface_t *)&WAKENET_MODEL, \
-    .wakenet_coeff = (void *)&WAKENET_COEFF, \
+    .wakenet_model_name = NULL, \
     .wakenet_mode = DET_MODE_2CH_90, \
     .afe_mode = SR_MODE_LOW_COST, \
     .afe_perferred_core = 0, \

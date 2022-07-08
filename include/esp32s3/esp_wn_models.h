@@ -1,141 +1,109 @@
 #pragma once
 #include "esp_wn_iface.h"
 
-//Contains declarations of all available speech recognion models. Pair this up with the right coefficients and you have a model that can recognize
-//a specific phrase or word.
 
-typedef enum {
-    FIRST_WAKE_WORD = 0,
-    SECOND_WAKE_WORD,
-} esp_wn_word_t;
+// The prefix of wakenet model name is used to filter all wakenet from availabel models.
+#define ESP_WN_PREFIX "wn"
 
-typedef enum {
-    NO_WAKE_WORD = -1,
-    CUSTOMIZED_WORD_WN7 = 0,
-    XIAOAITONGXUE_WN7 = 1,
-    XIAOAITONGXUE_WN7Q8,
-    ALEXA_WN7,
-    ALEXA_WN7Q8,
-    ALEXA_WN8,
-    HILEXIN_WN7,
-    HILEXIN_WN7Q8,
-    HILEXIN_WN8,
-    HIESP_WN8,
-    HIESP_WN8Q8,
-} esp_wn_model_t;
+/**
+ * @brief Get the wakenet handle from model name
+ *
+ * @param model_name   The name of model 
+ * @returns The handle of wakenet
+ */
+const esp_wn_iface_t *esp_wn_handle_from_name(const char *model_name);
 
-extern const esp_wn_iface_t esp_sr_wakenet5_quantized;
-extern const esp_wn_iface_t esp_sr_wakenet7_quantized;
-extern const esp_wn_iface_t esp_sr_wakenet7_quantized8;
-extern const esp_wn_iface_t esp_sr_wakenet8_quantized;
-extern const esp_wn_iface_t esp_sr_wakenet8_quantized8;
+/**
+ * @brief Get the wake word name from model name
+ *
+ * @param model_name   The name of model 
+ * @returns The wake word name, like "alexa","hilexin","xiaoaitongxue"
+ */
+char* esp_wn_wakeword_from_name(const char *model_name);
 
+// /**
+//  * @brief Get the model coeff from model name
+//  *
+//  * @Warning: retuen model_coeff_getter_t, when chip is ESP32, 
+//  *           return string for other chips
+//  * 
+//  * @param model_name   The name of model 
+//  * @returns The handle of wakenet
+//  */
+// void *esp_wn_coeff_from_name(char *model_name);
+
+
+#if defined CONFIG_USE_WAKENET
 /*
  Configure wake word to use based on what's selected in menuconfig.
 */
-#if defined CONFIG_USE_WAKENET
-#if CONFIG_SR_WN_WN5_HILEXIN_FIRST || CONFIG_SR_WN_WN5_HILEXIN_SECOND
+#if CONFIG_SR_WN_WN5_HILEXIN
 #include "hilexin_wn5.h"
-#define WAKENET_MODEL esp_sr_wakenet5_quantized
+#define WAKENET_MODEL_NAME "wn5_hilexin"
 #define WAKENET_COEFF get_coeff_hilexin_wn5
 
-#elif CONFIG_SR_WN_WN5X2_HILEXIN_FIRST || CONFIG_SR_WN_WN5X2_HILEXIN_SECOND
+#elif CONFIG_SR_WN_WN5X2_HILEXIN
 #include "hilexin_wn5X2.h"
-#define WAKENET_MODEL esp_sr_wakenet5_quantized
+#define WAKENET_MODEL_NAME "wn5_hilexinX2"
 #define WAKENET_COEFF get_coeff_hilexin_wn5X2
 
-#elif CONFIG_SR_WN_WN5X3_HILEXIN_FIRST || CONFIG_SR_WN_WN5X3_HILEXIN_SECOND
+
+#elif CONFIG_SR_WN_WN5X3_HILEXIN
 #include "hilexin_wn5X3.h"
-#define WAKENET_MODEL esp_sr_wakenet5_quantized
+#define WAKENET_MODEL_NAME "wn5_hilexinX3"
 #define WAKENET_COEFF get_coeff_hilexin_wn5X3
 
-#elif CONFIG_SR_WN_WN5_NIHAOXIAOZHI_FIRST || CONFIG_SR_WN_WN5_NIHAOXIAOZHI_SECOND
+
+#elif CONFIG_SR_WN_WN5_NIHAOXIAOZHI
 #include "nihaoxiaozhi_wn5.h"
-#define WAKENET_MODEL esp_sr_wakenet5_quantized
+#define WAKENET_MODEL_NAME "wn5_nihaoxiaozhi"
 #define WAKENET_COEFF get_coeff_nihaoxiaozhi_wn5
 
-#elif CONFIG_SR_WN_WN5X2_NIHAOXIAOZHI_FIRST || CONFIG_SR_WN_WN5X2_NIHAOXIAOZHI_SECOND
+
+#elif CONFIG_SR_WN_WN5X2_NIHAOXIAOZHI
 #include "nihaoxiaozhi_wn5X2.h"
-#define WAKENET_MODEL esp_sr_wakenet5_quantized
+#define WAKENET_MODEL_NAME "wn5_nihaoxiaozhiX2"
 #define WAKENET_COEFF get_coeff_nihaoxiaozhi_wn5X2
 
-#elif CONFIG_SR_WN_WN5X3_NIHAOXIAOZHI_FIRST || CONFIG_SR_WN_WN5X3_NIHAOXIAOZHI_SECOND
+
+#elif CONFIG_SR_WN_WN5X3_NIHAOXIAOZHI
 #include "nihaoxiaozhi_wn5X3.h"
-#define WAKENET_MODEL esp_sr_wakenet5_quantized
+#define WAKENET_MODEL_NAME "wn5_nihaoxiaozhiX3"
 #define WAKENET_COEFF get_coeff_nihaoxiaozhi_wn5X3
 
-#elif CONFIG_SR_WN_WN5X3_NIHAOXIAOXIN_FIRST || CONFIG_SR_WN_WN5X3_NIHAOXIAOXIN_SECOND
+
+#elif CONFIG_SR_WN_WN5X3_NIHAOXIAOXIN
 #include "nihaoxiaoxin_wn5X3.h"
-#define WAKENET_MODEL esp_sr_wakenet5_quantized
+#define WAKENET_MODEL_NAME "wn5_nihaoxiaoxinX3"
 #define WAKENET_COEFF get_coeff_nihaoxiaoxin_wn5X3
 
-#elif CONFIG_SR_WN_WN5X3_HIJESON_FIRST || CONFIG_SR_WN_WN5X3_HIJESON_SECOND
+
+#elif CONFIG_SR_WN_WN5X3_HIJESON
 #include "hijeson_wn5X3.h"
-#define WAKENET_MODEL esp_sr_wakenet5_quantized
+#define WAKENET_MODEL_NAME "wn5_hijesonX3"
 #define WAKENET_COEFF get_coeff_hijeson_wn5X3
 
-#elif CONFIG_SR_WN_WN5_CUSTOMIZED_WORD_FIRST || CONFIG_SR_WN_WN5_CUSTOMIZED_WORD_SECOND
+#elif CONFIG_SR_WN_WN5_CUSTOMIZED_WORD
 #include "customized_word_wn5.h"
-#define WAKENET_MODEL esp_sr_wakenet5_quantized
-#define WAKENET_COEFF get_coeff_customized_word_wn5
-
-#elif CONFIG_SR_WN_WN7_CUSTOMIZED_WORD_FIRST || CONFIG_SR_WN_WN7_CUSTOMIZED_WORD_SECOND
-#define WAKENET_MODEL esp_sr_wakenet7_quantized
-#define WAKENET_COEFF "custom7"
-
-#elif CONFIG_SR_WN_WN7_XIAOAITONGXUE_FIRST || CONFIG_SR_WN_WN7_XIAOAITONGXUE_SECOND
-#define WAKENET_MODEL esp_sr_wakenet7_quantized
-#define WAKENET_COEFF "xiaoaitongxue7"
-
-#elif CONFIG_SR_WN_WN7Q8_XIAOAITONGXUE_FIRST || CONFIG_SR_WN_WN7Q8_XIAOAITONGXUE_SECOND
-#define WAKENET_MODEL esp_sr_wakenet7_quantized8
-#define WAKENET_COEFF "xiaoaitongxue7q8"
-
-#elif CONFIG_SR_WN_WN7_HILEXIN_FIRST || CONFIG_SR_WN_WN7_HILEXIN_SECOND
-#define WAKENET_MODEL esp_sr_wakenet7_quantized
-#define WAKENET_COEFF "hilexin7"
-
-#elif CONFIG_SR_WN_WN7Q8_HILEXIN_FIRST || CONFIG_SR_WN_WN7Q8_HILEXIN_SECOND
-#define WAKENET_MODEL esp_sr_wakenet7_quantized8
-#define WAKENET_COEFF "hilexin7q8"
-
-#elif CONFIG_SR_WN_WN7_ALEXA_FIRST || CONFIG_SR_WN_WN7_ALEXA_SECOND
-#define WAKENET_MODEL esp_sr_wakenet7_quantized
-#define WAKENET_COEFF "alexa7"
-
-#elif CONFIG_SR_WN_WN8_ALEXA_FIRST || CONFIG_SR_WN_WN8_ALEXA_SECOND
-#define WAKENET_MODEL esp_sr_wakenet8_quantized
-#define WAKENET_COEFF "alexa8"
-
-#elif CONFIG_SR_WN_WN7Q8_ALEXA_FIRST || CONFIG_SR_WN_WN7Q8_ALEXA_SECOND
-#define WAKENET_MODEL esp_sr_wakenet7_quantized8
-#define WAKENET_COEFF "alexa7q8"
-
-#elif CONFIG_SR_WN_WN8_HIESP_FIRST || CONFIG_SR_WN_WN8_HIESP_SECOND
-#define WAKENET_MODEL esp_sr_wakenet8_quantized
-#define WAKENET_COEFF "hiesp8"
-
-#elif CONFIG_SR_WN_WN8Q8_HIESP_FIRST || CONFIG_SR_WN_WN8Q8_HIESP_SECOND
-#define WAKENET_MODEL esp_sr_wakenet8_quantized8
-#define WAKENET_COEFF "hiesp8q8"
-
-#elif CONFIG_SR_WN_WN8_HILEXIN_FIRST || CONFIG_SR_WN_WN8_HILEXIN_SECOND
-#define WAKENET_MODEL esp_sr_wakenet8_quantized
-#define WAKENET_COEFF "hilexin8"
+#define WAKENET_MODEL_NAME "wn5_customizedword"
+#define WAKENET_COEFF get_coeff_customizedword_wn5
 
 #else
-#error No valid wake word selected.
+#define WAKENET_MODEL_NAME "NULL"
+#define WAKENET_COEFF "COEFF_NULL"
 #endif
-#else
-#define WAKENET_MODEL "NULL"
-#define WAKENET_COEFF "NULL"
-#endif
-/* example
 
-static const sr_model_iface_t *model = &WAKENET_MODEL;
+#else
+#define WAKENET_MODEL_NAME "NULL"
+#define WAKENET_COEFF "COEFF_NULL"
+#endif
+
+/*
+
+static const sr_model_iface_t *model = esp_wn_handle_from_name(model_name);
 
 //Initialize wakeNet model data
-static model_iface_data_t *model_data=model->create(DET_MODE_90);
+static model_iface_data_t *model_data=model->create(model_name, DET_MODE_90);
 
 //Set parameters of buffer
 int audio_chunksize=model->get_samp_chunksize(model_data);

@@ -1,10 +1,6 @@
 #pragma once
 #include "stdint.h"
-#if CONFIG_AFE_INTERFACE_V1
 #include "esp_afe_config.h"
-#else
-#include "esp_afe_config.h"
-#endif
 
 //AFE: Audio Front-End 
 //SR:  Speech Recognition
@@ -13,24 +9,30 @@
 //Opaque AFE_SR data container
 typedef struct esp_afe_sr_data_t esp_afe_sr_data_t;
 
-// the output state of fetch function
-typedef enum {
-    AFE_FETCH_ERROR = -3,                   // fetch empty data, retry it
-    AFE_FETCH_CHANNEL_VERIFIED = -2,        // wwe state: output channel is verified
-    AFE_FETCH_NOISE = -1,                   // vad state: noise or silence
-    AFE_FETCH_SPEECH = 0,                   // vad state: speech
-    AFE_FETCH_WWE_DETECTED = 1              // wwe state: wake word is detected
-} afe_fetch_mode_t;
+/**
+ * @brief The state of vad
+ */
+typedef enum
+{
+    AFE_VAD_SILENCE = 0,                    // noise or silence
+    AFE_VAD_SPEECH                          // speech
+} afe_vad_state_t;
 
 /**
- * @brief Function to initialze a AFE_SR instance with a specified mode
- * 
- * @param mode              The mode of AFE_SR 
- * @param perferred_core    The perferred core to be pinned. 
- *                          If all task in AFE_SR can not run in real time by only one core, the another core would be used. 
- * @returns Handle to the AFE_SR data
+ * @brief The result of fetch function
  */
-typedef esp_afe_sr_data_t* (*esp_afe_sr_iface_op_create_t)(afe_sr_mode_t mode, int perferred_cor);
+typedef struct afe_fetch_result_t
+{
+    int16_t *data;                          // the data of audio.
+    int data_size;                          // the size of data. The unit is byte.
+    int wakeup_state;                       // the value is afe_wakeup_state_t
+    int wake_word_index;                    // if the wake word is detected. It will store the wake word index which start from 1.
+    int vad_state;                          // the value is afe_vad_state_t
+    int trigger_channel_id;                 // the channel index of output
+    int wake_word_length;                   // the length of wake word. It's unit is the number of samples.
+    int ret_value;                          // the return state of fetch function
+    void* reserved;                         // reserved for future use
+} afe_fetch_result_t;
 
 /**
  * @brief Function to initialze a AFE_SR instance
@@ -54,37 +56,37 @@ typedef int (*esp_afe_sr_iface_op_get_samp_chunksize_t)(esp_afe_sr_data_t *afe);
 /**
  * @brief Get the total channel number which be config
  * 
- * @param afe The AFE_SR object to query
- * @return The amount of total channels
+ * @param afe   The AFE_SR object to query
+ * @return      The amount of total channels
  */
 typedef int (*esp_afe_sr_iface_op_get_total_channel_num_t)(esp_afe_sr_data_t *afe);
 
 /**
  * @brief Get the mic channel number which be config
  * 
- * @param afe The AFE_SR object to query
- * @return The amount of mic channels
+ * @param afe   The AFE_SR object to query
+ * @return      The amount of mic channels
  */
 typedef int (*esp_afe_sr_iface_op_get_channel_num_t)(esp_afe_sr_data_t *afe);
 
 /**
  * @brief Get the sample rate of the samples to feed to the function
  *
- * @param afe The AFE_SR object to query
- * @return The sample rate, in hz
+ * @param afe   The AFE_SR object to query
+ * @return      The sample rate, in hz
  */
 typedef int (*esp_afe_sr_iface_op_get_samp_rate_t)(esp_afe_sr_data_t *afe);
 
 /**
  * @brief Feed samples of an audio stream to the AFE_SR
  *
- * @Warning  The input data should be arranged in the format of [CH0_0, CH1_0, ..., CHN_0, CH0_1, CH1_1, ..., CHN_1, ...].
- *           The last channel is reference signal or far-end signal.
+ * @Warning  The input data should be arranged in the format of channel interleaving.
+ *           The last channel is reference signal if it has reference data.
  *
- * @param afe   The AFE_SR object to queryq
+ * @param afe   The AFE_SR object to query
  * 
  * @param in    The input microphone signal, only support signed 16-bit @ 16 KHZ. The frame size can be queried by the 
- *              `get_samp_chunksize`. The channel number can be queried `get_channel_num`.
+ *              `get_feed_chunksize`.
  * @return      The size of input
  */
 typedef int (*esp_afe_sr_iface_op_feed_t)(esp_afe_sr_data_t *afe, const int16_t* in);
@@ -95,10 +97,9 @@ typedef int (*esp_afe_sr_iface_op_feed_t)(esp_afe_sr_data_t *afe, const int16_t*
  * @Warning  The output is single channel data, no matter how many channels the input is.
  *
  * @param afe   The AFE_SR object to query
- * @param out   The output enhanced signal. The frame size can be queried by the `get_samp_chunksize`.
- * @return      The state of output, please refer to the definition of `afe_fetch_mode_t`
+ * @return      The result of output, please refer to the definition of `afe_fetch_result_t`. (The frame size of output audio can be queried by the `get_fetch_chunksize`.)
  */
-typedef afe_fetch_mode_t (*esp_afe_sr_iface_op_fetch_t)(esp_afe_sr_data_t *afe, int16_t* out);
+typedef afe_fetch_result_t* (*esp_afe_sr_iface_op_fetch_t)(esp_afe_sr_data_t *afe);
 
 /**
  * @brief Initial wakenet and wake words coefficient, or reset wakenet and wake words coefficient 
@@ -108,7 +109,7 @@ typedef afe_fetch_mode_t (*esp_afe_sr_iface_op_fetch_t)(esp_afe_sr_data_t *afe, 
  * @param wakenet_word       The wakenet word, should be DEFAULT_WAKE_WORD or EXTRA_WAKE_WORD
  * @return             0: fail, 1: success
  */
-typedef int (*esp_afe_sr_iface_op_set_wakenet_t)(esp_afe_sr_data_t *afe, esp_wn_word_t wakenet_word);
+typedef int (*esp_afe_sr_iface_op_set_wakenet_t)(esp_afe_sr_data_t *afe, char* model_name);
 
 /**
  * @brief Disable wakenet model.
@@ -170,7 +171,6 @@ typedef void (*esp_afe_sr_iface_op_destroy_t)(esp_afe_sr_data_t *afe);
  * This structure contains the functions used to do operations on a AFE_SR.
  */
 typedef struct {
-    esp_afe_sr_iface_op_create_t create;
     esp_afe_sr_iface_op_create_from_config_t create_from_config;
     esp_afe_sr_iface_op_feed_t feed;
     esp_afe_sr_iface_op_fetch_t fetch;
