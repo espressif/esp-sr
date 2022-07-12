@@ -1,27 +1,46 @@
 # Audio Front-end Framework[[中文]](./README_CN.md)
 
-Espressif Audio Front-end (AFE) algorithm framework is independently developed by ESPRESSIF AI Lab. Based on ESP32 series chips, the framework can provide high-quality and stable audio data to the host.
+Espressif Audio Front-end (AFE) algorithm framework is independently developed by ESPRESSIF AI Lab. Based on ESP32 series chips, the framework can provide high-quality and stable audio data.
 
 ---
 
 ## Summary
 
-Espressif AFE provides the most convenient way to do audio front-end processing on ESP32 series chips. Espressif AFE framework stably transfers high-quality audio data to the host for further wake-up or speech recognition.
+Espressif AFE provides the most convenient way to do audio front-end processing on ESP32 series chips. Espressif AFE framework stably get high-quality audio data for further wake-up or speech recognition.
 
-The functions supported in Espressif AFE are as follows:
+Espressif AFE is divided into two sets of algorithms: 1) for speech recognition scenarios; 2) for voice communication scenarios. Shown as below:
 
-![overview](../img/AFE_overview.png)
+- Speech recognition scenarios
 
-The workflow of Espressif AFE is as follows:
+![overview](../img/AFE_SR_overview.png)
 
-![overview](../img/AFE_workflow.png)
+- Voice communication scenarios
 
-The workflow of Espressif AFE can be divided into four parts:
+![overview](../img/AFE_VOIP_overview.png)
 
-- AFE creation and initialization
-- AFE feed: Input audio data and will run AEC in the feed function
-- Internal: In case of wake-up recognition/single microphone speech noise reduction scene, BSS/NS algorithm processing will be carried out; If it is a multi microphone speech noise reduction scene, BSS/MISO algorithm processing will be carried out.
-- AFE fetch: Return the audio data after processing and the output value. In the wake-up recognition scenario, VAD processing and wake-up word detection will be carried out inside the fetch. The specific behavior depends on the config of `afe_config_t` structure; If it is a multi microphone speech noise reduction scene, noise reduction will be carried out. (Note: `wakenet_Init` and `voice_communication_Init` cannot be configured to true at the same time)
+The data flow of Espressif AFE is also divided into two scenarios, shown as below:
+
+- Speech recognition scenarios
+
+![overview](../img/AFE_SR_workflow.png)
+
+The workflow is as follows:
+
+1) Use **ESP_AFE_SR_HANDLE** to create and initialize AFE (`voice_communication_init` needs to be configured as false)
+2) AFE feed: Input audio data and will run AEC in the feed function
+3) Internal: BSS/NS algorithm processing will be carried out.
+4) AFE fetch: Return the audio data and the related information after processing. VAD processing and wake-up word detection will be carried out inside the fetch. The specific behavior depends on the config of `afe_config_t` structure. (Note: `wakenet_Init` and `voice_communication_Init` cannot be configured to true at the same time)
+
+- Voice communication scenarios
+
+![overview](../img/AFE_VOIP_workflow.png)
+
+The workflow is as follows:
+
+1) Use **ESP_AFE_VOIP_HANDLE** to create and initialize AFE (`voice_communication_init` needs to be configured as true)
+2) AFE feed: Input audio data and will run AEC in the feed function
+3) Internal: BSS/NS algorithm processing will be carried out. If it's dual MIC, the miso algorithm processing will be carried out later.
+4) AFE fetch: Return the audio data and the related information after processing. The AGC algorithm processing will be carried out. And the specific gain depends on the config of `afe_config_t` structure. If it's dual MIC, the NS algorithm processing will be carried out before AGC.(Note: `wakenet_Init` and `voice_communication_Init` cannot be configured to true at the same time)
 
 **Note:** `afe->feed()` and `afe->fetch()` are visible to users, while `internal BSS/NS/MISO task` is invisible to users.
 
@@ -31,11 +50,17 @@ The workflow of Espressif AFE can be divided into four parts:
 
 ### Select AFE handle
 
-Espressif AFE supports both single MIC and dual MIC scenarios, and the algorithm module can be flexibly configured. The internal task of single MIC applications is processed by NS, and the internal task of dual MIC applications is processed by BSS. If the dual microphone scenario is configured for voice noise reduction (i.e. `wakenet_init=false, voice_communication_init=true`), the  miso internal task will be added.
+Espressif AFE supports both single MIC and dual MIC scenarios, and the algorithm module can be flexibly configured. The internal task of single MIC applications is processed by NS, and the internal task of dual MIC applications is processed by BSS. If the dual microphone scenario is configured for voice communication (i.e. `wakenet_init=false, voice_communication_init=true`), the  miso internal task will be added.
 
-- Get AFE handle
+For the acquisition of AFE handle, there is a slight difference between speech recognition scenario and voice communication scenario:
 
-		esp_afe_sr_iface_t *afe_handle = &ESP_AFE_HANDLE;
+- Speech recognition
+
+		esp_afe_sr_iface_t *afe_handle = &ESP_AFE_SR_HANDLE;
+		
+- Voice communication
+
+		esp_afe_sr_iface_t *afe_handle = &ESP_AFE_VOIP_HANDLE;
 
 ### Input Audio data
 
@@ -90,13 +115,17 @@ Miso algorithm supports dual channel input and single channel output. It is used
 
 VAD algorithm supports real-time output of the voice activity state of the current frame.
 
+### AGC (Automatic Gain Control)
+
+AGC dynamically adjusts the amplitude of the output audio, and amplifies the output amplitude when a weak signal is input; When the input signal reaches a certain strength, the output amplitude will be compressed.
+
 ### WakeNet or Bypass
 
 Users can choose whether to detect wake words in AFE. When calling `afe->disable_wakenet(afe_data)`, it will enter bypass mode, and the WakeNet will not run.
 
 ### Output Audio
 
-The output audio of AFE is single-channel data. When WakeNet is enabled, AFE will output single-channel data with human voice.
+The output audio of AFE is single-channel data. In the speech recognition scenario,  AFE will output single-channel data with human voice while WakeNet is enabled. In the voice communication scenario, single channel data with higher signal-to-noise ratio will be output.
 
 ---
 
@@ -106,7 +135,13 @@ The output audio of AFE is single-channel data. When WakeNet is enabled, AFE wil
 
 `afe_handle ` is the function handle that the user calls the AFE interface. Therefore, the first step is to obtain `afe_handle`.
 
-	    esp_afe_sr_iface_t *afe_handle = &ESP_AFE_HANDLE;
+- Speech recognition
+
+		esp_afe_sr_iface_t *afe_handle = &ESP_AFE_SR_HANDLE;
+		
+- Voice communication
+
+		esp_afe_sr_iface_t *afe_handle = &ESP_AFE_VOIP_HANDLE;
 
 ### 2. Configure AFE
 
@@ -114,7 +149,7 @@ Get the configuration of AFE:
 
 	afe_config_t afe_config = AFE_CONFIG_DEFAULT();
 	
-Users can adjust the switch of each algorithm module and its corresponding parameters in macros ` AFE_ CONFIG_ DEFAULT ()`:
+Users can adjust the switch of each algorithm module and its corresponding parameters in ` afe_config`:
 
 ```
 #define AFE_CONFIG_DEFAULT() { \
@@ -123,9 +158,10 @@ Users can adjust the switch of each algorithm module and its corresponding param
     .vad_init = true, \
     .wakenet_init = true, \
     .voice_communication_init = false, \
+    .voip_agc_init = false, \
+    .voip_agc_gain = 15, \
     .vad_mode = VAD_MODE_3, \
-    .wakenet_model = (esp_wn_iface_t *)&WAKENET_MODEL, \
-    .wakenet_coeff = (void *)&WAKENET_COEFF, \
+    .wakenet_model_name = NULL, \
     .wakenet_mode = DET_MODE_2CH_90, \
     .afe_mode = SR_MODE_LOW_COST, \
     .afe_perferred_core = 0, \
@@ -143,15 +179,22 @@ Users can adjust the switch of each algorithm module and its corresponding param
 
 - se_init: Whether the BSS/NS algorithm is enabled.
 
-- vad_init: Whether the VAD algorithm is enabled.
+- vad_init: Whether the VAD algorithm is enabled ( It can only be used in speech recognition scenarios ).
 
 - wakenet_init: Whether the wake algorithm is enabled.
 
-- voice_communication_init: Whether voice communication noise reduction is enabled. It cannot be enabled with wakenet_init at the same time.
+- voice_communication_init: Whether voice communication is enabled. It cannot be enabled with wakenet_init at the same time.
+
+- voip_agc_init: Whether the AGC is enabled in voice communication.
+
+- voip_agc_gain: The gain of AGC ( unit: dB )
 
 - vad_mode: The VAD operating mode. The bigger, the more radical.
 
-- wakenet_model/wakenet_coeff/wakenet_mode: Use `idf.py menuconfig` to choose WakeNet model. Please refer to：[WakeNet](../wake_word_engine/README.md)
+- wakenet_model_name: Its default value is NULL in macro `AFE_CONFIG_DEFAULT()`. At first, you need to choose WakeNet model through `idf.py menuconfig`. Then you need to assign a specific model name to this place before `afe_handle->create_from_config`.  The type of value is string. Please refer to：[flash_model](../flash_model/README.md)
+(Note: In the example, we use the `esp_srmodel_filter()` to get wakenet_model_name. If you choose the multiple wakenet models coexist through menuconfig, this function will return a model name randomly.)
+
+- wakenet_mode: Wakenet mode. It indicate the number of wake-up channels according to the number of MIC channels.
 
 - afe_mode: Espressif AFE supports two working modes: SR_MODE_LOW_COST, SR_MODE_HIGH_PERF. See the afe_sr_mode_t enumeration for details.
 
@@ -176,7 +219,7 @@ Users can adjust the switch of each algorithm module and its corresponding param
 	
 	- AFE_MEMORY_ALLOC_MORE_PSRAM: Most of memory is allocated from external psram.
 	
-- agc_mode: Configuration for linear audio amplification. Four values can be configured:
+- agc_mode: Configuration for linear audio amplification which be used in speech recognition. It only takes effect when wakenet_init is enabled. Four values can be configured:
 
 	- AFE_MN_PEAK_AGC_MODE_1: Linearly amplify the audio  which will fed to multinet. The peak value is -5 dB.
 	
@@ -247,7 +290,7 @@ typedef int (*esp_afe_sr_iface_op_get_total_channel_num_t)(esp_afe_sr_data_t *af
 
 ### 5. fetch audio data
 
-Users can get the processed single-channel audio by `afe_handle->fetch()` function.
+Users can get the processed single-channel audio and related information by `afe_handle->fetch()` function.
 
 The number of data sampling points of fetch (the data type of sampling point is int16) can be got by `afe_handle->get_fetch_chunksize`.
 
@@ -264,14 +307,7 @@ The number of data sampling points of fetch (the data type of sampling point is 
 typedef int (*esp_afe_sr_iface_op_get_samp_chunksize_t)(esp_afe_sr_data_t *afe);
 ```
 
-Please pay attention to the return value of `afe_handle->fetch()`: 
-
-- AFE_FETCH_ERROR: Get empty data, please try again.
-- AFE_FETCH_CHANNEL_VERIFIED: Audio channel confirmation (This value is not returned while use single mic wakenet.)
-- AFE_FETCH_NOISE: Noise detected.
-- AFE_FETCH_SPEECH: Speech detected.
-- AFE_FETCH_WWE_DETECTED: Wakeup detected.
-- ...
+The declaration of `afe_handle->fetch()` is as follows:
 
 ```
 /**
@@ -280,10 +316,29 @@ Please pay attention to the return value of `afe_handle->fetch()`:
  * @Warning  The output is single channel data, no matter how many channels the input is.
  *
  * @param afe   The AFE_SR object to query
- * @param out   The output enhanced signal. The frame size can be queried by the `get_fetch_chunksize`.
- * @return      The state of output, please refer to the definition of `afe_fetch_mode_t`
+ * @return      The result of output, please refer to the definition of `afe_fetch_result_t`. (The frame size of output audio can be queried by the `get_fetch_chunksize`.)
  */
-typedef afe_fetch_mode_t (*esp_afe_sr_iface_op_fetch_t)(esp_afe_sr_data_t *afe, int16_t* out);
+typedef afe_fetch_result_t* (*esp_afe_sr_iface_op_fetch_t)(esp_afe_sr_data_t *afe);
+```
+
+Its return value is a pointer of structure, and the structure is defined as follows:
+
+```
+/**
+ * @brief The result of fetch function
+ */
+typedef struct afe_fetch_result_t
+{
+    int16_t *data;                          // the data of audio.
+    int data_size;                          // the size of data. The unit is byte.
+    int wakeup_state;                       // the value is wakenet_state_t
+    int wake_word_index;                    // if the wake word is detected. It will store the wake word index which start from 1.
+    int vad_state;                          // the value is afe_vad_state_t
+    int trigger_channel_id;                 // the channel index of output
+    int wake_word_length;                   // the length of wake word. It's unit is the number of samples.
+    int ret_value;                          // the return state of fetch function
+    void* reserved;                         // reserved for future use
+} afe_fetch_result_t;
 ```
 
 ### 6. Usage of WakeNet  
@@ -292,7 +347,7 @@ When users need to perform other operations after wake-up, such as offline or on
 
 Users can call `afe_handle->disable_wakenet(afe_data)` to stop WakeNet, or call `afe_handle->enable_wakenet(afe_data)` to enable WakeNet.
 
-In addition, ESP32S3 chip supports switching between two wakenet words. (Note: ESP32 chip only supports one wake-up word and does not support switching). After  AFE initialization, the ESP32S3 can switch to the second wakenet word by `afe_handle->set_wakenet(afe_data, SECOND_WAKE_WORD)`. How to configure two wakenet words, please refer to: [flash_model](../flash_model/README.md)
+In addition, ESP32S3 chip supports switching between wakenet words. (Note: ESP32 chip only supports one wake-up word and does not support switching). After  AFE initialization, the ESP32S3 can switch wakenet word by `afe_handle->set_wakenet()`. For example, `afe_handle->set_wakenet(afe_data, “wn9_hilexin”)` can switch to the "Hi Lexin". How to configure multiple wakenet words, please refer to: [flash_model](../flash_model/README.md)
 
 ### 7. Usage of AEC
 
