@@ -12,7 +12,6 @@ Please see the flow diagram of wakeNet below:
 
 - Speech Feature:  
   The wakeNet uses [MFCC](https://en.wikipedia.org/wiki/Mel-frequency_cepstrum) to obtain the features of the input audio clip (16 KHz, 16 bit, single track). The window width and step width of each frame of the audio clip are both 30 ms. 
-      
 - Neural Network:  
   Now, the neural network structure has been updated to the sixth edition, among which,  
   - wakeNet1,wakeNet2,wakeNet3,wakeNet4,wakeNet6,wakeNet7 had been out of use.
@@ -24,9 +23,12 @@ Please see the flow diagram of wakeNet below:
 - Keyword Triggering Method  
   For continuous audio stream, we calculate the average recognition results (M) for several frames and generate a smoothing prediction result, to improve the accuracy of keyword triggering. Only when the M value is larger than the set threshold, a triggering command is sent.  
 
-The following table shows the model support of Espressif SoCs:
+The following table shows the model support of Espressif SoCs:   
+|                          SoCs                              |   wakeNet5   |  wakeNet8   |  wakeNet9   |
+| :-------------------------------------------------------- | :----------: | :---------: | :---------: |
+|ESP32|Yes|No|No| 
+|ESP32S3|No|Yes|Yes| 
 
-![wakent_model](../img/wakenet_model.png)
 
 ## Use wakeNet
 
