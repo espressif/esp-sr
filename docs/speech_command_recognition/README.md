@@ -105,7 +105,7 @@ Here we provide two methods of adding speech commands:
 
 MultiNet supports online dynamic addition / deletion / modification of speech commands during operation, without changing models or adjusting parameters. For details, please refer to the example in ESP-Skainet.
 
-Please refer to [esp_mn_speech_commands](../../src/esp_mn_speech_commands.h) for details of APIs:
+Please refer to [esp_mn_speech_commands](../../src/esp_mn_speech_commands.c) for details of APIs:
 
 
 ## 4. Run speech commands recognition
