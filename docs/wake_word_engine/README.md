@@ -7,7 +7,7 @@ wakeNet, which is a wake word engine built upon neural network, is specially des
 Please see the flow diagram of wakeNet below:
 
 <center>
-<img src="../img/wakeNet_workflow.png" width = "800" />
+<img src="../img/wakenet_workflow.png" width = "800" />
 </center>
 
 - Speech Feature:  
@@ -26,7 +26,7 @@ Please see the flow diagram of wakeNet below:
 
 The following table shows the model support of Espressif SoCs:
 
-![wakent_model](../img/wakeNet_model.png)
+![wakent_model](../img/wakenet_model.png)
 
 ## Use wakeNet
 
