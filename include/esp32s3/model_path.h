@@ -2,8 +2,9 @@
 
 typedef struct 
 {
-    char **model_name;  // the name of models, like "wn9_hilexin"(wakenet9, hilexin), "mn5_en"(multinet5, english)
-    int num;            // the number of models
+    char **model_name;     // the name of models, like "wn9_hilexin"(wakenet9, hilexin), "mn5_en"(multinet5, english)
+    char *partition_label;  // partition label used to save the files of model
+    int num;               // the number of models
 } srmodel_list_t;
 
 #define MODEL_NAME_MAX_LENGTH 64
@@ -11,9 +12,11 @@ typedef struct
 /**
  * @brief Return all avaliable models in spiffs or selected in Kconfig.
  *
+ * @param partition_label    The spiffs label defined in your partition file used to save models.
+ * 
  * @return all avaliable models in spiffs,save as srmodel_list_t.
  */
-srmodel_list_t* esp_srmodel_init(void);
+srmodel_list_t* esp_srmodel_init(const char* partition_label);
 
 /**
  * @brief Free srmodel_list_t and unregister SPIFFS filesystem if open SPIFFS filesystem.
@@ -52,9 +55,11 @@ int esp_srmodel_exists(srmodel_list_t *models, char *model_name);
 /**
  * @brief Initialize and mount SPIFFS filesystem, return all avaliable models in spiffs.
  *
+ * @param partition_label    The spiffs label defined in your partition file used to save models.
+ * 
  * @return all avaliable models in spiffs,save as srmodel_list_t.
  */
-srmodel_list_t *srmodel_spiffs_init(void);
+srmodel_list_t *srmodel_spiffs_init(const char* partition_label);
 
 /**
  * @brief unregister SPIFFS filesystem and free srmodel_list_t.

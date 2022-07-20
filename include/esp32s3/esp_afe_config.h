@@ -39,8 +39,8 @@ typedef struct {
     bool vad_init;
     bool wakenet_init;
     bool voice_communication_init;
-    bool voip_agc_init;                     // AGC swich for voice communication
-    int voip_agc_gain;                      // AGC gain(dB) for voice communication
+    bool voice_communication_agc_init;      // AGC swich for voice communication
+    int voice_communication_agc_gain;       // AGC gain(dB) for voice communication
     vad_mode_t vad_mode;                    // The value can be: VAD_MODE_0, VAD_MODE_1, VAD_MODE_2, VAD_MODE_3, VAD_MODE_4
     char *wakenet_model_name;               // The model name of wakenet
     det_mode_t wakenet_mode;
@@ -61,8 +61,8 @@ typedef struct {
     .vad_init = true, \
     .wakenet_init = true, \
     .voice_communication_init = false, \
-    .voip_agc_init = false, \
-    .voip_agc_gain = 15, \
+    .voice_communication_agc_init = false, \
+    .voice_communication_agc_gain = 15, \
     .vad_mode = VAD_MODE_3, \
     .wakenet_model_name = NULL, \
     .wakenet_mode = DET_MODE_90, \
@@ -83,8 +83,8 @@ typedef struct {
     .vad_init = true, \
     .wakenet_init = true, \
     .voice_communication_init = false, \
-    .voip_agc_init = false, \
-    .voip_agc_gain = 15, \
+    .voice_communication_agc_init = false, \
+    .voice_communication_agc_gain = 15, \
     .vad_mode = VAD_MODE_3, \
     .wakenet_model_name = NULL, \
     .wakenet_mode = DET_MODE_2CH_90, \

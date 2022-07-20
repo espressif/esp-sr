@@ -7,29 +7,37 @@
 #include "model_path.h"
 #include "esp_wn_models.h"
 #include "esp_mn_models.h"
+#include "esp_log.h"
+
+static char *TAG = "MODEL_LOADER";
+static char *SRMODE_BASE_PATH = "/srmodel";
 
 char *get_model_base_path(void)
 {
-    #if defined CONFIG_MODEL_IN_SDCARD
-        return "sdcard";
-    #elif defined CONFIG_MODEL_IN_SPIFFS
-        return "srmodel";
-    #else
-        return NULL;
-    #endif
+    return SRMODE_BASE_PATH;
 }
 
-srmodel_list_t *read_models_form_spiffs(const char *path)
+int set_model_base_path(const char *base_path)
+{
+    if (base_path == NULL) return 0;
+    
+    SRMODE_BASE_PATH = base_path;
+    return 1;
+}
+
+srmodel_list_t *read_models_form_spiffs(esp_vfs_spiffs_conf_t *conf)
 {
     struct dirent *ret;
     DIR *dir;
-    dir = opendir(path);
+    dir = opendir(conf->base_path);
     srmodel_list_t *models = malloc(sizeof(srmodel_list_t*));
     models->num = 0;
+    models->partition_label = conf->partition_label;
     int idx = 0;
 
     if (dir != NULL)
     {
+        // get the number of models
         while ((ret = readdir(dir)) != NULL)
         { // NULL if reach the end of directory
 
@@ -42,13 +50,15 @@ srmodel_list_t *read_models_form_spiffs(const char *path)
             if (strcmp(suffix, "_MODEL_INFO_") == 0)
                 models->num ++;
         }
+
         // allocate model names
         models->model_name = malloc(models->num*sizeof(char*));
         for (int i=0; i<models->num; i++) {
             models->model_name[i] = (char*) calloc(MODEL_NAME_MAX_LENGTH, sizeof(char));
         }
 
-        dir = opendir(path);
+        // read& save model names 
+        dir = opendir(conf->base_path);
         while ((ret = readdir(dir)) != NULL)
         { // NULL if reach the end of directory
 
@@ -70,13 +80,14 @@ srmodel_list_t *read_models_form_spiffs(const char *path)
 }
 
 
-srmodel_list_t* srmodel_spiffs_init(void)
+srmodel_list_t* srmodel_spiffs_init(const char *partition_label)
 {
-    printf("Initializing models from SPIFFS\n");
+    printf(" \n");
+    ESP_LOGI(TAG, "Initializing models from SPIFFS, partition label: %s", partition_label);
 
     esp_vfs_spiffs_conf_t conf = {
-        .base_path = "/srmodel",
-        .partition_label = "model",
+        .base_path = SRMODE_BASE_PATH,
+        .partition_label = partition_label,
         .max_files = 5,
         .format_if_mount_failed = true
     };
@@ -87,30 +98,39 @@ srmodel_list_t* srmodel_spiffs_init(void)
 
     if (ret != ESP_OK) {
         if (ret == ESP_FAIL) {
-            printf("Failed to mount or format filesystem\n");
+            ESP_LOGE(TAG, "Failed to mount or format filesystem\n");
         } else if (ret == ESP_ERR_NOT_FOUND) {
-            printf("Failed to find SPIFFS partition\n");
+            ESP_LOGE(TAG, "Failed to find SPIFFS partition\n");
         } else {
-            printf("Failed to initialize SPIFFS (%s)\n", esp_err_to_name(ret));
+            ESP_LOGE(TAG, "Failed to initialize SPIFFS (%s)\n", esp_err_to_name(ret));
         }
         return NULL;
     }
 
     size_t total = 0, used = 0;
-    ret = esp_spiffs_info("model", &total, &used);
+    ret = esp_spiffs_info(partition_label, &total, &used);
     if (ret != ESP_OK) {
-        printf("Failed to get SPIFFS partition information (%s)\n", esp_err_to_name(ret));
+        ESP_LOGE(TAG, "Failed to get SPIFFS partition information (%s)\n", esp_err_to_name(ret));
     } else {
-        printf("Partition size: total: %d, used: %d\n", total, used);
+        ESP_LOGI(TAG, "Partition size: total: %d, used: %d\n", total, used);
     }
 
     // Read all model from path
-    return read_models_form_spiffs(conf.base_path);
+    return read_models_form_spiffs(&conf);
 }
 
 
 void srmodel_spiffs_deinit(srmodel_list_t *models)
 {
+    if (models->partition_label != NULL) {
+        esp_err_t ret = esp_vfs_spiffs_unregister(models->partition_label);
+        if (ret != ESP_OK) {
+            ESP_LOGW(TAG, "Already unregistered\n");
+        } else {
+            ESP_LOGI(TAG, "%s has been unregistered\n", models->partition_label);
+        }
+    }
+
     if (models != NULL) {
         if (models->num>0) {
             for (int i=0; i<models->num; i++) {
@@ -120,13 +140,6 @@ void srmodel_spiffs_deinit(srmodel_list_t *models)
         free(models);
     }
 
-    esp_vfs_spiffs_conf_t conf = {
-        .base_path = "/srmodel",
-        .partition_label = "model",
-        .max_files = 5,
-        .format_if_mount_failed = true
-    };
-    esp_vfs_spiffs_unregister(conf.partition_label);
 }
 
 srmodel_list_t *srmodel_config_init()
@@ -176,12 +189,12 @@ void srmodel_config_deinit(srmodel_list_t *models)
 }
 
 
-srmodel_list_t* esp_srmodel_init()
+srmodel_list_t* esp_srmodel_init(const char* base_path)
 {
 #ifdef CONFIG_IDF_TARGET_ESP32
     return srmodel_config_init();
 #else
-    return srmodel_spiffs_init();
+    return srmodel_spiffs_init(base_path);
 #endif
 }
 

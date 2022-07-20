@@ -16,7 +16,7 @@ void check_chip_config(void)
 #endif
 
 #ifndef CONFIG_ESPTOOLPY_FLASHFREQ_80M
-    ESP_LOGE(TAG, "Flash freq should be 240MHz");
+    ESP_LOGE(TAG, "Flash freq should be 80MHz");
 #endif
 
 #ifndef CONFIG_SPIRAM_SPEED_80M
@@ -892,6 +892,7 @@ esp_err_t esp_mn_commands_update_from_sdkconfig(esp_mn_iface_t *multinet, const 
 #else
         ESP_LOGE(TAG, "Incorrect language");
 #endif
+        
         if (command_str == NULL) continue;
         command_str_len = strlen(command_str);
         if (command_str_len <= 0) continue;

@@ -132,7 +132,7 @@ Now The ESP32S3 API is compatible with ESP32. You can refer to the ESP32S3 metho
     //
     // step1: initialize spiffs and return models in spiffs
     // 
-    srmodel_list_t *models = esp_srmodel_init();
+    srmodel_list_t *models = esp_srmodel_init("model");
 
     //
     // step2: select the specific model by keywords
