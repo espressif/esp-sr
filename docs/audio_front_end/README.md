@@ -37,7 +37,7 @@ The workflow is as follows:
 
 The workflow is as follows:
 
-1) Use **ESP_AFE_VOIP_HANDLE** to create and initialize AFE (`voice_communication_init` needs to be configured as true)
+1) Use **ESP_AFE_VC_HANDLE** to create and initialize AFE (`voice_communication_init` needs to be configured as true)
 2) AFE feed: Input audio data and will run AEC in the feed function
 3) Internal: BSS/NS algorithm processing will be carried out. If it's dual MIC, the miso algorithm processing will be carried out later.
 4) AFE fetch: Return the audio data and the related information after processing. The AGC algorithm processing will be carried out. And the specific gain depends on the config of `afe_config_t` structure. If it's dual MIC, the NS algorithm processing will be carried out before AGC.(Note: `wakenet_Init` and `voice_communication_Init` cannot be configured to true at the same time)
@@ -60,7 +60,7 @@ For the acquisition of AFE handle, there is a slight difference between speech r
 		
 - Voice communication
 
-		esp_afe_sr_iface_t *afe_handle = &ESP_AFE_VOIP_HANDLE;
+		esp_afe_sr_iface_t *afe_handle = &ESP_AFE_VC_HANDLE;
 
 ### Input Audio data
 
@@ -141,7 +141,7 @@ The output audio of AFE is single-channel data. In the speech recognition scenar
 		
 - Voice communication
 
-		esp_afe_sr_iface_t *afe_handle = &ESP_AFE_VOIP_HANDLE;
+		esp_afe_sr_iface_t *afe_handle = &ESP_AFE_VC_HANDLE;
 
 ### 2. Configure AFE
 
@@ -158,8 +158,8 @@ Users can adjust the switch of each algorithm module and its corresponding param
     .vad_init = true, \
     .wakenet_init = true, \
     .voice_communication_init = false, \
-    .voip_agc_init = false, \
-    .voip_agc_gain = 15, \
+    .voice_communication_agc_init = false, \
+    .voice_communication_agc_gain = 15, \
     .vad_mode = VAD_MODE_3, \
     .wakenet_model_name = NULL, \
     .wakenet_mode = DET_MODE_2CH_90, \
@@ -185,9 +185,9 @@ Users can adjust the switch of each algorithm module and its corresponding param
 
 - voice_communication_init: Whether voice communication is enabled. It cannot be enabled with wakenet_init at the same time.
 
-- voip_agc_init: Whether the AGC is enabled in voice communication.
+- voice_communication_agc_init: Whether the AGC is enabled in voice communication.
 
-- voip_agc_gain: The gain of AGC ( unit: dB )
+- voice_communication_agc_gain: The gain of AGC ( unit: dB )
 
 - vad_mode: The VAD operating mode. The bigger, the more radical.
 

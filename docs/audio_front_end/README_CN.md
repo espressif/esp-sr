@@ -37,7 +37,7 @@
 
 工作流程如下：
 
-1) 使用 **ESP_AFE_VOIP_HANDLE**，进行AFE 的创建和初始化 (`voice_communication_init`需配置为 true )
+1) 使用 **ESP_AFE_VC_HANDLE**，进行AFE 的创建和初始化 (`voice_communication_init`需配置为 true )
 2) AFE feed，输入音频数据，feed 内部会先进行 AEC 算法处理
 3) 内部: 首先进行 BSS/NS 算法处理；若为双麦，随后还会进行MISO 算法处理；
 4) AFE fetch，返回处理过的单通道音频数据和相关信息。其中会进行AGC非线性放大，具体增益值取决于用户对 `afe_config_t` 结构体的配置；若为双麦，在AGC之前还会进行降噪处理。(注：`wakenet_init` 和 `voice_communication_init` 不可同时配置为 true)
@@ -60,7 +60,7 @@
 		
 - 语音通话
 
-		esp_afe_sr_iface_t *afe_handle = &ESP_AFE_VOIP_HANDLE;
+		esp_afe_sr_iface_t *afe_handle = &ESP_AFE_VC_HANDLE;
 
 ### 输入音频
 
@@ -141,7 +141,7 @@ AFE 的输出音频为单通道数据。在语音识别场景，若WakeNet 开�
 		
 - 语音通话
 
-		esp_afe_sr_iface_t *afe_handle = &ESP_AFE_VOIP_HANDLE;
+		esp_afe_sr_iface_t *afe_handle = &ESP_AFE_VC_HANDLE;
 
 ### 2. 配置 afe
 
@@ -158,8 +158,8 @@ AFE 的输出音频为单通道数据。在语音识别场景，若WakeNet 开�
     .vad_init = true, \
     .wakenet_init = true, \
     .voice_communication_init = false, \
-    .voip_agc_init = false, \
-    .voip_agc_gain = 15, \
+    .voice_communication_agc_init = false, \
+    .voice_communication_agc_gain = 15, \
     .vad_mode = VAD_MODE_3, \
     .wakenet_model_name = NULL, \
     .wakenet_mode = DET_MODE_2CH_90, \
@@ -185,9 +185,9 @@ AFE 的输出音频为单通道数据。在语音识别场景，若WakeNet 开�
 
 - voice_communication_init: 语音通话是否使能。与 wakenet_init 不能同时使能。
 
-- voip_agc_init: 语音通话中AGC是否使能。
+- voice_communication_agc_init: 语音通话中AGC是否使能。
 
-- voip_agc_gain: AGC的增益值，单位为dB。
+- voice_communication_agc_gain: AGC的增益值，单位为dB。
 
 - vad_mode: VAD 检测的操作模式，越大越激进。
 
