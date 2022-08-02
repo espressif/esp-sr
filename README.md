@@ -8,6 +8,9 @@ Espressif esp_sr provides basic algorithms for **Speech Recognition** applicatio
 * The text to speech model [esp-tts](esp-tts/README.md)
 
 These algorithms are provided in the form of a component, so they can be integrated into your projects with minimum efforts. 
+ESP32-S3 is recommended, which supports AI instructions and larger, high-speech octal SPI PSRAM.
+The new algorithms will no longer support ESP32 chips.
+
 
 ## Wake Word Engine
 
