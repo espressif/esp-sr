@@ -93,6 +93,10 @@ choice SR_WN_MODEL_LOAD
         bool "Hi,ESP (wn9_hiesp)"
         depends on IDF_TARGET_ESP32S3
 
+    config SR_WN_WN9_NIHAOXIAOZHI
+        bool "nihaoxiaozhi (wn9_nihaoxiaozhi)"
+        depends on IDF_TARGET_ESP32S3
+
     config SR_WN_CUSTOMIZED_WORD
         bool "customized word (wn9_customizedword)"
         depends on IDF_TARGET_ESP32S3
