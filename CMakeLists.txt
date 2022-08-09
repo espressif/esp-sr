@@ -95,6 +95,7 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
         wakenet
         hufzip
         dl_lib
+	esp-dsp
         c_speech_features
         esp_audio_front_end
         esp_audio_processor
