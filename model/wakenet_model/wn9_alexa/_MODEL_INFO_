@@ -1,1 +1,2 @@
-wakeNet9l_v2h24_alexa_3_0.585_0.605
+# (neural network type)_(model data version)_(lable1_detection windown length_threshold for 90%_threshold for 95%)_(lable2 ...)_...
+wakenet9l_v2h24_alexa_3_0.615_0.645

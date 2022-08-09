@@ -1,38 +1,29 @@
 #include "stdio.h"
-#include "sdkconfig.h"
-#include "esp_spiffs.h"
 #include <sys/stat.h>
-#include <sys/dirent.h>
+#include <dirent.h>
 #include "string.h"
 #include "model_path.h"
 #include "esp_wn_models.h"
 #include "esp_mn_models.h"
+
+#ifdef ESP_PLATFORM
+#include <sys/dirent.h>
+#include "sdkconfig.h"
 #include "esp_log.h"
+#include "esp_spiffs.h"
+#endif
 
 static char *TAG = "MODEL_LOADER";
 static char *SRMODE_BASE_PATH = "/srmodel";
 
-char *get_model_base_path(void)
-{
-    return SRMODE_BASE_PATH;
-}
-
-int set_model_base_path(const char *base_path)
-{
-    if (base_path == NULL) return 0;
-    
-    SRMODE_BASE_PATH = base_path;
-    return 1;
-}
-
+#ifdef ESP_PLATFORM
 srmodel_list_t *read_models_form_spiffs(esp_vfs_spiffs_conf_t *conf)
 {
     struct dirent *ret;
     DIR *dir;
     dir = opendir(conf->base_path);
-    srmodel_list_t *models = malloc(sizeof(srmodel_list_t*));
-    models->num = 0;
-    models->partition_label = conf->partition_label;
+    srmodel_list_t *models = NULL;
+    int model_num = 0;
     int idx = 0;
 
     if (dir != NULL)
@@ -48,13 +39,19 @@ srmodel_list_t *read_models_form_spiffs(esp_vfs_spiffs_conf_t *conf)
             char *suffix = ret->d_name + len - 12;
 
             if (strcmp(suffix, "_MODEL_INFO_") == 0)
-                models->num ++;
+                model_num ++;
         }
 
         // allocate model names
-        models->model_name = malloc(models->num*sizeof(char*));
-        for (int i=0; i<models->num; i++) {
-            models->model_name[i] = (char*) calloc(MODEL_NAME_MAX_LENGTH, sizeof(char));
+        if (model_num == 0) {
+            return models;
+        } else {
+            models = malloc(sizeof(srmodel_list_t*));
+            models->num = model_num;
+            models->partition_label = conf->partition_label;
+            models->model_name = malloc(models->num*sizeof(char*));
+            for (int i=0; i<models->num; i++) 
+                models->model_name[i] = (char*) calloc(MODEL_NAME_MAX_LENGTH, sizeof(char));
         }
 
         // read& save model names 
@@ -188,22 +185,151 @@ void srmodel_config_deinit(srmodel_list_t *models)
     }
 }
 
+#endif
+
+char *get_model_base_path(void)
+{
+    return SRMODE_BASE_PATH;
+}
+
+int set_model_base_path(const char *base_path)
+{
+    if (base_path == NULL) return 0;
+    
+    SRMODE_BASE_PATH = base_path;
+    return 1;
+}
+
+char* join_path(char* dirname, char *filename)
+{
+    if (dirname == NULL || filename == NULL)
+        return NULL;
+    int dirname_len = strlen(dirname);
+    int filename_len = strlen(filename);
+    int len = filename_len + dirname_len + 2; 
+    char *path = calloc(len, sizeof(char));
+    memcpy(path, dirname, dirname_len);
+    if (dirname[dirname_len-1] == '/') {
+        memcpy(path+dirname_len, filename, filename_len);
+    } else {
+        path[dirname_len] = '/';
+        memcpy(path+dirname_len+1, filename, filename_len);
+    }
+    return path;
+}
+
+// read srmodel from sdcard
+srmodel_list_t* srmodel_sdcard_init(const char *base_path)
+{
+    printf("Initializing models from path: %s\n", base_path);
+    set_model_base_path(base_path);
+    struct dirent *ret, *sub_ret;
+    DIR *dir, *sub_dir;
+    dir = opendir(base_path);
+    srmodel_list_t *models = NULL;
+    int model_num = 0;
+    int idx = 0;
+    FILE* fp;
+
+    if (dir != NULL)
+    {
+        // get the number of models
+        while ((ret = readdir(dir)) != NULL)
+        { // NULL if reach the end of directory
+
+            if (ret->d_type == DT_DIR) { // if d_type is directory
+                char *sub_path = join_path(base_path, ret->d_name);
+                char *info_file = join_path(sub_path, "_MODEL_INFO_");
+                fp = fopen(info_file, "r");
+                if (fp != NULL) {
+                    model_num ++;  // If _MODLE_INFO_ file exists, model_num ++
+                }
+                printf("%s -> %s\n", sub_path, info_file);
+                fclose(fp);
+                free(sub_path);
+                free(info_file);
+            }
+        }
+        closedir(dir);
+
+        // allocate srmodel_list_t struct
+        if (model_num == 0) {
+            return models;
+        } else {
+            models = malloc(sizeof(srmodel_list_t*));
+            models->num = model_num;
+            models->partition_label = NULL;
+            models->model_name = malloc(models->num*sizeof(char*));
+            for (int i=0; i<models->num; i++) 
+                models->model_name[i] = (char*) calloc(MODEL_NAME_MAX_LENGTH, sizeof(char));
+        }
+        
+
+        // read & save model names 
+        dir = opendir(base_path);
+        while ((ret = readdir(dir)) != NULL)
+        { // NULL if reach the end of directory
+
+            if (ret->d_type == DT_DIR) { // if d_type is directory
+                char *sub_path = join_path(base_path, ret->d_name);
+                char *info_file = join_path(sub_path, "_MODEL_INFO_");
+                fp = fopen(info_file, "r");
+                if (fp != NULL) {
+                    memcpy(models->model_name[idx], ret->d_name, strlen(ret->d_name));
+                    idx++;
+                }
+                fclose(fp);
+                free(sub_path);
+                free(info_file);
+            }
+        }
+        closedir(dir);
+    }
+    return models;
+}
+
+
+void srmodel_sdcard_deinit(srmodel_list_t *models)
+{
+    if (models != NULL) {
+        if (models->num>0) {
+            for (int i=0; i<models->num; i++) {
+                free(models->model_name[i]);
+            }
+        }
+        free(models);
+    }
+}
+
+
 
 srmodel_list_t* esp_srmodel_init(const char* base_path)
 {
+#ifdef ESP_PLATFORM
+
 #ifdef CONFIG_IDF_TARGET_ESP32
     return srmodel_config_init();
 #else
     return srmodel_spiffs_init(base_path);
 #endif
+
+#else
+    return srmodel_sdcard_init(base_path);
+#endif 
 }
 
 void esp_srmodel_deinit(srmodel_list_t *models)
 {
+#ifdef ESP_PLATFORM
+
 #ifdef CONFIG_IDF_TARGET_ESP32
     return srmodel_config_deinit(models);
 #else
     return srmodel_spiffs_deinit(models);
+#endif
+
+#else
+    return srmodel_sdcard_deinit(models);
 #endif
 }
 

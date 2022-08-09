@@ -54,8 +54,6 @@ if "CONFIG_SR_WN_WN9_ALEXA" in WN_STRING:
     wakenet_model.append('wn9_alexa')
 if "CONFIG_SR_WN_WN9_HIESP" in WN_STRING:
     wakenet_model.append('wn9_hiesp')
-if "CONFIG_SR_WN_WN9_NIHAOXIAOZHI" in WN_STRING:
-    wakenet_model.append('wn9_nihaoxiaozhi')
 
 multinet_model = []
 if "CONFIG_SR_MN_CN_MULTINET3_SINGLE_RECOGNITION" in MN_STRING and len(multinet_model) < 2:
