@@ -29,14 +29,7 @@ ENDIF (IDF_VERSION_MAJOR GREATER 3)
         multinet
         dl_lib
         c_speech_features
-        hilexin_wn5
-        hilexin_wn5X2
-        hilexin_wn5X3
-        nihaoxiaozhi_wn5
-        nihaoxiaozhi_wn5X2
-        nihaoxiaozhi_wn5X3
-        nihaoxiaoxin_wn5X3
-        customized_word_wn5
+	wakeword_model
         multinet2_ch
         esp_audio_processor 
         esp_audio_front_end

@@ -45,10 +45,6 @@ choice SR_WN_MODEL_LOAD
         bool "Hi,Lexin (wn5_hilexin)"
         depends on IDF_TARGET_ESP32
 
-    config SR_WN_WN5X2_HILEXIN
-        bool "Hi,Lexin (wn5_hilexinX2)"
-        depends on IDF_TARGET_ESP32
-
     config SR_WN_WN5X3_HILEXIN
         bool "Hi,Lexin (wn5_hilexinX3)"
         depends on IDF_TARGET_ESP32
@@ -57,20 +53,12 @@ choice SR_WN_MODEL_LOAD
         bool "nihaoxiaozhi (wn5_nihaoxiaozhi)"
         depends on IDF_TARGET_ESP32
 
-    config SR_WN_WN5X2_NIHAOXIAOZHI
-        bool "nihaoxiaozhi (wn5_nihaoxiaozhiX2)"
-        depends on IDF_TARGET_ESP32
-
     config SR_WN_WN5X3_NIHAOXIAOZHI
         bool "nihaoxiaozhi (wn5_nihaoxiaozhiX3)"
         depends on IDF_TARGET_ESP32
 
     config SR_WN_WN5X3_NIHAOXIAOXIN
         bool "nihaoxiaoxin (wn5_nihaoxiaoxinX3)"
-        depends on IDF_TARGET_ESP32
-
-    config SR_WN_WN5_CUSTOMIZED_WORD
-        bool "customized word (wn5_customizedword)"
         depends on IDF_TARGET_ESP32
     
     config SR_WN_WN8_ALEXA
