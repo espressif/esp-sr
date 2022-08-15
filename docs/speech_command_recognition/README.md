@@ -60,7 +60,7 @@ Speech commands string need to meet specific formats, as follows:
 
   English speech commands need to be represented by specific phonetic symbols. The phonetic symbols of each word are separated by spaces, such as "turn on the light", which needs to be written as "TkN nN jc LiT".
   
-  **We provide specific conversion rules and tools. For details, please refer to the English G2P [tool](../tool/multinet_g2p.py).**
+  **We provide specific conversion rules and tools. For details, please refer to the English G2P [tool](../../tool/multinet_g2p.py).**
 
 #### 3.2.2 Set speech commands offline
 
