@@ -79,8 +79,7 @@ srmodel_list_t *read_models_form_spiffs(esp_vfs_spiffs_conf_t *conf)
 
 srmodel_list_t* srmodel_spiffs_init(const char *partition_label)
 {
-    printf(" \n");
-    ESP_LOGI(TAG, "Initializing models from SPIFFS, partition label: %s", partition_label);
+    ESP_LOGI(TAG, "\nInitializing models from SPIFFS, partition label: %s\n", partition_label);
 
     esp_vfs_spiffs_conf_t conf = {
         .base_path = SRMODE_BASE_PATH,
@@ -185,6 +184,12 @@ void srmodel_config_deinit(srmodel_list_t *models)
     }
 }
 
+model_coeff_getter_t* srmodel_get_model_coeff(char *model_name)
+{
+    model_coeff_getter_t *gettercb = &WAKENET_COEFF;
+    return gettercb;
+}
+
 #endif
 
 char *get_model_base_path(void)
@@ -200,7 +205,7 @@ int set_model_base_path(const char *base_path)
     return 1;
 }
 
-char* join_path(char* dirname, char *filename)
+char* _join_path_(const char* dirname, const char *filename)
 {
     if (dirname == NULL || filename == NULL)
         return NULL;
@@ -223,8 +228,8 @@ srmodel_list_t* srmodel_sdcard_init(const char *base_path)
 {
     printf("Initializing models from path: %s\n", base_path);
     set_model_base_path(base_path);
-    struct dirent *ret, *sub_ret;
-    DIR *dir, *sub_dir;
+    struct dirent *ret;
+    DIR *dir;
     dir = opendir(base_path);
     srmodel_list_t *models = NULL;
     int model_num = 0;
@@ -238,8 +243,8 @@ srmodel_list_t* srmodel_sdcard_init(const char *base_path)
         { // NULL if reach the end of directory
 
             if (ret->d_type == DT_DIR) { // if d_type is directory
-                char *sub_path = join_path(base_path, ret->d_name);
-                char *info_file = join_path(sub_path, "_MODEL_INFO_");
+                char *sub_path = _join_path_(base_path, ret->d_name);
+                char *info_file = _join_path_(sub_path, "_MODEL_INFO_");
                 fp = fopen(info_file, "r");
                 if (fp != NULL) {
                     model_num ++;  // If _MODLE_INFO_ file exists, model_num ++
@@ -271,8 +276,8 @@ srmodel_list_t* srmodel_sdcard_init(const char *base_path)
         { // NULL if reach the end of directory
 
             if (ret->d_type == DT_DIR) { // if d_type is directory
-                char *sub_path = join_path(base_path, ret->d_name);
-                char *info_file = join_path(sub_path, "_MODEL_INFO_");
+                char *sub_path = _join_path_(base_path, ret->d_name);
+                char *info_file = _join_path_(sub_path, "_MODEL_INFO_");
                 fp = fopen(info_file, "r");
                 if (fp != NULL) {
                     memcpy(models->model_name[idx], ret->d_name, strlen(ret->d_name));
@@ -337,7 +342,7 @@ void esp_srmodel_deinit(srmodel_list_t *models)
 char *_esp_strstr_(const char *haystack, const char *needle)
 {
     if (needle == NULL) return haystack;
-    else return strstr(haystack, needle);
+    else return (char *)strstr(haystack, needle);
 }
 
 char *esp_srmodel_filter(srmodel_list_t *models, const char *keyword1, const char *keyword2) 

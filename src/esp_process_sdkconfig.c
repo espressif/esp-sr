@@ -876,7 +876,7 @@ char *get_id_name_en(int i)
 #endif
 }
 
-esp_err_t esp_mn_commands_update_from_sdkconfig(esp_mn_iface_t *multinet, const model_iface_data_t *model_data)
+esp_mn_error_t* esp_mn_commands_update_from_sdkconfig(esp_mn_iface_t *multinet, const model_iface_data_t *model_data)
 {
     esp_mn_commands_alloc();
     int total_phrase_num = 0;
@@ -902,7 +902,6 @@ esp_err_t esp_mn_commands_update_from_sdkconfig(esp_mn_iface_t *multinet, const 
 
         char *token = strtok(command_str_temp, ",");
         while (token != NULL) {
-            int len = strlen(token);
             if (total_phrase_num > ESP_MN_MAX_PHRASE_NUM) {
                 ESP_LOGE(TAG, "The number of speech commands phrase must less than ESP_MN_MAX_PHRASE_NUM");
                 free(command_str_temp);
