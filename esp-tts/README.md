@@ -43,11 +43,10 @@ CPU loading test（基于ESP32 @ 240MHz测试 ）:
 
 #### Samples
 
-- 欢迎使用乐鑫语音合成, &nbsp; &nbsp; [voice=小乐,speed=0](./samples/S1_xiaole_speed0.wav), &nbsp; &nbsp;  [voice=小乐,speed=2](./samples/S1_xiaole_speed2.wav) 
 
-- 支付宝收款 1111.11 元, &nbsp; &nbsp;  [voice=小乐,speed=0](./samples/S1_xiaole_speed0.wav), &nbsp; &nbsp;  [voice=小乐,speed=2](./samples/S2_xiaole_speed2.wav) 
+- 欢迎使用乐鑫语音合成, 支付宝收款72.10元，微信收款643.12元，扫码收款5489.54元, &nbsp; &nbsp; [voice=xiaoxin,speed=1](./samples/xiaoxin_speed1.wav)
+- 支付宝收款 1111.11 元, &nbsp; &nbsp;  [voice=xiaole,speed=2](./samples/S2_xiaole_speed2.wav) 
 
-- 空调制热模式已打开，并调节到25度, &nbsp; &nbsp;  [voice=小乐,speed=0](./samples/S3_xiaole_speed0.wav), &nbsp; &nbsp;   [voice=小乐,speed=4](./samples/S3_xiaole_speed4.wav) 
 
    
 
@@ -60,18 +59,14 @@ CPU loading test（基于ESP32 @ 240MHz测试 ）:
 
 /*** 1. create esp tts handle  ***/
 
-//// Method1: use pre-define xiaole voice lib.
-//// This method is not recommended because the method may make app bin exceed the limit of esp32
-// esp_tts_handle_t *tts_handle=esp_tts_create(esp_tts_voice_female);
 
-  
-// method2: initial voice set from separate voice data partition
+// initial voice set from separate voice data partition
 
 const esp_partition_t* part=esp_partition_find_first(ESP_PARTITION_TYPE_DATA, ESP_PARTITION_SUBTYPE_DATA_FAT, "voice_data");
 if (part==0) printf("Couldn't find voice data partition!\n");
 spi_flash_mmap_handle_t mmap;
 uint16_t* voicedata;
-esp_err_t err=esp_partition_mmap(part, 0, 3*1024*1024, SPI_FLASH_MMAP_DATA, (const void**)&voicedata, &mmap);
+esp_err_t err=esp_partition_mmap(part, 0, part->size, SPI_FLASH_MMAP_DATA, (const void**)&voicedata, &mmap);
 esp_tts_voice_t *voice=esp_tts_voice_set_init(&esp_tts_voice_template, voicedata); 
 
 // 2. parse text and synthesis wave data
