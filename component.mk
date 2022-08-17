@@ -1,5 +1,6 @@
 COMPONENT_ADD_INCLUDEDIRS := include/$(IDF_TARGET) \
                              esp-tts/esp_tts_chinese/include \
+			     src/include \
 
 COMPONENT_SRCDIRS := src
 
