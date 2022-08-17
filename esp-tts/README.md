@@ -82,4 +82,4 @@ if (esp_tts_parse_chinese(tts_handle, text)) {  // parse text into pinyin list
 
 ```
 
-更多请参考[esp_tts.h](./esp_tts_chinese/include/esp_tts.h)查看API定义, 或参考esp-skainet中[chinese_tts](../../examples/chinese_tts)示例.
+更多请参考[esp_tts.h](./esp_tts_chinese/include/esp_tts.h)查看API定义, 或参考esp-skainet中[chinese_tts](https://github.com/espressif/esp-skainet/tree/master/examples/chinese_tts)示例.

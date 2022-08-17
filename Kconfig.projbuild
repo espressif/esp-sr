@@ -92,29 +92,29 @@ choice SR_WN_MODEL_LOAD
     config SR_WN_LOAD_MULIT_WORD
         bool "Load Multiple Wake Words"
         depends on IDF_TARGET_ESP32S3
-    
-    menu "Load Multiple Wake Words"
-        depends on SR_WN_LOAD_MULIT_WORD
-        
-        config SR_WN_WN9_HILEXIN_MULTI
-        bool "Hi,Lexin (wn9_hilexin)"
-        default False
-
-        config SR_WN_WN9_XIAOAITONGXUE_MULTI
-        bool "xiaoaitongxue (wn9_xiaoaitongxue)"
-        default False
-
-        config SR_WN_WN9_ALEXA_MULTI
-        bool "Alexa (wn9_alexa)"
-        default False
-
-        config SR_WN_WN9_HIESP_MULTI
-        bool "Hi,ESP (wn9_hiesp)"
-        default False
-
-    endmenu
 
 endchoice
+
+menu "Load Multiple Wake Words"
+    depends on SR_WN_LOAD_MULIT_WORD
+    
+    config SR_WN_WN9_HILEXIN_MULTI
+    bool "Hi,Lexin (wn9_hilexin)"
+    default False
+
+    config SR_WN_WN9_XIAOAITONGXUE_MULTI
+    bool "xiaoaitongxue (wn9_xiaoaitongxue)"
+    default False
+
+    config SR_WN_WN9_ALEXA_MULTI
+    bool "Alexa (wn9_alexa)"
+    default False
+
+    config SR_WN_WN9_HIESP_MULTI
+    bool "Hi,ESP (wn9_hiesp)"
+    default False
+
+endmenu
 
 config USE_MULTINET
     bool "use multinet"
