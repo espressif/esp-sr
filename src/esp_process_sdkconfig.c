@@ -876,7 +876,7 @@ char *get_id_name_en(int i)
 #endif
 }
 
-esp_mn_error_t* esp_mn_commands_update_from_sdkconfig(esp_mn_iface_t *multinet, const model_iface_data_t *model_data)
+esp_mn_error_t* esp_mn_commands_update_from_sdkconfig(const esp_mn_iface_t *multinet,  model_iface_data_t *model_data)
 {
     esp_mn_commands_alloc();
     int total_phrase_num = 0;

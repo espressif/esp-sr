@@ -137,7 +137,7 @@ esp_err_t esp_mn_commands_remove(char *phoneme_string)
 
 esp_mn_phrase_t *esp_mn_commands_get_from_index(int index)
 {
-    ESP_RETURN_ON_FALSE(NULL != esp_mn_root, ESP_ERR_INVALID_STATE, TAG, "The mn commands is not initialized");
+    ESP_RETURN_ON_FALSE(NULL != esp_mn_root, NULL, TAG, "The mn commands is not initialized");
     
     // phrase index also is phrase id, which is the depth from this phrase node to root node 
     esp_mn_node_t *temp = esp_mn_root;
@@ -151,7 +151,7 @@ esp_mn_phrase_t *esp_mn_commands_get_from_index(int index)
 
 esp_mn_phrase_t *esp_mn_commands_get_from_string(const char *phoneme_string)
 {
-    ESP_RETURN_ON_FALSE(NULL != esp_mn_root, ESP_ERR_INVALID_STATE, TAG, "The mn commands is not initialized");
+    ESP_RETURN_ON_FALSE(NULL != esp_mn_root, NULL, TAG, "The mn commands is not initialized");
     
     // phrase index also is phrase id, which is the depth from this phrase node to root node 
     esp_mn_node_t *temp = esp_mn_root;
@@ -165,9 +165,9 @@ esp_mn_phrase_t *esp_mn_commands_get_from_string(const char *phoneme_string)
     return NULL;
 }
 
-esp_mn_error_t *esp_mn_commands_update(const esp_mn_iface_t *multinet, const model_iface_data_t *model_data)
+esp_mn_error_t *esp_mn_commands_update(const esp_mn_iface_t *multinet, model_iface_data_t *model_data)
 {
-    ESP_RETURN_ON_FALSE(NULL != esp_mn_root, ESP_ERR_INVALID_STATE, TAG, "The mn commands is not initialize");
+    ESP_RETURN_ON_FALSE(NULL != esp_mn_root, NULL, TAG, "The mn commands is not initialize");
     esp_mn_error_t *error = multinet->set_speech_commands(model_data, esp_mn_root);
 
     if (error->num == 0) 
@@ -208,7 +208,7 @@ esp_mn_phrase_t *esp_mn_phrase_alloc(int command_id, char *phoneme_string)
     }
 
     esp_mn_phrase_t *phrase = _esp_mn_calloc_(1, sizeof(esp_mn_phrase_t));
-    ESP_RETURN_ON_FALSE(NULL != phrase, ESP_ERR_NO_MEM, TAG, "Fail to alloc mn phrase");
+    ESP_RETURN_ON_FALSE(NULL != phrase, NULL, TAG, "Fail to alloc mn phrase");
     phrase->command_id = command_id;
     phrase->threshold = 0;
     phrase->wave = NULL;
@@ -227,7 +227,7 @@ void esp_mn_phrase_free(esp_mn_phrase_t *phrase)
 esp_mn_node_t *esp_mn_node_alloc(esp_mn_phrase_t *phrase)
 {
     esp_mn_node_t *node = _esp_mn_calloc_(1, sizeof(esp_mn_node_t));
-    ESP_RETURN_ON_FALSE(NULL != node, ESP_ERR_NO_MEM, TAG, "Fail to alloc mn node");
+    ESP_RETURN_ON_FALSE(NULL != node, NULL, TAG, "Fail to alloc mn node");
     node->next = NULL;
     node->phrase = phrase;
     return node;

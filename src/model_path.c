@@ -48,13 +48,13 @@ srmodel_list_t *read_models_form_spiffs(esp_vfs_spiffs_conf_t *conf)
         } else {
             models = malloc(sizeof(srmodel_list_t*));
             models->num = model_num;
-            models->partition_label = conf->partition_label;
+            models->partition_label = (char *)conf->partition_label;
             models->model_name = malloc(models->num*sizeof(char*));
-            for (int i=0; i<models->num; i++) 
+            for (int i=0; i<models->num; i++)
                 models->model_name[i] = (char*) calloc(MODEL_NAME_MAX_LENGTH, sizeof(char));
         }
 
-        // read& save model names 
+        // read & save model names
         dir = opendir(conf->base_path);
         while ((ret = readdir(dir)) != NULL)
         { // NULL if reach the end of directory
@@ -70,7 +70,7 @@ srmodel_list_t *read_models_form_spiffs(esp_vfs_spiffs_conf_t *conf)
                 memcpy(models->model_name[idx], ret->d_name, (len-13)*sizeof(char));
                 // models->model_name[idx][len-13] = '\0';
                 idx ++;
-            }            
+            }
         }
     }
     return models;
@@ -186,7 +186,7 @@ void srmodel_config_deinit(srmodel_list_t *models)
 
 model_coeff_getter_t* srmodel_get_model_coeff(char *model_name)
 {
-    model_coeff_getter_t *gettercb = &WAKENET_COEFF;
+    model_coeff_getter_t *gettercb = (model_coeff_getter_t *)&WAKENET_COEFF;
     return gettercb;
 }
 
@@ -201,7 +201,7 @@ int set_model_base_path(const char *base_path)
 {
     if (base_path == NULL) return 0;
     
-    SRMODE_BASE_PATH = base_path;
+    SRMODE_BASE_PATH = (char *)base_path;
     return 1;
 }
 
@@ -341,7 +341,7 @@ void esp_srmodel_deinit(srmodel_list_t *models)
 // repackage strstr function to support needle==NULL
 char *_esp_strstr_(const char *haystack, const char *needle)
 {
-    if (needle == NULL) return haystack;
+    if (needle == NULL) return (char *)haystack;
     else return (char *)strstr(haystack, needle);
 }
 
