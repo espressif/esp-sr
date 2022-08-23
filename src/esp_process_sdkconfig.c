@@ -54,8 +54,7 @@ void check_chip_config(void)
 
 char *get_id_name_cn(int i)
 {
-#if defined CONFIG_USE_MULTINET
-#if defined CONFIG_SR_MN_CN_MULTINET2_SINGLE_RECOGNITION || defined CONFIG_SR_MN_CN_MULTINET4_5_SINGLE_RECOGNITION || defined CONFIG_SR_MN_CN_MULTINET4_5_SINGLE_RECOGNITION_QUANT8 || defined CONFIG_SR_MN_CN_MULTINET5_SINGLE_RECOGNITION_QUANT8
+#if defined CONFIG_SR_MN_CN_MULTINET2_SINGLE_RECOGNITION || defined CONFIG_SR_MN_CN_MULTINET4_5_SINGLE_RECOGNITION || defined CONFIG_SR_MN_CN_MULTINET4_5_SINGLE_RECOGNITION_QUANT8 || defined CONFIG_SR_MN_CN_MULTINET5_RECOGNITION_QUANT8
     if (i == 0)
         return CONFIG_CN_SPEECH_COMMAND_ID0;
     else if (i == 1)
@@ -458,9 +457,6 @@ char *get_id_name_cn(int i)
         return CONFIG_CN_SPEECH_COMMAND_ID199;
     else
         return NULL;
-#else
-    return NULL;
-#endif
 #else
     return NULL;
 #endif
@@ -879,20 +875,34 @@ char *get_id_name_en(int i)
 esp_mn_error_t* esp_mn_commands_update_from_sdkconfig(const esp_mn_iface_t *multinet,  model_iface_data_t *model_data)
 {
     esp_mn_commands_alloc();
+    printf("esp_mn_commands_update_from_sdkconfig\n");
     int total_phrase_num = 0;
+    int language_id = 1; // 0: Chinese, 1:English
+#ifdef CONFIG_SR_MN_CN_MULTINET2_SINGLE_RECOGNITION
+    language_id = 1;
+#else
+    if (strcmp(ESP_MN_CHINESE, multinet->get_language(model_data)) == 0) {
+        language_id = 1;
+    } else if (strcmp(ESP_MN_ENGLISH, multinet->get_language(model_data)) == 0) {
+        language_id = 2;
+    } else {
+        ESP_LOGE(TAG, "Invalid language");
+        return NULL;
+    }
+#endif
 
     for (int i = 0; i < ESP_MN_MAX_PHRASE_NUM; i++) {
         char *command_str = NULL;
         int command_str_len = 0;
 
-#if defined CONFIG_SR_MN_CN_MULTINET2_SINGLE_RECOGNITION || defined CONFIG_SR_MN_CN_MULTINET4_SINGLE_RECOGNITION || defined CONFIG_SR_MN_CN_MULTINET4_5_SINGLE_RECOGNITION || defined CONFIG_SR_MN_CN_MULTINET4_5_SINGLE_RECOGNITION_QUANT8 || defined CONFIG_SR_MN_CN_MULTINET5_SINGLE_RECOGNITION_QUANT8
-        command_str = get_id_name_cn(i);
-#elif defined CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION || defined CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION_QUANT8
-        command_str = get_id_name_en(i);
-#else
-        ESP_LOGE(TAG, "Incorrect language");
-#endif
-        
+        if (language_id == 1) {
+            command_str = get_id_name_cn(i);
+        } else if (language_id == 2) {
+            command_str = get_id_name_en(i);
+        } else {
+            ESP_LOGE(TAG, "Invalid language");
+        }
+
         if (command_str == NULL) continue;
         command_str_len = strlen(command_str);
         if (command_str_len <= 0) continue;
