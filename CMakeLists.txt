@@ -1,13 +1,13 @@
 if(IDF_TARGET STREQUAL "esp32")
     set(COMPONENT_ADD_INCLUDEDIRS 
+	src/include
         esp-tts/esp_tts_chinese/include
         include/esp32
-	src/include
         )
     set(COMPONENT_SRCS
+        src/model_path.c
         src/esp_mn_speech_commands.c
         src/esp_process_sdkconfig.c
-        src/model_path.c
         )
 
     set(COMPONENT_REQUIRES
@@ -62,14 +62,14 @@ elseif(${IDF_TARGET} STREQUAL "esp32s2")
          "-Wl,--end-group")
 elseif(${IDF_TARGET} STREQUAL "esp32s3")
     set(COMPONENT_ADD_INCLUDEDIRS 
+	src/include
         esp-tts/esp_tts_chinese/include
         include/esp32s3
-	src/include
         )
     set(COMPONENT_SRCS
+        src/model_path.c
         src/esp_mn_speech_commands.c
         src/esp_process_sdkconfig.c
-        src/model_path.c
         )
 
     set(COMPONENT_REQUIRES
