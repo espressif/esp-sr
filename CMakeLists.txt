@@ -26,7 +26,6 @@ IF (IDF_VERSION_MAJOR GREATER 3)
     add_prebuilt_library(esp_audio_front_end "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32/libesp_audio_front_end.a" PRIV_REQUIRES esp-sr)
 ENDIF (IDF_VERSION_MAJOR GREATER 3)
     target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
-        wakenet
         multinet
         dl_lib
         c_speech_features
@@ -36,6 +35,7 @@ ENDIF (IDF_VERSION_MAJOR GREATER 3)
         esp_audio_front_end
         esp_tts_chinese 
         voice_set_xiaole
+        wakenet
         "-Wl,--end-group")
 elseif(${IDF_TARGET} STREQUAL "esp32s2")
     set(COMPONENT_ADD_INCLUDEDIRS 
@@ -88,7 +88,6 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
     add_prebuilt_library(hufzip "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32s3/libhufzip.a" PRIV_REQUIRES esp-sr)
 
     target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
-        wakenet
         hufzip
         dl_lib
 	esp-dsp
@@ -98,6 +97,7 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
         multinet
         esp_tts_chinese
         voice_set_xiaole
+        wakenet
         "-Wl,--end-group")
 
     set(MVMODEL_EXE ${COMPONENT_PATH}/model/movemodel.py)

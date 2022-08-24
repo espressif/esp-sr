@@ -878,7 +878,7 @@ esp_mn_error_t* esp_mn_commands_update_from_sdkconfig(const esp_mn_iface_t *mult
     printf("esp_mn_commands_update_from_sdkconfig\n");
     int total_phrase_num = 0;
     int language_id = 1; // 0: Chinese, 1:English
-#ifdef CONFIG_SR_MN_CN_MULTINET2_SINGLE_RECOGNITION
+#ifdef CONFIG_IDF_TARGET_ESP32
     language_id = 1;
 #else
     if (strcmp(ESP_MN_CHINESE, multinet->get_language(model_data)) == 0) {
