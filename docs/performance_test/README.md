@@ -36,19 +36,20 @@
 
 |Model Type|RAM|PSRAM|Average Running Time per Frame| Frame Length|
 |:---:|:---:|:---:|:---:|:---:|
-|Quantised WakeNet8 @ 2 channel|50 KB|1640 KB|10 ms|32 ms|
-|Quantised WakeNet9 @ 2 channel|16 KB|320 KB|4 ms|32 ms|
+|Quantised WakeNet8 @ 2 channel|50 KB|1640 KB|10.0 ms|32 ms|
+|Quantised WakeNet9 @ 2 channel|16 KB|324 KB|3.0 ms|32 ms|
+|Quantised WakeNet9 @ 3 channel|20 KB|347 KB|4.3 ms|32 ms|
 
 ### 2.3 Performance
 
 |Distance| Quiet | Stationary Noise (SNR = 4 dB)| Speech Noise (SNR = 4 dB)| AEC Interruption (-10 dB)|
 |:---:|:---:|:---:|:---:|:---:|
 |1 m|98%|96%|94%|96%|
-|3 m|98%|94%|92%|94%|
+|3 m|98%|96%|94%|94%|
 
 False triggering rate: 1 time in 12 hours
 
-**Note**: We use the ESP32-S3-Korvo V4.0 development board and the WakeNet8(Alexa) model in our test. 
+**Note**: We use the ESP32-S3-Korvo V4.0 development board and the WakeNet9(Alexa) model in our test. 
 
 ## 3. MultiNet
 
@@ -64,7 +65,7 @@ False triggering rate: 1 time in 12 hours
 |:---:|:---:|:---:|:---:|:---:|
 |MultiNet 4|16.8KB|1866 KB|18 ms|32 ms|
 |MultiNet 4 Q8|10.5 KB|1009 KB|11 ms|32 ms|
-|MultiNet 5 Q8|14 KB||12 ms|32 ms|
+|MultiNet 5 Q8|16 KB |2310 KB|12 ms|32 ms|
 
 ### 2.3 Performance with AFE
 
