@@ -132,6 +132,7 @@ void srmodel_spiffs_deinit(srmodel_list_t *models)
             for (int i=0; i<models->num; i++) {
                 free(models->model_name[i]);
             }
+            free(models->model_name);
         }
         free(models);
     }
@@ -165,6 +166,7 @@ srmodel_list_t *srmodel_config_init()
 
     // could not find any avaliable models, return NULL 
     if (models->num == 0) {
+        free(models->model_name);
         free(models);
         models = NULL;
     }
@@ -179,6 +181,7 @@ void srmodel_config_deinit(srmodel_list_t *models)
             for (int i=0; i<models->num; i++) {
                 free(models->model_name[i]);
             }
+            free(models->model_name);
         }
         free(models);
     }
