@@ -90,8 +90,8 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
     target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
         hufzip
         dl_lib
-	esp-dsp
         c_speech_features
+	esp-dsp
         esp_audio_front_end
         esp_audio_processor
         multinet

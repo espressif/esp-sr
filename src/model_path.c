@@ -141,7 +141,7 @@ void srmodel_spiffs_deinit(srmodel_list_t *models)
 
 srmodel_list_t *srmodel_config_init()
 {
-    srmodel_list_t *models = malloc(sizeof(srmodel_list_t*));
+    srmodel_list_t *models = malloc(sizeof(srmodel_list_t));
     models->num = 2;
     models->model_name = malloc(models->num*sizeof(char*));
     for (int i=0; i<models->num; i++) {
