@@ -85,8 +85,8 @@ choice SR_WN_MODEL_LOAD
         bool "nihaoxiaozhi (wn9_nihaoxiaozhi)"
         depends on IDF_TARGET_ESP32S3
 
-    config SR_WN_CUSTOMIZED_WORD
-        bool "customized word (wn9_customizedword)"
+    config SR_WN_WN9_CUSTOMWORD
+        bool "customized word (wn9_customword)"
         depends on IDF_TARGET_ESP32S3
 
     config SR_WN_LOAD_MULIT_WORD
