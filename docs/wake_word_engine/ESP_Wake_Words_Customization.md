@@ -38,7 +38,7 @@ As mentioned above, you can provide your own training corpus for Espressif. Belo
 
 1. Audio file format
 	- Sample rate: 16 kHz
-	- Encoding: 6-bit signed int
+	- Encoding: 16-bit signed int
 	- Channel: mono
 	- Format: WAV	
 
