@@ -20,7 +20,7 @@ static char *SRMODE_BASE_PATH = "/srmodel";
 srmodel_list_t *read_models_form_spiffs(esp_vfs_spiffs_conf_t *conf)
 {
     struct dirent *ret;
-    DIR *dir;
+    DIR *dir = NULL;
     dir = opendir(conf->base_path);
     srmodel_list_t *models = NULL;
     int model_num = 0;
@@ -46,7 +46,7 @@ srmodel_list_t *read_models_form_spiffs(esp_vfs_spiffs_conf_t *conf)
         if (model_num == 0) {
             return models;
         } else {
-            models = malloc(sizeof(srmodel_list_t*));
+            models = malloc(sizeof(srmodel_list_t));
             models->num = model_num;
             models->partition_label = (char *)conf->partition_label;
             models->model_name = malloc(models->num*sizeof(char*));
@@ -55,6 +55,7 @@ srmodel_list_t *read_models_form_spiffs(esp_vfs_spiffs_conf_t *conf)
         }
 
         // read & save model names
+        closedir(dir);
         dir = opendir(conf->base_path);
         while ((ret = readdir(dir)) != NULL)
         { // NULL if reach the end of directory
@@ -72,6 +73,9 @@ srmodel_list_t *read_models_form_spiffs(esp_vfs_spiffs_conf_t *conf)
                 idx ++;
             }
         }
+        closedir(dir);
+        dir = NULL;
+
     }
     return models;
 }
@@ -232,7 +236,7 @@ srmodel_list_t* srmodel_sdcard_init(const char *base_path)
     printf("Initializing models from path: %s\n", base_path);
     set_model_base_path(base_path);
     struct dirent *ret;
-    DIR *dir;
+    DIR *dir = NULL;
     dir = opendir(base_path);
     srmodel_list_t *models = NULL;
     int model_num = 0;
@@ -264,7 +268,7 @@ srmodel_list_t* srmodel_sdcard_init(const char *base_path)
         if (model_num == 0) {
             return models;
         } else {
-            models = malloc(sizeof(srmodel_list_t*));
+            models = malloc(sizeof(srmodel_list_t));
             models->num = model_num;
             models->partition_label = NULL;
             models->model_name = malloc(models->num*sizeof(char*));
@@ -292,6 +296,7 @@ srmodel_list_t* srmodel_sdcard_init(const char *base_path)
             }
         }
         closedir(dir);
+        dir = NULL;
     }
     return models;
 }
