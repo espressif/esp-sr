@@ -1,6 +1,6 @@
 if(IDF_TARGET STREQUAL "esp32")
     set(COMPONENT_ADD_INCLUDEDIRS 
-	src/include
+    src/include
         esp-tts/esp_tts_chinese/include
         include/esp32
         )
@@ -29,7 +29,7 @@ ENDIF (IDF_VERSION_MAJOR GREATER 3)
         multinet
         dl_lib
         c_speech_features
-	wakeword_model
+    wakeword_model
         multinet2_ch
         esp_audio_processor 
         esp_audio_front_end
@@ -41,12 +41,7 @@ elseif(${IDF_TARGET} STREQUAL "esp32s2")
     set(COMPONENT_ADD_INCLUDEDIRS 
         esp-tts/esp_tts_chinese/include
         include/esp32
-	src/include
-        )
-    set(COMPONENT_SRCS
-        src/esp_process_sdkconfig.c
-        src/esp_mn_speech_commands.c
-        src/model_path.c
+        src/include
         )
 
     set(COMPONENT_REQUIRES
@@ -62,7 +57,7 @@ elseif(${IDF_TARGET} STREQUAL "esp32s2")
          "-Wl,--end-group")
 elseif(${IDF_TARGET} STREQUAL "esp32s3")
     set(COMPONENT_ADD_INCLUDEDIRS 
-	src/include
+    src/include
         esp-tts/esp_tts_chinese/include
         include/esp32s3
         )
@@ -91,7 +86,7 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
         hufzip
         dl_lib
         c_speech_features
-	esp-dsp
+    esp-dsp
         esp_audio_front_end
         esp_audio_processor
         multinet
