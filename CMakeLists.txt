@@ -50,8 +50,8 @@ elseif(${IDF_TARGET} STREQUAL "esp32s2")
         )
 
     register_component()
-    target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese/esp32s2")
-    target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
+    target_link_libraries(${COMPONENT_TARGET} INTERFACE "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese/esp32s2")
+    target_link_libraries(${COMPONENT_TARGET} INTERFACE "-Wl,--start-group"
         esp_tts_chinese
         voice_set_xiaole
          "-Wl,--end-group")
