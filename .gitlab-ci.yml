@@ -1,0 +1,559 @@
+stages:
+  - build
+  - deploy
+  - deploy_docs
+
+# global variables
+variables: &global-variables
+  IDF_PATH: "$CI_PROJECT_DIR/esp-idf"
+  GIT_STRATEGY: clone
+  GIT_SUBMODULE_STRATEGY: recursive
+  ESPCI_TOKEN: $GITLAB_KEY
+
+default:
+  retry:
+    max: 2
+    # In case of a runner failure we could hop to another one, or a network error could go away.
+    when: always
+
+.setup_idf_ci_env: &setup_idf_ci_env
+  - source esp-idf/tools/ci/utils.sh
+  - source esp-idf/tools/ci/configure_ci_environment.sh
+  - esp-idf/tools/idf_tools.py install
+  - esp-idf/tools/idf_tools.py export
+
+.before_build_esp32_series: &before_build_esp32_series
+  - cd components/at/private_include
+  - rm -f at_ota_token.h
+  - echo -e "#pragma once" >> at_ota_token.h
+  - echo -e "#define CONFIG_esp_sr_OTA_TOKEN_WROOM32 \"$AT_OTA_TOKEN_WROOM32\"" >> at_ota_token.h
+  - echo -e "#define CONFIG_esp_sr_OTA_SSL_TOKEN_WROOM32 \"$AT_OTA_TOKEN_WROOM32\"" >> at_ota_token.h
+  - echo -e "#define CONFIG_esp_sr_OTA_TOKEN_WROVER32 \"$AT_OTA_TOKEN_WROVER32\"" >> at_ota_token.h
+  - echo -e "#define CONFIG_esp_sr_OTA_SSL_TOKEN_WROVER32 \"$AT_OTA_TOKEN_WROVER32\"" >> at_ota_token.h
+  - echo -e "#define CONFIG_esp_sr_OTA_TOKEN_ESP32_PICO_D4 \"$AT_OTA_TOKEN_ESP32_PICO_D4\"" >> at_ota_token.h
+  - echo -e "#define CONFIG_esp_sr_OTA_SSL_TOKEN_ESP32_PICO_D4 \"$AT_OTA_TOKEN_ESP32_PICO_D4\"" >> at_ota_token.h
+  - echo -e "#define CONFIG_esp_sr_OTA_TOKEN_ESP32_SOLO_1 \"$AT_OTA_TOKEN_ESP32_SOLO_1\"" >> at_ota_token.h
+  - echo -e "#define CONFIG_esp_sr_OTA_SSL_TOKEN_ESP32_SOLO_1 \"$AT_OTA_TOKEN_ESP32_SOLO_1\"" >> at_ota_token.h
+  - echo -e "#define CONFIG_esp_sr_OTA_TOKEN_ESP32_MINI_1 \"$AT_OTA_TOKEN_ESP32_MINI_1\"" >> at_ota_token.h
+  - echo -e "#define CONFIG_esp_sr_OTA_SSL_TOKEN_ESP32_MINI_1 \"$AT_OTA_TOKEN_ESP32_MINI_1\"" >> at_ota_token.h
+  - echo -e "#define CONFIG_esp_sr_OTA_TOKEN_ESP32_QCLOUD \"$AT_OTA_TOKEN_ESP32_QCLOUD\"" >> at_ota_token.h
+  - echo -e "#define CONFIG_esp_sr_OTA_SSL_TOKEN_ESP32_QCLOUD \"$AT_OTA_TOKEN_ESP32_QCLOUD\"" >> at_ota_token.h
+  - cd -
+
+  - *setup_idf_ci_env
+  - export esp_sr_PROJECT_BRANCH=${CI_COMMIT_REF_NAME}
+
+.before_build_esp32c3_series: &before_build_esp32c3_series
+  - cd components/at/private_include
+  - rm -f at_ota_token.h
+  - echo -e "#define CONFIG_esp_sr_OTA_TOKEN_ESP32C3_MINI \"$AT_OTA_TOKEN_ESP32C3_MINI\"" >> at_ota_token.h
+  - echo -e "#define CONFIG_esp_sr_OTA_SSL_TOKEN_ESP32C3_MINI \"$AT_OTA_TOKEN_ESP32C3_MINI\"" >> at_ota_token.h
+  - echo -e "#define CONFIG_esp_sr_OTA_TOKEN_ESP32C3_MINI_QCLOUD \"$AT_OTA_TOKEN_ESP32C3_MINI_QCLOUD\"" >> at_ota_token.h
+  - echo -e "#define CONFIG_esp_sr_OTA_SSL_TOKEN_ESP32C3_MINI_QCLOUD \"$AT_OTA_TOKEN_ESP32C3_MINI_QCLOUD\"" >> at_ota_token.h
+  - cd -
+
+  - *setup_idf_ci_env
+  - export esp_sr_PROJECT_BRANCH=${CI_COMMIT_REF_NAME}
+
+.before_build_esp32c2_series: &before_build_esp32c2_series
+  - cd components/at/private_include
+  - rm -f at_ota_token.h
+  - echo -e "#define CONFIG_esp_sr_OTA_TOKEN_ESP32C2_2MB \"$ESP32C2_2MB_TOKEN\"" >> at_ota_token.h
+  - echo -e "#define CONFIG_esp_sr_OTA_SSL_TOKEN_ESP32C2_2MB \"$ESP32C2_2MB_TOKEN\"" >> at_ota_token.h
+  - echo -e "#define CONFIG_esp_sr_OTA_TOKEN_ESP32C2_4MB \"$ESP32C2_4MB_TOKEN\"" >> at_ota_token.h
+  - echo -e "#define CONFIG_esp_sr_OTA_SSL_TOKEN_ESP32C2_4MB \"$ESP32C2_4MB_TOKEN\"" >> at_ota_token.h
+  - cd -
+
+  - *setup_idf_ci_env
+  - export esp_sr_PROJECT_BRANCH=${CI_COMMIT_REF_NAME}
+
+.esp_sr_build_template:
+  stage: build
+  image: $CI_DOCKER_REGISTRY/esp-env-v5.0:2
+  tags:
+    - build
+  variables:
+    <<: *global-variables
+  before_script:
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo -n $GITLAB_KEY >> ~/.ssh/id_rsa_base64
+    - base64 --decode --ignore-garbage ~/.ssh/id_rsa_base64 > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - echo -e "Host gitlab.espressif.cn\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+  artifacts:
+    name: esp-sr-artifacts
+    paths:
+      - sdkconfig
+      - build/*.bin
+      - build/*.elf
+      - build/*.map
+      - build/bootloader/*.bin
+      - build/partition_table/*.bin
+      - build/customized_partitions/*.bin
+      - build/flasher_args.json
+      - build/download.config
+      - build/factory/*
+    expire_in: 6 mos
+
+.esp_sr_build_template_esp32c2:
+  stage: build
+  image: $CI_DOCKER_REGISTRY/esp-env-v5.0:2
+  tags:
+    - build
+  variables:
+    <<: *global-variables
+  before_script:
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo -n $GITLAB_KEY >> ~/.ssh/id_rsa_base64
+    - base64 --decode --ignore-garbage ~/.ssh/id_rsa_base64 > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - echo -e "Host gitlab.espressif.cn\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+  artifacts:
+    name: esp-sr-artifacts
+    paths:
+      - sdkconfig
+      - build/*.bin
+      - build/*.elf
+      - build/*.map
+      - build/bootloader/*.bin
+      - build/partition_table/*.bin
+      - build/customized_partitions/*.bin
+      - build/flasher_args.json
+      - build/download.config
+      - build/factory/*
+      - build/custom_ota_binaries/*
+    expire_in: 6 mos
+
+.execute_script_esp32: &execute_script_esp32
+  - sed -i "s?https://github.com?$GITLAB_SSH_SERVER?g" module_config/${MODULE_CFG_DIR}/IDF_VERSION
+  - mkdir build
+  - cp module_info.json build/module_info.json
+  - export HAS_IDF_PREREQUISITES=1
+  - ./build.py install
+  - rm -rf build && mkdir build
+  - mv module_info.json build/module_info.json
+  - *before_build_esp32_series
+  - ./build.py build
+
+.execute_script_esp32c3: &execute_script_esp32c3
+  - sed -i "s?https://github.com?$GITLAB_SSH_SERVER?g" module_config/${MODULE_CFG_DIR}/IDF_VERSION
+  - mkdir build
+  - cp module_info.json build/module_info.json
+  - export HAS_IDF_PREREQUISITES=1
+  - ./build.py install
+  - rm -rf build && mkdir build
+  - mv module_info.json build/module_info.json
+  - *before_build_esp32c3_series
+  - ./build.py build
+
+.execute_script_esp32c2: &execute_script_esp32c2
+  - sed -i "s?https://github.com?$GITLAB_SSH_SERVER?g" module_config/${MODULE_CFG_DIR}/IDF_VERSION
+  - mkdir build
+  - cp module_info.json build/module_info.json
+  - export HAS_IDF_PREREQUISITES=1
+  - ./build.py install
+  - rm -rf build && mkdir build
+  - mv module_info.json build/module_info.json
+  - *before_build_esp32c2_series
+  - ./build.py build
+
+esp32_wroom_at:
+  extends:
+    - .esp_sr_build_template
+  script:
+    - export MODULE_CFG_DIR=module_esp32_default
+    - 'echo -e "{\"platform\": \"PLATFORM_ESP32\", \"module\": \"WROOM-32\", \"description\": \"\",\"silence\": 0}" > module_info.json'
+    - *execute_script_esp32
+
+esp32_wrover_at:
+  extends:
+    - .esp_sr_build_template
+  script:
+    - export MODULE_CFG_DIR=module_wrover-32
+    - 'echo -e "{\"platform\": \"PLATFORM_ESP32\", \"module\": \"WROVER-32\", \"description\": \"\",\"silence\": 1}" > module_info.json'
+    - *execute_script_esp32
+
+esp32_pico_d4_at:
+  extends:
+    - .esp_sr_build_template
+  script:
+    - export MODULE_CFG_DIR=module_esp32_default
+    - 'echo -e "{\"platform\": \"PLATFORM_ESP32\", \"module\": \"PICO-D4\", \"description\": \"\",\"silence\": 0}" > module_info.json'
+    - *execute_script_esp32
+
+esp32_solo_1_at:
+  extends:
+    - .esp_sr_build_template
+  script:
+    - export MODULE_CFG_DIR=module_esp32_default
+    - 'echo -e "{\"platform\": \"PLATFORM_ESP32\", \"module\": \"SOLO-1\", \"description\": \"\",\"silence\": 0}" > module_info.json'
+    - *execute_script_esp32
+
+esp32-d2wd_at:
+  extends:
+    - .esp_sr_build_template
+  script:
+    - export MODULE_CFG_DIR=module_esp32-d2wd
+    - 'echo -e "{\"platform\": \"PLATFORM_ESP32\", \"module\": \"ESP32-D2WD\", \"description\": \"\",\"silence\": 0}" > module_info.json'
+    - *execute_script_esp32
+
+esp32_mini_1_at:
+  extends:
+    - .esp_sr_build_template
+  script:
+    - export MODULE_CFG_DIR=module_esp32_default
+    - 'echo -e "{\"platform\": \"PLATFORM_ESP32\", \"module\": \"MINI-1\", \"description\": \"\",\"silence\": 0}" > module_info.json'
+    - *execute_script_esp32
+
+esp32_sdio_at:
+  extends:
+    - .esp_sr_build_template
+  script:
+    - export MODULE_CFG_DIR=module_esp32-sdio
+    - 'echo -e "{\"platform\": \"PLATFORM_ESP32\", \"module\": \"ESP32-SDIO\", \"description\": \"\",\"silence\": 0}" > module_info.json'
+    - *execute_script_esp32
+
+esp32_qcloud:
+  extends:
+    - .esp_sr_build_template
+  script:
+    - export MODULE_CFG_DIR=module_esp32_qcloud
+    - 'echo -e "{\"platform\": \"PLATFORM_ESP32\", \"module\": \"ESP32_QCLOUD\", \"description\": \"QCLOUD TX:17 RX:16\",\"silence\": 0}" > module_info.json'
+    - *execute_script_esp32
+
+esp32_at_all_function_test_without_bt:
+  extends:
+    - .esp_sr_build_template
+  script:
+    - echo -e "CONFIG_AT_FS_COMMAND_SUPPORT=y" >> module_config/module_wrover-32/sdkconfig.defaults
+    - echo -e "CONFIG_AT_ETHERNET_SUPPORT=y" >> module_config/module_wrover-32/sdkconfig.defaults
+    - echo -e "CONFIG_AT_EAP_COMMAND_SUPPORT=y" >> module_config/module_wrover-32/sdkconfig.defaults
+    - echo -e "CONFIG_AT_DRIVER_COMMAND_SUPPORT=y" >> module_config/module_wrover-32/sdkconfig.defaults
+    - echo -e "CONFIG_AT_WEB_SERVER_SUPPORT=y" >> module_config/module_wrover-32/sdkconfig.defaults
+    - echo -e "CONFIG_AT_WEB_CAPTIVE_PORTAL_ENABLE=y" >> module_config/module_wrover-32/sdkconfig.defaults
+    # disable BT
+    - echo -e "CONFIG_AT_BLE_COMMAND_SUPPORT=n" >> module_config/module_wrover-32/sdkconfig.defaults
+    - echo -e "CONFIG_AT_BLE_HID_COMMAND_SUPPORT=n" >> module_config/module_wrover-32/sdkconfig.defaults
+    - echo -e "CONFIG_AT_BLUFI_COMMAND_SUPPORT=n" >> module_config/module_wrover-32/sdkconfig.defaults
+    - echo -e "CONFIG_AT_BT_COMMAND_SUPPORT=n" >> module_config/module_wrover-32/sdkconfig.defaults
+
+    - sed -i '/ota_1/d' module_config/module_wrover-32/partitions_at.csv
+    - old_size_str=`cat module_config/module_wrover-32/partitions_at.csv | grep ota_0 | awk -F, '{print $5}'`
+    - let old_value=$old_size_str
+    - new_value=`expr $old_value + $old_value`
+    - new_size_str=`printf "0x%x" ${new_value}`
+    - sed -i '/ota_0/s/'$old_size_str'/'$new_size_str'/g' module_config/module_wrover-32/partitions_at.csv
+
+    - export MODULE_CFG_DIR=module_wrover-32
+    - 'echo -e "{\"platform\": \"PLATFORM_ESP32\", \"module\": \"WROVER-32\", \"description\": \"\",\"silence\": 0}" > module_info.json'
+    - *execute_script_esp32
+
+esp32_at_all_function_test_just_bt:
+  extends:
+    - .esp_sr_build_template
+  script:
+    # enable BT
+    - echo -e "CONFIG_AT_BT_COMMAND_SUPPORT=y" >> module_config/module_wrover-32/sdkconfig.defaults
+    - echo -e "CONFIG_AT_BT_SPP_COMMAND_SUPPORT=y" >> module_config/module_wrover-32/sdkconfig.defaults
+    - echo -e "CONFIG_AT_BT_A2DP_COMMAND_SUPPORT=y" >> module_config/module_wrover-32/sdkconfig.defaults
+    # disable non BT
+    - echo -e "CONFIG_AT_FS_COMMAND_SUPPORT=n" >> module_config/module_wrover-32/sdkconfig.defaults
+    - echo -e "CONFIG_AT_ETHERNET_SUPPORT=n" >> module_config/module_wrover-32/sdkconfig.defaults
+    - echo -e "CONFIG_AT_EAP_COMMAND_SUPPORT=n" >> module_config/module_wrover-32/sdkconfig.defaults
+    - echo -e "CONFIG_AT_DRIVER_COMMAND_SUPPORT=n" >> module_config/module_wrover-32/sdkconfig.defaults
+    - echo -e "CONFIG_AT_WEB_SERVER_SUPPORT=n" >> module_config/module_wrover-32/sdkconfig.defaults
+    - echo -e "CONFIG_AT_WEB_CAPTIVE_PORTAL_ENABLE=n" >> module_config/module_wrover-32/sdkconfig.defaults
+    - echo -e "CONFIG_AT_OTA_SUPPORT=n" >> module_config/module_wrover-32/sdkconfig.defaults
+    - echo -e "CONFIG_AT_MDNS_COMMAND_SUPPORT=n" >> module_config/module_wrover-32/sdkconfig.defaults
+    - echo -e "CONFIG_AT_WPS_COMMAND_SUPPORT=n" >> module_config/module_wrover-32/sdkconfig.defaults
+    - echo -e "CONFIG_AT_SMARTCONFIG_COMMAND_SUPPORT=n" >> module_config/module_wrover-32/sdkconfig.defaults
+    - echo -e "CONFIG_AT_PING_COMMAND_SUPPORT=n" >> module_config/module_wrover-32/sdkconfig.defaults
+    - echo -e "CONFIG_AT_MQTT_COMMAND_SUPPORT=n" >> module_config/module_wrover-32/sdkconfig.defaults
+    - echo -e "CONFIG_AT_HTTP_COMMAND_SUPPORT=n" >> module_config/module_wrover-32/sdkconfig.defaults
+    - echo -e "CONFIG_AT_SIGNALING_COMMAND_SUPPORT=n" >> module_config/module_wrover-32/sdkconfig.defaults
+    - echo -e "CONFIG_ESP_WIFI_SLP_IRAM_OPT=n" >> module_config/module_wrover-32/sdkconfig.defaults
+
+    - sed -i '/ota_1/d' module_config/module_wrover-32/partitions_at.csv
+    - old_size_str=`cat module_config/module_wrover-32/partitions_at.csv | grep ota_0 | awk -F, '{print $5}'`
+    - let old_value=$old_size_str
+    - new_value=`expr $old_value + $old_value`
+    - new_size_str=`printf "0x%x" ${new_value}`
+    - sed -i '/ota_0/s/'$old_size_str'/'$new_size_str'/g' module_config/module_wrover-32/partitions_at.csv
+
+    - export MODULE_CFG_DIR=module_wrover-32
+    - 'echo -e "{\"platform\": \"PLATFORM_ESP32\", \"module\": \"WROVER-32\", \"description\": \"\",\"silence\": 0}" > module_info.json'
+    - *execute_script_esp32
+
+esp32_ethernet_at:
+  extends:
+    - .esp_sr_build_template
+  script:
+    - echo -e "CONFIG_AT_FS_COMMAND_SUPPORT=y" >> module_config/module_wrover-32/sdkconfig.defaults
+    - echo -e "CONFIG_AT_ETHERNET_SUPPORT=y" >> module_config/module_wrover-32/sdkconfig.defaults
+    - echo -e "CONFIG_AT_EAP_COMMAND_SUPPORT=y" >> module_config/module_wrover-32/sdkconfig.defaults
+
+    - sed -i '/ota_1/d' module_config/module_wrover-32/partitions_at.csv
+    - old_size_str=`cat module_config/module_wrover-32/partitions_at.csv | grep ota_0 | awk -F, '{print $5}'`
+    - let old_value=$old_size_str
+    - new_value=`expr $old_value + $old_value`
+    - new_size_str=`printf "0x%x" ${new_value}`
+    - sed -i '/ota_0/s/'$old_size_str'/'$new_size_str'/g' module_config/module_wrover-32/partitions_at.csv
+
+    - export MODULE_CFG_DIR=module_wrover-32
+    - 'echo -e "{\"platform\": \"PLATFORM_ESP32\", \"module\": \"WROVER-32\", \"description\": \"\",\"silence\": 0}" > module_info.json'
+    - *execute_script_esp32
+
+esp32c3_mini_1_at:
+  extends:
+    - .esp_sr_build_template
+  script:
+    - export MODULE_CFG_DIR=module_esp32c3_default
+    - 'echo -e "{\"platform\": \"PLATFORM_ESP32C3\", \"module\": \"MINI-1\", \"description\": \"\",\"silence\": 0}" > module_info.json'
+    - *execute_script_esp32c3
+
+esp32c3_at_full_function_test:
+  extends:
+    - .esp_sr_build_template
+  script:
+    # enable all features
+    - echo -e "CONFIG_AT_FS_COMMAND_SUPPORT=y" >> module_config/module_esp32c3_default/sdkconfig.defaults
+    - echo -e "CONFIG_AT_DRIVER_COMMAND_SUPPORT=y" >> module_config/module_esp32c3_default/sdkconfig.defaults
+    - echo -e "CONFIG_AT_EAP_COMMAND_SUPPORT=y" >> module_config/module_esp32c3_default/sdkconfig.defaults
+    - echo -e "CONFIG_AT_WEB_SERVER_SUPPORT=y" >> module_config/module_esp32c3_default/sdkconfig.defaults
+    - echo -e "CONFIG_AT_WEB_CAPTIVE_PORTAL_ENABLE=y" >> module_config/module_esp32c3_default/sdkconfig.defaults
+
+    - export MODULE_CFG_DIR=module_esp32c3_default
+    - 'echo -e "{\"platform\": \"PLATFORM_ESP32C3\", \"module\": \"MINI-1\", \"description\": \"\",\"silence\": 0}" > module_info.json'
+    - *execute_script_esp32c3
+
+esp32c3_spi_at:
+  extends:
+    - .esp_sr_build_template
+  script:
+    - export MODULE_CFG_DIR=module_esp32c3-spi
+    - 'echo -e "{\"platform\": \"PLATFORM_ESP32C3\", \"module\": \"ESP32C3-SPI\", \"description\": \"\",\"silence\": 0}" > module_info.json'
+    - *execute_script_esp32c3
+
+esp32c3_qcloud:
+  extends:
+    - .esp_sr_build_template
+  script:
+    - export MODULE_CFG_DIR=module_esp32c3_qcloud
+    - 'echo -e "{\"platform\": \"PLATFORM_ESP32C3\", \"module\": \"ESP32C3_QCLOUD\", \"description\": \"QCLOUD TX:7 RX:6\",\"silence\": 0}" > module_info.json'
+    - *execute_script_esp32c3
+
+esp32c3_rainmaker:
+  extends:
+    - .esp_sr_build_template
+  script:
+    - export MODULE_CFG_DIR=module_esp32c3_rainmaker
+    - 'echo -e "{\"platform\": \"PLATFORM_ESP32C3\", \"module\": \"ESP32C3_RAINMAKER\", \"description\": \"\",\"silence\": 0}" > module_info.json'
+    - *execute_script_esp32c3
+
+esp32c2_4mb_at:
+  extends:
+    - .esp_sr_build_template_esp32c2
+  script:
+    - export MODULE_CFG_DIR=module_esp32c2_default
+    - 'echo -e "{\"platform\": \"PLATFORM_ESP32C2\", \"module\": \"ESP32C2-4MB\", \"description\": \"\",\"silence\": 0}" > module_info.json'
+    - *execute_script_esp32c2
+
+esp32c2_4mb_at_xtal_40mhz_test:
+  extends:
+    - .esp_sr_build_template_esp32c2
+  script:
+    # enable 40mhz xtal freq
+    - echo -e "CONFIG_XTAL_FREQ_40=y" >> module_config/module_esp32c2_default/sdkconfig.defaults
+
+    - export MODULE_CFG_DIR=module_esp32c2_default
+    - 'echo -e "{\"platform\": \"PLATFORM_ESP32C2\", \"module\": \"ESP32C2-4MB\", \"description\": \"\",\"silence\": 0}" > module_info.json'
+    - *execute_script_esp32c2
+
+esp32c2_2mb_at:
+  extends:
+    - .esp_sr_build_template_esp32c2
+  script:
+    - export MODULE_CFG_DIR=module_esp32c2-2mb
+    - 'echo -e "{\"platform\": \"PLATFORM_ESP32C2\", \"module\": \"ESP32C2-2MB\", \"description\": \"\",\"silence\": 0}" > module_info.json'
+    - *execute_script_esp32c2
+
+push_master_to_github:
+  stage: deploy
+  only:
+    - master
+    - /^release\/v.*$/
+  tags:
+    - deploy
+  when: on_success
+  image: $CI_DOCKER_REGISTRY/esp-env-v4.4:1
+  variables:
+    GIT_STRATEGY: clone
+    GITHUB_PUSH_REFS: refs/remotes/origin/release refs/remotes/origin/master
+  script:
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo -n $GH_PUSH_KEY > ~/.ssh/id_rsa_base64
+    - base64 --decode --ignore-garbage ~/.ssh/id_rsa_base64 > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+    - git remote add github git@github.com:espressif/esp-sr.git
+    # - git push --follow-tags github HEAD:master
+    - eval $(git for-each-ref --shell bash --format 'if [ $CI_COMMIT_SHA == %(objectname) ]; then git checkout -B %(refname:strip=3); git push --follow-tags github %(refname:strip=3); fi;' $GITHUB_PUSH_REFS)
+
+esp32_demo:
+  extends:
+    - .esp_sr_build_template
+  script:
+    # replace submodule esp-idf to internal repository to speedup cloning
+    - commit_str=$(awk '/commit:/{print $0}' module_config/module_esp32_default/IDF_VERSION)
+    - branch_str=$(awk '/branch:/{print $0}' module_config/module_esp32_default/IDF_VERSION)
+    - git clone -b ${branch_str#*branch:} ${GITLAB_SSH_SERVER}/espressif/esp-idf.git
+    - cd esp-idf
+    - git checkout ${commit_str#*commit:}
+    # (the same regular expressions are used to set these are used in 'only:' sections below
+    - source ./tools/ci/configure_ci_environment.sh
+    - tools/idf_tools.py --non-interactive install && eval "$(tools/idf_tools.py --non-interactive export)" || exit 1
+    # fetch the submodules (& if necessary re-fetch repo) from gitlab
+    - time ./tools/ci/get-full-sources.sh
+    - git submodule update --init
+    - pip install -r requirements.txt
+    - cd -
+
+    - cd examples/at_sdio_host/ESP32
+    - idf.py build
+    - cd -
+
+    - cd examples/at_spi_master/sdspi/ESP32
+    - idf.py build
+    - cd -
+
+doc_build_html_en:
+  stage: build
+  image: $CI_DOCKER_REGISTRY/esp-idf-doc-env-v5.0:2-2
+  tags:
+    - build_docs
+  needs: []
+  artifacts:
+    when: always
+    paths:
+      - docs/_build/*/*/*.txt
+      - docs/_build/*/*/html/*
+    expire_in: 6 mos
+  script:
+    - cd docs
+    - ./check_lang_folder_sync.sh
+    - ./check_doc_chars.py
+    - pip install -r requirements.txt
+    # build html
+    - build-docs -t {esp32,esp32c2,esp32c3} -l en -bs html
+
+doc_build_html_cn:
+  stage: build
+  image: $CI_DOCKER_REGISTRY/esp-idf-doc-env-v5.0:2-2
+  tags:
+    - build_docs
+  needs: []
+  artifacts:
+    when: always
+    paths:
+      - docs/_build/*/*/*.txt
+      - docs/_build/*/*/html/*
+    expire_in: 6 mos
+  script:
+    - cd docs
+    - ./check_lang_folder_sync.sh
+    - ./check_doc_chars.py
+    - pip install -r requirements.txt
+    # build html
+    - build-docs -t {esp32,esp32c2,esp32c3} -l zh_CN -bs html
+
+# Separate PDF build and HTML build due to artifacts size limit.
+doc_build_pdf_en:
+  stage: build
+  image: $CI_DOCKER_REGISTRY/esp-idf-doc-env-v5.0:2-2
+  tags:
+    - build_docs
+  needs: []
+  artifacts:
+    when: always
+    paths:
+      - docs/_build/*/*/*.txt
+      - docs/_build/*/*/latex/*
+    expire_in: 6 mos
+  script:
+    - cd docs
+    - ./check_lang_folder_sync.sh
+    - ./check_doc_chars.py
+    - pip install -r requirements.txt
+    # build pdf
+    - build-docs -t {esp32,esp32c2,esp32c3} -l en -bs latex
+
+doc_build_pdf_cn:
+  stage: build
+  image: $CI_DOCKER_REGISTRY/esp-idf-doc-env-v5.0:2-2
+  tags:
+    - build_docs
+  needs: []
+  artifacts:
+    when: always
+    paths:
+      - docs/_build/*/*/*.txt
+      - docs/_build/*/*/latex/*
+    expire_in: 6 mos
+  script:
+    - cd docs
+    - ./check_lang_folder_sync.sh
+    - ./check_doc_chars.py
+    - pip install -r requirements.txt
+    # build pdf
+    - build-docs -t {esp32,esp32c2,esp32c3} -l zh_CN -bs latex
+
+.deploy_docs_template:
+  stage: deploy_docs
+  image: $CI_DOCKER_REGISTRY/esp-idf-doc-env-v5.0:2-2
+  tags:
+    - deploy
+  needs:
+    - doc_build_html_en
+    - doc_build_html_cn
+    - doc_build_pdf_en
+    - doc_build_pdf_cn
+  script:
+    - source ${CI_PROJECT_DIR}/docs/utils.sh
+    - add_doc_server_ssh_keys $DOCS_DEPLOY_PRIVATEKEY $DOCS_DEPLOY_SERVER $DOCS_DEPLOY_SERVER_USER
+    - export GIT_VER=$(git describe --always)
+    - pip install -r ${CI_PROJECT_DIR}/docs/requirements.txt
+    - deploy-docs
+
+deploy_docs_preview:
+  extends:
+    - .deploy_docs_template
+  except:
+    refs:
+      - master
+  variables:
+    TYPE: "preview"
+    DOCS_BUILD_DIR: "${CI_PROJECT_DIR}/docs/_build/"
+    DOCS_DEPLOY_PRIVATEKEY: "$DOCS_PREVIEW_DEPLOY_KEY"
+    DOCS_DEPLOY_SERVER: "$DOCS_PREVIEW_SERVER"
+    DOCS_DEPLOY_SERVER_USER: "$DOCS_PREVIEW_SERVER_USER"
+    DOCS_DEPLOY_PATH: "$DOCS_PREVIEW_PATH"
+    DOCS_DEPLOY_URL_BASE: "https://$DOCS_PREVIEW_SERVER_URL/docs/esp-sr"
+
+deploy_docs_production:
+  extends:
+    - .deploy_docs_template
+  only:
+    refs:
+      - master
+      - /^release\/v.*$/
+  variables:
+    TYPE: "production"
+    DOCS_BUILD_DIR: "${CI_PROJECT_DIR}/docs/_build/"
+    DOCS_DEPLOY_PRIVATEKEY: "$DOCS_PROD_DEPLOY_KEY"
+    DOCS_DEPLOY_SERVER: "$DOCS_PROD_SERVER"
+    DOCS_DEPLOY_SERVER_USER: "$DOCS_PROD_SERVER_USER"
+    DOCS_DEPLOY_PATH: "$DOCS_PROD_PATH"
+    DOCS_DEPLOY_URL_BASE: "https://docs.espressif.com/projects/esp-sr"

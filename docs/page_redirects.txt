@@ -1,0 +1,9 @@
+# Redirects from "old URL" "new URL"
+#
+# Space delimited
+#
+# New URL should be relative to document root, only)
+#
+# Empty lines and lines starting with # are ignored
+
+# get-started/ESP_AT_Commands_Set              AT_Command_Set/AT_Command_Set

@@ -1,0 +1,7 @@
+.. This document contains all the inline substitutions in the ESP-AT repo.
+
+.. |icon-green-check| image:: ../../_static/icon-green-check.png
+
+.. |icon-orange-check| image:: ../../_static/icon-orange-check.png
+
+.. |icon-red-cross| image:: ../../_static/icon-red-cross.png
