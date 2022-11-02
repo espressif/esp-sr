@@ -6,7 +6,7 @@ Espressif Speech Wake-up Solution Customization Process
 
 Espressif provides users with the offline wake word customization
 service, which allows users to use both publicly available wake words
-(such as “Hi Lexin”, ”Alexa”, and “Espressif”) and customized wake
+(such as “Hi Lexin”, ”Alexa”, and “hi,ESP”) and customized wake
 words.
 
 1. If you want to use publicly available wake words for commercial use
