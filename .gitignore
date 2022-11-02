@@ -2,3 +2,4 @@ build/
 sdkconfig.old
 sdkconfig
 model/target/*
+.vscode

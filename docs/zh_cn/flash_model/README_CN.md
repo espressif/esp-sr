@@ -25,7 +25,7 @@ ESP32S3：
 
 运行 `idf.py menuconfig` 进入 `ESP Speech Recognition`:
 
-![overview](../img/model-1.png)
+![overview](../../.static/model-1.png)
 
 ### 1.1 model data path
 
@@ -42,11 +42,11 @@ ESP32S3：
 
 此选项默认打开，当用户只使用 AEC 或者 BSS 等，无须运行 WakeNet 或 MultiNet 时，请关闭次选项，将会减小工程固件的大小。
 - 根据menuconfig列表选择唤醒词模型，`ESP Speech Recognition -> Select wake words`.　括号中为唤醒词模型的名字，你需要在代码用名字切换，初始化wakenet. 
-![select wake wake](../img/wn_menu1.png)  
+![select wake wake](../../.static/wn_menu1.png)  
 - 如果想加载多个唤醒词，以便在代码中进行唤醒词的切换，首选选择'Load Multiple Wake Words'  
-![multi wake wake](../img/wn_menu2.png)  
+![multi wake wake](../../.static/wn_menu2.png)  
 然后按照列表选择多个唤醒词:  
-![multi wake wake](../img/wn_menu3.png)
+![multi wake wake](../../.static/wn_menu3.png)
   
  **注：多唤醒词选项只支持 ESP32S3，具体根据客户硬件flash容量，选择合适数量的唤醒词。**
 

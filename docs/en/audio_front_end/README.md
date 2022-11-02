@@ -12,17 +12,17 @@ Espressif AFE is divided into two sets of algorithms: 1) for speech recognition 
 
 - Speech recognition scenarios
 
-![overview](../img/AFE_SR_overview.png)
+![overview](../../.static/AFE_SR_overview.png)
 
 - Voice communication scenarios
 
-![overview](../img/AFE_VOIP_overview.png)
+![overview](../../.static/AFE_VOIP_overview.png)
 
 The data flow of Espressif AFE is also divided into two scenarios, shown as below:
 
 - Speech recognition scenarios
 
-![overview](../img/AFE_SR_workflow.png)
+![overview](../../.static/AFE_SR_workflow.png)
 
 The workflow is as follows:
 
@@ -33,7 +33,7 @@ The workflow is as follows:
 
 - Voice communication scenarios
 
-![overview](../img/AFE_VOIP_workflow.png)
+![overview](../../.static/AFE_VOIP_workflow.png)
 
 The workflow is as follows:
 
@@ -82,7 +82,7 @@ At present, the AEC only support one reference data , so ref_num can only be 0 o
 
  The input data is arranged as follows:
 
- <img src="../img/AFE_mode_0.png" height = "100" align=center />  
+ <img src="../../.static/AFE_mode_0.png" height = "100" align=center />  
 
 - AFE dual MIC
 
@@ -91,7 +91,7 @@ At present, the AEC only support one reference data , so ref_num can only be 0 o
 
   The input data is arranged as follows:
 
- <img src="../img/AFE_mode_other.png" height = "70" align=center />     
+ <img src="../../.static/AFE_mode_other.png" height = "70" align=center />     
 
 Note: the converted data size is: `afe->get_feed_chunksize * channel number * sizeof(short)`
 

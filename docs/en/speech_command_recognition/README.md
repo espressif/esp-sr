@@ -18,7 +18,7 @@ The MultiNet input is the audio processed by the audio-front-end algorithm (AFE)
 
 The following table shows the model support of Espressif SoCs:
 
-![multinet_model](../img/MultiNet_model.png)
+![multinet_model](../../.static/MultiNet_model.png)
 
 Note: the model ending with Q8 represents the 8bit version of the model, means more lightweight.
 
@@ -26,7 +26,7 @@ Note: the model ending with Q8 represents the 8bit version of the model, means m
 
 Please see the flow diagram below:
 
-![speech_command-recognition-system](../img/multinet_workflow.png)
+![speech_command-recognition-system](../../.static/multinet_workflow.png)
 
 
 ## 3. User Guide
@@ -72,7 +72,7 @@ Here we provide two methods of adding speech commands:
 
   Users can refer to the example in ESP-Skainet, users can define their own speech commands by `idf.py menuconfig -> ESP Speech Recognition-> Add Chinese speech commands/Add English speech commands`.
   
-    ![menuconfig_add_speech_commands](../img/menuconfig_add_speech_commands.png)
+    ![menuconfig_add_speech_commands](../../.static/menuconfig_add_speech_commands.png)
 
   Please note that a single `Command ID` can support multiple phrases. For example, "da kai kong tiao" and "kai kong tiao" have the same meaning, you can write them in the entry corresponding to the same command ID, and separate the adjacent entries with the English character "," without spaces before and after ",".
  

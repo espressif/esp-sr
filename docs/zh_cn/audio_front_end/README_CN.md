@@ -12,17 +12,17 @@
 
 - 语音识别场景
 
-![overview](../img/AFE_SR_overview.png)
+![overview](../../.static/AFE_SR_overview.png)
 
 - 语音通话场景
 
-![overview](../img/AFE_VOIP_overview.png)
+![overview](../../.static/AFE_VOIP_overview.png)
 
 乐鑫 AFE 的数据流也相应分为两种场景，如下所示：
 
 - 语音识别场景
 
-![overview](../img/AFE_SR_workflow.png)
+![overview](../../.static/AFE_SR_workflow.png)
 
 工作流程如下：
 
@@ -33,7 +33,7 @@
 
 - 语音通话场景
 
-![overview](../img/AFE_VOIP_workflow.png)
+![overview](../../.static/AFE_VOIP_workflow.png)
 
 工作流程如下：
 
@@ -82,7 +82,7 @@
  
  数据排布如下：
  
- <img src="../img/AFE_mode_0.png" height = "100" align=center />  
+ <img src="../../.static/AFE_mode_0.png" height = "100" align=center />  
 
 - AFE 双麦场景
 
@@ -91,7 +91,7 @@
 
  数据排布如下：
  
-  <img src="../img/AFE_mode_other.png" height = "70" align=center />  
+  <img src="../../.static/AFE_mode_other.png" height = "70" align=center />  
 
 注意：换算成数据量大小为：`afe->get_feed_chunksize * 通道数 * sizeof(short)` 
 

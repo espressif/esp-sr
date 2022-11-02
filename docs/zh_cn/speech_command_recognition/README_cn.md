@@ -18,7 +18,7 @@ MultiNet 输入为经过前端语音算法（AFE）处理过的音频，格式�
 
 以下表格展示在不同芯片上的模型支持：
 
-![multinet_model](../img/MultiNet_model.png)
+![multinet_model](../../.static/MultiNet_model.png)
 
 用户选择不同的模型的方法请参考 [flash model](../flash_model/README_CN.md) 。
 
@@ -28,7 +28,7 @@ MultiNet 输入为经过前端语音算法（AFE）处理过的音频，格式�
 
 可以参考以下命令词识别原理：
 
-![speech_command-recognition-system](../img/multinet_workflow.png)
+![speech_command-recognition-system](../../.static/multinet_workflow.png)
 
 ## 3. 使用指南
 
@@ -77,7 +77,7 @@ MultiNet 支持多种且灵活的命令词设置方式，用户无论通过那�
  
    可以参考 ESP-Skainet 中 example 通过 `idf.py menuconfig -> ESP Speech Recognition-> Add Chinese speech commands/Add English speech commands` 添加命令词。
 
-    ![menuconfig_add_speech_commands](../img/menuconfig_add_speech_commands.png)
+    ![menuconfig_add_speech_commands](../../.static/menuconfig_add_speech_commands.png)
   
     请注意单个 Command ID 可以支持多个短语，比如“打开空调”和“开空调”表示的意义相同，则可以将其写在同一个 Command ID 对应的词条中，用英文字符“,”隔开相邻词条（“,”前后无需空格）。
   

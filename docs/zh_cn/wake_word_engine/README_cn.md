@@ -6,7 +6,7 @@ WakeNet是一个基于神经网络，为低功耗嵌入式MCU设计的的唤醒�
 
 WakeNet的流程图如下：
 <center>
-<img src="../img/wakenet_workflow.png" width = "800" />
+<img src="../../.static/wakenet_workflow.png" width = "800" />
 </center>
 
 
@@ -26,7 +26,7 @@ WakeNet的流程图如下：
 
 以下表格展示在不同芯片上的模型支持：
 
-![wakent_model](../img/WakeNet_model.png)
+![wakent_model](../../.static/WakeNet_model.png)
 
 ## WakeNet使用
 

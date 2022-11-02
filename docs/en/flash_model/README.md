@@ -25,7 +25,7 @@ So that on ESP32S3 you can:
 
 Run `idf.py menuconfig` navigate to `ESP Speech Recognition`:
 
-![overview](../img/model-1.png)
+![overview](../../.static/model-1.png)
 
 ### 1.1 model data path
 
@@ -43,11 +43,11 @@ This option needs to be turned on. Users do not need to modify it. Please keep t
 This option is turned on by default. When the user only uses `AEC` or `BSS`, etc., and does not need to run `WakeNet` or `MultiNet`, please turn off this option, which will reduce the size of the project firmware.
 
 - Select wake words by menuconfig, `ESP Speech Recognition -> Select wake words`. The model name of wake word in parentheses is used to initialize wakenet handle.   
-  ![select wake wake](../img/wn_menu1.png)  
+  ![select wake wake](../../.static/wn_menu1.png)  
 - If you want to select multiple wake words, please select `Load Multiple Wake Words` ( **Note this option only supports ESP32S3**)
-![multi wake wake](../img/wn_menu2.png)  
+![multi wake wake](../../.static/wn_menu2.png)  
   Then you can select multiple wake words at the same time  
-![multi wake wake](../img/wn_menu3.png)
+![multi wake wake](../../.static/wn_menu3.png)
 
 For more details, please refer to [WakeNet](../wake_word_engine/README.md) .
  

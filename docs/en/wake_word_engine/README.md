@@ -7,7 +7,7 @@ wakeNet, which is a wake word engine built upon neural network, is specially des
 Please see the flow diagram of wakeNet below:
 
 <center>
-<img src="../img/wakenet_workflow.png" width = "800" />
+<img src="../../.static/wakenet_workflow.png" width = "800" />
 </center>
 
 - Speech Feature:  
