@@ -14,7 +14,7 @@ Espressif provides users with the offline wake word customization service, which
 		- It will take two to three weeks for Espressif to train and optimize the corpus after the hardware design meets our requirement;
 		- It will be delivered in a static library of wake word;
 		- Espressif will charge training fees based on the scale of your production.
-		
+
 	- Otherwise
 		- Espressif will collect and provide all the training corpus;
 		- Espressif will deliver a static library file of successfully trained wake word to you, but won't share the corpus;
@@ -30,8 +30,6 @@ Espressif provides users with the offline wake word customization service, which
  	- Please set them by yourself referring to [esp-sr](https://github.com/espressif/esp-sr/tree/c5896943ea278195968c93c8b3466c720e641ebc/speech_command_recognition) algorithm. They do not need additional customization.
  	- Similar to speech wake words, the effect of command words is also related to hardware designs, so please refer to *Espressif MIC Design Guidelines*.
 
- 
---------
 #### 2.1 Requirements on Corpus
 
 As mentioned above, you can provide your own training corpus for Espressif. Below are the requirements.

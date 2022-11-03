@@ -5,13 +5,13 @@
 
 1. Type: omnidirectional MEMS microphone
 2. Sensitivity
-	- Under 1 Pa sound pressure, it should be no less than -38 dBV for analog microphones, and -26 dB for digital microphones. 
-	- The tolerance should be controlled within ±2 dB, and within ±1 dB for microphone arrays.
+    - Under 1 Pa sound pressure, it should be no less than -38 dBV for analog microphones, and -26 dB for digital microphones. 
+    - The tolerance should be controlled within ±2 dB, and within ±1 dB for microphone arrays.
 3. Signal-to-noise ratio (SNR)
-	- No less than 62 dB. Higher than 64 dB is recommended.
-	- Frequency response fluctuates within ±3 dB from 50 to 16 kHz. 
-	- PSRR should be larger than 55 dB for MEMS microphones.
-		
+    - No less than 62 dB. Higher than 64 dB is recommended.
+    - Frequency response fluctuates within ±3 dB from 50 to 16 kHz. 
+    - PSRR should be larger than 55 dB for MEMS microphones.
+
 ### Structure Design
 
 1. The aperture or width of the microphone hole is recommended to be greater than 1 mm, the pickup pipe should be as short as possible, and the cavity should be as small as possible to ensure that the resonance frequency of the microphone and structural components is above 9 kHz.

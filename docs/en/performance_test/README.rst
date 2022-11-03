@@ -4,7 +4,7 @@ Performance Test
 AFE
 ---
 
-1.1 Resource Occupancy(ESP32)
+Resource Occupancy(ESP32)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 +-----------------+-----------------+-----------------+-----------------+
@@ -105,8 +105,7 @@ Performance
 
 False triggering rate: 1 time in 12 hours
 
-**Note**: We use the ESP32-S3-Korvo V4.0 development board and the
-WakeNet9(Alexa) model in our test.
+**Note**: We use the ESP32-S3-Korvo V4.0 development board and the WakeNet9(Alexa) model in our test.
 
 MultiNet
 --------

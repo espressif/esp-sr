@@ -3,10 +3,7 @@ Audio Front-end 框架
 
 :link_to_translation:`en:[English]`
 
-
 乐鑫 Audio Front-end(AFE) 算法框架由乐鑫 AI 实验室自主开发。该框架基于 ESP32 系列芯片，能够提供高质量并且稳定的音频数据。
-
---------------
 
 概述
 ----
@@ -15,19 +12,19 @@ Audio Front-end 框架
 
 乐鑫 AFE 的功能分为两套：
 
-1. 针对语音识别场景；
-2. 针对语音通话场景。如下所示：
+#. 针对语音识别场景；
+#. 针对语音通话场景。如下所示：
 
 -  语音识别场景
 
 .. figure:: ../../.static/AFE_SR_overview.png
-   :alt: overview
+    :alt: overview
 
 
 -  语音通话场景
 
 .. figure:: ../../.static/AFE_VOIP_overview.png
-   :alt: overview
+    :alt: overview
 
 
 乐鑫 AFE 的数据流也相应分为两种场景，如下所示：
@@ -35,60 +32,51 @@ Audio Front-end 框架
 -  语音识别场景
 
 .. figure:: ../../.static/AFE_SR_workflow.png
-   :alt: overview
-
+    :alt: overview
 
 工作流程如下：
 
-1. 使用 **ESP_AFE_SR_HANDLE**\ ，进行AFE 的创建和初始化(``voice_communication_init``\ 需配置为 false )
-2. AFE feed，输入音频数据，feed 内部会先进行 AEC 算法处理
-3. 内部: 进行 BSS/NS 算法处理
-4. AFE fetch，返回处理过的单通道音频数据和相关信息， fetch 内部会进行
-   VAD 处理，以及唤醒词的检测，具体行为取决于用户对 ``afe_config_t``
-   结构体的配置。(注：\ ``wakenet_init`` 和 ``voice_communication_init``
-   不可同时配置为 true)
+#. 使用 **ESP_AFE_SR_HANDLE**，进行AFE 的创建和初始化(``voice_communication_init`` 需配置为 false )
+#. AFE feed，输入音频数据，feed 内部会先进行 AEC 算法处理
+#. 内部: 进行 BSS/NS 算法处理
+#. AFE fetch，返回处理过的单通道音频数据和相关信息， fetch 内部会进行 VAD 处理，以及唤醒词的检测，具体行为取决于用户对 ``afe_config_t`` 结构体的配置。(注： ``wakenet_init`` 和 ``voice_communication_init`` 不可同时配置为 true)
 
 -  语音通话场景
 
 .. figure:: ../../.static/AFE_VOIP_workflow.png
-   :alt: overview
+    :alt: overview
 
 
 工作流程如下：
 
-1. 使用 **ESP_AFE_VC_HANDLE**\ ，进行AFE 的创建和初始化
-   (``voice_communication_init``\ 需配置为 true )
-2. AFE feed，输入音频数据，feed 内部会先进行 AEC 算法处理
-3. 内部: 首先进行 BSS/NS 算法处理；若为双麦，随后还会进行MISO 算法处理；
-4. AFE fetch，返回处理过的单通道音频数据和相关信息。其中会进行AGC非线性放大，具体增益值取决于用户对
-   ``afe_config_t``
-   结构体的配置；若为双麦，在AGC之前还会进行降噪处理。(注：\ ``wakenet_init``
-   和 ``voice_communication_init`` 不可同时配置为 true)
+#. 使用 **ESP_AFE_VC_HANDLE** ，进行AFE 的创建和初始化 (``voice_communication_init`` 需配置为 true )
+#. AFE feed，输入音频数据，feed 内部会先进行 AEC 算法处理
+#. 内部: 首先进行 BSS/NS 算法处理；若为双麦，随后还会进行MISO 算法处理；
+#. AFE fetch，返回处理过的单通道音频数据和相关信息。其中会进行AGC非线性放大，具体增益值取决于用户对 ``afe_config_t`` 结构体的配置；若为双麦，在AGC之前还会进行降噪处理。(注： ``wakenet_init`` 和 ``voice_communication_init`` 不可同时配置为 true)
 
-**Note:** ``afe->feed()`` 和 ``afe->fetch()``
-对用户可见，\ ``Internal BSS/NS/MISO Task`` 对用户不可见。
+.. note::
+    ``afe->feed()`` 和 ``afe->fetch()`` 对用户可见， ``Internal BSS/NS/MISO Task`` 对用户不可见。
 
-   * AEC 在 afe->feed() 函数中运行；若 aec_init 配置为 false 状态，BSS/NS 将会在 afe->feed() 函数中运行。
-   * BSS/NS/MISO 为 AFE 内部独立 Task 进行处理；
-   * VAD/WakeNet 的结果，以及处理后的单通道音频，通过 afe->fetch()
-     函数获取。
+    * AEC 在 afe->feed() 函数中运行；若 aec_init 配置为 false 状态，BSS/NS 将会在 afe->feed() 函数中运行。
+    * BSS/NS/MISO 为 AFE 内部独立 Task 进行处理；
+    * VAD/WakeNet 的结果，以及处理后的单通道音频，通过 afe->fetch() 函数获取。
 
 选择 AFE Handle
 ~~~~~~~~~~~~~~~
 
-目前 AFE 支持单麦和双麦两种应用场景，并且可对算法模块进行灵活配置。单麦场景内部 Task 为 NS 处理，双麦场景内部 Task 为 BSS 处理，双麦场景若配置为语音通话(即：\ ``wakenet_init=false, voice_communication_init=true``)，则会再增加一个 MISO 的内部 Task。
+目前 AFE 支持单麦和双麦两种应用场景，并且可对算法模块进行灵活配置。单麦场景内部 Task 为 NS 处理，双麦场景内部 Task 为 BSS 处理，双麦场景若配置为语音通话(即： ``wakenet_init=false, voice_communication_init=true``)，则会再增加一个 MISO 的内部 Task。
 
 对于AFE handle的获取，语音识别场景与语音通话场景，略有差异：
 
 -  语音识别
 
-   ::
+    ::
 
         esp_afe_sr_iface_t *afe_handle = &ESP_AFE_SR_HANDLE;
 
 -  语音通话
 
-   ::
+    ::
 
         esp_afe_sr_iface_t *afe_handle = &ESP_AFE_VC_HANDLE;
 
@@ -99,10 +87,10 @@ Audio Front-end 框架
 
 ::
 
-   total_ch_num=1, mic_num=1, ref_num=0
-   total_ch_num=2, mic_num=1, ref_num=1
-   total_ch_num=2, mic_num=2, ref_num=0
-   total_ch_num=3, mic_num=2, ref_num=1
+    total_ch_num=1, mic_num=1, ref_num=0
+    total_ch_num=2, mic_num=1, ref_num=1
+    total_ch_num=2, mic_num=2, ref_num=0
+    total_ch_num=3, mic_num=2, ref_num=1
 
 (注解: total_ch_num: 总通道数，mic_num: 麦克风通道数，ref_num: 参考回路通道数)
 
@@ -110,27 +98,27 @@ Audio Front-end 框架
 
 -  AFE 单麦场景
 
-   -  输入音频格式为 16KHz, 16bit, 双通道 (1个通道为 mic 数据，另一个通道为参考回路) ; 若不需要 AEC,音频不包含参考回路，则可只包含1个通道 mic 数据，ref_num 设置为0。
-   -  输入数据帧长，会根据用户配置的算法模块不同而有差异, 用户可以使用 ``afe->get_feed_chunksize`` 来获取需要的采样点数目（采样点数据类型为 int16）
+    -  输入音频格式为 16KHz, 16bit, 双通道 (1个通道为 mic 数据，另一个通道为参考回路) ; 若不需要 AEC,音频不包含参考回路，则可只包含1个通道 mic 数据，ref_num 设置为0。
+    -  输入数据帧长，会根据用户配置的算法模块不同而有差异, 用户可以使用 ``afe->get_feed_chunksize`` 来获取需要的采样点数目（采样点数据类型为 int16）
 
 数据排布如下：
 
-   .. figure:: ../../.static/AFE_mode_0.png
-      :alt: input data of single MIC
-      :height: 0.7in
+    .. figure:: ../../.static/AFE_mode_0.png
+        :alt: input data of single MIC
+        :height: 0.7in
 
 -  AFE 双麦场景
 
-   -  输入音频格式为 16KHz, 16bit, 三通道；若不需要 AEC,音频不包含参考回路，则可只包含两个通道 mic 数据，ref_num 设置为0。
-   -  输入数据帧长，会根据用户配置的算法模块不同而有差异,用户可以使用 ``afe->get_feed_chunksize`` 来获取需要填充的数据量
+    -  输入音频格式为 16KHz, 16bit, 三通道；若不需要 AEC,音频不包含参考回路，则可只包含两个通道 mic 数据，ref_num 设置为0。
+    -  输入数据帧长，会根据用户配置的算法模块不同而有差异,用户可以使用 ``afe->get_feed_chunksize`` 来获取需要填充的数据量
 
 数据排布如下：
 
-   .. figure:: ../../.static/AFE_mode_other.png
-      :alt: input data of dual MIC
-      :height: 0.75in
+    .. figure:: ../../.static/AFE_mode_other.png
+        :alt: input data of dual MIC
+        :height: 0.75in
 
-注意：换算成数据量大小为：\ ``afe->get_feed_chunksize * 通道数 * sizeof(short)``
+注意：换算成数据量大小为： ``afe->get_feed_chunksize * 通道数 * sizeof(short)``
 
 AEC 简介
 ~~~~~~~~
@@ -176,26 +164,23 @@ WakeNet or Bypass 简介
 
 AFE 的输出音频为单通道数据。在语音识别场景，若WakeNet 开启的情况下，AFE 会输出有目标人声的单通道数据。在语音通话场景，将会输出信噪比更高的单通道数据。
 
---------------
-
 快速开始
 --------
 
 定义 afe_handle
 ~~~~~~~~~~~~~~~~~~
 
-``afe_handle`` 是用户后续调用 afe 接口的函数句柄。所以第一步需先获得
-``afe_handle``\ 。
+``afe_handle`` 是用户后续调用 afe 接口的函数句柄。所以第一步需先获得 ``afe_handle``。
 
 -  语音识别
 
-   ::
+    ::
 
         esp_afe_sr_iface_t *afe_handle = &ESP_AFE_SR_HANDLE;
 
 -  语音通话
 
-   ::
+    ::
 
         esp_afe_sr_iface_t *afe_handle = &ESP_AFE_VC_HANDLE;
 
@@ -206,33 +191,33 @@ AFE 的输出音频为单通道数据。在语音识别场景，若WakeNet 开�
 
 ::
 
-   afe_config_t afe_config = AFE_CONFIG_DEFAULT();
+    afe_config_t afe_config = AFE_CONFIG_DEFAULT();
 
-可调整\ ``afe_config``\ 中各算法模块的使能及其相应参数:
+可调整 ``afe_config`` 中各算法模块的使能及其相应参数:
 
 ::
 
-   #define AFE_CONFIG_DEFAULT() { \
-       .aec_init = true, \
-       .se_init = true, \
-       .vad_init = true, \
-       .wakenet_init = true, \
-       .voice_communication_init = false, \
-       .voice_communication_agc_init = false, \
-       .voice_communication_agc_gain = 15, \
-       .vad_mode = VAD_MODE_3, \
-       .wakenet_model_name = NULL, \
-       .wakenet_mode = DET_MODE_2CH_90, \
-       .afe_mode = SR_MODE_LOW_COST, \
-       .afe_perferred_core = 0, \
-       .afe_perferred_priority = 5, \
-       .afe_ringbuf_size = 50, \
-       .memory_alloc_mode = AFE_MEMORY_ALLOC_MORE_PSRAM, \
-       .agc_mode = AFE_MN_PEAK_AGC_MODE_2, \
-       .pcm_config.total_ch_num = 3, \
-       .pcm_config.mic_num = 2, \
-       .pcm_config.ref_num = 1, \
-   }
+    #define AFE_CONFIG_DEFAULT() { \
+        .aec_init = true, \
+        .se_init = true, \
+        .vad_init = true, \
+        .wakenet_init = true, \
+        .voice_communication_init = false, \
+        .voice_communication_agc_init = false, \
+        .voice_communication_agc_gain = 15, \
+        .vad_mode = VAD_MODE_3, \
+        .wakenet_model_name = NULL, \
+        .wakenet_mode = DET_MODE_2CH_90, \
+        .afe_mode = SR_MODE_LOW_COST, \
+        .afe_perferred_core = 0, \
+        .afe_perferred_priority = 5, \
+        .afe_ringbuf_size = 50, \
+        .memory_alloc_mode = AFE_MEMORY_ALLOC_MORE_PSRAM, \
+        .agc_mode = AFE_MN_PEAK_AGC_MODE_2, \
+        .pcm_config.total_ch_num = 3, \
+        .pcm_config.mic_num = 2, \
+        .pcm_config.ref_num = 1, \
+    }
 
 -  aec_init: AEC 算法是否使能。
 
@@ -243,7 +228,7 @@ AFE 的输出音频为单通道数据。在语音识别场景，若WakeNet 开�
 -  wakenet_init: 唤醒是否使能。
 
 -  voice_communication_init: 语音通话是否使能。与 wakenet_init
-   不能同时使能。
+    不能同时使能。
 
 -  voice_communication_agc_init: 语音通话中AGC是否使能。
 
@@ -251,18 +236,17 @@ AFE 的输出音频为单通道数据。在语音识别场景，若WakeNet 开�
 
 -  vad_mode: VAD 检测的操作模式，越大越激进。
 
--  wakenet_model_name: 宏\ ``AFE_CONFIG_DEFAULT()`` \ 中该值默认为NULL。使用 ``idf.py menuconfig`` 选择了相应的唤醒模型后，在调用\ ``afe_handle->create_from_config``\ 之前，需给该处赋值具体的模型名字，类型为字符串形式。唤醒模型的具体说明，详见：\ `flash_model <../flash_model/README_cn.md>`__(注意：示例代码中，使用了 esp_srmodel_filter() 获取模型名字，若 menuconfig 中选择了多个模型共存，该函数将会随机返回一个模型名字)
+-  wakenet_model_name: 宏 ``AFE_CONFIG_DEFAULT()``  中该值默认为NULL。使用 ``idf.py menuconfig`` 选择了相应的唤醒模型后，在调用 ``afe_handle->create_from_config`` 之前，需给该处赋值具体的模型名字，类型为字符串形式。唤醒模型的具体说明，详见： `flash_model <../flash_model/README_cn.md>`__(注意：示例代码中，使用了 esp_srmodel_filter() 获取模型名字，若 menuconfig 中选择了多个模型共存，该函数将会随机返回一个模型名字)
 
 -  wakenet_mode: 唤醒的模式。对应为多少通道的唤醒，根据mic通道的数量选择
 
 -  afe_mode: 乐鑫 AFE 目前支持 2 种工作模式，分别为：SR_MODE_LOW_COST,SR_MODE_HIGH_PERF。详细可见 afe_sr_mode_t 枚举。
 
-   -  SR_MODE_LOW_COST: 量化版本，占用资源较少。
+    -  SR_MODE_LOW_COST: 量化版本，占用资源较少。
 
-   -  SR_MODE_HIGH_PERF: 非量化版本，占用资源较多。
+    -  SR_MODE_HIGH_PERF: 非量化版本，占用资源较多。
 
-      **ESP32 芯片，只支持模式 SR_MODE_HIGH_PERF;
-      ESP32S3 芯片，两种模式均支持**
+      **ESP32 芯片，只支持模式 SR_MODE_HIGH_PERF; ESP32S3 芯片，两种模式均支持**
 
 -  afe_perferred_core: AFE 内部 BSS/NS/MISO 算法，运行在哪个 CPU 核。
 
@@ -272,29 +256,29 @@ AFE 的输出音频为单通道数据。在语音识别场景，若WakeNet 开�
 
 -  memory_alloc_mode: 内存分配的模式。可配置三个值：
 
-   -  AFE_MEMORY_ALLOC_MORE_INTERNAL: 更多的从内部ram分配。
+    -  AFE_MEMORY_ALLOC_MORE_INTERNAL: 更多的从内部ram分配。
 
-   -  AFE_MEMORY_ALLOC_INTERNAL_PSRAM_BALANCE: 部分从内部ram分配。
+    -  AFE_MEMORY_ALLOC_INTERNAL_PSRAM_BALANCE: 部分从内部ram分配。
 
-   -  AFE_MEMORY_ALLOC_MORE_PSRAM: 绝大部分从外部psram分配
+    -  AFE_MEMORY_ALLOC_MORE_PSRAM: 绝大部分从外部psram分配
 
 -  agc_mode: 将音频线性放大的 level 配置，该配置在语音识别场景下起作用，并且在唤醒使能时才生效。可配置四个值：
 
-   -  AFE_MN_PEAK_AGC_MODE_1: 线性放大喂给后续multinet的音频，峰值处为 -5dB。
+    -  AFE_MN_PEAK_AGC_MODE_1: 线性放大喂给后续multinet的音频，峰值处为 -5dB。
 
-   -  AFE_MN_PEAK_AGC_MODE_2: 线性放大喂给后续multinet的音频，峰值处为 -4dB。
+    -  AFE_MN_PEAK_AGC_MODE_2: 线性放大喂给后续multinet的音频，峰值处为 -4dB。
 
-   -  AFE_MN_PEAK_AGC_MODE_3: 线性放大喂给后续multinet的音频，峰值处为 -3dB。
+    -  AFE_MN_PEAK_AGC_MODE_3: 线性放大喂给后续multinet的音频，峰值处为 -3dB。
 
-   -  AFE_MN_PEAK_NO_AGC: 不做线性放大
+    -  AFE_MN_PEAK_NO_AGC: 不做线性放大
 
 -  pcm_config: 根据 ``afe->feed()`` 喂入的音频结构进行配置，该结构体有三个成员变量需要配置：
 
-   -  total_ch_num: 音频总的通道数，total_ch_num = mic_num + ref_num。
+    -  total_ch_num: 音频总的通道数，total_ch_num = mic_num + ref_num。
 
-   -  mic_num: 音频的麦克风通道数。目前仅支持配置为 1 或 2。
+    -  mic_num: 音频的麦克风通道数。目前仅支持配置为 1 或 2。
 
-   -  ref_num: 音频的参考回路通道数，目前仅支持配置为 0 或 1。
+    -  ref_num: 音频的参考回路通道数，目前仅支持配置为 0 或 1。
 
 创建 afe_data
 ~~~~~~~~~~~~~~~~
@@ -303,7 +287,7 @@ AFE 的输出音频为单通道数据。在语音识别场景，若WakeNet 开�
 
 ::
 
-   /**
+    /**
     * @brief Function to initialze a AFE_SR instance
     * 
     * @param afe_config        The config of AFE_SR
@@ -320,7 +304,7 @@ feed 音频数据
 
 ::
 
-   /**
+    /**
     * @brief Feed samples of an audio stream to the AFE_SR
     *
     * @Warning  The input data should be arranged in the format of channel interleaving.
@@ -340,7 +324,7 @@ feed 音频数据
 
 ::
 
-   /**
+    /**
     * @brief Get the total channel number which be config
     * 
     * @param afe   The AFE_SR object to query
@@ -357,7 +341,7 @@ fetch 的数据采样点数目（采样点数据类型为 int16）可以通过 `
 
 ::
 
-   /**
+    /**
     * @brief Get the amount of each channel samples per frame that need to be passed to the function
     *
     * Every speech enhancement AFE_SR processes a certain number of samples at the same time. This function
@@ -372,7 +356,7 @@ fetch 的数据采样点数目（采样点数据类型为 int16）可以通过 `
 
 ::
 
-   /**
+    /**
     * @brief fetch enhanced samples of an audio stream from the AFE_SR
     *
     * @Warning  The output is single channel data, no matter how many channels the input is.
@@ -386,11 +370,11 @@ fetch 的数据采样点数目（采样点数据类型为 int16）可以通过 `
 
 ::
 
-   /**
+    /**
     * @brief The result of fetch function
     */
-   typedef struct afe_fetch_result_t
-   {
+    typedef struct afe_fetch_result_t
+    {
        int16_t *data;                          // the data of audio.
        int data_size;                          // the size of data. The unit is byte.
        int wakeup_state;                       // the value is wakenet_state_t
@@ -400,7 +384,7 @@ fetch 的数据采样点数目（采样点数据类型为 int16）可以通过 `
        int wake_word_length;                   // the length of wake word. It's unit is the number of samples.
        int ret_value;                          // the return state of fetch function
        void* reserved;                         // reserved for future use
-   } afe_fetch_result_t;
+    } afe_fetch_result_t;
 
 WakeNet 使用
 ~~~~~~~~~~~~~
@@ -409,7 +393,7 @@ WakeNet 使用
 
 用户可以调用 ``afe_handle->disable_wakenet(afe_data)`` 来停止 WakeNet。当后续应用结束后又可以调用 ``afe_handle->enable_wakenet(afe_data)``来开启 WakeNet。
 
-另外，ESP32S3 芯片，支持唤醒词切换。(注： ESP32 芯片只支持一个唤醒词，不支持切换)。在初始化 AFE 完成后，ESP32S3 芯片可通过 ``set_wakenet()``\ 函数切换唤醒词。例如，``afe_handle->set_wakenet(afe_data, “wn9_hilexin”)`` 切换到“Hi Lexin”唤醒词。具体如何配置多个唤醒词，详见：\ `flash_model <../flash_model/README_CN.md>`__
+另外，ESP32S3 芯片，支持唤醒词切换。(注： ESP32 芯片只支持一个唤醒词，不支持切换)。在初始化 AFE 完成后，ESP32S3 芯片可通过 ``set_wakenet()`` 函数切换唤醒词。例如, ``afe_handle->set_wakenet(afe_data, “wn9_hilexin”)`` 切换到“Hi Lexin”唤醒词。具体如何配置多个唤醒词，详见： `flash_model <../flash_model/README_CN.md>`__
 
 AEC 使用
 ~~~~~~~~
@@ -418,8 +402,8 @@ AEC 的使用和 WakeNet 相似，用户可以根据自己的需求来停止或�
 
 -  停止 AEC
 
-   afe->disable_aec(afe_data);
+    afe->disable_aec(afe_data);
 
 -  开启 AEC
 
-   afe->enable_aec(afe_data);
+    afe->enable_aec(afe_data);
