@@ -26,8 +26,6 @@ MultiNet 输入为经过前端语音算法（AFE）处理过的音频，格式�
 .. figure:: ../../.static/MultiNet_model.png
    :alt: multinet_model
 
-   multinet_model
-
 用户选择不同的模型的方法请参考 `flash
 model <../flash_model/README_CN.md>`__ 。
 
