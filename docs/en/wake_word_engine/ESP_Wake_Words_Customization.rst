@@ -1,22 +1,22 @@
 Espressif Speech Wake-up Solution Customization Process
 ========================================================
 
-1.1 Speech Wake Word Customization Process
-------------------------------------------
+Speech Wake Word Customization Process
+---------------------------------------
 
 Espressif provides users with the offline wake word customization
 service, which allows users to use both publicly available wake words
 (such as “Hi Lexin”, ”Alexa”, and “hi,ESP”) and customized wake
 words.
 
-1. If you want to use publicly available wake words for commercial use
+#. If you want to use publicly available wake words for commercial use
 
    -  Please check the wake words provided in
       `esp-sr <https://github.com/espressif/esp-sr>`__;
    -  We will continue to provide more and more wake words that are free
       for commercial use.
 
-2. If you want to use custom wake words, we can also provide the offline
+#. If you want to use custom wake words, we can also provide the offline
    wake word customization service.
 
    -  If you provide a training corpus
@@ -49,7 +49,7 @@ words.
       `sales@espressif.com <sales@espressif.com>`__ for details of the
       fee.
 
-3. If you want to use offline command words
+#. If you want to use offline command words
 
    -  Please set them by yourself referring to
       `esp-sr <https://github.com/espressif/esp-sr/tree/c5896943ea278195968c93c8b3466c720e641ebc/speech_command_recognition>`__
@@ -66,14 +66,14 @@ words.
 As mentioned above, you can provide your own training corpus for
 Espressif. Below are the requirements.
 
-1. Audio file format
+#. Audio file format
 
    -  Sample rate: 16 kHz
    -  Encoding: 16-bit signed int
    -  Channel: mono
    -  Format: WAV
 
-2. Sampling environment
+#. Sampling environment
 
    -  Room with an ambient noise lower than 30 dB and reverberation less
       than 0.3 s, or a professional audio room (recommended).
@@ -95,7 +95,7 @@ Espressif. Below are the requirements.
       -  So more samples are collected with the same number of time and
          participants.
 
-3. Sample distribution
+#. Sample distribution
 
    -  Sample size: 500. Males and females should be close to 1:1.
    -  The number of children under 12 years old invloved varies from
@@ -109,4 +109,4 @@ Espressif. Below are the requirements.
 2.2 Hareware Design Guidelines
 ------------------------------
 
-1. Please refer to *Espressif MIC Design Guidelines*.
+#. Please refer to *Espressif MIC Design Guidelines*.

@@ -1,5 +1,7 @@
-WakeNet `[English] <./README.md>`__
-===================================
+WakeNet
+=======
+
+:link_to_translation:`en:[English]`
 
 WakeNet是一个基于神经网络，为低功耗嵌入式MCU设计的的唤醒词模型，目前支持5个以内的唤醒词识别。
 

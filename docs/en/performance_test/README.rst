@@ -1,8 +1,8 @@
 Performance Test
 ================
 
-1. AFE
-------
+AFE
+---
 
 1.1 Resource Occupancy(ESP32)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -19,8 +19,8 @@ Performance Test
 | AFE Layer       | 73 KB           |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
 
-1.2 Resource Occupancy(ESP32S3)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Resource Occupancy(ESP32S3)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 +-----------------+-----------------+-----------------+-----------------+
 | algorithm Type  | RAM             | Average cpu     | Frame Length    |
@@ -42,13 +42,13 @@ Performance Test
 | AFE Layer       | 227 KB          |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
 
-2. WakeNet
-----------
+WakeNet
+-------
 
 .. _resource-occupancyesp32-1:
 
-2.1 Resource Occupancy(ESP32)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Resource Occupancy(ESP32)
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 +-------------+-------------+-------------+-------------+-------------+
 | Model Type  | Parameter   | RAM         | Average     | Frame       |
@@ -68,8 +68,8 @@ Performance Test
 
 .. _resource-occupancyesp32s3-1:
 
-2.2 Resource Occupancy(ESP32S3)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Resource Occupancy(ESP32S3)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 +----------------+-------+---------+----------------+--------------+
 | Model Type     | RAM   | PSRAM   | Average        | Frame Length |
@@ -89,8 +89,8 @@ Performance Test
 | channel        |       |         |                |              |
 +----------------+-------+---------+----------------+--------------+
 
-2.3 Performance
-~~~~~~~~~~~~~~~
+Performance
+~~~~~~~~~~~
 
 +-------------+-------------+-------------+-------------+-------------+
 | Distance    | Quiet       | Stationary  | Speech      | AEC         |
@@ -108,13 +108,13 @@ False triggering rate: 1 time in 12 hours
 **Note**: We use the ESP32-S3-Korvo V4.0 development board and the
 WakeNet9(Alexa) model in our test.
 
-3. MultiNet
------------
+MultiNet
+--------
 
 .. _resource-occupancyesp32-2:
 
-2.1 Resource Occupancy(ESP32)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Resource Occupancy(ESP32)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 +-------------+-------------+-------------+-------------+-------------+
 | Model Type  | Internal    | PSRAM       | Average     | Frame       |
@@ -127,8 +127,8 @@ WakeNet9(Alexa) model in our test.
 
 .. _resource-occupancyesp32s3-2:
 
-2.2 Resource Occupancy(ESP32S3)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Resource Occupancy(ESP32S3)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 +-------------+-------------+-------------+-------------+-------------+
 | Model Type  | Internal    | PSRAM       | Average     | Frame       |
@@ -145,8 +145,8 @@ WakeNet9(Alexa) model in our test.
 | Q8          |             |             |             |             |
 +-------------+-------------+-------------+-------------+-------------+
 
-2.3 Performance with AFE
-~~~~~~~~~~~~~~~~~~~~~~~~
+Performance with AFE
+~~~~~~~~~~~~~~~~~~~~
 
 +-----------+-----------+-----------+-----------+-----------+-----------+
 | Model     | Distance  | Quiet     | S         | Speech    |           |

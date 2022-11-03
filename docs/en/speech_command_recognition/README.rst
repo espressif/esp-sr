@@ -5,16 +5,15 @@ MultiNet is a lightweight model designed to realize speech commands
 recognition offline on ESP32 series. Now, up to 200 speech commands,
 including customized commands, are supported.
 
-   | Support Chinese and English speech commands recognition (esp32s3 is
-     required for English speech commands recognition)
-   | Support user-defined commands
-   | Support adding / deleting / modifying commands during operation
-   | Up to 200 commands are supported
-   | It supports single recognition and continuous recognition
-   | Lightweight and low resource consumption
-   | Low delay, within 500ms
-   | Support online Chinese and English model switching (esp32s3 only)
-   | The model is partitioned separately to support users to apply OTA
+   * Support Chinese and English speech commands recognition (esp32s3 is required for English speech commands recognition)
+   * Support user-defined commands
+   * Support adding / deleting / modifying commands during operation
+   * Up to 200 commands are supported
+   * It supports single recognition and continuous recognition
+   * Lightweight and low resource consumption
+   * Low delay, within 500ms
+   * Support online Chinese and English model switching (esp32s3 only)
+   * The model is partitioned separately to support users to apply OTA
 
 1. Overview
 -----------
@@ -65,8 +64,8 @@ Please see the flow diagram below:
 3.2 Speech commands customization method
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-   | Support a variety of speech commands customization methods
-   | Support dynamic addition / deletion / modification of speech
+   * Support a variety of speech commands customization methods
+   * Support dynamic addition / deletion / modification of speech
      commands
 
 3.2.1 Format of Speech commands
@@ -186,8 +185,8 @@ use of AFE, please refer to the document:
 When users uses AFE and enables wakenet, then can use MultiNet. And
 there are the following requirements:
 
-   | The frame length of MultiNet is equal to the AFE fetch frame length
-   | The audio format supported is 16KHz, 16bit, mono. The data obtained
+   * The frame length of MultiNet is equal to the AFE fetch frame length
+   * The audio format supported is 16KHz, 16bit, mono. The data obtained
      by AFE fetch is also in this format
 
 -  Get the frame length that needs to be passed into MultiNet
@@ -211,8 +210,8 @@ there are the following requirements:
 
 Speech commands recognition supports two basic modes:
 
-   | Single recognition
-   | Continuous recognition
+   * Single recognition
+   * Continuous recognition
 
 Speech command recognition must be used with WakeNet. After wake-up,
 MultiNet detection can be run.
@@ -256,18 +255,16 @@ into the following identification states:
    -  ``prob`` meaNS the recognition probability of the recognized
       entries, which is arranged from large to small
 
-   Users can use ``phrase_id[0]`` and ``prob[0]`` get the recognition
-   result with the highest probability.
+   Users can use ``phrase_id[0]`` and ``prob[0]`` get the recognition result with the highest probability.
 
    -  ESP_MN_STATE_TIMEOUT
 
-   This status means that the speech commands has not been detected for
-   a long time and will exit automatically. Wait for the next wake-up.
+   This status means that the speech commands has not been detected for a long time and will exit automatically. Wait for the next wake-up.
 
-| Therefore:
-| Exit the speech recognition when the return status is
+* Therefore:
+* Exit the speech recognition when the return status is
   ``ESP_MN_STATE_DETECTED``, it is single recognition mode;
-| Exit the speech recognition when the return status is
+* Exit the speech recognition when the return status is
   ``ESP_MN_STATE_TIMEOUT``, it is continuous recognition mode;
 
 5. Other configurations

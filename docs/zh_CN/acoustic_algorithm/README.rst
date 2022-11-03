@@ -52,10 +52,8 @@ Function
 
    -  inst: VAD handle.
    -  data: buffer to save both input and output audio stream.
-   -  sample_rate_hz: The Sampling frequency (Hz) can be 32000, 16000,
-      8000, default: 16000.
-   -  one_frame_ms: The length of the audio processing can be 10ms,
-      20ms, 30ms, default: 30.
+   -  sample_rate_hz: The Sampling frequency (Hz) can be 32000, 16000, 8000, default: 16000.
+   -  one_frame_ms: The length of the audio processing can be 10ms, 20ms, 30ms, default: 30.
 
    **Return**
 
@@ -80,9 +78,7 @@ AGC
 Overview
 ~~~~~~~~
 
-AGC keeps the volume of audio signal at a stable level to avoid the
-situation that the signal is so loud that gets clipped or too quiet to
-trigger the speech recognizer.
+AGC keeps the volume of audio signal at a stable level to avoid the situation that the signal is so loud that gets clipped or too quiet to trigger the speech recognizer.
 
 .. _api-reference-1:
 
@@ -97,8 +93,7 @@ API Reference
 
    **Parameter**
 
-   -  agc_mode: operating mode of AGC, 3 to enable AGC and 0 to disable
-      it.
+   -  agc_mode: operating mode of AGC, 3 to enable AGC and 0 to disable it.
    -  sample_rate: sampling rate of audio signal.
 
    **Return**
@@ -121,8 +116,7 @@ API Reference
 
    **Return**
 
-   Return 0 if AGC processing succeeds, -1 if fails; -2 and -3 indicate
-   invalid input of sample_rate and frame_size, respectively.
+   Return 0 if AGC processing succeeds, -1 if fails; -2 and -3 indicate invalid input of sample_rate and frame_size, respectively.
 
 -  ``void esp_agc_clse(void *agc_handle)``
 
@@ -216,8 +210,7 @@ NS
 Overview
 ~~~~~~~~
 
-Single-channel speech enhancement. If multiple mics are available with
-the board, MASE is recommened for noise suppression.
+Single-channel speech enhancement. If multiple mics are available with the board, MASE is recommened for noise suppression.
 
 .. _api-reference-3:
 

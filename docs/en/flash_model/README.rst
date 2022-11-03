@@ -1,8 +1,10 @@
-Model loading method\ `[中文] <./README_CN.md>`__
-=================================================
+Model Loading Method
+====================
+
+:link_to_translation:`zh_CN:[中文]`
 
 In esp-sr, both WakeNet and MultiNet will use a large amount of model
-data, and the model data is located in ``ESP-SR_PATH/model/``. Currently
+data, and the model data is located in *ESP-SR_PATH/model/*. Currently
 esp-sr supports the following model loading methods:
 
 ESP32:
@@ -18,48 +20,39 @@ So that on ESP32S3 you can:
 
 -  Greatly reduce the size of the user application APP BIN
 -  Supports the selection of up to two wake words
--  Support online switching of Chinese and English Speech Command
-   Recognition
+-  Support online switching of Chinese and English Speech Command Recognition
 -  Convenient for users to perform OTA
--  Supports reading and changing models from SD card, which is more
-   convenient and can reduce the size of module Flash used in the
-   project
--  When the user is developing the code, when the modification does not
-   involve the model, it can avoid flashing the model data every time,
-   greatly reducing the flashing time and improving the development
-   efficiency
+-  Supports reading and changing models from SD card, which is more convenient and can reduce the size of module Flash used in the project
+-  When the user is developing the code, when the modification does not involve the model, it can avoid flashing the model data every time, greatly reducing the flashing time and improving the development efficiency
 
-1. Model configuration introduction
------------------------------------
+Model Configuration Introduction
+--------------------------------
 
-Run ``idf.py menuconfig`` navigate to ``ESP Speech Recognition``:
+Run *idf.py menuconfig* navigate to *ESP Speech Recognition*:
 
 .. figure:: ../../.static/model-1.png
    :alt: overview
 
    overview
 
-1.1 model data path
-~~~~~~~~~~~~~~~~~~~
+Model Data Path
+~~~~~~~~~~~~~~~
 
-This option is only available on ESP32S3. It indicates the storage
-location of the model data. It supports the choice of
-``spiffs partition`` or ``SD Card``.
+This option is only available on ESP32S3. It indicates the storage location of the model data. It supports the choice of ``spiffs partition`` or ``SD Card``.
 
--  ``spiffs partition`` means that the model data is stored in the Flash
+-  *spiffs partition* means that the model data is stored in the Flash
    spiffs partition, and the model data will be loaded from the Flash
    spiffs partition
 -  ``SD Card`` means that the model data is stored in the SD card, and
    the model data will be loaded from the SD Card
+   
+Use AFE
+~~~~~~~
 
-1.2 use afe
+This option needs to be turned on. Users do not need to modify it. Please keep the default configuration.
+
+Use Wakenet
 ~~~~~~~~~~~
-
-This option needs to be turned on. Users do not need to modify it.
-Please keep the default configuration.
-
-1.3 use wakenet
-~~~~~~~~~~~~~~~
 
 This option is turned on by default. When the user only uses ``AEC`` or
 ``BSS``, etc., and does not need to run ``WakeNet`` or ``MultiNet``,
@@ -79,8 +72,8 @@ firmware.
 For more details, please refer to
 `WakeNet <../wake_word_engine/README.md>`__ .
 
-1.4 use multinet
-~~~~~~~~~~~~~~~~
+Use Multinet
+~~~~~~~~~~~~
 
 This option is turned on by default. When users only use WakeNet or
 other algorithm modules, please turn off this option, which will reduce
@@ -134,60 +127,48 @@ The user needs to add English Speech Command words to this item when
 For more details, please refer to
 `MultiNet <../speech_command_recognition/README.md>`__ .
 
-2. How to use
--------------
+How To Use
+----------
 
 Here is an introduction to the code implementation of model data loading
 in the project. If you want get more detailes, please refer to
 esp-skainet examples.
 
-2.1.1 ESP32
-~~~~~~~~~~~
+ESP32
+~~~~~
 
-| When the user uses ESP32, since it only supports loading the model
-  data directly from the Flash, the model data in the code will
-  automatically read the required data from the Flash according to the
-  address.
-| Now The ESP32S3 API is compatible with ESP32. You can refer to the
-  ESP32S3 method to load and initialize the model.
+| When the user uses ESP32, since it only supports loading the model data directly from the Flash, the model data in the code will automatically read the required data from the Flash according to the address.
+| Now The ESP32S3 API is compatible with ESP32. You can refer to the ESP32S3 method to load and initialize the model.
 
-2.1.2 ESP32S3
-~~~~~~~~~~~~~
+ESP32S3
+~~~~~~~
 
--  Step1: Write a partition table:
+#. Write a partition table:
 
    ::
 
       model,  data, spiffs,         , SIZE,
 
-   Among them, ``SIZE`` can refer to the recommended size when the user
-   uses ‘idf.py build’ to compile, for example:
+   Among them, ``SIZE`` can refer to the recommended size when the user uses ``idf.py build`` to compile, for example:
 
    ::
 
       Recommended model partition size: 500K
 
-   After completing the above configuration, the project will
-   automatically generate ``model.bin`` after the project is compiled,
-   and flash it to the spiffs partition.
+   After completing the above configuration, the project will automatically generate ``model.bin`` after the project is compiled, and flash it to the spiffs partition.
 
--  Step2: Initialize the spiffs partition User can use
-   ``esp_srmodel_init()`` API to initialize spiffs and return all loaded
-   models.
+#. Initialize the spiffs partition User can use ``esp_srmodel_init()`` API to initialize spiffs and return all loaded models.
 
-   -  base_path: The model storage ``base_path`` is ``srmodel`` and
-      cannot be changed
-   -  partition_label: The partition label of the model is ``model``,
-      which needs to be consistent with the ``Name`` in the above
-      partition table
+   -  base_path: The model storage ``base_path`` is ``srmodel`` and cannot be changed
+   -  partition_label: The partition label of the model is ``model``, which needs to be consistent with the ``Name`` in the above partition table
 
    **Note: After the user changes the model, be sure to run
    ``idf.py clean`` before compiling again.**
 
 .. _esp32s3-1:
 
-2.2 ESP32S3
------------
+ESP32S3
+-------
 
 ::
 

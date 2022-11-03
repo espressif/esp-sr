@@ -30,9 +30,7 @@ Please see the flow diagram of wakeNet below:
 
    -  wakeNet1,wakeNet2,wakeNet3,wakeNet4,wakeNet6,wakeNet7 had been out of use.
    -  wakeNet5 only support ESP32 chip.
-   -  wakeNet8,wakeNet9 only support ESP32S3 chip, which are built upon
-      the `Dilated Convolution <https://arxiv.org/pdf/1609.03499.pdf>`__
-      structure. 
+   -  wakeNet8,wakeNet9 only support ESP32S3 chip, which are built upon the `Dilated Convolution <https://arxiv.org/pdf/1609.03499.pdf>`__ structure. 
 
     Note that: The network structure of wakeNet5,wakeNet5X2 and wakeNet5X3 is same, but the parameter of wakeNetX2 and wakeNetX3 is more than wakeNet5. Please refer to `Performance Test <#performance-test>`__ for details.
 
@@ -50,8 +48,7 @@ Use wakeNet
 -  How to run wakeNet
 
    wakeNet is currently included in the
-   `AFE <../audio_front_end/README.md>`__, which is running by default,
-   and returns the detect results through the AFE fetch interface.
+   `AFE <../audio_front_end/README.md>`__, which is running by default, and returns the detect results through the AFE fetch interface.
 
    If users do not wants to initialize WakeNet, please use:
 
