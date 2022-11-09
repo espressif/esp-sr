@@ -10,6 +10,9 @@ Overview
 
 WakeNet的流程图如下：
 
+.. figure:: ../../.static/wakenet_workflow.png
+    :alt: overview
+
 .. raw:: html
 
     <center>
@@ -33,6 +36,10 @@ WakeNet的流程图如下：
 -  Keyword Trigger Method：
     对连续的音频流，为准确判断关键词的触发，我们通过计算若干帧内识别结果的平均值M，来判断触发。当M大于大于指定阈值，发出触发的命令。
 
+以下表格展示在不同芯片上的模型支持：
+
+.. figure:: ../../.static/WakeNet_model.png
+    :alt: overview
 
 WakeNet使用
 -----------

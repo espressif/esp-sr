@@ -8,7 +8,11 @@
 
 乐鑫 AFE 框架以最便捷的方式基于乐鑫的 ESP32 系列芯片进行语音前端处理。使用乐鑫 AFE 框架，您可以获取高质量且稳定的音频数据，从而更加方便地构建唤醒或语音识别等应用。
 
-乐鑫 AFE 的功能分为两套：1）针对语音识别场景；2）针对语音通话场景。如下所示：
+乐鑫 AFE 的功能分为两套：
+
+# 针对语音识别场景。
+
+# 针对语音通话场景。
 
 - 语音识别场景
 
@@ -44,9 +48,9 @@
 
 **Note:** `afe->feed()` 和 `afe->fetch()` 对用户可见，`Internal BSS/NS/MISO Task` 对用户不可见。
 
-> AEC 在 afe->feed() 函数中运行；若 aec_init 配置为 false 状态，BSS/NS 将会在 afe->feed() 函数中运行。  
-> BSS/NS/MISO 为 AFE 内部独立 Task 进行处理；  
-> VAD/WakeNet 的结果，以及处理后的单通道音频，通过 afe->fetch() 函数获取。
+* AEC 在 afe->feed() 函数中运行；若 aec_init 配置为 false 状态，BSS/NS 将会在 afe->feed() 函数中运行。  
+* BSS/NS/MISO 为 AFE 内部独立 Task 进行处理；  
+* VAD/WakeNet 的结果，以及处理后的单通道音频，通过 afe->fetch() 函数获取。
 
 ### 选择 AFE handle
 
