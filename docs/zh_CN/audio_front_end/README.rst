@@ -17,13 +17,13 @@ Audio Front-end 框架
 
 -  语音识别场景
 
-.. figure:: ../../.static/AFE_SR_overview.png
+.. figure:: ../../_static/AFE_SR_overview.png
     :alt: overview
 
 
 -  语音通话场景
 
-.. figure:: ../../.static/AFE_VOIP_overview.png
+.. figure:: ../../_static/AFE_VOIP_overview.png
     :alt: overview
 
 
@@ -31,7 +31,7 @@ Audio Front-end 框架
 
 -  语音识别场景
 
-.. figure:: ../../.static/AFE_SR_workflow.png
+.. figure:: ../../_static/AFE_SR_workflow.png
     :alt: overview
 
 工作流程如下：
@@ -43,7 +43,7 @@ Audio Front-end 框架
 
 -  语音通话场景
 
-.. figure:: ../../.static/AFE_VOIP_workflow.png
+.. figure:: ../../_static/AFE_VOIP_workflow.png
     :alt: overview
 
 
@@ -103,7 +103,7 @@ Audio Front-end 框架
 
 数据排布如下：
 
-    .. figure:: ../../.static/AFE_mode_0.png
+    .. figure:: ../../_static/AFE_mode_0.png
         :alt: input data of single MIC
         :height: 0.7in
 
@@ -114,7 +114,7 @@ Audio Front-end 框架
 
 数据排布如下：
 
-    .. figure:: ../../.static/AFE_mode_other.png
+    .. figure:: ../../_static/AFE_mode_other.png
         :alt: input data of dual MIC
         :height: 0.75in
 
@@ -236,7 +236,7 @@ AFE 的输出音频为单通道数据。在语音识别场景，若WakeNet 开�
 
 -  vad_mode: VAD 检测的操作模式，越大越激进。
 
--  wakenet_model_name: 宏 ``AFE_CONFIG_DEFAULT()``  中该值默认为NULL。使用 ``idf.py menuconfig`` 选择了相应的唤醒模型后，在调用 ``afe_handle->create_from_config`` 之前，需给该处赋值具体的模型名字，类型为字符串形式。唤醒模型的具体说明，详见： `flash_model <../flash_model/README_cn.md>`__(注意：示例代码中，使用了 esp_srmodel_filter() 获取模型名字，若 menuconfig 中选择了多个模型共存，该函数将会随机返回一个模型名字)
+-  wakenet_model_name: 宏 ``AFE_CONFIG_DEFAULT()``  中该值默认为NULL。使用 ``idf.py menuconfig`` 选择了相应的唤醒模型后，在调用 ``afe_handle->create_from_config`` 之前，需给该处赋值具体的模型名字，类型为字符串形式。唤醒模型的具体说明，详见： `flash_model <../flash_model/README_cn.md>`__ (注意：示例代码中，使用了 esp_srmodel_filter() 获取模型名字，若 menuconfig 中选择了多个模型共存，该函数将会随机返回一个模型名字)
 
 -  wakenet_mode: 唤醒的模式。对应为多少通道的唤醒，根据mic通道的数量选择
 
@@ -391,7 +391,7 @@ WakeNet 使用
 
 当用户在唤醒后需要进行其他操作，比如离线或在线语音识别，这时候可以暂停 WakeNet 的运行，从而减轻 CPU 的资源消耗。
 
-用户可以调用 ``afe_handle->disable_wakenet(afe_data)`` 来停止 WakeNet。当后续应用结束后又可以调用 ``afe_handle->enable_wakenet(afe_data)``来开启 WakeNet。
+用户可以调用 ``afe_handle->disable_wakenet(afe_data)`` 来停止 WakeNet。当后续应用结束后又可以调用 ``afe_handle->enable_wakenet(afe_data)`` 来开启 WakeNet。
 
 另外，ESP32S3 芯片，支持唤醒词切换。(注： ESP32 芯片只支持一个唤醒词，不支持切换)。在初始化 AFE 完成后，ESP32S3 芯片可通过 ``set_wakenet()`` 函数切换唤醒词。例如, ``afe_handle->set_wakenet(afe_data, “wn9_hilexin”)`` 切换到“Hi Lexin”唤醒词。具体如何配置多个唤醒词，详见： `flash_model <../flash_model/README_CN.md>`__
 

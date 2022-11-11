@@ -1,5 +1,5 @@
 模型加载方式
-===========
+============
 
 :link_to_translation:`en:[English]`
 
@@ -28,7 +28,7 @@ ESP32S3：
 
 运行 ``idf.py menuconfig`` 进入 ``ESP Speech Recognition``:
 
-.. figure:: ../../.static/model-1.png
+.. figure:: ../../_static/model-1.png
     :alt: overview
 
     overview
@@ -206,6 +206,6 @@ ESP32S3 支持：
         esp_mn_iface_t *multinet = esp_mn_handle_from_name(mn_name);
         model_iface_data_t *mn_model_data = multinet->create(mn_name, 6000);
 
-.. |select wake wake| image:: ../../.static/wn_menu1.png
-.. |multi wake wake| image:: ../../.static/wn_menu2.png
-.. |image1| image:: ../../.static/wn_menu3.png
+.. |select wake wake| image:: ../../_static/wn_menu1.png
+.. |multi wake wake| image:: ../../_static/wn_menu2.png
+.. |image1| image:: ../../_static/wn_menu3.png

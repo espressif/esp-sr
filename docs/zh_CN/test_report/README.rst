@@ -1,6 +1,8 @@
 测试方法与测试报告
 ==================
 
+:link_to_translation:`en:[English]`
+
 测试场景
 ~~~~~~~~
 
@@ -55,13 +57,13 @@
 | 4            | 2m       | 45°      | 65dBA    | 3m       | 90°      | 64dBA    | -1dB |
 +--------------+----------+----------+----------+----------+----------+----------+------+
 
-.. figure:: ../../.static/test_reference_position1.png
+.. figure:: ../../_static/test_reference_position1.png
     :align: center
     :alt: overview
 
 描述已自动生成在唤醒测试场景下，建议人工嘴（声音源）位于语音模块麦克风正前方，水平直线距离3米，人工嘴（声音源）距离地面1.5米。语音模块（ESP32-S3）和声压计位于同一垂直方向，声压计在语音模块（ESP32-S3）正上方75厘米处。噪声源在斜45度方向，距地高度1.2米，距离语音模块（ESP32-S3）2米。
 
-.. figure:: ../../.static/test_reference_position2.png
+.. figure:: ../../_static/test_reference_position2.png
     :align: center
     :alt: overview
 
@@ -183,6 +185,6 @@
 |              |          | - 噪声：NA    |            |          |
 +--------------+----------+---------------+------------+----------+
 
-.. figure:: ../../.static/test_response_time.png
+.. figure:: ../../_static/test_response_time.png
     :align: center
     :alt: overview

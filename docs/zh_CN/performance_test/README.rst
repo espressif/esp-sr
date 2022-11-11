@@ -1,6 +1,8 @@
 性能测试
 ========
 
+:link_to_translation:`en:[English]`
+
 AFE
 ---
 

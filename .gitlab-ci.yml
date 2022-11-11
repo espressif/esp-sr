@@ -1,0 +1,259 @@
+stages:
+  - check
+  - test
+  - build
+  - test_deploy
+  - deploy
+
+variables:
+  # Versioned esp-idf-doc env image to use for all document building jobs
+  ESP_SR_ENV_IMAGE: "$CI_DOCKER_REGISTRY/esp-idf-doc-env-v5.0:2-2"
+  ESP_SR_PATH: "$CI_PROJECT_DIR"
+  IDF_PATH: $CI_PROJECT_DIR/esp-idf
+  IDF_REPO: ${GITLAB_SSH_SERVER}/espressif/esp-idf.git
+
+.before_script_minimal:
+  before_script:
+    - source ci/utils.sh
+
+.before_script_prepare_build:
+  before_script:
+    # Use CI Tools
+    - curl -sSL ${CIT_LOADER_URL} | sh
+    - source citools/import_functions
+    - source ci/utils.sh
+    # Purge any old esp-docs versions
+    - pip uninstall -y esp-docs
+    - pip install .
+
+check_setup:
+  stage: check
+  image: $ESP_SR_ENV_IMAGE
+  extends:
+    - .before_script_minimal
+  script:
+    - pip install .
+
+check_python_style:
+  stage: check
+  image: $ESP_SR_ENV_IMAGE
+  extends:
+    - .before_script_minimal
+  script:
+    - python -m flake8 --config=$ESP_SR_PATH/.flake8 $ESP_SR_PATH
+
+test_uts:
+  stage: test
+  image: $ESP_SR_ENV_IMAGE
+  extends:
+    - .before_script_prepare_build
+  script:
+    - cd test/unit_tests
+    - python test_docs.py
+    - python test_esp_extensions.py
+    - python test_deploy.py
+
+test_builds:
+  stage: test
+  image: $ESP_SR_ENV_IMAGE
+  extends:
+    - .before_script_prepare_build
+  script:
+    - cd test/build_tests
+    - ./build_all.sh
+
+.build_template:
+  stage: build
+  image: $ESP_SR_ENV_IMAGE
+  extends:
+    - .before_script_prepare_build
+
+build_example_basic:
+  extends:
+    - .build_template
+  variables:
+    DOCS_DIR: $CI_PROJECT_DIR/examples/basic
+  artifacts:
+    when: always
+    paths:
+      - $DOCS_DIR/_build/*/*/html/*
+      - $DOCS_DIR/_build/*/*/*.txt
+    expire_in: 4 days
+  script:
+    - cd "$DOCS_DIR"
+    - ./build_example.sh
+
+build_example_doxygen:
+  extends:
+    - .build_template
+  variables:
+    DOCS_DIR: $CI_PROJECT_DIR/examples/doxygen
+  script:
+    - cd $DOCS_DIR
+    - ./build_example.sh
+
+build_ESP_SR_html:
+  extends:
+    - .build_template
+  variables:
+    DOCS_DIR: $CI_PROJECT_DIR/docs
+  artifacts:
+    when: always
+    paths:
+      - $DOCS_DIR/_build/*/*/html/*
+      - $DOCS_DIR/_build/*/*/*.txt
+    expire_in: 4 days
+  script:
+    - cd $DOCS_DIR
+    - build-docs --skip-reqs-check -l $DOCLANG
+  parallel:
+    matrix:
+      - DOCLANG: ["en"]
+
+build_ESP_SR_pdf:
+  extends:
+    - .build_template
+  variables:
+    DOCS_DIR: $CI_PROJECT_DIR/docs
+  artifacts:
+    when: always
+    paths:
+      - $DOCS_DIR/_build/*/*/latex/*
+      - $DOCS_DIR/_build/*/*/*.txt
+    expire_in: 4 days
+  script:
+    - cd $DOCS_DIR
+    - build-docs --skip-reqs-check -l $DOCLANG
+  parallel:
+    matrix:
+      - DOCLANG: ["en"]
+
+build_idf_docs_html:
+  extends:
+    - .build_template
+  variables:
+    DOCS_DIR: $CI_PROJECT_DIR/esp-idf/docs
+    IDF_COMMIT_ID: 7d680980894fbcc1532f6934c1e3a2f0f8181d64
+  artifacts:
+    when: always
+    paths:
+      - $DOCS_DIR/_build/*/*/html/*
+      - $DOCS_DIR/_build/*/*/*.txt
+    expire_in: 4 days
+  script:
+      # add gitlab ssh key
+    - cit_add_ssh_key "${GITLAB_KEY_PEM}"
+    - $ESP_SR_PATH/ci/setup_idf.sh ${IDF_REPO} $IDF_COMMIT_ID $IDF_PATH $DOCTGT
+    - eval "$($IDF_PATH/tools/idf_tools.py --non-interactive export)"
+    - pip install $ESP_SR_PATH
+    - cd $DOCS_DIR
+    - build-docs --skip-reqs-check -l $DOCLANG -t $DOCTGT
+  parallel:
+    matrix:
+      - DOCLANG: ["en", "zh_CN"]
+        DOCTGT: ["esp32", "esp32s2", "esp32s3", "esp32c3"]
+
+build_idf_docs_pdf:
+  extends:
+    - .build_template
+  variables:
+    DOCS_DIR: $CI_PROJECT_DIR/esp-idf/docs
+    IDF_COMMIT_ID: 7d680980894fbcc1532f6934c1e3a2f0f8181d64
+  artifacts:
+    when: always
+    paths:
+      - $DOCS_DIR/_build/*/*/latex/*
+      - $DOCS_DIR/_build/*/*/*.txt
+    expire_in: 4 days
+  script:
+      # add gitlab ssh key
+    - cit_add_ssh_key "${GITLAB_KEY_PEM}"
+    - $ESP_SR_PATH/ci/setup_idf.sh ${IDF_REPO} $IDF_COMMIT_ID $IDF_PATH $DOCTGT
+    - eval "$($IDF_PATH/tools/idf_tools.py --non-interactive export)"
+    - pip install $ESP_SR_PATH
+    - cd $DOCS_DIR
+    - build-docs --skip-reqs-check -l $DOCLANG -t $DOCTGT -bs latex
+  parallel:
+    matrix:
+      - DOCLANG: ["en", "zh_CN"]
+        DOCTGT: ["esp32", "esp32s2", "esp32s3", "esp32c3"]
+
+build_package:
+  stage: build
+  image: $ESP_SR_ENV_IMAGE
+  extends:
+   - .before_script_minimal
+  tags:
+    - build
+  dependencies: []
+  artifacts:
+    when: always
+    paths:
+      - dist/*
+  script:
+    - python -m pip install build
+    - python -m build
+
+.deploy_docs_template:
+  stage: test_deploy
+  image: $ESP_SR_ENV_IMAGE
+  extends:
+    - .before_script_prepare_build
+  variables:
+    DOCS_DEPLOY_PRIVATEKEY: "$DOCS_DEPLOY_KEY"
+    DOCS_DEPLOY_SERVER: "$DOCS_SERVER"
+    DOCS_DEPLOY_SERVER_USER: "$DOCS_SERVER_USER"
+    DOCS_DEPLOY_PATH: "$DOCS_PATH"
+    DOCS_DEPLOY_URL_BASE: "https://$CI_DOCKER_REGISTRY/docs/esp-idf"
+  script:
+    - add_doc_server_ssh_keys $DOCS_DEPLOY_PRIVATEKEY $DOCS_DEPLOY_SERVER $DOCS_DEPLOY_SERVER_USER
+    - export GIT_VER=$(git describe --always)
+    - deploy-docs
+
+deploy_docs_ESP_SR:
+  extends:
+    - .deploy_docs_template
+  only:
+    - master
+  variables:
+    DOCS_BUILD_DIR: "${CI_PROJECT_DIR}/docs/_build/"
+    TYPE: "preview"
+    DOCS_DEPLOY_PRIVATEKEY: "$DOCS_PROD_DEPLOY_KEY"
+    DOCS_DEPLOY_SERVER: "$DOCS_PROD_SERVER"
+    DOCS_DEPLOY_SERVER_USER: "$DOCS_PROD_SERVER_USER"
+    DOCS_DEPLOY_PATH: "$DOCS_PROD_PATH"
+    DOCS_DEPLOY_URL_BASE: "https://docs.espressif.com/projects/esp-docs"
+  needs:
+    - build_ESP_SR_html
+    - build_ESP_SR_pdf
+
+deploy_docs_idf:
+   extends:
+     - .deploy_docs_template
+   variables:
+     DOCS_BUILD_DIR: "${CI_PROJECT_DIR}/esp-idf/docs/_build/"
+     TYPE: "preview"
+     DOCS_DEPLOY_PRIVATEKEY: "$DOCS_DEPLOY_KEY"
+     DOCS_DEPLOY_SERVER: "$DOCS_SERVER"
+     DOCS_DEPLOY_SERVER_USER: "$DOCS_SERVER_USER"
+     DOCS_DEPLOY_PATH: "$DOCS_PATH"
+     DOCS_DEPLOY_URL_BASE: "https://$DOCS_PREVIEW_SERVER_URL/docs/esp-idf"
+   needs:
+     - build_idf_docs_html
+     - build_idf_docs_pdf
+
+deploy_package:
+  stage: deploy
+  image: $ESP_SR_ENV_IMAGE
+  extends:
+    - .before_script_minimal
+  tags:
+    - build
+  only:
+    - master
+  when: on_success
+  dependencies:
+    - build_package
+  script:
+   - pip install .
+   - python $ESP_SR_PATH/ci/deploy_package.py

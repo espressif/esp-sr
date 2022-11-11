@@ -22,7 +22,7 @@ MultiNet 输入为经过前端语音算法（AFE）处理过的音频，格式�
 
 以下表格展示在不同芯片上的模型支持：
 
-.. figure:: ../../.static/MultiNet_model.png
+.. figure:: ../../_static/MultiNet_model.png
     :alt: multinet_model
 
 用户选择不同的模型的方法请参考 `flash model <../flash_model/README_CN.md>`__ 。
@@ -34,7 +34,7 @@ MultiNet 输入为经过前端语音算法（AFE）处理过的音频，格式�
 
 可以参考以下命令词识别原理：
 
-.. figure:: ../../.static/multinet_workflow.png
+.. figure:: ../../_static/multinet_workflow.png
     :alt: speech_command-recognition-system
 
     speech_command-recognition-system
@@ -43,7 +43,7 @@ MultiNet 输入为经过前端语音算法（AFE）处理过的音频，格式�
 --------
 
 命令词设计要求
-~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
 
 -  中文推荐长度一般为 4-6 个汉字，过短导致误识别率高，过长不方便用户记忆
 -  英文推荐长度一般为 4-6 个单词
@@ -79,7 +79,7 @@ MultiNet 对命令词自定义方法没有限制，用户可以通过任意方�
    **并且我们也提供相应的工具，供用户将汉字转换为拼音，详细可见：** `英文转音素工具 <../../tool/multinet_g2p.py>`__。
 
 离线设置命令词
-^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^
 
 MultiNet 支持多种且灵活的命令词设置方式，用户无论通过那种方式编写命令词（代码/网络/文件），只需调用相应的 API 即可。
 
@@ -89,7 +89,7 @@ MultiNet 支持多种且灵活的命令词设置方式，用户无论通过那�
 
     可以参考 ESP-Skainet 中 example 通过 ``idf.py menuconfig -> ESP Speech Recognition-> Add Chinese speech commands/Add English speech commands`` 添加命令词。
 
-    .. figure:: ../../.static/menuconfig_add_speech_commands.png
+    .. figure:: ../../_static/menuconfig_add_speech_commands.png
         :alt: menuconfig_add_speech_commands
 
         menuconfig_add_speech_commands

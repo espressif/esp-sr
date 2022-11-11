@@ -10,7 +10,7 @@ Overview
 
 WakeNet的流程图如下：
 
-.. figure:: ../../.static/wakenet_workflow.png
+.. figure:: ../../_static/wakenet_workflow.png
     :alt: overview
 
 .. raw:: html
@@ -38,7 +38,7 @@ WakeNet的流程图如下：
 
 以下表格展示在不同芯片上的模型支持：
 
-.. figure:: ../../.static/WakeNet_model.png
+.. figure:: ../../_static/WakeNet_model.png
     :alt: overview
 
 WakeNet使用

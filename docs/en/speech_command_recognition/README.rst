@@ -25,7 +25,7 @@ characters or English words.
 
 The following table shows the model support of Espressif SoCs:
 
-.. figure:: ../../.static/MultiNet_model.png
+.. figure:: ../../_static/MultiNet_model.png
     :alt: multinet_model
 
     multinet_model
@@ -38,7 +38,7 @@ Commands Recognition Process
 
 Please see the flow diagram below:
 
-.. figure:: ../../.static/multinet_workflow.png
+.. figure:: ../../_static/multinet_workflow.png
     :alt: speech_command-recognition-system
 
     speech_command-recognition-system
@@ -78,7 +78,7 @@ Speech commands string need to meet specific formats, as follows:
 
     English speech commands need to be represented by specific phonetic symbols. The phonetic symbols of each word are separated by spaces, such as “turn on the light”, which needs to be written as “TkN nN jc LiT”.
 
-   **We provide specific conversion rules and tools. For details, please refer to the English G2P** `tool <../../tool/multinet_g2p.py>`__**.**
+   **We provide specific conversion rules and tools. For details, please refer to the English G2P** `tool <../../tool/multinet_g2p.py>`__.
 
 Set speech commands offline
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -91,7 +91,7 @@ Here we provide two methods of adding speech commands:
 
     Users can refer to the example in ESP-Skainet, users can define their own speech commands by ``idf.py menuconfig -> ESP Speech Recognition-> Add Chinese speech commands/Add English speech commands``.
 
-    .. figure:: ../../.static/menuconfig_add_speech_commands.png
+    .. figure:: ../../_static/menuconfig_add_speech_commands.png
         :alt: menuconfig_add_speech_commands
 
         menuconfig_add_speech_commands

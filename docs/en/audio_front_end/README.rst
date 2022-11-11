@@ -19,13 +19,13 @@ Espressif AFE is divided into two sets of algorithms:
 
 -  Speech recognition scenarios
 
-.. figure:: ../../.static/AFE_SR_overview.png
+.. figure:: ../../_static/AFE_SR_overview.png
     :alt: overview
 
 
 -  Voice communication scenarios
 
-.. figure:: ../../.static/AFE_VOIP_overview.png
+.. figure:: ../../_static/AFE_VOIP_overview.png
     :alt: overview
 
 
@@ -34,7 +34,7 @@ as below:
 
 -  Speech recognition scenarios
 
-.. figure:: ../../.static/AFE_SR_workflow.png
+.. figure:: ../../_static/AFE_SR_workflow.png
     :alt: overview
 
 
@@ -51,7 +51,7 @@ The workflow is as follows:
 
 -  Voice communication scenarios
 
-.. figure:: ../../.static/AFE_VOIP_workflow.png
+.. figure:: ../../_static/AFE_VOIP_workflow.png
     :alt: overview
 
 
@@ -119,7 +119,7 @@ At present, the AEC only support one reference data , so ref_num can only be 0 o
 
 The input data is arranged as follows:
 
-    .. figure:: ../../.static/AFE_mode_0.png
+    .. figure:: ../../_static/AFE_mode_0.png
         :alt: input data of single MIC
         :height: 0.7in
 
@@ -130,7 +130,7 @@ The input data is arranged as follows:
 
 The input data is arranged as follows:
 
-    .. figure:: ../../.static/AFE_mode_other.png
+    .. figure:: ../../_static/AFE_mode_other.png
         :alt: input data of dual MIC
         :height: 0.75in
 

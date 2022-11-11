@@ -1,6 +1,8 @@
 声学算法介绍
 ============
 
+:link_to_translation:`en:[English]`
+
 esp-sr 中提供的声学算法包括语音活动检测 (VAD)、自适应增益控制 (AGC)、声学回声消除 (AEC)、噪声抑制 (NS) 和麦克风阵列语音增强 (MASE)。 VAD、AGC、AEC 和 NS 支持单麦克风和多麦克风开发板，MASE 仅支持多麦克风板。
 
 VAD

@@ -1,5 +1,5 @@
 wakeNet
-=======
+========
 
 wakeNet, which is a wake word engine built upon neural network, is
 specially designed for low-power embedded MCUs. Now, the wakeNet model
@@ -20,7 +20,7 @@ Please see the flow diagram of wakeNet below:
 
 -  speech features:
 
-    我们使用 `MFCC <https://en.wikipedia.org/wiki/Mel-frequency_cepstrum>`__方法提取语音频谱特征。输入的音频文件采样率为16KHz，单声道，编码方式为signed 16-bit。每帧窗宽和步长均为30ms。
+    我们使用 `MFCC <https://en.wikipedia.org/wiki/Mel-frequency_cepstrum>`__ 方法提取语音频谱特征。输入的音频文件采样率为16KHz，单声道，编码方式为signed 16-bit。每帧窗宽和步长均为30ms。
 
 -  Speech Feature:
 
