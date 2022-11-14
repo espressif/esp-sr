@@ -25,10 +25,22 @@ characters or English words.
 
 The following table shows the model support of Espressif SoCs:
 
+<<<<<<< HEAD
++---------+-----------+-------------+---------------+-------------+
+|  Chip   |   ESP32   |   ESP32S3                                 |
++=========+===========+=============+===============+=============+
+| Model   | MultiNet2 | MultiNet4.5 | MultiNet4.5Q8 | MultiNet5Q8 |
++---------+-----------+-------------+---------------+-------------+
+| Chinese | √         | √           | √             | √           |
++---------+-----------+-------------+---------------+-------------+
+| English |           |             |               | √           |
++---------+-----------+-------------+---------------+-------------+
+=======
 .. figure:: ../../_static/MultiNet_model.png
     :alt: multinet_model
 
     multinet_model
+>>>>>>> 7c465343973cd5291b534f75bae9a6f2fc6465d8
 
 .. note:: 
     Note: the model ending with Q8 represents the 8bit version of the model, means more lightweight.

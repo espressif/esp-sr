@@ -58,7 +58,7 @@ Use Wakenet
 
 **注：多唤醒词选项只支持 ESP32S3，具体根据客户硬件flash容量，选择合适数量的唤醒词。**
 
-更多细节请参考 `WakeNet <../wake_word_engine/README.md>`__ 。
+更多细节请参考 `WakeNet <../wake_word_engine/README.rst>`__ 。
 
 Use Multinet
 ~~~~~~~~~~~~~

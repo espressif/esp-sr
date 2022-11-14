@@ -13,13 +13,31 @@ ESP-SR 用户指南
 
     **本文档仅包含针对 芯片的 ESP-AT 使用**。如需了解其他芯片，请在页面左上方的下拉菜单中选择您的目标芯片。
 
+<<<<<<< HEAD
+.. only:: latex 
+
+    **本文档仅包含针对 芯片的 ESP-AT 使用**。
+=======
 .. only:: latex
 
     **本文档仅包含针对  芯片的 ESP-AT 使用**。
+>>>>>>> 7c465343973cd5291b534f75bae9a6f2fc6465d8
 
 .. toctree::
     :hidden:
 
+<<<<<<< HEAD
+    AFE 声学前端算法 <audio_front_end/README>
+    唤醒词模型 <wake_word_engine/README>
+    定制化唤醒词 <wake_word_engine/ESP_Wake_Words_Customization>
+    语音指令 <speech_command_recognition/README>
+    声学算法介绍 <acoustic_algorithm/README>
+    模型加载方式 <flash_model/README>
+    麦克风设计指南 <audio_front_end/Espressif_Microphone_Design_Guidelines>
+    测试报告 <test_report/README>
+    性能测试 <performance_test/README>
+
+=======
     入门 <acoustic_algorithm/README>
     麦克风设计指南 <audio_front_end/Espressif_Microphone_Design_Guidelines>
     AFE 声学前端算法 <audio_front_end/README>
@@ -29,4 +47,5 @@ ESP-SR 用户指南
     测试报告 <test_report/README>
     唤醒词模型 <wake_word_engine/README> 
     
+>>>>>>> 7c465343973cd5291b534f75bae9a6f2fc6465d8
 * :ref:`genindex`

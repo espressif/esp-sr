@@ -19,6 +19,17 @@ except ImportError:
     sys.path.insert(0, os.path.abspath(ESP_DOCS_PATH))
     from conf_docs import *  # noqa: F403,F401
 
+<<<<<<< HEAD
+ESP32_DOCS = ['audio_front_end/README.rst',
+              'wake_word_engine/README.rst',
+              'wake_word_engine/ESP_Wake_Words_Customization.rst',
+              'speech_command_recognition/README.rst',
+              'acoustic_algorithm/README.rst',
+              'flash_model/README.rst',
+              'audio_front_end/Espressif_Microphone_Design_Guidelines.rst',
+              'test_report/README.rst',
+              'performance_test/README.rst',
+=======
 ESP32_DOCS = ['acoustic_algorithm/README.rst',
               'audio_front_end/Espressif_Microphone_Design_Guidelines.rst',
               'audio_front_end/README.rst',
@@ -28,6 +39,7 @@ ESP32_DOCS = ['acoustic_algorithm/README.rst',
               'test_report/README.rst',
               'wake_word_engine/ESP_Wake_Words_Customization.rst',
               'wake_word_engine/README.rst',
+>>>>>>> 7c465343973cd5291b534f75bae9a6f2fc6465d8
               ]
 
 # format: {tag needed to include: documents to included}, tags are parsed from sdkconfig and peripheral_caps.h headers

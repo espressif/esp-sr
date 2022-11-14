@@ -20,7 +20,11 @@ Please see the flow diagram of wakeNet below:
 
 -  speech features:
 
+<<<<<<< HEAD
+    We use the `MFCC < https://en.wikipedia.org/wiki/Mel-frequency_cepstrum>`__ method to extract speech spectrum features. The sampling rate of the input audio file is 16KHz, mono, and the encoding mode is signed 16-bit. The window width and step size of each frame are 30ms.
+=======
     我们使用 `MFCC <https://en.wikipedia.org/wiki/Mel-frequency_cepstrum>`__ 方法提取语音频谱特征。输入的音频文件采样率为16KHz，单声道，编码方式为signed 16-bit。每帧窗宽和步长均为30ms。
+>>>>>>> 7c465343973cd5291b534f75bae9a6f2fc6465d8
 
 -  Speech Feature:
 
@@ -40,6 +44,28 @@ Please see the flow diagram of wakeNet below:
 -  Keyword Triggering Method:
 
     For continuous audio stream, we calculate the average recognition results (M) for several frames and generate a smoothing prediction result, to improve the accuracy of keyword triggering. Only when the M value is larger than the set threshold, a triggering command is sent.
+
++-----------------+-----------+-------------+-------------+-----------+-----------+-----------+-----------+
+| Chip            | ESP32                                 | ESP32S3                                       |
++=================+===========+=============+=============+===========+===========+===========+===========+
+| model           | WakeNet 5                             | WakeNet 8             | WakeNet 9             |
+|                 +-----------+-------------+-------------+-----------+-----------+-----------+-----------+
+|                 | WakeNet 5 | WakeNet 5X2 | WakeNet 5X3 | Q16       | Q8        | Q16       | Q8        |
++-----------------+-----------+-------------+-------------+-----------+-----------+-----------+-----------+
+| Hi,Lexin        | √         | √           | √           |           |           |           | √         |
++-----------------+-----------+-------------+-------------+-----------+-----------+-----------+-----------+
+| nihaoxiaozhi    | √         |             | √           |           |           |           | √         |
++-----------------+-----------+-------------+-------------+-----------+-----------+-----------+-----------+
+| nihaoxiaoxin    |           |             | √           |           |           |           |           |
++-----------------+-----------+-------------+-------------+-----------+-----------+-----------+-----------+
+| xiaoaitongxue   |           |             |             |           |           |           | √         |
++-----------------+-----------+-------------+-------------+-----------+-----------+-----------+-----------+
+| Alexa           |           |             |             | √         |           |           | √         |
++-----------------+-----------+-------------+-------------+-----------+-----------+-----------+-----------+
+| Hi,ESP          |           |             |             |           |           |           | √         |
++-----------------+-----------+-------------+-------------+-----------+-----------+-----------+-----------+
+| Customized word |           |             |             |           |           |           | √         |
++-----------------+-----------+-------------+-------------+-----------+-----------+-----------+-----------+
 
 Use wakeNet
 -----------
