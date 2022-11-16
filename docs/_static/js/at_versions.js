@@ -1,6 +1,6 @@
 var DOCUMENTATION_VERSIONS = {
     DEFAULTS: { has_targets: false,
-                supported_targets: [ "esp32c2" ]
+                supported_targets: [ "esp32s3" ]
               },
     VERSIONS: [
         // latest

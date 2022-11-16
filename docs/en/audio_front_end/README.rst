@@ -59,8 +59,8 @@ The workflow is as follows:
 
 #. Use **ESP_AFE_VC_HANDLE** to create and initialize AFE (``voice_communication_init`` needs to be configured as true)
 #. AFE feed: Input audio data and will run AEC in the feed function
-#. Internal: BSS/NS algorithm processing will be carried out. If it’s dual MIC, the miso algorithm processing will be carried out later.
-#. AFE fetch: Return the audio data and the related information after processing. The AGC algorithm processing will be carried out. And the specific gain depends on the config of ``afe_config_t`` structure. If it’s dual MIC, the NS algorithm processing will be carried out before AGC.
+#. Internal: BSS/NS algorithm processing will be carried out. If it's dual MIC, the miso algorithm processing will be carried out later.
+#. AFE fetch: Return the audio data and the related information after processing. The AGC algorithm processing will be carried out. And the specific gain depends on the config of ``afe_config_t`` structure. If it's dual MIC, the NS algorithm processing will be carried out before AGC.
 
     .. note ::
         ``wakenet_Init`` and ``voice_communication_Init`` cannot be configured to true at the same time
@@ -76,7 +76,7 @@ Select AFE Handle
 ~~~~~~~~~~~~~~~~~
 
 Espressif AFE supports both single MIC and dual MIC scenarios, and the algorithm module can be flexibly configured. The internal task of single MIC applications is processed by NS, and the internal task of dual MIC applications is processed by BSS. If the dual microphone scenario is configured for voice communication
-(i.e. ``wakenet_init=false, voice_communication_init=true``), the miso internal task will be added.
+(i.e. ``wakenet_init=false, voice_communication_init=true``), the miso internal task will be added.
 
 For the acquisition of AFE handle, there is a slight difference between speech recognition scenario and voice communication scenario:
 
@@ -248,7 +248,7 @@ Users can adjust the switch of each algorithm module and its corresponding param
 
 -  vad_mode: The VAD operating mode. The bigger, the more radical.
 
--  wakenet_model_name: Its default value is NULL in macro ``AFE_CONFIG_DEFAULT()``. At first, you need to choose WakeNet model through ``idf.py menuconfig``. Then you need to assign a specific model name to this place before ``afe_handle->create_from_config``. The type of value is string. Please refer to：`flash_model <../flash_model/README.md>`__ 
+-  wakenet_model_name: Its default value is NULL in macro ``AFE_CONFIG_DEFAULT()``. At first, you need to choose WakeNet model through ``idf.py menuconfig``. Then you need to assign a specific model name to this place before ``afe_handle->create_from_config``. The type of value is string. Please refer to `flash_model <../flash_model/README.md>`__ 
     .. note:: 
         In the example, we use the ``esp_srmodel_filter()`` to get wakenet_model_name. If you choose the multiple wakenet models coexist through menuconfig, this function will return a model name randomly.
 
@@ -288,7 +288,7 @@ Users can adjust the switch of each algorithm module and its corresponding param
 
 -  pcm_config: Configure according to the audio that fed by ``afe->feed()``. This structure has three member variables to configure:
 
-    -  total_ch_num: Total number of audio channels，total_ch_num = mic_num + ref_num。
+    -  total_ch_num: Total number of audio channels, total_ch_num = mic_num + ref_num.
 
     -  mic_num: The number of microphone channels. It only can be set to 1 or 2.
 
@@ -407,7 +407,7 @@ When users need to perform other operations after wake-up, such as offline or on
 
 Users can call ``afe_handle->disable_wakenet(afe_data)`` to stop WakeNet, or call ``afe_handle->enable_wakenet(afe_data)`` to enable WakeNet.
 
-In addition, ESP32S3 chip supports switching between wakenet words. (Note: ESP32 chip only supports one wake-up word and does not support switching). After AFE initialization, the ESP32S3 can switch wakenet word by ``afe_handle->set_wakenet()``. For example, ``afe_handle->set_wakenet(afe_data, “wn9_hilexin”)`` can switch to the “Hi Lexin”. How to configure multiple wakenet words, please refer to: `flash_model <../flash_model/README.md>`__
+In addition, ESP32S3 chip supports switching between wakenet words. (Note: ESP32 chip only supports one wake-up word and does not support switching). After AFE initialization, the ESP32S3 can switch wakenet word by ``afe_handle->set_wakenet()``. For example, ``afe_handle->set_wakenet(afe_data, "wn9_hilexin")`` can switch to the "Hi Lexin". How to configure multiple wakenet words, please refer to: `flash_model <../flash_model/README.md>`__
 
 Usage Of AEC
 ~~~~~~~~~~~~~

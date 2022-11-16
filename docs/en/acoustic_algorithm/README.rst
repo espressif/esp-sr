@@ -1,6 +1,8 @@
 Acoustic Algorithm Introduction
 ===============================
 
+:link_to_translation:`zh_CN:[中文]`
+
 Acoustic algorithms provided in esp-sr include voice activity detection(VAD), adaptive gain control (AGC), acoustic echo cancellation (AEC),noise suppression (NS), and mic-array speech enhancement (MASE). VAD, AGC, AEC, and NS are supported with either single-mic and multi-mic development board, MASE is supported with multi-mic board only.
 
 VAD
