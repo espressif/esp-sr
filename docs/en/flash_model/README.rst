@@ -74,7 +74,7 @@ ESP32 supports:
 -  None
 -  chinese single recognition (MultiNet2)
 
-ESP32S3 支持：
+ESP32S3 supports:
 
 -  None
 
@@ -88,7 +88,7 @@ English Speech Commands Recognition model selection.
 
 This option does not support ESP32.
 
-ESP32S3 Supports：
+ESP32S3 Supports:
 
 -  None
 

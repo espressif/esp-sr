@@ -1,14 +1,17 @@
 wakeNet
 ========
 
-wakeNet, which is a wake word engine built upon neural network, is
-specially designed for low-power embedded MCUs. Now, the wakeNet model
-supports up to 5 wake words.
+:link_to_translation:`zh_CN:[中文]`
+
+wakeNet, which is a wake word engine built upon neural network, is specially designed for low-power embedded MCUs. Now, the wakeNet model supports up to 5 wake words.
 
 Overview
 --------
 
 Please see the flow diagram of wakeNet below:
+
+.. figure:: ../../_static/wakenet_workflow.png
+    :alt: overview
 
 .. raw:: html
 
@@ -20,11 +23,8 @@ Please see the flow diagram of wakeNet below:
 
 -  speech features:
 
-<<<<<<< HEAD
-    We use the `MFCC < https://en.wikipedia.org/wiki/Mel-frequency_cepstrum>`__ method to extract speech spectrum features. The sampling rate of the input audio file is 16KHz, mono, and the encoding mode is signed 16-bit. The window width and step size of each frame are 30ms.
-=======
-    我们使用 `MFCC <https://en.wikipedia.org/wiki/Mel-frequency_cepstrum>`__ 方法提取语音频谱特征。输入的音频文件采样率为16KHz，单声道，编码方式为signed 16-bit。每帧窗宽和步长均为30ms。
->>>>>>> 7c465343973cd5291b534f75bae9a6f2fc6465d8
+    We use the `MFCC <https://en.wikipedia.org/wiki/Mel-frequency_cepstrum>`__ method to extract speech spectrum features. The sampling rate of the input audio file is 16KHz, mono, and the encoding mode is signed 16-bit. The window width and step size of each frame are 30ms.
+    We use `MFCC <https://en.wikipedia.org/wiki/Mel-frequency_cepstrum>`__ method to extract the speech spectrum features. The input audio file has a sample rate of 16KHz, mono, and is encoded as signed 16-bit. each frame has a window width and step size of 30ms.
 
 -  Speech Feature:
 
@@ -72,11 +72,11 @@ Use wakeNet
 
 -  How to select the wakeNet model
 
-    Please refer to `flash model  <../flash_model/README.md>`__.
+    Please refer to `flash model  <../flash_model/README.rst>`__.
 
 -  How to run wakeNet
 
-    wakeNet is currently included in the `AFE <../audio_front_end/README.md>`__, which is running by default, and returns the detect results through the AFE fetch interface.
+    wakeNet is currently included in the `AFE <../audio_front_end/README.rst>`__, which is running by default, and returns the detect results through the AFE fetch interface.
 
     If users do not wants to initialize WakeNet, please use:
 
@@ -94,9 +94,9 @@ Use wakeNet
 Performance Test
 ----------------
 
-Please refer to `Performance Test <../performance_test/README.md>`__.
+Please refer to `Performance Test <../performance_test/README.rst>`__.
 
 Wake Word Customization
 -----------------------
 
-For details on how to customize your wake words, please see `Espressif Speech Wake Word Customization Process <ESP_Wake_Words_Customization.md>`__.
+For details on how to customize your wake words, please see `Espressif Speech Wake Word Customization Process <ESP_Wake_Words_Customization.rst>`__.

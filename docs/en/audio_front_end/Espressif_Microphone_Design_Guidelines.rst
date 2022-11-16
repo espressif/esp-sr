@@ -1,5 +1,7 @@
 Espressif Microphone Design Guidelines
-======================================
+=======================================
+
+:link_to_translation:`zh_CN:[中文]`
 
 This document provides microphone design guidelines and suggestions for the ESP32-S3 series of audio development boards.
 

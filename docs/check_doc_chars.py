@@ -22,7 +22,7 @@ if sys.version_info[0] == 2:
     sys.setdefaultencoding('utf-8')
 
 # allowed characters, include some chinese characters, symbol, and punctuation
-at_allowed_chars_list = ['中文', '®', '℃', '…', '✅', '❌', '√', '×', '├', '└', '│', '–', '—']
+at_allowed_chars_list = ['中文', '®', '℃', '…', '✅', '❌', '√', '×', '├', '└', '│', '–', '—',"±","°"]
 at_not_allowed_chars_list = re.compile(b'[^\x0a\x0d\x20-\x7e]')
 at_file_white_list = ['index_of_abbreviations.rst']
 

@@ -1,10 +1,12 @@
 Espressif Speech Wake-up Solution Customization Process
 ========================================================
 
+:link_to_translation:`zh_CN:[中文]`
+
 Speech Wake Word Customization Process
 ---------------------------------------
 
-Espressif provides users with the offline wake word customization service, which allows users to use both publicly available wake words (such as “Hi Lexin”, ”Alexa”, and “hi,ESP”) and customized wake words.
+Espressif provides users with the offline wake word customization service, which allows users to use both publicly available wake words (such as "Hi Lexin", "Alexa", and "hi,ESP") and customized wake words.
 
 #. If you want to use publicly available wake words for commercial use
 
@@ -24,7 +26,7 @@ Espressif provides users with the offline wake word customization service, which
     -  Otherwise
 
         -  Espressif will collect and provide all the training corpus;
-        -  Espressif will deliver a static library file of successfully trained wake word to you, but won’t share the corpus;
+        -  Espressif will deliver a static library file of successfully trained wake word to you, but won't share the corpus;
         -  It will take around three weeks to collect and train the corpus;
         -  Espressif will charge training fees (corpus collecting fees included) based on the scale of your production.
 
@@ -58,7 +60,7 @@ As mentioned above, you can provide your own training corpus for Espressif. Belo
             -  The whole product is strongly recommended.
             -  The development board of your product also works when there is no cavity structure.
 
-        -  Record in 16 kHz, and don’t use **resampling**.
+        -  Record in 16 kHz, and don't use **resampling**.
 
     -  At the recording site, pay attention to the impact of reverberation interference in a closed environment.
     -  Collect samples with multiple recording devices at the same time (recommended).

@@ -1,6 +1,8 @@
 MultiNet Introduction
 =====================
 
+:link_to_translation:`zh_CN:[中文]`
+
 MultiNet is a lightweight model designed to realize speech commands
 recognition offline on ESP32 series. Now, up to 200 speech commands,
 including customized commands, are supported.
@@ -25,7 +27,6 @@ characters or English words.
 
 The following table shows the model support of Espressif SoCs:
 
-<<<<<<< HEAD
 +---------+-----------+-------------+---------------+-------------+
 |  Chip   |   ESP32   |   ESP32S3                                 |
 +=========+===========+=============+===============+=============+
@@ -35,12 +36,6 @@ The following table shows the model support of Espressif SoCs:
 +---------+-----------+-------------+---------------+-------------+
 | English |           |             |               | √           |
 +---------+-----------+-------------+---------------+-------------+
-=======
-.. figure:: ../../_static/MultiNet_model.png
-    :alt: multinet_model
-
-    multinet_model
->>>>>>> 7c465343973cd5291b534f75bae9a6f2fc6465d8
 
 .. note:: 
     Note: the model ending with Q8 represents the 8bit version of the model, means more lightweight.
@@ -66,7 +61,7 @@ Requirements of speech commands
 -  Mixed Chinese and English is not supported in command words
 -  Currently, up to 200 command words are supported
 -  The command word cannot contain Arabic numerals and special characters
--  Avoid common command words like “hello”
+-  Avoid common command words like "hello"
 -  The greater the pronunciation difference of each Chinese character / word in the command word, the better the performance
 
 Speech commands customization method
@@ -82,13 +77,13 @@ Speech commands string need to meet specific formats, as follows:
 
 -  Chines
 
-    Chinese speech commands need to use Chinese Pinyin, and there should be a space between the Pinyin spelling of each word. For example, “打开空调” should be written as “da kai kong tiao”, “打开绿色灯” should be written as “da kai lv se deng”.
+    Chinese speech commands need to use Chinese Pinyin, and there should be a space between the Pinyin spelling of each word.
 
     In addition, we also provide corresponding tools for users to convert Chinese characters into pinyin. See details:
 
 -  English
 
-    English speech commands need to be represented by specific phonetic symbols. The phonetic symbols of each word are separated by spaces, such as “turn on the light”, which needs to be written as “TkN nN jc LiT”.
+    English speech commands need to be represented by specific phonetic symbols. The phonetic symbols of each word are separated by spaces, such as "turn on the light", which needs to be written as "TkN nN jc LiT".
 
    **We provide specific conversion rules and tools. For details, please refer to the English G2P** `tool <../../tool/multinet_g2p.py>`__.
 
@@ -108,7 +103,7 @@ Here we provide two methods of adding speech commands:
 
         menuconfig_add_speech_commands
 
-    Please note that a single ``Command ID`` can support multiple phrases. For example, “da kai kong tiao” and “kai kong tiao” have the same meaning, you can write them in the entry corresponding to the same command ID, and separate the adjacent entries with the English character “,” without spaces before and after “,”.
+    Please note that a single ``Command ID`` can support multiple phrases. For example, "da kai kong tiao" and "kai kong tiao" have the same meaning, you can write them in the entry corresponding to the same command ID, and separate the adjacent entries with the English character "," without spaces before and after ",".
 
     Then call the following API:
 
@@ -149,7 +144,7 @@ Run speech commands recognition
 
 Speech commands recognition needs to be run together with the audio front-end (AFE) in esp-sr (WakeNet needs to be enabled in AFE). For the use of AFE, please refer to the document:
 
-`AFE 介绍及使用 <../audio_front_end/README_CN.md>`__
+`AFE Introduction and Use <../audio_front_end/README_CN.md>`__
 
 MultiNet Initialization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
