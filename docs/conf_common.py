@@ -50,7 +50,7 @@ github_repo = 'espressif/esp-sr'
 html_context['github_user'] = 'espressif'
 html_context['github_repo'] = 'esp-sr'
 
-idf_targets = ['esp32']
+idf_targets = ['esp32', 'esp32s2', 'esp32s3']
 languages = ['en', 'zh_CN']
 
 google_analytics_id = os.environ.get('CI_GOOGLE_ANALYTICS_ID', None)
