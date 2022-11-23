@@ -29,5 +29,3 @@ ESP-SR 用户指南
     麦克风设计指南 <audio_front_end/Espressif_Microphone_Design_Guidelines>
     测试报告 <test_report/README>
     性能测试 <performance_test/README>
-
-* :ref:`genindex`
