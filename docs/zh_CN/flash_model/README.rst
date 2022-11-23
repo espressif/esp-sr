@@ -153,18 +153,20 @@ ESP32S3 支持：
 
 -  自定义路径 如果用户想将模型放置于指定文件夹，可以自己修改 ``get_model_base_path()`` 函数，位于 ``ESP-SR_PATH/model/model_path.c``。 比如，指定文件夹为 SD 卡目录中的 ``espmodel``, 则可以修改该函数为：
 
-    ::
+.. only:: html
 
-        char *get_model_base_path(void)
-        {
-        #if defined CONFIG_MODEL_IN_SDCARD
-            return "sdcard/espmodel";
-        #elif defined CONFIG_MODEL_IN_SPIFFS
-            return "srmodel";
-        #else
-            return NULL;
-        #endif
-        }
+        ::
+
+            char *get_model_base_path(void)
+            {
+            #if defined CONFIG_MODEL_IN_SDCARD
+                return "sdcard/espmodel";
+            #elif defined CONFIG_MODEL_IN_SPIFFS
+                return "srmodel";
+            #else
+                return NULL;
+            #endif
+            }
 
 -  初始化 SD 卡
 
@@ -172,39 +174,41 @@ ESP32S3 支持：
 
 完成以上操作后，便可以进行工程的烧录。
 
-代码中模型初始化与使用
-^^^^^^^^^^^^^^^^^^^^^^
+.. only:: html
 
-::
+    代码中模型初始化与使用
+    ^^^^^^^^^^^^^^^^^^^^^^
 
-        //
-        // step1: initialize spiffs and return models in spiffs
-        // 
-        srmodel_list_t *models = esp_srmodel_init();
+    ::
 
-        //
-        // step2: select the specific model by keywords
-        //
-        char *wn_name = esp_srmodel_filter(models, ESP_WN_PREFIX, NULL); // select wakenet model
-        char *nm_name = esp_srmodel_filter(models, ESP_MN_PREFIX, NULL); // select multinet model
-        char *alexa_wn_name  = esp_srmodel_filter(models, ESP_WN_PREFIX, "alexa"); // select wakenet with "alexa" wake word.
-        char *en_mn_name  = esp_srmodel_filter(models, ESP_MN_PREFIX, ESP_MN_ENGLISH); // select english multinet model
-        char *cn_mn_name  = esp_srmodel_filter(models, ESP_MN_PREFIX, ESP_MN_CHINESE); // select english multinet model
+            //
+            // step1: initialize spiffs and return models in spiffs
+            // 
+            srmodel_list_t *models = esp_srmodel_init();
 
-        // It also works if you use the model name directly in your code.
-        char *my_wn_name = "wn9_hilexin"  
-        // we recommend you to check that it is loaded correctly
-        if (!esp_srmodel_exists(models, my_wn_name))
-            printf("%s can not be loaded correctly\n")
+            //
+            // step2: select the specific model by keywords
+            //
+            char *wn_name = esp_srmodel_filter(models, ESP_WN_PREFIX, NULL); // select wakenet model
+            char *nm_name = esp_srmodel_filter(models, ESP_MN_PREFIX, NULL); // select multinet model
+            char *alexa_wn_name  = esp_srmodel_filter(models, ESP_WN_PREFIX, "alexa"); // select wakenet with "alexa" wake word.
+            char *en_mn_name  = esp_srmodel_filter(models, ESP_MN_PREFIX, ESP_MN_ENGLISH); // select english multinet model
+            char *cn_mn_name  = esp_srmodel_filter(models, ESP_MN_PREFIX, ESP_MN_CHINESE); // select english multinet model
 
-        //
-        // step3: initialize model
-        //
-        esp_wn_iface_t *wakenet = esp_wn_handle_from_name(wn_name);
-        model_iface_data_t *wn_model_data = wakenet->create(wn_name, DET_MODE_2CH_90);
+            // It also works if you use the model name directly in your code.
+            char *my_wn_name = "wn9_hilexin"  
+            // we recommend you to check that it is loaded correctly
+            if (!esp_srmodel_exists(models, my_wn_name))
+                printf("%s can not be loaded correctly\n")
 
-        esp_mn_iface_t *multinet = esp_mn_handle_from_name(mn_name);
-        model_iface_data_t *mn_model_data = multinet->create(mn_name, 6000);
+            //
+            // step3: initialize model
+            //
+            esp_wn_iface_t *wakenet = esp_wn_handle_from_name(wn_name);
+            model_iface_data_t *wn_model_data = wakenet->create(wn_name, DET_MODE_2CH_90);
+
+            esp_mn_iface_t *multinet = esp_mn_handle_from_name(mn_name);
+            model_iface_data_t *mn_model_data = multinet->create(mn_name, 6000);
 
 .. |select wake wake| image:: ../../_static/wn_menu1.png
 .. |multi wake wake| image:: ../../_static/wn_menu2.png

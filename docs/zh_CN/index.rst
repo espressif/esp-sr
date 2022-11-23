@@ -24,7 +24,6 @@ ESP-SR 用户指南
     唤醒词模型 <wake_word_engine/README>
     定制化唤醒词 <wake_word_engine/ESP_Wake_Words_Customization>
     语音指令 <speech_command_recognition/README>
-    声学算法介绍 <acoustic_algorithm/README>
     模型加载方式 <flash_model/README>
     麦克风设计指南 <audio_front_end/Espressif_Microphone_Design_Guidelines>
     测试报告 <test_report/README>

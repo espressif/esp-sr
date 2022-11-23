@@ -21,7 +21,6 @@ Based on years of hardware design and development experience, Loxin can provide 
     Wake word model <wake_word_engine/README>
     Customized wake words <wake_word_engine/ESP_Wake_Words_Customization>
     Speech commands <speech_command_recognition/README>
-    Acoustic algorithm introduction <acoustic_algorithm/README>
     Model loading method <flash_model/README>
     Microphone Design Guidelines <audio_front_end/Espressif_Microphone_Design_Guidelines>
     Test Reports <test_report/README>

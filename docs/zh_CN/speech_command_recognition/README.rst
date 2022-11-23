@@ -85,6 +85,11 @@ MultiNet 对命令词自定义方法没有限制，用户可以通过任意方�
 
    **并且我们也提供相应的工具，供用户将汉字转换为拼音，详细可见：** `英文转音素工具 <../../tool/multinet_g2p.py>`__。
 
+.. only:: latex
+
+    .. figure:: ../../_static/QR_multinet_g2p.png
+        :alt: menuconfig_add_speech_commands
+
 离线设置命令词
 ^^^^^^^^^^^^^^^
 

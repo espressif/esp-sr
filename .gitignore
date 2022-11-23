@@ -6,6 +6,7 @@ include/sdkconfig.h
 build/
 sdkconfig.old
 sdkconfig
+<<<<<<< HEAD
 .DS_Store
 
 *.pyc
@@ -24,3 +25,8 @@ docs/doxygen_sqlite3.db
 # Downloaded font files
 docs/_static/DejaVuSans.ttf
 docs/_static/NotoSansSC-Regular.otf
+=======
+model/target/*
+.vscode
+docs/_build/*
+>>>>>>> 0981bc8425d6cace35ebb73789265a1c2e14dc92

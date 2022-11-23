@@ -24,12 +24,22 @@ WakeNet的流程图如下：
 -  Speech Features：
     我们使用 `MFCC <https://en.wikipedia.org/wiki/Mel-frequency_cepstrum>`__ 方法提取语音频谱特征。输入的音频文件采样率为16KHz，单声道，编码方式为signed 16-bit。每帧窗宽和步长均为30ms。
 
+.. only:: latex
+
+    .. figure:: ../../_static/QR_MFCC.png
+        :alt: overview
+
 -  Neural Network：
     神经网络结构已经更新到第9版，其中：
 
     -  wakeNet1,wakeNet2,wakeNet3,wakeNet4已经停止使用。
     -  wakeNet5应用于ESP32芯片。
     -  wakeNet8和wakeNet9应用于ESP32S3芯片，模型基于　`Dilated Convolution <https://arxiv.org/pdf/1609.03499.pdf>`__ 结构。
+
+.. only:: latex
+
+    .. figure:: ../../_static/QR_Dilated_Convolution.png
+        :alt: overview
 
     注意，WakeNet5,WakeNet5X2 和 WakeNet5X3 的网络结构一致，但是 WakeNet5X2 和 WakeNet5X3 的参数比 WakeNet5 要多。请参考 `性能测试 <#性能测试>`__ 来获取更多细节。
 
@@ -71,9 +81,7 @@ WakeNet使用
 
 -  WakeNet 运行
 
-    WakeNet 目前包含在语音前端算法
-    `AFE <../audio_front_end/README_CN.md>`__
-    中，默认为运行状态，并将识别结果通过 AFE fetch 接口返回。
+    WakeNet 目前包含在语音前端算法 `AFE <../audio_front_end/README_CN.md>`__中，默认为运行状态，并将识别结果通过 AFE fetch 接口返回。
 
     如果用户不需要初始化 WakeNet，请在 AFE 配置时选择：
 
