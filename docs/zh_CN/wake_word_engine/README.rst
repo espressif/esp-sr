@@ -81,7 +81,7 @@ WakeNet使用
 
 -  WakeNet 运行
 
-    WakeNet 目前包含在语音前端算法 `AFE <../audio_front_end/README_CN.md>`__中，默认为运行状态，并将识别结果通过 AFE fetch 接口返回。
+    WakeNet 目前包含在语音前端算法 `AFE <../audio_front_end/README_CN.md>`__ 中，默认为运行状态，并将识别结果通过 AFE fetch 接口返回。
 
     如果用户不需要初始化 WakeNet，请在 AFE 配置时选择：
 
@@ -89,7 +89,7 @@ WakeNet使用
 
         afe_config.wakenet_init = False.
 
-    如果用户想临时关闭/打开 WakeNet, 请在运行过程中调用：
+        如果用户想临时关闭/打开 WakeNet, 请在运行过程中调用：
 
     ::
 

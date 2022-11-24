@@ -295,7 +295,7 @@ AFE 的输出音频为单通道数据。在语音识别场景，若WakeNet 开�
         * @param afe_config        The config of AFE_SR
         * @returns Handle to the AFE_SR data
         */
-    typedef esp_afe_sr_data_t* (*esp_afe_sr_iface_op_create_from_config_t)(afe_config_t *afe_config);
+        typedef esp_afe_sr_data_t* (*esp_afe_sr_iface_op_create_from_config_t)(afe_config_t *afe_config);
 
     feed 音频数据
     ~~~~~~~~~~~~~~~~
@@ -318,7 +318,7 @@ AFE 的输出音频为单通道数据。在语音识别场景，若WakeNet 开�
         *              `get_feed_chunksize`.
         * @return      The size of input
         */
-    typedef int (*esp_afe_sr_iface_op_feed_t)(esp_afe_sr_data_t *afe, const int16_t* in);
+        typedef int (*esp_afe_sr_iface_op_feed_t)(esp_afe_sr_data_t *afe, const int16_t* in);
 
     获取音频通道数：
 
@@ -332,7 +332,7 @@ AFE 的输出音频为单通道数据。在语音识别场景，若WakeNet 开�
         * @param afe   The AFE_SR object to query
         * @return      The amount of total channels
         */
-    typedef int (*esp_afe_sr_iface_op_get_total_channel_num_t)(esp_afe_sr_data_t *afe);
+        typedef int (*esp_afe_sr_iface_op_get_total_channel_num_t)(esp_afe_sr_data_t *afe);
 
     fetch 音频数据
     ~~~~~~~~~~~~~~
@@ -352,7 +352,7 @@ AFE 的输出音频为单通道数据。在语音识别场景，若WakeNet 开�
         * @param afe The AFE_SR object to query
         * @return The amount of samples to feed the fetch function
         */
-    typedef int (*esp_afe_sr_iface_op_get_samp_chunksize_t)(esp_afe_sr_data_t *afe);
+        typedef int (*esp_afe_sr_iface_op_get_samp_chunksize_t)(esp_afe_sr_data_t *afe);
 
     ``afe_handle->fetch()`` 的函数声明如下：
 
@@ -366,7 +366,7 @@ AFE 的输出音频为单通道数据。在语音识别场景，若WakeNet 开�
         * @param afe   The AFE_SR object to query
         * @return      The result of output, please refer to the definition of `afe_fetch_result_t`. (The frame size of output audio can be queried by the `get_fetch_chunksize`.)
         */
-    typedef afe_fetch_result_t* (*esp_afe_sr_iface_op_fetch_t)(esp_afe_sr_data_t *afe);
+        typedef afe_fetch_result_t* (*esp_afe_sr_iface_op_fetch_t)(esp_afe_sr_data_t *afe);
 
     其返回值为结构体指针，结构体定义如下：
 
@@ -377,15 +377,15 @@ AFE 的输出音频为单通道数据。在语音识别场景，若WakeNet 开�
         */
         typedef struct afe_fetch_result_t
         {
-        int16_t *data;                          // the data of audio.
-        int data_size;                          // the size of data. The unit is byte.
-        int wakeup_state;                       // the value is wakenet_state_t
-        int wake_word_index;                    // if the wake word is detected. It will store the wake word index which start from 1.
-        int vad_state;                          // the value is afe_vad_state_t
-        int trigger_channel_id;                 // the channel index of output
-        int wake_word_length;                   // the length of wake word. It's unit is the number of samples.
-        int ret_value;                          // the return state of fetch function
-        void* reserved;                         // reserved for future use
+            int16_t *data;                          // the data of audio.
+            int data_size;                          // the size of data. The unit is byte.
+            int wakeup_state;                       // the value is wakenet_state_t
+            int wake_word_index;                    // if the wake word is detected. It will store the wake word index which start from 1.
+            int vad_state;                          // the value is afe_vad_state_t
+            int trigger_channel_id;                 // the channel index of output
+            int wake_word_length;                   // the length of wake word. It's unit is the number of samples.
+            int ret_value;                          // the return state of fetch function
+            void* reserved;                         // reserved for future use
         } afe_fetch_result_t;
 
     WakeNet 使用
