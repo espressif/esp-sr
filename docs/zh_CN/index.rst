@@ -3,12 +3,43 @@ ESP-SR 用户指南
 
 :link_to_translation:`en:[English]`
 
-这里是乐鑫 `ESP-SR <https://github.com/espressif/esp-sr>`__ 本文档将介绍乐鑫以 ESP32 和 ESP32S3 系列芯片为基础推出的 AI 语音解决方案。从前端音频处理，到语音命令词识别，从硬件设计建议，到性能测试方法，全面介绍乐鑫在 AI 语音方面的系统性工作，为用户在乐鑫 ESP32 系列芯片及开发板上构建 AIoT 应用，提供有力参考。
+这里是乐鑫 `ESP-SR <https://github.com/espressif/esp-sr>`__ 本文档旨在指导用户基于 ESP32 系列芯片为基础搭建　AI 语音解决方案，将通过一个简单的示例展示如何使用ESP-SR中的算法和模型．
 
-乐鑫 AFE 算法已通过亚马逊 Alexa 内置设备的 Software Audio Front-End 认证。可在语音通话和语音识别等场景下提供高质量音频输入。 AFE 算法中内置的唤醒模块可实现本地语音唤醒功能，且支持唤醒词定制。乐鑫语音命令词识别模型可支持最多 200 条中英文命令词，且可在运行中修改命令词，为应用带来极大灵活性。
+概述
+----
 
-基于多年硬件设计与开发经验，乐鑫可为客户提供语音开发板 Review 服务，并乐意为客户自制开发板进行测试和调优，以展现算法最优性能。客户也可按照乐鑫提供的测试方式和自测结果，对开发板和整机产品进行深入评估。
+ESP-SR　支持以下模块：
 
+    * 音频前端 (Audio Front-End) <./audio_front_end/README>
+    * 唤醒词检测　(Wake Word Detection) <./wake_word_engine/README>
+    * 语音指令识别　(Speech Command Recognition) <./speech_command_recognition/README>
+    * 语音合成　(目前只支持中文)
+
+准备工作
+----
+
+硬件:
+~~~~~~
+
+    * 一款音频开发版，推荐使用　ESP32-S3-Korvo-1 或者　ESP32-S3-Korvo-２
+    * **USB 数据线** (A 转　Micro-B)
+    * 电脑　(Linux)
+
+．．　note:: 目前一些开发板使用的是 USB Type C 接口．请确保使用合适的数据线连接开发板！
+
+软件：
+~~~~~~
+
+    * 下载 `ESP-SKAINET <https://github.com/espressif/esp-skainet>`，　ESP-SR 将作为 ESP-SKAINET 的组件被一起下载
+    * 配置安装 ESP－IDF, 推荐使用 ESP-SKAINET 中包含的版本． 安装方法请参考　｀ESP-IDF 快速入门　＜https://docs.espressif.com/projects/esp-idf/zh_CN/latest/esp32/get-started/index.html＞｀
+
+
+编译运行一个示例
+----
+
+    * 进入 ESP-SKAINET/examples/cn_speech_commands_recognition 目录，该示例为中文命令指令识别示例，通过说指定唤醒词，触发语音指令识别，当一段时间没有语音指令后，会语音指令识别，等待下一次唤醒词触发．
+    * 参考该示例目录下的配置和编译说明，运行该示例．
+　　　
 .. toctree::
     :hidden:
 

@@ -1,4 +1,4 @@
-性能测试
+资源消耗
 ========
 
 :link_to_translation:`en:[English]`
