@@ -1,0 +1,160 @@
+stages:
+  - build
+  - deploy
+  - deploy_docs
+
+# global variables
+variables: &global-variables
+  ESP_DOCS_ENV_IMAGE: "$CI_DOCKER_REGISTRY/esp-idf-doc-env-v5.0:2-2"
+  IDF_PATH: "$CI_PROJECT_DIR/esp-idf"
+  IDF_REPO: ${GITLAB_SSH_SERVER}/espressif/esp-idf.git
+  GIT_STRATEGY: clone
+  GIT_SUBMODULE_STRATEGY: recursive
+  ESPCI_TOKEN: $GITLAB_KEY
+
+before_script:
+  - echo $ESP_DOCS_ENV_IMAGE
+
+default:
+  retry:
+    max: 2
+    # In case of a runner failure we could hop to another one, or a network error could go away.
+    when: always
+
+.setup_idf_ci_env: &setup_idf_ci_env
+  - source esp-idf/tools/ci/utils.sh
+  - source esp-idf/tools/ci/configure_ci_environment.sh
+  - esp-idf/tools/idf_tools.py install
+  - esp-idf/tools/idf_tools.py export
+
+doc_build_html_en:
+  stage: build
+  image: $ESP_DOCS_ENV_IMAGE
+  tags:
+    - build_docs
+  needs: []
+  artifacts:
+    when: always
+    paths:
+      - docs/_build/*/*/*.txt
+      - docs/_build/*/*/html/*
+    expire_in: 6 mos
+  script:
+    - cd docs
+    - ./check_lang_folder_sync.sh
+    - ./check_doc_chars.py
+    - pip install -r requirements.txt
+    # build html
+    - build-docs -t esp32 -l en -bs html
+
+doc_build_html_cn:
+  stage: build
+  image: $ESP_DOCS_ENV_IMAGE
+  tags:
+    - build_docs
+  needs: []
+  artifacts:
+    when: always
+    paths:
+      - docs/_build/*/*/*.txt
+      - docs/_build/*/*/html/*
+    expire_in: 6 mos
+  script:
+    - cd docs
+    - ./check_lang_folder_sync.sh
+    - ./check_doc_chars.py
+    - pip install -r requirements.txt
+    # build html
+    - build-docs -t esp32 -l zh_CN -bs html
+
+# Separate PDF build and HTML build due to artifacts size limit.
+doc_build_pdf_en:
+  stage: build
+  image: $ESP_DOCS_ENV_IMAGE
+  tags:
+    - build_docs
+  needs: []
+  artifacts:
+    when: always
+    paths:
+      - docs/_build/*/*/*.txt
+      - docs/_build/*/*/latex/*
+    expire_in: 6 mos
+  script:
+    - cd docs
+    - ./check_lang_folder_sync.sh
+    - ./check_doc_chars.py
+    - pip install -r requirements.txt
+    # build pdf
+    - build-docs -t esp32 -l en -bs latex
+
+doc_build_pdf_cn:
+  stage: build
+  image: $ESP_DOCS_ENV_IMAGE
+  tags:
+    - build_docs
+  needs: []
+  artifacts:
+    when: always
+    paths:
+      - docs/_build/*/*/*.txt
+      - docs/_build/*/*/latex/*
+    expire_in: 6 mos
+  script:
+    - cd docs
+    - ./check_lang_folder_sync.sh
+    - ./check_doc_chars.py
+    - pip install -r requirements.txt
+    # build pdf
+    - build-docs -t esp32 -l zh_CN -bs latex
+
+.deploy_docs_template:
+  stage: deploy_docs
+  image: $ESP_DOCS_ENV_IMAGE
+  tags:
+    - deploy
+  needs:
+    - doc_build_html_en
+    - doc_build_html_cn
+    - doc_build_pdf_en
+    - doc_build_pdf_cn
+  script:
+    - source ${CI_PROJECT_DIR}/docs/utils.sh
+    - add_doc_server_ssh_keys $DOCS_DEPLOY_PRIVATEKEY $DOCS_DEPLOY_SERVER $DOCS_DEPLOY_SERVER_USER
+    - export GIT_VER=$(git describe --always)
+    - pip install -r ${CI_PROJECT_DIR}/docs/requirements.txt
+    - deploy-docs
+
+deploy_docs_preview:
+  extends:
+    - .deploy_docs_template
+  except:
+    refs:
+      - master
+  variables:
+    TYPE: "preview"
+    DOCS_BUILD_DIR: "${CI_PROJECT_DIR}/docs/_build/"
+    DOCS_DEPLOY_PRIVATEKEY: "$DOCS_PREVIEW_DEPLOY_KEY"
+    DOCS_DEPLOY_SERVER: "$DOCS_PREVIEW_SERVER"
+    DOCS_DEPLOY_SERVER_USER: "$DOCS_PREVIEW_SERVER_USER"
+    DOCS_DEPLOY_PATH: "$DOCS_PREVIEW_PATH"
+    DOCS_DEPLOY_URL_BASE: "https://$DOCS_PREVIEW_SERVER_URL/docs/esp-sr"
+
+deploy_docs_production:
+  extends:
+    - .deploy_docs_template
+  # only:
+  #   refs:
+  #     - master
+  #     - /^release\/v.*$/
+  except:
+    refs:
+      - master
+  variables:
+    TYPE: "production"
+    DOCS_BUILD_DIR: "${CI_PROJECT_DIR}/docs/_build/"
+    DOCS_DEPLOY_PRIVATEKEY: "$DOCS_PROD_DEPLOY_KEY"
+    DOCS_DEPLOY_SERVER: "$DOCS_PROD_SERVER"
+    DOCS_DEPLOY_SERVER_USER: "$DOCS_PROD_SERVER_USER"
+    DOCS_DEPLOY_PATH: "$DOCS_PROD_PATH"
+    DOCS_DEPLOY_URL_BASE: "https://docs.espressif.com/projects/esp-sr"
