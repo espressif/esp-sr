@@ -24,6 +24,6 @@ Based on years of hardware design and development experience, Loxin can provide 
     Model loading method <flash_model/README>
     Microphone Design Guidelines <audio_front_end/Espressif_Microphone_Design_Guidelines>
     Test Reports <test_report/README>
-    Performance Testing <performance_test/README>
+    Performance Testing <benchmark/README>
 
 Translated with www.DeepL.com/Translator (free version)

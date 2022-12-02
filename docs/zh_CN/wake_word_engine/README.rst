@@ -99,7 +99,7 @@ WakeNet使用
 性能测试
 --------
 
-具体请参考 `Performance Test <../performance_test/README.md>`__ 。
+具体请参考 `Performance Test <../benchmark/README.md>`__ 。
 
 唤醒词定制
 ----------

@@ -26,7 +26,7 @@ ESP32_DOCS = ['audio_front_end/README.rst',
               'flash_model/README.rst',
               'audio_front_end/Espressif_Microphone_Design_Guidelines.rst',
               'test_report/README.rst',
-              'performance_test/README.rst',
+              'benchmark/README.rst',
             ]
 
 # format: {tag needed to include: documents to included}, tags are parsed from sdkconfig and peripheral_caps.h headers

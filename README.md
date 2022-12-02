@@ -18,7 +18,7 @@ Espressif wake word engine [WakeNet](docs/wake_word_engine/README.md) is special
 
 Currently, Espressif has not only provided an official wake word "Hi,Lexin","Hi,ESP" to public for free, but also allows customized wake words. For details on how to customize your own wake words, please see [Espressif Speech Wake Words Customization Process](docs/wake_word_engine/ESP_Wake_Words_Customization.md).
 
-- [WakeNet Performance](docs/performance_test/README.md)
+- [WakeNet Performance](docs/benchmark/README.md)
 
 ## Speech Command Recognition
 
@@ -26,7 +26,7 @@ Espressif's speech command recognition model [MultiNet](docs/speech_command_reco
 
 Currently, Espressif **MultiNet** supports up to 200 Chinese or English speech commands, such as “打开空调” (Turn on the air conditioner) and “打开卧室灯” (Turn on the bedroom light).
 
-- [MultiNet Performance](docs/performance_test/README.md)
+- [MultiNet Performance](docs/benchmark/README.md)
 
 ## Audio Front End
 
@@ -34,7 +34,7 @@ Espressif Audio Front-End [AFE](docs/audio_front_end/README.md) integrates AEC (
 
 Our two-mic Audio Front-End (AFE) have been qualified as a “Software Audio Front-End Solution” for [Amazon Alexa Built-in devices](https://developer.amazon.com/en-US/alexa/solution-providers/dev-kits#software-audio-front-end-dev-kits).
 
-- [Audio Front-End Performance](docs/performance_test/README.md)
+- [Audio Front-End Performance](docs/benchmark/README.md)
 
 **In order to achieve optimal performance:**
 
