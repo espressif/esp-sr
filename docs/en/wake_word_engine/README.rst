@@ -94,7 +94,7 @@ Use wakeNet
 Performance Test
 ----------------
 
-Please refer to `Performance Test <../performance_test/README.rst>`__.
+Please refer to `Performance Test <../benchmark/README.rst>`__.
 
 Wake Word Customization
 -----------------------
