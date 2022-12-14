@@ -1,0 +1,12 @@
+version: "1.0.1"
+description: esp_sr provides basic algorithms for Speech Recognition applications
+url: https://github.com/espressif/esp-sr
+dependencies:
+  idf: ">=4.4"
+targets:
+  - esp32
+  - esp32s3
+files:
+  exclude:
+    - ".github"
+    - "docs"
