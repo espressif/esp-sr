@@ -158,3 +158,23 @@ deploy_docs_production:
     DOCS_DEPLOY_SERVER_USER: "$DOCS_PROD_SERVER_USER"
     DOCS_DEPLOY_PATH: "$DOCS_PROD_PATH"
     DOCS_DEPLOY_URL_BASE: "https://docs.espressif.com/projects/esp-sr"
+
+push_to_github:
+  stage: deploy
+  image: $CI_DOCKER_REGISTRY/esp-env-v4.4:1
+  tags:
+    - deploy
+  when: on_success
+  only:
+    - master
+    - /^release\/v/
+  script:
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo -n $GH_PUSH_KEY > ~/.ssh/id_rsa_base64
+    - base64 --decode --ignore-garbage ~/.ssh/id_rsa_base64 > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+    - git remote remove github &>/dev/null || true
+    - git remote add github git@github.com:espressif/esp-sr.git
+    - git push github "${CI_COMMIT_SHA}:refs/heads/${CI_COMMIT_REF_NAME}"
