@@ -75,13 +75,13 @@ WakeNet使用
 
 -  WakeNet 模型选择
 
-    WakeNet 模型选择请参考 `flash model 介绍 <../flash_model/README_CN.md>`__ 。
+    WakeNet 模型选择请参考 :doc:`flash model 介绍 <../flash_model/README>` 。
 
-    自定义的唤醒词，请参考 `乐鑫语音唤醒词定制流程 <乐鑫语音唤醒词定制流程.md>`__ 。
+    自定义的唤醒词，请参考 :doc:`乐鑫语音唤醒词定制流程 <ESP_Wake_Words_Customization>` 。
 
 -  WakeNet 运行
 
-    WakeNet 目前包含在语音前端算法 `AFE <../audio_front_end/README_CN.md>`__ 中，默认为运行状态，并将识别结果通过 AFE fetch 接口返回。
+    WakeNet 目前包含在语音前端算法 :doc:`AFE <../audio_front_end/README>` 中，默认为运行状态，并将识别结果通过 AFE fetch 接口返回。
 
     如果用户不需要初始化 WakeNet，请在 AFE 配置时选择：
 
@@ -99,9 +99,9 @@ WakeNet使用
 性能测试
 --------
 
-具体请参考 `Performance Test <../benchmark/README.md>`__ 。
+具体请参考 :doc:`Performance Test <../benchmark/README>` 。
 
 唤醒词定制
 ----------
 
-如果需要定制唤醒词，请参考 `乐鑫语音唤醒词定制流程 <乐鑫语音唤醒词定制流程.md>`__ 。
+如果需要定制唤醒词，请参考 :doc:`乐鑫语音唤醒词定制流程 <ESP_Wake_Words_Customization>` 。

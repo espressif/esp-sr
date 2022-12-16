@@ -14,7 +14,7 @@ high-quality audio data for further wake-up or speech recognition.
 
 Espressif AFE is divided into two sets of algorithms:
 
-#. for speech recognition scenarios; 
+#. for speech recognition scenarios;
 #. for voice communication scenarios. Shown as below:
 
 -  Speech recognition scenarios
@@ -44,8 +44,8 @@ The workflow is as follows:
     (``voice_communication_init`` needs to be configured as false)
 #. AFE feed: Input audio data and will run AEC in the feed function
 #. Internal: BSS/NS algorithm processing will be carried out.
-#. AFE fetch: Return the audio data and the related information after processing. VAD processing and wake-up word detection will be carried out inside the fetch. The specific behavior depends on the config of ``afe_config_t`` structure. 
-    
+#. AFE fetch: Return the audio data and the related information after processing. VAD processing and wake-up word detection will be carried out inside the fetch. The specific behavior depends on the config of ``afe_config_t`` structure.
+
     .. note ::
         ``wakenet_Init`` and ``voice_communication_Init`` cannot be configured to true at the same time
 
@@ -95,7 +95,7 @@ For the acquisition of AFE handle, there is a slight difference between speech r
 Input Audio Data
 ~~~~~~~~~~~~~~~~
 
-The AFE supports two kinds of scenarios: single MIC and dual MIC. The number of channels can be configured according to the audio of ``afe->feed()``. Modify method: It can modify the ``pcm_config`` configuration in macro ``AFE_CONFIG_DEFAULT()``. It supports the following configuration combinations 
+The AFE supports two kinds of scenarios: single MIC and dual MIC. The number of channels can be configured according to the audio of ``afe->feed()``. Modify method: It can modify the ``pcm_config`` configuration in macro ``AFE_CONFIG_DEFAULT()``. It supports the following configuration combinations
 
 .. note ::
     It must meet ``total_ch_num = mic_num + ref_num`` :
@@ -134,7 +134,7 @@ The input data is arranged as follows:
         :alt: input data of dual MIC
         :height: 0.75in
 
-.. note:: 
+.. note::
     the converted data size is: ``afe->get_feed_chunksize * channel number * sizeof(short)``
 
 AEC Introduction
@@ -248,8 +248,8 @@ Users can adjust the switch of each algorithm module and its corresponding param
 
 -  vad_mode: The VAD operating mode. The bigger, the more radical.
 
--  wakenet_model_name: Its default value is NULL in macro ``AFE_CONFIG_DEFAULT()``. At first, you need to choose WakeNet model through ``idf.py menuconfig``. Then you need to assign a specific model name to this place before ``afe_handle->create_from_config``. The type of value is string. Please refer to `flash_model <../flash_model/README.md>`__ 
-    .. note:: 
+-  wakenet_model_name: Its default value is NULL in macro ``AFE_CONFIG_DEFAULT()``. At first, you need to choose WakeNet model through ``idf.py menuconfig``. Then you need to assign a specific model name to this place before ``afe_handle->create_from_config``. The type of value is string. Please refer to :doc:`flash_model <../flash_model/README>` .
+    .. note::
         In the example, we use the ``esp_srmodel_filter()`` to get wakenet_model_name. If you choose the multiple wakenet models coexist through menuconfig, this function will return a model name randomly.
 
 -  wakenet_mode: Wakenet mode. It indicate the number of wake-up channels according to the number of MIC channels.
@@ -303,7 +303,7 @@ The user uses the ``afe_handle->create_from_config(&afe_config)`` function to ob
 
     /**
     * @brief Function to initialze a AFE_SR instance
-    * 
+    *
     * @param afe_config        The config of AFE_SR
     * @returns Handle to the AFE_SR data
     */
@@ -325,8 +325,8 @@ The input audio size and layout format can refer to the step **Input Audio data*
     *           The last channel is reference signal if it has reference data.
     *
     * @param afe   The AFE_SR object to query
-    * 
-    * @param in    The input microphone signal, only support signed 16-bit @ 16 KHZ. The frame size can be queried by the 
+    *
+    * @param in    The input microphone signal, only support signed 16-bit @ 16 KHZ. The frame size can be queried by the
     *              `get_feed_chunksize`.
     * @return      The size of input
     */
@@ -340,7 +340,7 @@ Get the number of audio channels:
 
     /**
     * @brief Get the total channel number which be config
-    * 
+    *
     * @param afe   The AFE_SR object to query
     * @return      The amount of total channels
     */
@@ -407,7 +407,7 @@ When users need to perform other operations after wake-up, such as offline or on
 
 Users can call ``afe_handle->disable_wakenet(afe_data)`` to stop WakeNet, or call ``afe_handle->enable_wakenet(afe_data)`` to enable WakeNet.
 
-In addition, ESP32S3 chip supports switching between wakenet words. (Note: ESP32 chip only supports one wake-up word and does not support switching). After AFE initialization, the ESP32S3 can switch wakenet word by ``afe_handle->set_wakenet()``. For example, ``afe_handle->set_wakenet(afe_data, "wn9_hilexin")`` can switch to the "Hi Lexin". How to configure multiple wakenet words, please refer to: `flash_model <../flash_model/README.md>`__
+In addition, ESP32S3 chip supports switching between wakenet words. (Note: ESP32 chip only supports one wake-up word and does not support switching). After AFE initialization, the ESP32S3 can switch wakenet word by ``afe_handle->set_wakenet()``. For example, ``afe_handle->set_wakenet(afe_data, "wn9_hilexin")`` can switch to the "Hi Lexin". How to configure multiple wakenet words, please refer to: :doc:`flash_model <../flash_model/README>`
 
 Usage Of AEC
 ~~~~~~~~~~~~~

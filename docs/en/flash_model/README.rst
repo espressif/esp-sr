@@ -54,7 +54,7 @@ This option is turned on by default. When the user only uses ``AEC`` or ``BSS``,
 -  Select wake words by menuconfig, ``ESP Speech Recognition -> Select wake words``. The model name of wake word in parentheses is used to initialize wakenet handle. |select wake wake|
 -  If you want to select multiple wake words, please select ``Load Multiple Wake Words`` ( **Note this option only supports ESP32S3**) |multi wake wake| Then you can select multiple wake words at the same time |image1|
 
-For more details, please refer to `WakeNet <../wake_word_engine/README.md>`__ .
+For more details, please refer to :doc:`WakeNet <../wake_word_engine/README>` .
 
 Use Multinet
 ~~~~~~~~~~~~
@@ -102,7 +102,7 @@ The user needs to add Chinese Speech Command words to this item when ``Chinese S
 
 The user needs to add English Speech Command words to this item when ``Chinese Speech Commands Model`` is not ``None``.
 
-For more details, please refer to `MultiNet <../speech_command_recognition/README.md>`__ .
+For more details, please refer to :doc:`MultiNet <../speech_command_recognition/README>` .
 
 How To Use
 ----------
@@ -148,7 +148,7 @@ ESP32S3
 
        //
        // step1: initialize spiffs and return models in spiffs
-       // 
+       //
        srmodel_list_t *models = esp_srmodel_init("model");
 
        //
@@ -159,9 +159,9 @@ ESP32S3
        char *alexa_wn_name  = esp_srmodel_filter(models, ESP_WN_PREFIX, "alexa"); // select wakenet with "alexa" wake word.
        char *en_mn_name  = esp_srmodel_filter(models, ESP_MN_PREFIX, ESP_MN_ENGLISH); // select english multinet model
        char *cn_mn_name  = esp_srmodel_filter(models, ESP_MN_PREFIX, ESP_MN_CHINESE); // select english multinet model
-         
+
        // It also works if you use the model name directly in your code.
-       char *my_wn_name = "wn9_hilexin"  
+       char *my_wn_name = "wn9_hilexin"
        // we recommend you to check that it is loaded correctly
         if (!esp_srmodel_exists(models, my_wn_name))
             printf("%s can not be loaded correctly\n")

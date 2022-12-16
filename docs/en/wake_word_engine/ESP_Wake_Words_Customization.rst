@@ -36,7 +36,7 @@ Espressif provides users with the offline wake word customization service, which
 
 #. If you want to use offline command words
 
-    -  Please set them by yourself referring to `esp-sr <https://github.com/espressif/esp-sr/tree/c5896943ea278195968c93c8b3466c720e641ebc speech_command_recognition>`__ algorithm. They do not need additional customization.
+    -  Please set them by yourself referring to `esp-sr <https://github.com/espressif/esp-sr>`__ algorithm. They do not need additional customization.
     -  Similar to speech wake words, the effect of command words is also related to hardware designs, so please refer to *Espressif MIC Design Guidelines*.
 
 Requirements on Corpus

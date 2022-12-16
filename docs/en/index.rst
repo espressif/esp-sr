@@ -1,6 +1,8 @@
+ESP-SR User Guide
+=================
 :link_to_translation:`zh_CN:[中文]`
 
-This is LEXIN `ESP-SR <https://github.com/espressif/esp-sr>` This document will introduce LEXIN's AI voice solution based on ESP32 series chip. From front-end audio processing, to voice command word recognition, from hardware design suggestions, to performance testing methods, it is a comprehensive introduction to Loxin's systematic work on AI speech, and provides a strong reference for users to build AIoT applications on Loxin ESP32 series chips and development boards.
+This is LEXIN `ESP-SR <https://github.com/espressif/esp-sr>`__ This document will introduce LEXIN's AI voice solution based on ESP32 series chip. From front-end audio processing, to voice command word recognition, from hardware design suggestions, to performance testing methods, it is a comprehensive introduction to Loxin's systematic work on AI speech, and provides a strong reference for users to build AIoT applications on Loxin ESP32 series chips and development boards.
 
 Lexin AFE algorithm has passed the Software Audio Front-End certification for Amazon Alexa built-in devices. The built-in wake-up module in AFE algorithm can realize local voice wake-up function and support wake-up word customization. Lexin's voice command word recognition model can support up to 200 English and Chinese command words, and the command words can be modified during operation, bringing great flexibility to the application.
 

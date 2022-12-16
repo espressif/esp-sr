@@ -31,12 +31,12 @@ Please see the flow diagram of wakeNet below:
     The wakeNet uses `MFCC <https://en.wikipedia.org/wiki/Mel-frequency_cepstrum>`__ to obtain the features of the input audio clip (16 KHz, 16 bit, single track). The window width and step width of each frame of the audio clip are both 30 ms.
 
 -  Neural Network:
-    
+
     Now, the neural network structure has been updated to the ninth edition, among which:
 
     -  wakeNet1,wakeNet2,wakeNet3,wakeNet4,wakeNet6,wakeNet7 had been out of use.
     -  wakeNet5 only support ESP32 chip.
-    -  wakeNet8,wakeNet9 only support ESP32S3 chip, which are built upon the `Dilated Convolution <https://arxiv.org/pdf/1609.03499.pdf>`__ structure. 
+    -  wakeNet8,wakeNet9 only support ESP32S3 chip, which are built upon the `Dilated Convolution <https://arxiv.org/pdf/1609.03499.pdf>`__ structure.
 
     .. note:: text
         The network structure of wakeNet5,wakeNet5X2 and wakeNet5X3 is same, but the parameter of wakeNetX2 and wakeNetX3 is more than wakeNet5. Please refer to `Performance Test <#performance-test>`__ for details.
@@ -72,11 +72,11 @@ Use wakeNet
 
 -  How to select the wakeNet model
 
-    Please refer to `flash model  <../flash_model/README.rst>`__.
+    Please refer to :doc:`flash model  <../flash_model/README>` .
 
 -  How to run wakeNet
 
-    wakeNet is currently included in the `AFE <../audio_front_end/README.rst>`__, which is running by default, and returns the detect results through the AFE fetch interface.
+    wakeNet is currently included in the :doc:`AFE <../audio_front_end/README>`, which is running by default, and returns the detect results through the AFE fetch interface.
 
     If users do not wants to initialize WakeNet, please use:
 
@@ -94,9 +94,9 @@ Use wakeNet
 Performance Test
 ----------------
 
-Please refer to `Performance Test <../benchmark/README.rst>`__.
+Please refer to :doc:`Performance Test <../benchmark/README>` .
 
 Wake Word Customization
 -----------------------
 
-For details on how to customize your wake words, please see `Espressif Speech Wake Word Customization Process <ESP_Wake_Words_Customization.rst>`__.
+For details on how to customize your wake words, please see :doc:`Espressif Speech Wake Word Customization Process <ESP_Wake_Words_Customization>` .
