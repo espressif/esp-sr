@@ -1,25 +1,17 @@
 stages:
   - build
-  - deploy
   - deploy_docs
+  - deploy
 
-# global variables
-variables: &global-variables
-  ESP_DOCS_ENV_IMAGE: "$CI_DOCKER_REGISTRY/esp-idf-doc-env-v5.0:2-2"
-  IDF_PATH: "$CI_PROJECT_DIR/esp-idf"
+
+
+variables:
+  # Versioned esp-idf-doc env image to use for all document building jobs
+  ESP_DOCS_ENV_IMAGE: "$CI_DOCKER_REGISTRY/esp-idf-doc-env-v5.0"
+  ESP_SR_PATH: "$CI_PROJECT_DIR"
+  IDF_PATH: $CI_PROJECT_DIR/esp-idf
   IDF_REPO: ${GITLAB_SSH_SERVER}/espressif/esp-idf.git
-  GIT_STRATEGY: clone
-  GIT_SUBMODULE_STRATEGY: recursive
-  ESPCI_TOKEN: $GITLAB_KEY
 
-before_script:
-  - echo $ESP_DOCS_ENV_IMAGE
-
-default:
-  retry:
-    max: 2
-    # In case of a runner failure we could hop to another one, or a network error could go away.
-    when: always
 
 .setup_idf_ci_env: &setup_idf_ci_env
   - source esp-idf/tools/ci/utils.sh
@@ -27,99 +19,64 @@ default:
   - esp-idf/tools/idf_tools.py install
   - esp-idf/tools/idf_tools.py export
 
-doc_build_html_en:
+.build_template:
   stage: build
   image: $ESP_DOCS_ENV_IMAGE
-  tags:
-    - build_docs
-  needs: []
-  artifacts:
-    when: always
-    paths:
-      - docs/_build/*/*/*.txt
-      - docs/_build/*/*/html/*
-    expire_in: 6 mos
-  script:
-    - cd docs
-    - ./check_lang_folder_sync.sh
-    - ./check_doc_chars.py
-    - pip install -r requirements.txt
-    # build html
-    - build-docs -t esp32 -l en -bs html
 
-doc_build_html_cn:
-  stage: build
-  image: $ESP_DOCS_ENV_IMAGE
-  tags:
-    - build_docs
-  needs: []
+build_esp_sr_html:
+  extends:
+    - .build_template
+  variables:
+    DOCS_DIR: $CI_PROJECT_DIR/docs
   artifacts:
     when: always
     paths:
-      - docs/_build/*/*/*.txt
-      - docs/_build/*/*/html/*
-    expire_in: 6 mos
+      - $DOCS_DIR/_build/*/*/html/*
+      - $DOCS_DIR/_build/*/*/*.txt
+    expire_in: 4 days
   script:
-    - cd docs
+    - cd $DOCS_DIR
     - ./check_lang_folder_sync.sh
     - ./check_doc_chars.py
-    - pip install -r requirements.txt
-    # build html
-    - build-docs -t esp32 -l zh_CN -bs html
+    - build-docs --skip-reqs-check -l $DOCLANG -t $DOCTGT
+    - echo "ESP-SR documentation preview available at $CI_JOB_URL/artifacts/file/docs/_build/$DOCLANG/$DOCTGT/html/index.html"
+  parallel:
+    matrix:
+      - DOCLANG: ["en", "zh_CN"]
+        DOCTGT: ["esp32", "esp32s3"]
 
-# Separate PDF build and HTML build due to artifacts size limit.
-doc_build_pdf_en:
-  stage: build
-  image: $ESP_DOCS_ENV_IMAGE
-  tags:
-    - build_docs
-  needs: []
+build_esp_sr_pdf:
+  extends:
+    - .build_template
+  variables:
+    DOCS_DIR: $CI_PROJECT_DIR/docs
   artifacts:
     when: always
     paths:
-      - docs/_build/*/*/*.txt
-      - docs/_build/*/*/latex/*
-    expire_in: 6 mos
+      - $DOCS_DIR/_build/*/*/latex/*
+      - $DOCS_DIR/_build/*/*/*.txt
+    expire_in: 4 days
   script:
-    - cd docs
+    - cd $DOCS_DIR
     - ./check_lang_folder_sync.sh
     - ./check_doc_chars.py
-    - pip install -r requirements.txt
-    # build pdf
-    - build-docs -t esp32 -l en -bs latex
+    - build-docs --skip-reqs-check -l $DOCLANG -t $DOCTGT
+  parallel:
+    matrix:
+      - DOCLANG: ["en", "zh_CN"]
+        DOCTGT: ["esp32", "esp32s3"]
 
-doc_build_pdf_cn:
-  stage: build
-  image: $ESP_DOCS_ENV_IMAGE
-  tags:
-    - build_docs
-  needs: []
-  artifacts:
-    when: always
-    paths:
-      - docs/_build/*/*/*.txt
-      - docs/_build/*/*/latex/*
-    expire_in: 6 mos
-  script:
-    - cd docs
-    - ./check_lang_folder_sync.sh
-    - ./check_doc_chars.py
-    - pip install -r requirements.txt
-    # build pdf
-    - build-docs -t esp32 -l zh_CN -bs latex
 
 .deploy_docs_template:
   stage: deploy_docs
   image: $ESP_DOCS_ENV_IMAGE
   tags:
-    - deploy
+    - deploy_docs
   needs:
-    - doc_build_html_en
-    - doc_build_html_cn
-    - doc_build_pdf_en
-    - doc_build_pdf_cn
+    - build_esp_sr_html
+    - build_esp_sr_pdf
   script:
-    - source ${CI_PROJECT_DIR}/docs/utils.sh
+    - source ${CI_PROJECT_DIR}/ci/utils.sh
     - add_doc_server_ssh_keys $DOCS_DEPLOY_PRIVATEKEY $DOCS_DEPLOY_SERVER $DOCS_DEPLOY_SERVER_USER
     - export GIT_VER=$(git describe --always)
     - pip install -r ${CI_PROJECT_DIR}/docs/requirements.txt
@@ -143,13 +100,8 @@ deploy_docs_preview:
 deploy_docs_production:
   extends:
     - .deploy_docs_template
-  # only:
-  #   refs:
-  #     - master
-  #     - /^release\/v.*$/
-  except:
-    refs:
-      - master
+  only:
+    - master
   variables:
     TYPE: "production"
     DOCS_BUILD_DIR: "${CI_PROJECT_DIR}/docs/_build/"

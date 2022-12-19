@@ -1,4 +1,4 @@
-# Bash helper functions for adding SSH keys
+# Modified from https://gitlab.com/gitlab-org/gitlab/-/blob/master/scripts/utils.sh
 
 function add_ssh_keys() {
   local key_string="${1}"

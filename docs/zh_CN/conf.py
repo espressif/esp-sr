@@ -6,16 +6,18 @@
 
 # Importing conf_common adds all the non-language-specific
 # parts to this conf module
-import sys
-import os
-sys.path.insert(0, os.path.abspath('..'))
-from conf_common import *  # noqa: F401, F403 - need to make available everything from common
+try:
+    from conf_common import *  # noqa: F403,F401
+except ImportError:
+    import os
+    import sys
+    sys.path.insert(0, os.path.abspath('..'))
+    from conf_common import *  # noqa: F403,F401
 
 # General information about the project.
-project = u'ESP-SR 用户指南'
+project = u'ESP-SR'
 copyright = u'2016 - 2022 乐鑫信息科技（上海）股份有限公司'
-
-pdf_title = u'ESP-SR 用户指南'
+pdf_title = u'ESP-SR 用户手册'
 # Final PDF filename will contains target and version
 pdf_file_prefix = u'esp-sr'
 
