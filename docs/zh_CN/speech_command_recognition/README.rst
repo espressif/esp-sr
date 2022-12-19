@@ -32,7 +32,7 @@ MultiNet 输入为经过前端语音算法（AFE）处理过的音频，格式�
 | English |           |             |               | √           |
 +---------+-----------+-------------+---------------+-------------+
 
-用户选择不同的模型的方法请参考 `flash model <../flash_model/README_CN.md>`__ 。
+用户选择不同的模型的方法请参考 :doc:`flash model <../flash_model/README>` 。
 
 **注：其中以 ``Q8`` 结尾的模型代表模型的 8bit 版本，表明该模型更加轻量化。**
 
@@ -83,7 +83,7 @@ MultiNet 对命令词自定义方法没有限制，用户可以通过任意方�
 
     英文命令词需要使用特定音标表示，每个单词的音标间用空格隔开，比如“turn on the light”，需要写成“TkN nN jc LiT”。
 
-   **并且我们也提供相应的工具，供用户将汉字转换为拼音，详细可见：** `英文转音素工具 <../../tool/multinet_g2p.py>`__。
+    此外，我们也提供相应的工具，供用户将汉字转换为拼音，详细可见： `英文转音素工具 <../../tool/multinet_g2p.py>` 。
 
 .. only:: latex
 
@@ -138,14 +138,14 @@ MultiNet 支持多种且灵活的命令词设置方式，用户无论通过那�
 
 MultiNet 支持在运行过程中在线动态添加/删除/修改命令词，该过程无须更换模型和调整参数。具体可以参考 ESP-Skainet 中 example。
 
-具体API说明请参考　`esp_mn_speech_commands <../../src/esp_mn_speech_commands.c>`__ ：
+具体 API 说明请参考　`esp_mn_speech_commands <../../src/esp_mn_speech_commands.c>`_。
 
 运行命令词识别
 --------------
 
 命令词识别需要和 ESP-SR 中的声学算法模块（AFE）（AFE中需使能唤醒（WakeNet））一起运行。关于 AFE 的使用，请参考文档：
 
-`AFE 介绍及使用 <../audio_front_end/README_CN.md>`__
+:doc:`AFE 介绍及使用 <../audio_front_end/README>`
 
 当用户配置完成 AFE 后，请按照以下步骤配置和运行 MultiNet：
 
@@ -153,7 +153,7 @@ MultiNet 初始化
 ~~~~~~~~~~~~~~~
 
 -  模型加载与初始化　　　
-    请参考 `flash_model <../flash_model/README_CN.md>`__
+    请参考 :doc:`flash_model <../flash_model/README>`
 
 -  设置命令词 请参考上文 #3。
 

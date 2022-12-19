@@ -37,7 +37,7 @@ The following table shows the model support of Espressif SoCs:
 | English |           |             |               | √           |
 +---------+-----------+-------------+---------------+-------------+
 
-.. note:: 
+.. note::
     Note: the model ending with Q8 represents the 8bit version of the model, means more lightweight.
 
 Commands Recognition Process
@@ -85,7 +85,8 @@ Speech commands string need to meet specific formats, as follows:
 
     English speech commands need to be represented by specific phonetic symbols. The phonetic symbols of each word are separated by spaces, such as "turn on the light", which needs to be written as "TkN nN jc LiT".
 
-   **We provide specific conversion rules and tools. For details, please refer to the English G2P** `tool <../../tool/multinet_g2p.py>`__.
+
+   We provide specific conversion rules and tools. For details, please refer to the English G2P `tool <../../tool/multinet_g2p.py>`_ .
 
 Set speech commands offline
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -135,16 +136,13 @@ Set speech commands online
 
 MultiNet supports online dynamic addition / deletion / modification of speech commands during operation, without changing models or adjusting parameters. For details, please refer to the example in ESP-Skainet.
 
-Please refer to
-`esp_mn_speech_commands <../../src/esp_mn_speech_commands.c>`__ for
-details of APIs:
-
+Please refer to `esp_mn_speech_commands <../../src/esp_mn_speech_commands.c>`_ for details of APIs:
 Run speech commands recognition
 ----------------------------------
 
 Speech commands recognition needs to be run together with the audio front-end (AFE) in esp-sr (WakeNet needs to be enabled in AFE). For the use of AFE, please refer to the document:
 
-`AFE Introduction and Use <../audio_front_end/README_CN.md>`__
+:doc:`AFE Introduction and Use <../audio_front_end/README>`
 
 MultiNet Initialization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

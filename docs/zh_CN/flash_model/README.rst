@@ -58,7 +58,7 @@ Use Wakenet
 
 **注：多唤醒词选项只支持 ESP32S3，具体根据客户硬件flash容量，选择合适数量的唤醒词。**
 
-更多细节请参考 `WakeNet <../wake_word_engine/README.rst>`__ 。
+更多细节请参考 :doc:`WakeNet <../wake_word_engine/README>` 。
 
 Use Multinet
 ~~~~~~~~~~~~~
@@ -104,12 +104,12 @@ ESP32S3 支持：
 
 当用户在 ``English Speech Commands Model`` 中选择非 ``None`` 时，需要在该项处添加中文命令词。
 
-用户按照需求自定义添加命令词，具体请参考 `MultiNet <../speech_command_recognition/README.md>`__ 。
+用户按照需求自定义添加命令词，具体请参考 :doc:`MultiNet <../speech_command_recognition/README>` 。
 
 模型使用
 ---------
 
-当用户完成以上的配置选择后，应用层请参考 esp-skainet 进行初始化和使用。这里介绍一下模型数据加载在用户工程中的代码实现。 也可以参考代码　`model_path.c <../../src/model_path.c>`__
+当用户完成以上的配置选择后，应用层请参考 esp-skainet 进行初始化和使用。这里介绍一下模型数据加载在用户工程中的代码实现。 也可以参考代码 `model_path.c <../src/model_path.c>`_ 。
 
 使用 ESP32
 ~~~~~~~~~~
@@ -183,7 +183,7 @@ ESP32S3 支持：
 
             //
             // step1: initialize spiffs and return models in spiffs
-            // 
+            //
             srmodel_list_t *models = esp_srmodel_init();
 
             //
@@ -196,7 +196,7 @@ ESP32S3 支持：
             char *cn_mn_name  = esp_srmodel_filter(models, ESP_MN_PREFIX, ESP_MN_CHINESE); // select english multinet model
 
             // It also works if you use the model name directly in your code.
-            char *my_wn_name = "wn9_hilexin"  
+            char *my_wn_name = "wn9_hilexin"
             // we recommend you to check that it is loaded correctly
             if (!esp_srmodel_exists(models, my_wn_name))
                 printf("%s can not be loaded correctly\n")
