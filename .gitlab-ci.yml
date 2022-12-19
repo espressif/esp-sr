@@ -1,7 +1,7 @@
 stages:
   - build
-  - deploy
   - deploy_docs
+  - deploy
 
 
 
@@ -100,13 +100,8 @@ deploy_docs_preview:
 deploy_docs_production:
   extends:
     - .deploy_docs_template
-  # only:
-  #   refs:
-  #     - master
-  #     - /^release\/v.*$/
-  except:
-    refs:
-      - master
+  only:
+    - master
   variables:
     TYPE: "production"
     DOCS_BUILD_DIR: "${CI_PROJECT_DIR}/docs/_build/"
