@@ -37,7 +37,7 @@ build_esp_sr_html:
   script:
     - cd $DOCS_DIR
     - ./check_lang_folder_sync.sh
-    - ./check_doc_chars.py
+#    - ./check_doc_chars.py
     - build-docs --skip-reqs-check -l $DOCLANG -t $DOCTGT
     - echo "ESP-SR documentation preview available at $CI_JOB_URL/artifacts/file/docs/_build/$DOCLANG/$DOCTGT/html/index.html"
   parallel:
@@ -59,8 +59,8 @@ build_esp_sr_pdf:
   script:
     - cd $DOCS_DIR
     - ./check_lang_folder_sync.sh
-    - ./check_doc_chars.py
-    - build-docs --skip-reqs-check -l $DOCLANG -t $DOCTGT
+#    - ./check_doc_chars.py
+    - build-docs -bs latex -l $DOCLANG -t $DOCTGT
   parallel:
     matrix:
       - DOCLANG: ["en", "zh_CN"]

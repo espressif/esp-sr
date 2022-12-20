@@ -3,79 +3,96 @@ Espressif Speech Wake-up Solution Customization Process
 
 :link_to_translation:`zh_CN:[中文]`
 
-Speech Wake Word Customization Process
----------------------------------------
+Wake Word Customization Process
+-------------------------------
 
-Espressif provides users with the offline wake word customization service, which allows users to use both publicly available wake words (such as "Hi Lexin", "Alexa", and "hi,ESP") and customized wake words.
+Espressif provides users with the **wake word customization** :
 
-#. If you want to use publicly available wake words for commercial use
+#. Espressif has already opened some wake words for customers' commercial use, such as "HI Leixi", or "Nihao Xiaoxin".
 
-    -  Please check the wake words provided in `esp-sr <https://github.com/espressif/esp-sr>`__;
-    -  We will continue to provide more and more wake words that are free for commercial use.
+    -  For a complete list, see Table :ref:`Publicly Available Wake Words Provided by Espressif <esp-open-wake-word>` .
+    -  Espressif also plans to provide more wake words that are free for commercial use soon.
 
-#. If you want to use custom wake words, we can also provide the offline
-    wake word customization service.
+#. Offline wake word customization can also be provided by Espressif:
 
-    -  If you provide a training corpus
+    -  Training corpus provided by customer
 
-        -  It must consist of at least 20,000 qualified corpus entries(see the section below for detailed requirements);
-        -  It will take two to three weeks for Espressif to train and optimize the corpus after the hardware design meets our requirement;
-        -  It will be delivered in a static library of wake word;
-        -  Espressif will charge training fees based on the scale of your production.
+        -  Customer must provide at least 20,000 qualified corpus entries. See detailed requirements in Section :ref:`corpus-requirement` .
+        -  It usually takes two to three weeks for Espressif to train and optimize the received corpus.
+        -  A fee will be charged for training and optimizing the corpus.
 
-    -  Otherwise
+    -  Training corpus provided by Espressif
 
-        -  Espressif will collect and provide all the training corpus;
-        -  Espressif will deliver a static library file of successfully trained wake word to you, but won't share the corpus;
-        -  It will take around three weeks to collect and train the corpus;
-        -  Espressif will charge training fees (corpus collecting fees included) based on the scale of your production.
+        -  Espressif provides all the corpus required for training.
+        -  The time required to collect corpus needs to be discussed separately. After the corpus is ready, it usually takes two to three weeks for Espressif to train and optimize the received corpus.
+        -  A fee will be charged for training and optimizing the corpus. A separate fee will be changed for collecting the corpus.
 
-    -  The above time is subject to change depending on the project.
+    -  The actual fee and time for your customization depend on the **number of wake words you need** and the **scale of your mass production**. For details, please contact our `sales person <sales@espressif.com>`_ .
 
-    -  Espressif will only charge a one-time customization fee depending on the number of wake words you customize and the scale of your production, and will not charge license fees for the quantity and time of use. Please email us at `sales@espressif.com <sales@espressif.com>`__ for details of the fee.
+#. About Espressif wake word engine WakeNet:
 
-#. If you want to use offline command words
+    - Currently, up to 5 wake words are supported by each WakeNet model.
+    - A wake word usually consists of 3 to 6 symbols, such as "Hi Leixin", "xiaoaitongxue", "nihaotianmao".
+    - More than one WakeNet models can be used together. However, more resource will be consumed when you use more models.
+    - For more details, see Section :doc:`WakeNet Wake Word Model <README>` .
 
-    -  Please set them by yourself referring to `esp-sr <https://github.com/espressif/esp-sr>`__ algorithm. They do not need additional customization.
-    -  Similar to speech wake words, the effect of command words is also related to hardware designs, so please refer to *Espressif MIC Design Guidelines*.
+.. _corpus-requirement:
 
 Requirements on Corpus
 --------------------------
 
-As mentioned above, you can provide your own training corpus for Espressif. Below are the requirements.
+As mentioned above, customers can provide Espressif with training corpus collected themselves or purchased from a third party. However, there are some limitations:
 
-#. Audio file format
+- Audio file format
 
-    -  Sample rate: 16 kHz
-    -  Encoding: 16-bit signed int
-    -  Channel: mono
-    -  Format: WAV
+    - Sample rate: 16 kHz
+    - Encoding: 16-bit signed int
+    - Channel: mono
+    - Format: WAV
 
-#. Sampling environment
+#. Sampling requirement
 
-    -  Room with an ambient noise lower than 30 dB and reverberation less than 0.3 s, or a professional audio room (recommended).
+    - Number of samples: more than 500 people, including men and women of all ages and at least 100 children.
+    - Sampling environment: a quiet room (< 40 dB). It is recommended to use a professional audio room.
+    - Recording device: high-fidelity microphone.
+    - How to sample:
+        - At 1 meters away from the microphone: each person speaks the wake word out loud for 15 times (5 times in fast speed, 5 times in normal speed, 5 times in slow speed).
+        - At 3 meters away from the microphone: each person speaks the wake word out loud for 15 times (5 times in fast speed, 5 times in normal speed, 5 times in slow speed).
+    - File name: it is recommended to name the samples according to the age, gender, and quantity of the collected samples, such as ``female_age_fast_id.wav``. Or you can use a separate file to present such information.
 
-        -  Recording device: high-fidelity microphone.
+Hardware Design and Test
+------------------------
 
-            -  The whole product is strongly recommended.
-            -  The development board of your product also works when there is no cavity structure.
+The voice wake-up performance heavily depends on the hardware design and cavity structure. Therefore, please pay special attention to the following requirements:
 
-        -  Record in 16 kHz, and don't use **resampling**.
+#.  Hardware Design
 
-    -  At the recording site, pay attention to the impact of reverberation interference in a closed environment.
-    -  Collect samples with multiple recording devices at the same time (recommended).
+    - Speaker designs: customers can make their own designs by modifying the reference designs (schematic/PCB) provided by Espressif. Also, Espressif can also review customers' speaker designs to avoid some common design issues.
 
-        -  For example, postion the devices at 1 m and 3 m away.
-        -  So more samples are collected with the same number of time and participants.
+    - Cavity structure: cavity should be designed by acoustic specialists. Espressif does not provide ID design reference. Customers can refer to other mainstream speaker cavity designs on the market, such as Tmall Genie, Xiaodu Smart Speaker, and Google Smart Speaker, etc.
 
-#. Sample distribution
+#. Customers can perform the following tests to verify the hardware designs. Note that it's suggested to perform the following tests in a professional audio room. Customers can adjust the actual tests based on their actual testing environment.
 
-    -  Sample size: 500. Males and females should be close to 1:1.
-    -  The number of children under 12 years old invloved varies from product to product, but the percentage should be no less than 15%.
-    -  If there are requirements for certain languages or dialects, special corpus samples need to be provided.
-    -  It is recommended to name the samples according to the age, gender, and quantity of the collected samples, such as HiLeXin_male_B_014.wav, and ABCD represents different age groups.
+    - Recording test to verify the gain and distortion of mic and codec
 
-Hareware Design Guidelines
----------------------------
+        - Play the sample (90 dB, 0.1 meter away from the mic), and adjust the gain to ensure that the recording is not saturated.
+        - Use a sweep file of 0~20 KHz, and start recording using the sampling rate of 16 KHz. The recording should not have obvious frequency aliasing.
+        - Record 100 samples, and feed these samples to open cloud voice recognition API. A certain recognition rate must be reached.
 
-#. Please refer to *Espressif MIC Design Guidelines*.
+    - Playback test to verify the distortion of power amplifier (PA) and speaker
+
+        - Test PA power @ 1% Total Harmonic Distortion (THD)
+
+    - Speech algorithms test to verify the AEC, BFM and NS models
+
+        - Adjust the delays of the reference signals based on the different requirements of different AEC algorithms.
+        - Test the product based on the actual use scenario. For example, play ``85DB-90DB Dreamer.wav`` (a song) and record.
+        - Analyze the processed signals to evaluate the performance of AEC, BFM, NS, etc.
+
+    -  DSP performance test to identify the correct DSP parameter and minimize the nonlinear distortion in the DSP algorithm
+
+        -  Noise Suppression
+        -  Acoustic Echo Cancellation
+        -  Speech Enhancement
+
+#. Customers can also **send** 1 or 2 pieces of hardware to Espressif and ask us to optimize the product for better wakeup performance.

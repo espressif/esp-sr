@@ -25,3 +25,9 @@ versions_url = '_static/docs_version.js'
 
 # Final PDF filename will contains target and version
 pdf_file_prefix = u'esp-sr'
+
+# add Tracking id for Google Analytics
+
+google_analytics_id = os.environ.get('CI_GOOGLE_ANALYTICS_ID', None)
+
+project_homepage = 'https://github.com/espressif/esp-sr'

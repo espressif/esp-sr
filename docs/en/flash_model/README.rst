@@ -1,122 +1,142 @@
-Model Loading Method
-====================
+Flash Model
+===========
 
 :link_to_translation:`zh_CN:[中文]`
 
-In esp-sr, both WakeNet and MultiNet will use a large amount of model data, and the model data is located in *ESP-SR_PATH/model/*. Currently esp-sr supports the following model loading methods:
+ESP-SR's WakeNet and MultiNet both use a lot of model data (which can be found in :project:`model`). Currently, ESP-SR supports the following methods to flash models:
 
-ESP32:
+.. only:: esp32
 
--  Load directly from Flash
+    ESP32: Load directly from Flash
 
-ESP32S3:
+.. only:: esp32s3
 
--  Load from Flash spiffs partition
--  Load from external SDCard
+    ESP32-S3:
 
-So that on ESP32S3 you can:
+    -  Load directly from SIP Flash File System (SPIFFS)
+    -  Load from external SD card
 
--  Greatly reduce the size of the user application APP BIN
--  Supports the selection of up to two wake words
--  Support online switching of Chinese and English Speech Command Recognition
--  Convenient for users to perform OTA
--  Supports reading and changing models from SD card, which is more convenient and can reduce the size of module Flash used in the project
--  When the user is developing the code, when the modification does not involve the model, it can avoid flashing the model data every time, greatly reducing the flashing time and improving the development efficiency
+    So that on ESP32S3 you can:
 
-Model Configuration Introduction
---------------------------------
+        -  Greatly reduce the size of the user application APP BIN
+        -  Supports the selection of up to two wake words
+        -  Support online switching of Chinese and English Speech Command Recognition
+        -  Convenient for users to perform OTA
+        -  Supports reading and changing models from SD card, which is more convenient and can reduce the size of module Flash used in the project
+        -  When the user is developing the code, when the modification does not involve the model, it can avoid flashing the model data every time, greatly reducing the flashing time and improving the development efficiency
 
-Run *idf.py menuconfig* navigate to *ESP Speech Recognition*:
+Configuration
+-------------
+
+Run ``idf.py menuconfig`` to navigate to ``ESP Speech Recognition``:
 
 .. figure:: ../../_static/model-1.png
     :alt: overview
 
     overview
 
-Model Data Path
-~~~~~~~~~~~~~~~
+.. only:: esp32s3
 
-This option is only available on ESP32S3. It indicates the storage location of the model data. It supports the choice of ``spiffs partition`` or ``SD Card``.
+    Model Data Path
+    ~~~~~~~~~~~~~~~
 
--  *spiffs partition* means that the model data is stored in the Flash spiffs partition, and the model data will be loaded from the Flash spiffs partition
--  ``SD Card`` means that the model data is stored in the SD card, and the model data will be loaded from the SD Card
+    This option indicates the storage location of the model data: ``spiffs partition`` or ``SD Card``.
+
+    -  ``spiffs partition`` means that the model data is stored in the SPIFFS partition, and the model data will be loaded from the SPIFFS partition
+    -  ``SD Card`` means that the model data is stored in the SD card, and the model data will be loaded from the SD card
 
 Use AFE
 ~~~~~~~
 
-This option needs to be turned on. Users do not need to modify it. Please keep the default configuration.
+This option is enabled by default. Users do not need to modify it. Please keep the default configuration.
 
-Use Wakenet
+Use WakeNet
 ~~~~~~~~~~~
 
-This option is turned on by default. When the user only uses ``AEC`` or ``BSS``, etc., and does not need to run ``WakeNet`` or ``MultiNet``, please turn off this option, which will reduce the size of the project firmware.
+This option is enabled by default. When the user only uses ``AEC`` or ``BSS``, etc., and does not need ``WakeNet`` or ``MultiNet``, please disable this option, which reduces the size of the project firmware.
 
--  Select wake words by menuconfig, ``ESP Speech Recognition -> Select wake words``. The model name of wake word in parentheses is used to initialize wakenet handle. |select wake wake|
--  If you want to select multiple wake words, please select ``Load Multiple Wake Words`` ( **Note this option only supports ESP32S3**) |multi wake wake| Then you can select multiple wake words at the same time |image1|
+Select wake words by via ``menuconfig`` by navigating to ``ESP Speech Recognition`` > ``Select wake words``. The model name of wake word in parentheses must be used to initialize WakeNet handle.
+
+    |select wake wake|
+
+If you want to select multiple wake words, please select ``Load Multiple Wake Words``
+
+    |multi wake wake|
+
+Then you can select multiple wake words at the same time:
+
+    |image1|
+
+.. only:: esp32
+
+    .. note::
+        ESP32 doesn't support multiple wake words.
+
+.. only:: esp32s3
+
+    .. note::
+        ESP32-S3 does support multiple wake words. Users can select more than one wake words according to the hardware flash size.
 
 For more details, please refer to :doc:`WakeNet <../wake_word_engine/README>` .
 
 Use Multinet
 ~~~~~~~~~~~~
 
-This option is turned on by default. When users only use WakeNet or other algorithm modules, please turn off this option, which will reduce the size of the project firmware in some cases.
+This option is enabled by default. When users only use WakeNet or other algorithm modules, please disable this option, which reduces the size of the project firmware in some cases.
 
-ESP32 chip only supports Chinese Speech Commands Recognition.
+Chinese Speech Commands Model
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-ESP32S3 supports Chinese and English Speech Commands Recognition, and supports Chinese and English recognition model switching.
+.. only:: esp32
 
--  Chinese Speech Commands Model
+    ESP32 only supports command words in Chinese:
 
-Chinese Speech Commands Recognition model selection.
+    -  None
+    -  Chinese single recognition (MultiNet2)
 
-ESP32 supports:
+.. only:: esp32s3
 
--  None
--  chinese single recognition (MultiNet2)
+    ESP32-S3 supports command words in both Chinese and English:
 
-ESP32S3 supports:
+    -  None
+    -  Chinese single recognition (MultiNet4.5)
+    -  Chinese single recognition (MultiNet4.5 quantized with 8-bit)
+    -  English Speech Commands Model
 
--  None
+    The user needs to add Chinese Speech Command words to this item when ``Chinese Speech Commands Model`` is not ``None``.
 
--  chinese single recognition (MultiNet4.5)
+.. only:: esp32s3
 
--  chinese single recognition (MultiNet4.5 quantized with 8-bit)
+    English Speech Commands Model
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
--  English Speech Commands Model
+    ESP32-S3 supports command words in both Chinese and English, and allows users to switch between these two languages.
 
-English Speech Commands Recognition model selection.
+    -  None
+    -  English recognition (MultiNet5 quantized with 8-bit, depends on WakeNet8)
+    -  Add Chinese speech commands
 
-This option does not support ESP32.
+    The user needs to add English Speech Command words to this item when ``English Speech Commands Model`` is not ``None``.
 
-ESP32S3 Supports:
-
--  None
-
--  english recognition (MultiNet5 quantized with 8-bit, depends on WakeNet8)
-
--  Add Chinese speech commands
-
-The user needs to add Chinese Speech Command words to this item when ``Chinese Speech Commands Model`` is not ``None``.
-
--  Add English speech commands
-
-The user needs to add English Speech Command words to this item when ``Chinese Speech Commands Model`` is not ``None``.
-
-For more details, please refer to :doc:`MultiNet <../speech_command_recognition/README>` .
+For more details, please refer to Section :doc:`MultiNet <../speech_command_recognition/README>` .
 
 How To Use
 ----------
 
-Here is an introduction to the code implementation of model data loading in the project. If you want get more detailes, please refer to esp-skainet examples.
+After the above-mentioned configuration, users can initialize and start using the models following the examples described in the `ESP-Skainet <https://github.com/espressif/esp-skainet>`_ repo.
 
-ESP32
-~~~~~
+Here, we only introduce the code implementation, which can also be found in `model_path.c <../src/model_path.c>`_ .
 
-| When the user uses ESP32, since it only supports loading the model data directly from the Flash, the model data in the code will automatically read the required data from the Flash according to the address.
-| Now The ESP32S3 API is compatible with ESP32. You can refer to the ESP32S3 method to load and initialize the model.
+.. only:: esp32
 
-ESP32S3
-~~~~~~~
+    ESP32 can only load model data from flash. Therefore, the model data in the code will automatically read the required data from the Flash according to the address. Note that, ESP32 and ESP32-S3 APIs are compatible.
+
+.. only:: esp32s3
+
+    ESP32-S3 can load model data from SPIFFS or SD card.
+
+Load Model Data from SPIFFS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #. Write a partition table:
 
@@ -124,41 +144,75 @@ ESP32S3
 
         model,  data, spiffs,         , SIZE,
 
-    Among them, ``SIZE`` can refer to the recommended size when the user uses ``idf.py build`` to compile, for example:
+    Among them, ``SIZE`` can refer to the recommended size when the user uses ``idf.py build`` to compile, for example: ``Recommended model partition size: 500K``
 
-    ::
-
-        Recommended model partition size: 500K
-
-    After completing the above configuration, the project will automatically generate ``model.bin`` after the project is compiled, and flash it to the spiffs partition.
-
-#. Initialize the spiffs partition User can use ``esp_srmodel_init()`` API to initialize spiffs and return all loaded models.
+#. Initialize the SPIFFS partition: User can use ``esp_srmodel_init()`` API to initialize SPIFFS and return all loaded models.
 
     -  base_path: The model storage ``base_path`` is ``srmodel`` and cannot be changed
     -  partition_label: The partition label of the model is ``model``, which needs to be consistent with the ``Name`` in the above partition table
 
-   **Note: After the user changes the model, be sure to run ``idf.py clean`` before compiling again.**
+After completing the above configuration, the project will automatically generate ``model.bin`` after the project is compiled, and flash it to the SPIFFS partition.
 
-.. _esp32s3-1:
+.. only:: esp32s3
 
-ESP32S3
--------
+    Load Model Data from SD Card
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-::
+    When configured to load model data from ``SD Card``, users need to:
+
+    -  Manually load model data from SD card
+        After the above-mentioned configuration, users can compile the code, and copy the files in ``model/target`` to the root directory of the SD card.
+
+    -  Customized path
+        Users can also use customized path by configuring the :cpp:func:`get_model_base_path()` of ``model/model_path.c``.
+
+        .. only:: html
+
+            For example, users can configure the customized path to the ``espmodel`` in the SD card:
+
+                ::
+
+                    char *get_model_base_path(void)
+                    {
+                    #if defined CONFIG_MODEL_IN_SDCARD
+                        return "sdcard/espmodel";
+                    #elif defined CONFIG_MODEL_IN_SPIFFS
+                        return "srmodel";
+                    #else
+                        return NULL;
+                    #endif
+                    }
+
+    -  Initialize SD card
+        Users must initialize SD card so the chip can load SD card. Users of `ESP-Skainet <https://github.com/espressif/esp-skainet>`_ can call  ``esp_sdcard_init("/sdcard", num);`` to initialize any board supported SD cards. Otherwise, users need to write the initialization code themselves.
+        After the above-mentioned steps, users can flash the project.
+
+
+.. |select wake wake| image:: ../../_static/wn_menu1.png
+.. |multi wake wake| image:: ../../_static/wn_menu2.png
+.. |image1| image:: ../../_static/wn_menu3.png
+
+
+.. only:: html
+
+    Model initialization and Usage
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    ::
 
        //
-       // step1: initialize spiffs and return models in spiffs
+       // step1: initialize SPIFFS and return models in SPIFFS
        //
        srmodel_list_t *models = esp_srmodel_init("model");
 
        //
        // step2: select the specific model by keywords
        //
-       char *wn_name = esp_srmodel_filter(models, ESP_WN_PREFIX, NULL); // select wakenet model
-       char *nm_name = esp_srmodel_filter(models, ESP_MN_PREFIX, NULL); // select multinet model
-       char *alexa_wn_name  = esp_srmodel_filter(models, ESP_WN_PREFIX, "alexa"); // select wakenet with "alexa" wake word.
-       char *en_mn_name  = esp_srmodel_filter(models, ESP_MN_PREFIX, ESP_MN_ENGLISH); // select english multinet model
-       char *cn_mn_name  = esp_srmodel_filter(models, ESP_MN_PREFIX, ESP_MN_CHINESE); // select english multinet model
+       char *wn_name = esp_srmodel_filter(models, ESP_WN_PREFIX, NULL); // select WakeNet model
+       char *nm_name = esp_srmodel_filter(models, ESP_MN_PREFIX, NULL); // select MultiNet model
+       char *alexa_wn_name  = esp_srmodel_filter(models, ESP_WN_PREFIX, "alexa"); // select WakeNet with "alexa" wake word.
+       char *en_mn_name  = esp_srmodel_filter(models, ESP_MN_PREFIX, ESP_MN_ENGLISH); // select english MultiNet model
+       char *cn_mn_name  = esp_srmodel_filter(models, ESP_MN_PREFIX, ESP_MN_CHINESE); // select english MultiNet model
 
        // It also works if you use the model name directly in your code.
        char *my_wn_name = "wn9_hilexin"
@@ -174,7 +228,3 @@ ESP32S3
 
        esp_mn_iface_t *multinet = esp_mn_handle_from_name(mn_name);
        model_iface_data_t *mn_model_data = multinet->create(mn_name, 6000);
-
-.. |select wake wake| image:: ../../_static/wn_menu1.png
-.. |multi wake wake| image:: ../../_static/wn_menu2.png
-.. |image1| image:: ../../_static/wn_menu3.png
