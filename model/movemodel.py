@@ -77,7 +77,7 @@ elif "CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION" in MN_STRING and len(multine
 print(wakenet_model)
 print(multinet_model)
 
-target_model = model_path + '/target'
+target_model = args.project_path + '/target'
 if os.path.exists(target_model):
     shutil.rmtree(target_model)
 os.makedirs(target_model)

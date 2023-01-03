@@ -98,7 +98,7 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
 
     set(MVMODEL_EXE ${COMPONENT_PATH}/model/movemodel.py)
     add_custom_command(
-         OUTPUT ${COMPONENT_DIR}/model/target/_MODEL_INFO_
+         OUTPUT ${PROJECT_DIR}/target/_MODEL_INFO_
          COMMENT "Running move model..."
          COMMAND python ${MVMODEL_EXE} -d1 ${PROJECT_DIR} -d2 ${COMPONENT_PATH}
          DEPENDS ${COMPONENT_DIR}/model/
@@ -110,7 +110,7 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
     idf_build_get_property(idf_path IDF_PATH)
     set(spiffsgen_py ${PYTHON} ${idf_path}/components/spiffs/spiffsgen.py)
 
-    get_filename_component(base_dir_full_path ${COMPONENT_DIR}/model/target/ ABSOLUTE)
+    get_filename_component(base_dir_full_path ${PROJECT_DIR}/target/ ABSOLUTE)
 
     partition_table_get_partition_info(size "--partition-name model" "size")
     partition_table_get_partition_info(offset "--partition-name model" "offset")
@@ -141,7 +141,7 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
             ${follow_symlinks}
             ${use_magic}
             ${use_magic_len}
-            DEPENDS ${COMPONENT_DIR}/model/target/_MODEL_INFO_
+            DEPENDS ${PROJECT_DIR}/target/_MODEL_INFO_
             )
 
         set_property(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}" APPEND PROPERTY
