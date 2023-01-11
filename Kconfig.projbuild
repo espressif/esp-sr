@@ -2175,4 +2175,1028 @@ config EN_SPEECH_COMMAND_ID199
 
 endmenu
 
+
+menu "Add English speech commands"
+depends on SR_MN_EN_MULTINET6_QUANT
+config EN_SPEECH_COMMAND_ID0
+    string "ID0"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_TE LL _ME _A _JO KE,TE LL _ME _A _JO KE"
+
+config EN_SPEECH_COMMAND_ID1
+    string "ID1"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_S ING _A _SO NG,S ING _A _SO NG"
+
+config EN_SPEECH_COMMAND_ID2
+    string "ID2"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_PLAY _NEW S _CHA N N EL,P LA Y _NEW S _CHA N N EL"
+
+config EN_SPEECH_COMMAND_ID3
+    string "ID3"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_TURN _ON _MY _SO UND BO X,_TURN _ON _MY _S O U ND B O X,_TURN _ON _MY _ S O UN D BO X"
+
+config EN_SPEECH_COMMAND_ID4
+    string "ID4"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_TURN _OF F _MY _SO UND BO X,_TURN _OF _MY _S O U ND B O X,_TURN _OF _MY _ S O UN D BO X"
+
+config EN_SPEECH_COMMAND_ID5
+    string "ID5"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_HIGH EST _ VO LU ME,H IG H EST _ VO LU ME"
+
+config EN_SPEECH_COMMAND_ID6
+    string "ID6"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "LOW EST _ VO LU ME"
+
+config EN_SPEECH_COMMAND_ID7
+    string "ID7"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_IN C RE A SE _THE _ VO LU ME"
+
+config EN_SPEECH_COMMAND_ID8
+    string "ID8"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_DE C RE A SE _THE _ VO LU ME"
+
+config EN_SPEECH_COMMAND_ID9
+    string "ID9"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_TURN _ON _THE _T V,T UR N _ON _THE _T V"
+
+config EN_SPEECH_COMMAND_ID10
+    string "ID10"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_TURN _OF F _THE _T V,T UR N _OF F _THE _T V"
+
+config EN_SPEECH_COMMAND_ID11
+    string "ID11"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_MAKE _ME _A _TE A,MA KE _ME _A _TE A"
+
+config EN_SPEECH_COMMAND_ID12
+    string "ID12"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_MAKE _ME _A _CO FF E E,MA KE _ME _A _CO FF E E"
+
+config EN_SPEECH_COMMAND_ID13
+    string "ID13"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_TURN _ON _THE _ L IGHT,T UR N _ON _THE _ L IGHT"
+
+config EN_SPEECH_COMMAND_ID14
+    string "ID14"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_TURN _OF F _THE _ L IGHT,T UR N _OF F _THE _ L IGHT,_TURN _OF _THE _ L IGHT"
+
+config EN_SPEECH_COMMAND_ID15
+    string "ID15"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_CHA NG E _THE _COL OR _TO _RE D,CH AN GE _THE _COL OR _TO _RE D"
+
+config EN_SPEECH_COMMAND_ID16
+    string "ID15"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_CHA NG E _THE _COL OR _TO _G RE EN,CH AN GE _THE _COL OR _TO _G RE EN"
+
+config EN_SPEECH_COMMAND_ID17
+    string "ID15"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_TURN _ON _ALL _THE _ L IGHT S,T UR N _ON _ALL _THE _ L IGHT S"
+
+config EN_SPEECH_COMMAND_ID18
+    string "ID15"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_TURN _OF F _ALL _THE _ L IGHT S,_TURN _OF _ALL _THE _ L IGHT S"
+
+config EN_SPEECH_COMMAND_ID19
+    string "ID15"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_TURN _ON _THE _A IR _CON D ITION ER"
+
+config EN_SPEECH_COMMAND_ID20
+    string "ID16"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_TURN _OF F _THE _A IR _CON D ITION ER,_TURN _OF _THE _A IR _CON D ITION ER"
+
+config EN_SPEECH_COMMAND_ID21
+    string "ID17"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_SE T _THE _TE MP ER A TURE _TO _SIX TE EN _DE G RE ES"
+
+config EN_SPEECH_COMMAND_ID22
+    string "ID18"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_SE T _THE _TE MP ER A TURE _TO _SE VEN TE EN _DE G RE ES"
+
+config EN_SPEECH_COMMAND_ID23
+    string "ID19"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_SE T _THE _TE MP ER A TURE _TO _E IGHT E EN _DE G RE ES"
+
+config EN_SPEECH_COMMAND_ID24
+    string "ID20"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_SE T _THE _TE MP ER A TURE _TO _NI NE TE EN _DE G RE ES"
+
+config EN_SPEECH_COMMAND_ID25
+    string "ID21"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_SE T _THE _TE MP ER A TURE _TO _T W ENT Y _DE G RE ES"
+
+config EN_SPEECH_COMMAND_ID26
+    string "ID22"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_SE T _THE _TE MP ER A TURE _TO _T W ENT Y _ONE _DE G RE ES"
+
+config EN_SPEECH_COMMAND_ID27
+    string "ID23"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_SE T _THE _TE MP ER A TURE _TO _T W ENT Y _TWO _DE G RE ES"
+
+config EN_SPEECH_COMMAND_ID28
+    string "ID24"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_SE T _THE _TE MP ER A TURE _TO _T W ENT Y _THREE _DE G RE ES"
+
+config EN_SPEECH_COMMAND_ID29
+    string "ID25"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_SE T _THE _TE MP ER A TURE _TO _T W ENT Y _FOUR _DE G RE ES"
+
+config EN_SPEECH_COMMAND_ID30
+    string "ID26"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_SE T _THE _TE MP ER A TURE _TO _T W ENT Y _F IVE _DE G RE ES"
+
+config EN_SPEECH_COMMAND_ID31
+    string "ID27"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default "_SE T _THE _TE MP ER A TURE _TO _T W ENT Y _SIX _DE G RE ES"
+
+config EN_SPEECH_COMMAND_ID28
+    string "ID28"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID29
+    string "ID29"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID30
+    string "ID30"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID31
+    string "ID31"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID32
+    string "ID32"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID33
+    string "ID33"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID34
+    string "ID34"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID35
+    string "ID35"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID36
+    string "ID36"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID37
+    string "ID37"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID38
+    string "ID38"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID39
+    string "ID39"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID40
+    string "ID40"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID41
+    string "ID41"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID42
+    string "ID42"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID43
+    string "ID43"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID44
+    string "ID44"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID45
+    string "ID45"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID46
+    string "ID46"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID47
+    string "ID47"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID48
+    string "ID48"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID49
+    string "ID49"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID50
+    string "ID50"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID51
+    string "ID51"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID52
+    string "ID52"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID53
+    string "ID53"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID54
+    string "ID54"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID55
+    string "ID55"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID56
+    string "ID56"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID57
+    string "ID57"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID58
+    string "ID58"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID59
+    string "ID59"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID60
+    string "ID60"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID61
+    string "ID61"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID62
+    string "ID62"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID63
+    string "ID63"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID64
+    string "ID64"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID65
+    string "ID65"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID66
+    string "ID66"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID67
+    string "ID67"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID68
+    string "ID68"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID69
+    string "ID69"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID70
+    string "ID70"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID71
+    string "ID71"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID72
+    string "ID72"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID73
+    string "ID73"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID74
+    string "ID74"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID75
+    string "ID75"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID76
+    string "ID76"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID77
+    string "ID77"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID78
+    string "ID78"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID79
+    string "ID79"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID80
+    string "ID80"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID81
+    string "ID81"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID82
+    string "ID82"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID83
+    string "ID83"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID84
+    string "ID84"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID85
+    string "ID85"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID86
+    string "ID86"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID87
+    string "ID87"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID88
+    string "ID88"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID89
+    string "ID89"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID90
+    string "ID90"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID91
+    string "ID91"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID92
+    string "ID92"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID93
+    string "ID93"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID94
+    string "ID94"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID95
+    string "ID95"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID96
+    string "ID96"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID97
+    string "ID97"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID98
+    string "ID98"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID99
+    string "ID99"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID100
+    string "ID100"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID101
+    string "ID101"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID102
+    string "ID102"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID103
+    string "ID103"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID104
+    string "ID104"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID105
+    string "ID105"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID106
+    string "ID106"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID107
+    string "ID107"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID108
+    string "ID108"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID109
+    string "ID109"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID110
+    string "ID110"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID111
+    string "ID111"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID112
+    string "ID112"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID113
+    string "ID113"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID114
+    string "ID114"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID115
+    string "ID115"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID116
+    string "ID116"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID117
+    string "ID117"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID118
+    string "ID118"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID119
+    string "ID119"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID120
+    string "ID120"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID121
+    string "ID121"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID122
+    string "ID122"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID123
+    string "ID123"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID124
+    string "ID124"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID125
+    string "ID125"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID126
+    string "ID126"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID127
+    string "ID127"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID128
+    string "ID128"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID129
+    string "ID129"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID130
+    string "ID130"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID131
+    string "ID131"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID132
+    string "ID132"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID133
+    string "ID133"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID134
+    string "ID134"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID135
+    string "ID135"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID136
+    string "ID136"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID137
+    string "ID137"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID138
+    string "ID138"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID139
+    string "ID139"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID140
+    string "ID140"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID141
+    string "ID141"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID142
+    string "ID142"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID143
+    string "ID143"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID144
+    string "ID144"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID145
+    string "ID145"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID146
+    string "ID146"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID147
+    string "ID147"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID148
+    string "ID148"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID149
+    string "ID149"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID150
+    string "ID150"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID151
+    string "ID151"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID152
+    string "ID152"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID153
+    string "ID153"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID154
+    string "ID154"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID155
+    string "ID155"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID156
+    string "ID156"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID157
+    string "ID157"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID158
+    string "ID158"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID159
+    string "ID159"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID160
+    string "ID160"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID161
+    string "ID161"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID162
+    string "ID162"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID163
+    string "ID163"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID164
+    string "ID164"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID165
+    string "ID165"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID166
+    string "ID166"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID167
+    string "ID167"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID168
+    string "ID168"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID169
+    string "ID169"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID170
+    string "ID170"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID171
+    string "ID171"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID172
+    string "ID172"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID173
+    string "ID173"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID174
+    string "ID174"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID175
+    string "ID175"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID176
+    string "ID176"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID177
+    string "ID177"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID178
+    string "ID178"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID179
+    string "ID179"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID180
+    string "ID180"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID181
+    string "ID181"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID182
+    string "ID182"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID183
+    string "ID183"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID184
+    string "ID184"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID185
+    string "ID185"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID186
+    string "ID186"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID187
+    string "ID187"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID188
+    string "ID188"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID189
+    string "ID189"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID190
+    string "ID190"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID191
+    string "ID191"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID192
+    string "ID192"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID193
+    string "ID193"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID194
+    string "ID194"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID195
+    string "ID195"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID196
+    string "ID196"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID197
+    string "ID197"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID198
+    string "ID198"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+
+config EN_SPEECH_COMMAND_ID199
+    string "ID199"
+    depends on SR_MN_EN_MULTINET6_QUANT
+    default ""
+endmenu
+
 endmenu

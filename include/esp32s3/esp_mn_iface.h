@@ -18,9 +18,9 @@ typedef enum {
 } esp_mn_state_t;
 
 typedef enum {
-	ESP_MN_GREEDY_SEARCH = 0,        // greedy search
-	ESP_MN_BEAM_SEARCH = 1,          // beam search
-    ESP_MN_BEAM_SEARCH_WIRH_LM = 2,  // beam search with language model
+	ESP_MN_GREEDY_SEARCH = 0,          // greedy search
+	ESP_MN_BEAM_SEARCH = 1,            // beam search
+    ESP_MN_BEAM_SEARCH_WITH_TRIE = 2,  // beam search with trie language model
 } esp_mn_search_method_t;
 
 typedef enum {

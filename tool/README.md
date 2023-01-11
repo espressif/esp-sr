@@ -2,13 +2,16 @@
 
 
 
-####  1. Install g2p_en, please refer to https://pypi.org/project/g2p-en/ 
+####  1. Install g2p_en and sentencepiece
 
 ```
 pip install g2p_en
+pip install sentencepiece
 ```
 
 #### 2. Run multinet_g2p.py
+
+##### 2.1 multinet5 (units:phoneme)
 
 ```
 python multinet_g2p.py -t "hello world,hi ESP;turn on the light;turn off the light"
@@ -16,6 +19,13 @@ python multinet_g2p.py -t "hello world,hi ESP;turn on the light;turn off the lig
 ------
 in: hello world,hi ESP;turn on the light;turn off the light
 out: hcLb WkLD,hi fST;TkN nN jc LiT;TkN eF jc LiT;
+```
+
+##### 2.2 multinet6 (units:subword)
+```
+python multinet_g2p.py -m bpe.model -t "hello world,hi ESP;turn on the light;turn off the light"
+in: hello world,hi ESP;turn on the light;turn off the light
+out: _HE LL O _WORLD , H I _E S P ; T UR N _ON _THE _ L IGHT ; T UR N _OF F _THE _ L IGHT
 ```
 
 #### 3. Add speech commands 

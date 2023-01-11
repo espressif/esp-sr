@@ -1,2 +1,2 @@
 # (neural network type)_(model data version)_(lable1_detection windown length_threshold for 90%_threshold for 95%)_(lable2 ...)_...
-wakeNet9l_v2h8_bangwotiaocheng_3_0.98_0.99_bangwodakai_3_0.98_0.99_bangwoguanbi_3_0.98_0.99
+wakenet9l_v5h8_jiuming_3_0.630_0.634

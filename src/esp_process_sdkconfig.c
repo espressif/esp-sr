@@ -464,7 +464,7 @@ char *get_id_name_cn(int i)
 
 char *get_id_name_en(int i)
 {
-#if defined CONFIG_USE_MULTINET && defined CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION_QUANT8
+#if defined CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION_QUANT8 || defined CONFIG_SR_MN_EN_MULTINET6_QUANT
     if (i == 0)
         return CONFIG_EN_SPEECH_COMMAND_ID0;
     else if (i == 1)
