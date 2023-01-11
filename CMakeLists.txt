@@ -114,7 +114,6 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
 
     partition_table_get_partition_info(size "--partition-name model" "size")
     partition_table_get_partition_info(offset "--partition-name model" "offset")
-    partition_table_get_partition_info(offset "--partition-name model" "offset")
 
     if("${size}" AND "${offset}" AND CONFIG_MODEL_IN_SPIFFS AND CONFIG_USE_WAKENET)
         set(image_file ${CMAKE_BINARY_DIR}/model.bin)
