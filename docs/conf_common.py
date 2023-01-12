@@ -28,4 +28,4 @@ pdf_file_prefix = u'esp-sr'
 
 # add Tracking id for Google Analytics
 
-google_analytics_id = os.environ.get(UA-132861133-1, None)
+google_analytics_id = os.environ.get('UA-132861133-1', None)
