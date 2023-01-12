@@ -9,10 +9,10 @@ Overview
 
 ESP-SR framework includes the following modules:
 
-* The wake word detection model **WakeNet**
-* The speech command recognition model **MultiNet**
-* Audio Front-End **AFE**
-* The text to speech model **esp-tts** (only for the Chinese language)
+* Audio Front-end AFE
+* Wake Word Engine WakeNet
+* Speech Command Word Recognition MultiNet
+* Speech Synthesis (only supports Chinese language)
 
 These algorithms are provided in the form of a component, so they can be integrated into your projects with minimum effort.
 
@@ -34,7 +34,7 @@ Currently, Espressif **MultiNet** supports up to 200 Chinese or English speech c
 
 ## Audio Front End
 
-Espressif Audio Front-End **AFE** integrates AEC (Acoustic Echo Cancellation), VAD (Voice Activity Detection), BSS(Blind Source Separation) and NS (Noise Suppression).
+Espressif Audio Front-End **AFE** integrates AEC (Acoustic Echo Cancellation), VAD (Voice Activity Detection), BSS (Blind Source Separation) and NS (Noise Suppression).
 
 Our two-mic Audio Front-End (AFE) have been qualified as a “Software Audio Front-End Solution” for [Amazon Alexa Built-in devices](https://developer.amazon.com/en-US/alexa/solution-providers/dev-kits#software-audio-front-end-dev-kits).
 
