@@ -28,6 +28,4 @@ pdf_file_prefix = u'esp-sr'
 
 # add Tracking id for Google Analytics
 
-google_analytics_id = os.environ.get('CI_GOOGLE_ANALYTICS_ID', None)
-
-project_homepage = 'https://github.com/espressif/esp-sr'
+google_analytics_id = os.environ.get(UA-132861133-1, None)
