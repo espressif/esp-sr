@@ -1,14 +1,14 @@
-wakeNet
-========
+WakeNet Wake Word Model
+=======================
 
 :link_to_translation:`zh_CN:[中文]`
 
-wakeNet, which is a wake word engine built upon neural network, is specially designed for low-power embedded MCUs. Now, the wakeNet model supports up to 5 wake words.
+WakeNet is a wake word engine built upon neural network for low-power embedded MCUs. Currently, WakeNet supports up to 5 wake words.
 
 Overview
 --------
 
-Please see the flow diagram of wakeNet below:
+Please see the flow diagram of WakeNet below:
 
 .. figure:: ../../_static/wakenet_workflow.png
     :alt: overview
@@ -21,29 +21,34 @@ Please see the flow diagram of wakeNet below:
 
     </center>
 
--  speech features:
+-  Speech Feature
+    We use `MFCC <https://en.wikipedia.org/wiki/Mel-frequency_cepstrum>`__ method to extract the speech spectrum features. The input audio file has a sample rate of 16KHz, mono, and is encoded as signed 16-bit. Each frame has a window width and step size of 30ms.
 
-    We use the `MFCC <https://en.wikipedia.org/wiki/Mel-frequency_cepstrum>`__ method to extract speech spectrum features. The sampling rate of the input audio file is 16KHz, mono, and the encoding mode is signed 16-bit. The window width and step size of each frame are 30ms.
-    We use `MFCC <https://en.wikipedia.org/wiki/Mel-frequency_cepstrum>`__ method to extract the speech spectrum features. The input audio file has a sample rate of 16KHz, mono, and is encoded as signed 16-bit. each frame has a window width and step size of 30ms.
+.. only:: latex
 
--  Speech Feature:
+    .. figure:: ../../_static/QR_MFCC.png
+        :alt: overview
 
-    The wakeNet uses `MFCC <https://en.wikipedia.org/wiki/Mel-frequency_cepstrum>`__ to obtain the features of the input audio clip (16 KHz, 16 bit, single track). The window width and step width of each frame of the audio clip are both 30 ms.
-
--  Neural Network:
-
+-  Neural Network
     Now, the neural network structure has been updated to the ninth edition, among which:
 
-    -  wakeNet1,wakeNet2,wakeNet3,wakeNet4,wakeNet6,wakeNet7 had been out of use.
-    -  wakeNet5 only support ESP32 chip.
-    -  wakeNet8,wakeNet9 only support ESP32S3 chip, which are built upon the `Dilated Convolution <https://arxiv.org/pdf/1609.03499.pdf>`__ structure.
+    -  WakeNet1, WakeNet2, WakeNet3, WakeNet4, WakeNet6, and WakeNet7 had been out of use.
+    -  WakeNet5 only supports ESP32 chip.
+    -  WakeNet8 and WakeNet9 only support ESP32-S3 chip, which are built upon the `Dilated Convolution <https://arxiv.org/pdf/1609.03499.pdf>`__ structure.
 
-    .. note:: text
-        The network structure of wakeNet5,wakeNet5X2 and wakeNet5X3 is same, but the parameter of wakeNetX2 and wakeNetX3 is more than wakeNet5. Please refer to `Performance Test <#performance-test>`__ for details.
+.. only:: latex
+
+    .. figure:: ../../_static/QR_Dilated_Convolution.png
+        :alt: overview
+
+    The network structure of WakeNet5, WakeNet5X2 and WakeNet5X3 is the same, but WakeNetX2 and WakeNetX3 have more parameters than WakeNet5. Please refer to :doc:`Resource Consumption <../benchmark/README>` for details.
 
 -  Keyword Triggering Method:
-
     For continuous audio stream, we calculate the average recognition results (M) for several frames and generate a smoothing prediction result, to improve the accuracy of keyword triggering. Only when the M value is larger than the set threshold, a triggering command is sent.
+
+The wake words supported by Espressif chips are listed below:
+
+.. _esp-open-wake-word:
 
 +-----------------+-----------+-------------+-------------+-----------+-----------+-----------+-----------+
 | Chip            | ESP32                                 | ESP32S3                                       |
@@ -67,36 +72,33 @@ Please see the flow diagram of wakeNet below:
 | Customized word |           |             |             |           |           |           | √         |
 +-----------------+-----------+-------------+-------------+-----------+-----------+-----------+-----------+
 
-Use wakeNet
+Use WakeNet
 -----------
 
--  How to select the wakeNet model
+-  Select WakeNet model
 
-    Please refer to :doc:`flash model  <../flash_model/README>` .
+    To select WakeNet model, please refer to Section :doc:`flash model <../flash_model/README>` .
 
--  How to run wakeNet
+    To customize wake words, please refer to Section :doc:`Espressif Speech Wake-up Solution Customization Process <ESP_Wake_Words_Customization>`
 
-    wakeNet is currently included in the :doc:`AFE <../audio_front_end/README>`, which is running by default, and returns the detect results through the AFE fetch interface.
+-  Run WakeNet
 
-    If users do not wants to initialize WakeNet, please use:
+    WakeNet is currently included in the :doc:`AFE <../audio_front_end/README>`, which is enabled by default, and returns the detection results through the AFE fetch interface.
+
+    If users do not need WakeNet, please use:
 
     ::
 
         afe_config.wakeNet_init = False.
 
-    If users want to close/open WakeNet temporarily, plese use:
+    If users want to enable/disable WakeNet temporarily, please use:
 
     ::
 
         afe_handle->disable_wakenet(afe_data)
         afe_handle->enable_wakenet(afe_data)
 
-Performance Test
-----------------
+Resource Consumption
+--------------------
 
-Please refer to :doc:`Performance Test <../benchmark/README>` .
-
-Wake Word Customization
------------------------
-
-For details on how to customize your wake words, please see :doc:`Espressif Speech Wake Word Customization Process <ESP_Wake_Words_Customization>` .
+Please refer to :doc:`Resource Consumption <../benchmark/README>` .

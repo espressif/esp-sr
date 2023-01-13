@@ -1,24 +1,27 @@
-MultiNet 介绍
-=============
+命令词
+======
 
 :link_to_translation:`en:[English]`
 
-MultiNet 是为了在 ESP32 系列上离线实现多命令词识别而设计的轻量化模型，目前支持 200 个以内的自定义命令词识别。
+MultiNet 命令词识别模型
+----------------------------
 
-    * 支持中文和英文命令词识别（英文命令词识别需使用 ESP32S3）
-    * 支持用户自定义命令词
-    * 支持运行过程中 增加/删除/修改 命令词语
-    * 最多支持 200 个命令词
-    * 支持单次识别和连续识别两种模式
-    * 轻量化，低资源消耗
-    * 低延时，延时500ms内
-    * 支持在线中英文模型切换（仅 ESP32S3）
-    * 模型单独分区，支持用户应用 OTA
+MultiNet 是为了在 {IDF_TARGET_NAME} 系列上离线实现多命令词识别而设计的轻量化模型，目前支持 200 个以内的自定义命令词识别。
 
-概述
--------
+.. list::
 
-MultiNet 输入为经过前端语音算法（AFE）处理过的音频，格式为 16KHz，16bit，单声道。通过对音频进行识别，则可以对应到相应的汉字或单词。
+    :esp32s3: - 支持中文和英文命令词识别
+    :esp32: - 支持中文命令词识别
+    - 支持用户自定义命令词
+    - 支持运行过程中 增加/删除/修改 命令词语
+    - 最多支持 200 个命令词
+    - 支持单次识别和连续识别两种模式
+    - 轻量化，低资源消耗
+    - 低延时，延时 500 ms内
+    :esp32s3: - 支持在线中英文模型切换
+    - 模型单独分区，支持用户应用 OTA
+
+MultiNet 输入为经过前端语音算法（AFE）处理过的音频（格式为 16 KHz，16 bit，单声道）。通过对音频进行识别，则可以对应到相应的汉字或单词。
 
 以下表格展示在不同芯片上的模型支持：
 
@@ -32,48 +35,27 @@ MultiNet 输入为经过前端语音算法（AFE）处理过的音频，格式�
 | English |           |             |               | √           |
 +---------+-----------+-------------+---------------+-------------+
 
-用户选择不同的模型的方法请参考 :doc:`flash model <../flash_model/README>` 。
+用户选择不同的模型的方法请参考 :doc:`模型加载 <../flash_model/README>` 。
 
-**注：其中以 ``Q8`` 结尾的模型代表模型的 8bit 版本，表明该模型更加轻量化。**
+.. note::
+    其中以 ``Q8`` 结尾的模型代表模型的 8 bit 版本，表明该模型更加轻量化。
 
 命令词识别原理
 -----------------
 
-可以参考以下命令词识别原理：
+命令词识别原理如下图所示：
 
 .. figure:: ../../_static/multinet_workflow.png
     :alt: speech_command-recognition-system
 
     speech_command-recognition-system
 
-使用指南
---------
+.. _command-requirements:
 
 命令词设计要求
-~~~~~~~~~~~~~~~
+----------------
 
--  中文推荐长度一般为 4-6 个汉字，过短导致误识别率高，过长不方便用户记忆
--  英文推荐长度一般为 4-6 个单词
--  命令词中不支持中英文混合
--  目前最多支持 **200** 条命令词
--  命令词中不能含有阿拉伯数字和特殊字符
--  命令词避免使用常用语
--  命令词中每个汉字/单词的发音相差越大越好
-
-命令词自定义方法
-~~~~~~~~~~~~~~~~
-
-    * 支持多种命令词自定义方法
-    * 支持随时动态增加/删除/修改命令词
-
-MultiNet 对命令词自定义方法没有限制，用户可以通过任意方式（在线/离线）等将所需的命令词按照相应的格式，组成链表发给 MultiNet 即可。
-
-我们针对不同客户提供不同的 example 来展示一些命令词的自定义方法，大体分为以下两种。
-
-命令词格式
-^^^^^^^^^^
-
-命令词需要满足特定的格式，具体如下：
+目前，MultiNet 最多支持 **200** 条命令词。命令词需要满足特定的格式，具体如下：
 
 -  中文
 
@@ -81,9 +63,27 @@ MultiNet 对命令词自定义方法没有限制，用户可以通过任意方�
 
 -  英文
 
-    英文命令词需要使用特定音标表示，每个单词的音标间用空格隔开，比如“turn on the light”，需要写成“TkN nN jc LiT”。
+    英文命令词需要使用特定音标表示，每个单词的音标间用空格隔开，比如“turn on the light”，需要写成“TkN nN jc LiT”。具体可使用我们提供的工具进行转换，详细可见： :project_file:`tool/multinet_g2p.py` 。
 
-    此外，我们也提供相应的工具，供用户将汉字转换为拼音，详细可见： `英文转音素工具 <../../tool/multinet_g2p.py>` 。
+
+自定义要求
+~~~~~~~~~~~
+
+在设计命令词时有如下要求和建议：
+
+.. list::
+
+    -  中文推荐长度一般为 4-6 个汉字，过短导致误识别率高，过长不方便用户记忆
+    :esp32s3: - 英文推荐长度一般为 4-6 个单词
+    -  不支持中英文混合
+    -  不能含有阿拉伯数字和特殊字符
+    -  应避免使用常用语
+    -  命令词中每个汉字/单词的发音相差越大越好
+
+自定义方法
+~~~~~~~~~~~
+
+MultiNet 支持多种且灵活的命令词设置方式，可通过在线或离线方法设置命令词，还允许随时动态增加/删除/修改命令词
 
 .. only:: latex
 
@@ -93,22 +93,20 @@ MultiNet 对命令词自定义方法没有限制，用户可以通过任意方�
 离线设置命令词
 ^^^^^^^^^^^^^^^
 
-MultiNet 支持多种且灵活的命令词设置方式，用户无论通过那种方式编写命令词（代码/网络/文件），只需调用相应的 API 即可。
+MultiNet 支持两种离线设置命令词的方法：
 
-在这里我们提供两种常见的命令词添加方法。
+-  通过 ``menuconfig``
 
--  编写 ``menuconfig`` 进行添加
-
-    可以参考 ESP-Skainet 中 example 通过 ``idf.py menuconfig -> ESP Speech Recognition-> Add Chinese speech commands/Add English speech commands`` 添加命令词。
+    1. ``idf.py menuconfig`` > ``ESP Speech Recognition`` > ``Add Chinese speech commands/Add English speech commands``，添加命令词。具体也可参考 ESP-Skainet 中的 example。
 
     .. figure:: ../../_static/menuconfig_add_speech_commands.png
         :alt: menuconfig_add_speech_commands
 
         menuconfig_add_speech_commands
 
-    请注意单个 Command ID 可以支持多个短语，比如“打开空调”和“开空调”表示的意义相同，则可以将其写在同一个 Command ID 对应的词条中，用英文字符“,”隔开相邻词条（“,”前后无需空格）。
+    注意，单个 Command ID 可以支持多个短语，比如“打开空调”和“开空调”表示的意义相同，则可以将其写在同一个 Command ID 对应的词条中，用英文字符“,”隔开相邻词条（“,”前后无需空格）。
 
-    然后通过在代码里调用以下 API 即可：
+    1. 在代码里调用以下 API：
 
     ::
 
@@ -127,43 +125,38 @@ MultiNet 支持多种且灵活的命令词设置方式，用户无论通过那�
         */
         esp_err_t esp_mn_commands_update_from_sdkconfig(esp_mn_iface_t *multinet, const model_iface_data_t *model_data);
 
--  通过自己创建命令词进行添加
+-  通过修改代码
 
-    可以参考 ESP-Skainet 中 example 了解这种添加命令词的方法。
-
-    该方法中，用户直接在代码中编写命令词，并传给 MultiNet，在实际开发和产品中，用户可以通过网络/UART/SPI等多种可能的方式传递所需的命令词并随时更换命令词。
+    该方法中，用户直接在代码中编写命令词，并传给 MultiNet。在实际产品开发和使用中，用户可以通过网络/UART/SPI 等多种接口，传递所需的命令词并随时更换命令词。详情可参考 ESP-Skainet 中的 example。
 
 在线设置命令词
 ^^^^^^^^^^^^^^
 
-MultiNet 支持在运行过程中在线动态添加/删除/修改命令词，该过程无须更换模型和调整参数。具体可以参考 ESP-Skainet 中 example。
+MultiNet 还支持在运行过程中，在线动态设置命令词（添加/删除/修改），且整个过程无须更换模型或调整参数。详情可参考 ESP-Skainet 中 example。
 
-具体 API 说明请参考　`esp_mn_speech_commands <../../src/esp_mn_speech_commands.c>`_。
+具体 API 说明请参考　:project_file:`src/esp_mn_speech_commands.c` 。
 
-运行命令词识别
---------------
+MultiNet 的使用
+----------------
 
-命令词识别需要和 ESP-SR 中的声学算法模块（AFE）（AFE中需使能唤醒（WakeNet））一起运行。关于 AFE 的使用，请参考文档：
+MultiNet 命令词识别需要和 ESP-SR 中的 AFE 声学算法模块一起运行（此外，AFE 运行还需要使能 WakeNet 功能，具体请参考 :doc:`AFE 介绍及使用 <../audio_front_end/README>` ）。
 
-:doc:`AFE 介绍及使用 <../audio_front_end/README>`
-
-当用户配置完成 AFE 后，请按照以下步骤配置和运行 MultiNet：
+当用户配置完成 AFE 后，请按照以下步骤配置和运行 MultiNet。
 
 MultiNet 初始化
 ~~~~~~~~~~~~~~~
 
--  模型加载与初始化　　　
-    请参考 :doc:`flash_model <../flash_model/README>`
+-  模型加载与初始化，请参考 :doc:`模型加载 <../flash_model/README>`
 
--  设置命令词 请参考上文 #3。
+-  设置命令词，请参考 :ref:`command-requirements`
 
 MultiNet 运行
 ~~~~~~~~~~~~~
 
-当用户开启 AFE 且使能 WakeNet 后，则可以运行 MultiNet。且有以下几点要求：
+当用户开启 AFE 且使能 WakeNet 后，则可以运行 MultiNet。但需要注意以下几点要求：
 
-    * 传入帧长和 AFE fetch 帧长长度相等
-    * 支持音频格式为 16KHz，16bit，单通道。AFE fetch 拿到的数据也为这个格式
+* 传入帧长和 AFE fetch 帧长长度相等
+* 支持音频格式为 16 KHz，16 bit，单通道。AFE fetch 拿到的数据也为这个格式
 
 -  确定需要传入 MultiNet 的帧长
 
@@ -173,7 +166,7 @@ MultiNet 运行
 
     ``mu_chunksize`` 是需要传入 MultiNet 的每帧音频的 ``short`` 型点数，这个大小和 AFE 中 fetch 的每帧数据点数完全一致。
 
--  MultiNet detect
+-  MultiNet 识别
 
     我们将 AFE 实时 ``fetch`` 到的数据送入以下 API：
 
@@ -181,20 +174,19 @@ MultiNet 运行
 
         esp_mn_state_t mn_state = multinet->detect(model_data, buff);
 
-``buff`` 的长度为 ``mu_chunksize * sizeof(int16_t)``。
+    ``buff`` 的长度为 ``mu_chunksize * sizeof(int16_t)``。
 
 MultiNet 识别结果
 ~~~~~~~~~~~~~~~~~
 
-命令词识别支持两种基本模式：
+MultiNet 命令词识别支持两种基本模式：
 
-    * 单次识别
-    * 连续识别
+* 单次识别
+* 连续识别
 
 命令词识别必须和唤醒搭配使用，当唤醒后可以运行命令词的检测。
 
-命令词模型在运行时，会实时返回当前帧的识别状态
-``mn_state`` ，目前分为以下几种识别状态：
+命令词模型在运行时，会实时返回当前帧的识别状态 ``mn_state`` ，目前分为以下几种识别状态：
 
 -  ESP_MN_STATE_DETECTING
 
@@ -219,7 +211,9 @@ MultiNet 识别结果
             float prob[ESP_MN_RESULT_MAX_NUM];         // The list of probability.
         } esp_mn_results_t;
 
-    -  其中 ``state`` 为当前识别的状态
+    其中，
+
+    -  ``state`` 为当前识别的状态
     -  ``num`` 表示识别到的词条数目， ``num`` <= 5，即最多返回 5 个候选结果
     -  ``phrase_id`` 表示识别到的词条对应的 Phrase ID
     -  ``prob`` 表示识别到的词条识别概率，从大到到小依次排列
@@ -230,9 +224,9 @@ MultiNet 识别结果
 
     该状态表示长时间未检测到命令词，自动退出。等待下次唤醒。
 
-| 因此：
-| 当命令词识别返回状态为 ``ESP_MN_STATE_DETECTED`` 时退出命令词识别，则为单次识别模式；
-| 当命令词识别返回状态为 ``ESP_MN_STATE_TIMEOUT`` 时退出命令词识别，则为连续识别模式；
+因此：
+当命令词识别返回状态为 ``ESP_MN_STATE_DETECTED`` 时退出命令词识别，则为单次识别模式；
+当命令词识别返回状态为 ``ESP_MN_STATE_TIMEOUT`` 时退出命令词识别，则为连续识别模式；
 
 其他配置和使用
 --------------
@@ -240,4 +234,4 @@ MultiNet 识别结果
 阈值设置
 ~~~~~~~~
 
-　　该功能仍在开发中．
+该功能仍在开发中。
