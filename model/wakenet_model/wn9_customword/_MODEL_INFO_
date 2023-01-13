@@ -1,1 +1,2 @@
-wakenet9_v1h24_hilexin_3_0.608_0.615
+# (neural network type)_(model data version)_(lable1_detection windown length_threshold for 90%_threshold for 95%)_(lable2 ...)_...
+wakenet9l_v52h8_jiuming_3_0.640_0.645

@@ -2196,12 +2196,12 @@ config EN_SPEECH_COMMAND_ID2
 config EN_SPEECH_COMMAND_ID3
     string "ID3"
     depends on SR_MN_EN_MULTINET6_QUANT
-    default "_TURN _ON _MY _SO UND BO X,T UR N _ON _MY _SO UND BO X"
+    default "_TURN _ON _MY _SO UND BO X,_TURN _ON _MY _S O U ND B O X,_TURN _ON _MY _ S O UN D BO X"
 
 config EN_SPEECH_COMMAND_ID4
     string "ID4"
     depends on SR_MN_EN_MULTINET6_QUANT
-    default "_TURN _OF F _MY _SO UND BO X,_TURN _OF _MY _SO UND BO X"
+    default "_TURN _OF F _MY _SO UND BO X,_TURN _OF _MY _S O U ND B O X,_TURN _OF _MY _ S O UN D BO X"
 
 config EN_SPEECH_COMMAND_ID5
     string "ID5"
@@ -2221,7 +2221,7 @@ config EN_SPEECH_COMMAND_ID7
 config EN_SPEECH_COMMAND_ID8
     string "ID8"
     depends on SR_MN_EN_MULTINET6_QUANT
-    default "_DE C RE SE _THE _ VO LU ME"
+    default "_DE C RE A SE _THE _ VO LU ME"
 
 config EN_SPEECH_COMMAND_ID9
     string "ID9"
