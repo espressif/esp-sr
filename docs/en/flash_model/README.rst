@@ -1,9 +1,11 @@
-Flash Model
-===========
+Flashing Models
+===============
 
 :link_to_translation:`zh_CN:[中文]`
 
-ESP-SR's WakeNet and MultiNet both use a lot of model data (which can be found in :project:`model`). Currently, ESP-SR supports the following methods to flash models:
+In the AI industry, a model refers to a mathematical representation of a system or process. It is used to make predictions or decisions based on input data. There are many types of models, such as decision trees, neural networks, and support vector machines, each with their own strengths and weaknesses. Esprssif also provides our trained models such as WakeNet and MultiNet (see the model data used in :project:`model`)
+
+To use our models in your project, you need to flash these models. Currently, ESP-SR supports the following methods to flash models:
 
 .. only:: esp32
 

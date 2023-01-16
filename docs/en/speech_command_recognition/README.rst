@@ -35,7 +35,7 @@ The following table shows the models supported by Espressif SoCs:
 | English |           |             |               | √           |
 +---------+-----------+-------------+---------------+-------------+
 
-For details on flash models, see Section :doc:`flash model <../flash_model/README>` .
+For details on flash models, see Section :doc:`Flashing Models <../flash_model/README>` .
 
 .. note::
     Models ending with Q8 represents the 8 bit version of the model, which is more lightweight.
