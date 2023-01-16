@@ -3,7 +3,9 @@
 
 :link_to_translation:`en:[English]`
 
-ESP-SR 的 WakeNet 和 MultiNet 均会使用大量的模型数据，模型数据位于 :project:`model` 中。目前 ESP-SR 支持以下模型加载方式：
+在人工智能行业中，模型是指一个系统或过程的数学表示。它用于基于输入数据做出预测或决策，有许多不同类型的模型，如决策树、神经网络和支持向量机，每种模型都有其优缺点。乐鑫也提供经过训练的 WakeNet 和 MultiNet 模型（数据模型见 :project:`model`） 。
+
+使用模型前需先将其加载至你的项目，目前 ESP-SR 支持以下模型加载方式：
 
 .. only:: esp32
 

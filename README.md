@@ -1,17 +1,17 @@
 # ESP-SR Speech Recognition Framework
 
-[![Documentation Status](https://readthedocs.com/projects/espressif-esp-adf/badge/?version=latest)](https://docs.espressif.com/projects/esp-sr/zh_CN/latest/esp32/index.html)
+[![Documentation Status](https://readthedocs.com/projects/espressif-esp-adf/badge/?version=latest)](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/index.html)
 
-Espressif `ESP-SR <https://github.com/espressif/esp-sr>`_ helps users build AI speech solutions based on ESP32 or ESP32-S3 chips.
+Espressif [ESP-SR](https://github.com/espressif/esp-sr) helps users build AI speech solutions based on ESP32 or ESP32-S3 chips.
 
 Overview
 --------
 
 ESP-SR framework includes the following modules:
 
-* Audio Front-end AFE
-* Wake Word Engine WakeNet
-* Speech Command Word Recognition MultiNet
+* [Audio Front-end AFE](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/audio_front_end/README.html)
+* [Wake Word Engine WakeNet](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/wake_word_engine/README.html)
+* [Speech Command Word Recognition MultiNet](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/speech_command_recognition/README.html)
 * Speech Synthesis (only supports Chinese language)
 
 These algorithms are provided in the form of a component, so they can be integrated into your projects with minimum effort.

@@ -77,7 +77,7 @@ Use WakeNet
 
 -  Select WakeNet model
 
-    To select WakeNet model, please refer to Section :doc:`flash model <../flash_model/README>` .
+    To select WakeNet model, please refer to Section :doc:`Flashing Models <../flash_model/README>` .
 
     To customize wake words, please refer to Section :doc:`Espressif Speech Wake-up Solution Customization Process <ESP_Wake_Words_Customization>`
 
