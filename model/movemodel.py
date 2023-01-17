@@ -28,12 +28,15 @@ if __name__ == '__main__':
 with io.open(sdkconfig_path, "r") as f:
     WN_STRING = ''
     MN_STRING = ''
+    NSN_STRING = ''
     for label in f:
         label = label.strip("\n")
         if 'CONFIG_SR_WN' in label and label[0] != '#':
             WN_STRING += label
         if 'CONFIG_SR_MN' in label and label[0] != '#':
             MN_STRING += label
+        if 'CONFIG_SR_NSN' in label and label[0] != '#':
+            NSN_STRING += label
 
 wakenet_model = []
 if "CONFIG_SR_WN_WN7Q8_XIAOAITONGXUE" in WN_STRING:
@@ -73,11 +76,18 @@ if "CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION_QUANT8" in MN_STRING and len(mu
     multinet_model.append('mn5q8_en')
 elif "CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION" in MN_STRING and len(multinet_model) < 2:
     multinet_model.append('mn5_en')
+elif "CONFIG_SR_MN_EN_MULTINET6_QUANT" in MN_STRING and len(multinet_model) < 2:
+    multinet_model.append('mn6_en')
+
+nsnet_model = ''
+if "CONFIG_SR_NSN_NSNET1" in NSN_STRING:
+    nsnet_model = 'nsnet1'
 
 print(wakenet_model)
 print(multinet_model)
+print(nsnet_model)
 
-target_model = args.project_path + '/target'
+target_model = model_path + '/target'
 if os.path.exists(target_model):
     shutil.rmtree(target_model)
 os.makedirs(target_model)
@@ -87,6 +97,8 @@ if len(wakenet_model) != 0:
 if len(multinet_model) != 0:
     for multinet_model_item in multinet_model:
         shutil.copytree(model_path + '/multinet_model/' + multinet_model_item, target_model+'/'+multinet_model_item)
+if nsnet_model != '':
+    shutil.copytree(model_path + '/nsnet_model/' + nsnet_model, target_model+'/'+nsnet_model)
 
 # os.system("cp %s %s" % (wakenet_model+'/_MODEL_INFO_', target_model))
 

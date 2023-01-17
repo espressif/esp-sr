@@ -12,42 +12,42 @@ void check_chip_config(void)
 {
 #ifdef CONFIG_IDF_TARGET_ESP32S3
 #ifndef CONFIG_ESP32S3_DEFAULT_CPU_FREQ_240
-    ESP_LOGE(TAG, "CPU freq should be 240MHz");
+    ESP_LOGW(TAG, "CPU freq should be 240MHz");
 #endif
 
-#ifndef CONFIG_ESPTOOLPY_FLASHFREQ_80M
-    ESP_LOGE(TAG, "Flash freq should be 80MHz");
+#if (! defined CONFIG_ESPTOOLPY_FLASHFREQ_80M) && (! defined CONFIG_ESPTOOLPY_FLASHFREQ_120M)
+    ESP_LOGW(TAG, "Flash freq should be not less than 80MHz");
 #endif
 
-#ifndef CONFIG_SPIRAM_SPEED_80M
-    ESP_LOGE(TAG, "PSRAM freq should be 80MHz");
+#if (! defined CONFIG_SPIRAM_SPEED_80M) && (! defined CONFIG_SPIRAM_SPEED_120M)
+    ESP_LOGW(TAG, "PSRAM freq should be not less than 80MHz");
 #endif
 
 #ifndef CONFIG_ESP32S3_DATA_CACHE_64KB
-    ESP_LOGE(TAG, "Data cache should be 64KB");
+    ESP_LOGW(TAG, "Data cache recommends 64KB");
 #endif
 
 #ifndef CONFIG_ESP32S3_DATA_CACHE_LINE_64B
-    ESP_LOGE(TAG, "Data cache line should be 64B");
+    ESP_LOGW(TAG, "Data cache line recommends 64B");
 #endif
 #elif CONFIG_IDF_TARGET_ESP32
 #ifndef CONFIG_ESP32_DEFAULT_CPU_FREQ_240
-    ESP_LOGE(TAG, "CPU freq should be 240MHz");
+    ESP_LOGW(TAG, "CPU freq should be 240MHz");
 #endif
 
 #ifndef CONFIG_SPIRAM_SPEED_80M
-    ESP_LOGE(TAG, "PSRAM freq should be 80MHz");
+    ESP_LOGW(TAG, "PSRAM freq should be 80MHz");
 #endif
 
 #ifndef CONFIG_ESPTOOLPY_FLASHFREQ_80M
-    ESP_LOGE(TAG, "Flash freq should be 80MHz");
+    ESP_LOGW(TAG, "Flash freq should be 80MHz");
 #endif
 
 #ifndef CONFIG_ESPTOOLPY_FLASHMODE_QIO
-    ESP_LOGE(TAG, "Flash mode should be QIO");
+    ESP_LOGW(TAG, "Flash mode should be QIO");
 #endif
 #else
-    ESP_LOGE(TAG, "ESP-SR-AFE only support ESP32/ESP32S3");
+    ESP_LOGW(TAG, "ESP-SR-AFE only support ESP32/ESP32S3");
 #endif
 }
 
