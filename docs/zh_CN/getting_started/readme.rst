@@ -12,8 +12,8 @@ ESP-SR 支持以下模块：
 
 * :doc:`声学前端算法 AFE <../audio_front_end/README>`
 * :doc:`唤醒词检测 WakeNet <../wake_word_engine/README>`
-* :doc:`命令词识别 MultiNet<../speech_command_recognition/README>`
-* 语音合成（目前只支持中文）
+* :doc:`命令词识别 MultiNet <../speech_command_recognition/README>`
+* :doc:`语音合成（目前只支持中文）<../speech_synthesis/readme>`
 
 准备工作
 --------

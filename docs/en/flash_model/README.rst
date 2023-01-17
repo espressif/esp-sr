@@ -18,7 +18,7 @@ To use our models in your project, you need to flash these models. Currently, ES
     -  Load directly from SIP Flash File System (SPIFFS)
     -  Load from external SD card
 
-    So that on ESP32S3 you can:
+    So that on ESP32-S3 you can:
 
         -  Greatly reduce the size of the user application APP BIN
         -  Supports the selection of up to two wake words

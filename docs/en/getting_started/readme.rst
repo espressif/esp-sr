@@ -13,7 +13,7 @@ ESP-SR includes the following modules:
 * :doc:`Audio Front-end AFE <../audio_front_end/README>`
 * :doc:`Wake Word Engine WakeNet <../wake_word_engine/README>`
 * :doc:`Speech Command Word Recognition MultiNet <../speech_command_recognition/README>`
-* Speech Synthesis (only supports Chinese language)
+* :doc:`Speech Synthesis (only supports Chinese language) <../speech_synthesis/readme>`
 
 What You Need
 -------------

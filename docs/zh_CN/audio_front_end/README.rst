@@ -27,7 +27,7 @@ AEF 声学前端算法框架
     * - AGC (Automatic Gain Control)
       - 自动增益控制算法，可以动态调整输出音频的幅值，当弱信号输入时，放大输出幅度；当输入信号达到一定强度时，压缩输出幅度。
     * - WakeNet
-      - 基于神经网络的唤醒词模型，专为低功耗潜入式 MCU 设计
+      - 基于神经网络的唤醒词模型，专为低功耗嵌入式 MCU 设计
 
 使用场景
 --------
@@ -319,7 +319,7 @@ AEC 的使用和 WakeNet 相似，用户可以根据自己的需求来停止或�
     feed 音频数据
     ^^^^^^^^^^^^^
 
-    在初始化 AFE 完成后，使用 :cpp:func: `feed` 函数，将音频数据输入到 AFE 模块中进行处理。输入音频的格式详见 :ref:`input-audio-1` 。
+    在初始化 AFE 完成后，使用 :cpp:func:`feed` 函数，将音频数据输入到 AFE 模块中进行处理。输入音频的格式详见 :ref:`input-audio-1` 。
 
     ::
 
@@ -405,3 +405,9 @@ AEC 的使用和 WakeNet 相似，用户可以根据自己的需求来停止或�
             int ret_value;                          // the return state of fetch function
             void* reserved;                         // reserved for future use
         } afe_fetch_result_t;
+
+
+资源消耗
+--------
+
+有关本模型的资源消耗情况，请见 :doc:`资源消耗 <../benchmark/README>`。
