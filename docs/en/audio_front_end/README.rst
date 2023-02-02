@@ -405,3 +405,9 @@ The usage of AEC is similar to that of WakeNet. Users can disable or enable AEC 
         int ret_value;                          // the return state of fetch function
         void* reserved;                         // reserved for future use
         } afe_fetch_result_t;
+
+
+Resource Occupancy
+------------------
+
+For the resource occupancy for this model, see :doc:`Resource Occupancy <../benchmark/README>`.

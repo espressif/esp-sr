@@ -98,7 +98,7 @@ Use WakeNet
         afe_handle->disable_wakenet(afe_data)
         afe_handle->enable_wakenet(afe_data)
 
-Resource Consumption
---------------------
+Resource Occupancy
+------------------
 
-Please refer to :doc:`Resource Consumption <../benchmark/README>` .
+For the resource occupancy for this model, see :doc:`Resource Occupancy <../benchmark/README>`.

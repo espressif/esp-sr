@@ -21,7 +21,7 @@ project_slug = 'esp-sr'
 
 # Contains info used for constructing target and version selector
 # Can also be hosted externally, see esp-idf for example
-versions_url = '_static/docs_version.js'
+versions_url = './_static/docs_version.js'
 
 # Final PDF filename will contains target and version
 pdf_file_prefix = u'esp-sr'

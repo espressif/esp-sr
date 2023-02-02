@@ -101,4 +101,4 @@ WakeNet 的使用
 资源消耗
 --------
 
-具体请参考 :doc:`资源消耗 <../benchmark/README>` 。
+有关本模型的资源消耗情况，请见 :doc:`资源消耗 <../benchmark/README>`。

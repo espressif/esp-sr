@@ -228,6 +228,12 @@ Therefore:
 * Single recognition mode: exit the speech recognition when the return status is ``ESP_MN_STATE_DETECTED``
 * Continuous recognition: exit the speech recognition when the return status is ``ESP_MN_STATE_TIMEOUT``
 
+Resource Occupancy
+------------------
+
+For the resource occupancy for this model, see :doc:`Resource Occupancy <../benchmark/README>`.
+
+
 Other configurations
 -----------------------
 

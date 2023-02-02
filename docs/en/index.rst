@@ -17,6 +17,7 @@ ESP-SR User Guide
     Audio Front-end (AFE) <audio_front_end/index>
     Wake Word WakeNet <wake_word_engine/index>
     Speech Command Word MultiNet <speech_command_recognition/README>
+    Speech Synthesis (Only Supports Chinese Language) <speech_synthesis/readme>
     Flashing Models <flash_model/README>
     Resource Overhead <benchmark/README>
     Test Report <test_report/README>
