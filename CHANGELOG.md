@@ -1,5 +1,15 @@
 # Change log for esp-sr
 
+## 1.1.0
+Update document of ESP-SR
+Add ESP-SR into Espressif component manager 
+
+## 1.0.0
+Add wakenet8 & wakenet9  
+Add multinet5 to support English and Chinese speech commond recognition
+Remove wakenet7 
+Add AFE pipeline for voice communication
+
 ## 0.8.0
 support ESP32S3 chip
 add wakenet7 & update wakenet5 to support multi-channel detection
@@ -23,7 +33,6 @@ update multinet1 Chinese model v2.0
 add Mic Array Processing(MAP) algorithm  
 Fix the bug of parsing speech command  
 fix the bug of decoder  
-
 
 ## 0.3.0
 add wakenet6  
