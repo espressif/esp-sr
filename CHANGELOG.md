@@ -1,6 +1,7 @@
 # Change log for esp-sr
 
 ## 1.1.0
+Support esp32c3 for Chinese TTS  
 Update document of ESP-SR
 Add ESP-SR into Espressif component manager 
 

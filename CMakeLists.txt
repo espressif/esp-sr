@@ -37,24 +37,6 @@ ENDIF (IDF_VERSION_MAJOR GREATER 3)
         voice_set_xiaole
         wakenet
         "-Wl,--end-group")
-elseif(${IDF_TARGET} STREQUAL "esp32s2")
-    set(COMPONENT_ADD_INCLUDEDIRS 
-        esp-tts/esp_tts_chinese/include
-        include/esp32
-        src/include
-        )
-
-    set(COMPONENT_REQUIRES
-        json
-        spiffs
-        )
-
-    register_component()
-    target_link_libraries(${COMPONENT_TARGET} INTERFACE "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese/esp32s2")
-    target_link_libraries(${COMPONENT_TARGET} INTERFACE "-Wl,--start-group"
-        esp_tts_chinese
-        voice_set_xiaole
-         "-Wl,--end-group")
 elseif(${IDF_TARGET} STREQUAL "esp32s3")
     set(COMPONENT_ADD_INCLUDEDIRS 
     src/include
@@ -162,4 +144,26 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
         set(message "Failed to create SPIFFS image for partition 'model'. "
                     "Check project configuration if using the correct partition table file.")
     endif()
+elseif(${IDF_TARGET} STREQUAL "esp32s2")
+    set(COMPONENT_ADD_INCLUDEDIRS 
+        esp-tts/esp_tts_chinese/include
+        )
+
+    register_component()
+    target_link_libraries(${COMPONENT_TARGET} INTERFACE "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese/esp32s2")
+    target_link_libraries(${COMPONENT_TARGET} INTERFACE "-Wl,--start-group"
+        esp_tts_chinese
+        voice_set_xiaole
+         "-Wl,--end-group")
+elseif(${IDF_TARGET} STREQUAL "esp32c3")
+    set(COMPONENT_ADD_INCLUDEDIRS 
+        esp-tts/esp_tts_chinese/include
+        )
+
+    register_component()
+    target_link_libraries(${COMPONENT_TARGET} INTERFACE "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese/esp32c3")
+    target_link_libraries(${COMPONENT_TARGET} INTERFACE "-Wl,--start-group"
+        esp_tts_chinese
+        voice_set_xiaole
+         "-Wl,--end-group")
 endif()
