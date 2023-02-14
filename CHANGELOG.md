@@ -1,6 +1,7 @@
 # Change log for esp-sr
 
 ## Unreleased
+- ESP-DSP dependency is now installed from the component registry
 
 ## 1.1.0
 - Support esp32c3 for Chinese TTS
