@@ -2,6 +2,7 @@
 
 ## Unreleased
 - ESP-DSP dependency is now installed from the component registry
+- Add some English MultiNet6 model which is trained by RNNT and CTC
 
 ## 1.1.0
 - Support esp32c3 for Chinese TTS
