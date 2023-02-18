@@ -1,7 +1,4 @@
-**multinet_g2p.py** is used to convert English phrase into phonemes which can be recognized by multinet．
-
-
-
+## MultiNet5
 ####  1. Install g2p_en, please refer to https://pypi.org/project/g2p-en/ 
 
 ```
@@ -45,4 +42,45 @@ multinet->reset(model_data, new_commands_str, err_id);
 // turn off the light -> commond id=2
 ```
 
+## MultiNet6
 
+
+The FST (Finite State Transducer) is used to save a list of commands.
+
+#### Step 1. Data preparation
+
+Requirements:
+- python>3.8
+- sentencepiece
+
+To create a FST from a list of commands, two files are needed:
+- commands.txt: maps a command id to subwords
+- tokens.txt: maps subword tokens to it's indices in the bpe model
+
+Assume you have a list of commands written in a text file `commands_list.txt` of the following format:
+
+```
+# command_id command_sentence
+1 TELL ME A JOKE
+2 MAKE A COFFEE
+```
+**Note**: command ids starts from 1, 0 is reserved in FST.
+
+Run the following command to create the required files, do not change the filenames `commands.txt` and `tokens.txt`. 
+
+```sh
+pip install -r requirements.txt
+
+python fst/prepare_for_fst.py \
+    --infile commands_list.txt \
+    --bpe-model fst/bpe.model \
+    --out-command-list commands.txt \
+    --out-token-symbols tokens.txt
+```
+
+#### Step 2. Move created files
+
+1. Remove `/model/multinet_model/fst/fst.txt` and `/model/multinet_model/fst/fst_reversed.txt` if those files exist. 
+2. Move the following files to `/model/multinet_model/fst/`
+- commands.txt
+- tokens.txt
