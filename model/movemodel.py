@@ -78,8 +78,8 @@ elif "CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION" in MN_STRING and len(multine
     multinet_model.append('mn5_en')
 elif "CONFIG_SR_MN_EN_MULTINET6_QUANT" in MN_STRING and len(multinet_model) < 2:
     multinet_model.append('mn6_en')
-elif "CONFIG_SR_MN_EN_MULTINET6_CTC_QUANT" in MN_STRING and len(multinet_model) < 2:
-    multinet_model.append('mn6_en_ctc')
+elif "CONFIG_SR_MN_CN_MULTINET6_QUANT" in MN_STRING and len(multinet_model) < 2:
+    multinet_model.append('mn6_cn')
 
 nsnet_model = ''
 if "CONFIG_SR_NSN_NSNET1" in NSN_STRING:
