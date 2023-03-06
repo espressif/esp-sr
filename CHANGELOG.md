@@ -2,9 +2,11 @@
 
 ## Unreleased
 - ESP-DSP dependency is now installed from the component registry
-- Add some English MultiNet6 model which is trained by RNNT and CTC
+- Add an English MultiNet6 model which is trained by RNNT and CTC
+- Add a Chinese MultiNet6 model which is trained by RNNT and CTC
 - Fixed CMake errors when esp-sr was installed from component registry
 - Fixed the list of supported chips displayed in the component registry
+
 
 ## 1.1.0
 - Support esp32c3 for Chinese TTS
