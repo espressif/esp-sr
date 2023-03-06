@@ -23,17 +23,7 @@ MultiNet is a lightweight model designed to recognize multiple speech command wo
 
 The MultiNet input is the audio processed by the audio-front-end algorithm (AFE), with the format of 16 KHz, 16 bit and mono. By recognizing the audio signals, speech commands can be recognized.
 
-The following table shows the models supported by Espressif SoCs:
-
-+---------+-----------+-------------+---------------+-------------+
-|  Chip   |   ESP32   |   ESP32S3                                 |
-+=========+===========+=============+===============+=============+
-| Model   | MultiNet2 | MultiNet4.5 | MultiNet4.5Q8 | MultiNet5Q8 |
-+---------+-----------+-------------+---------------+-------------+
-| Chinese | √         | √           | √             | √           |
-+---------+-----------+-------------+---------------+-------------+
-| English |           |             |               | √           |
-+---------+-----------+-------------+---------------+-------------+
+Please refer to :doc:`Models Benchmark  <../benchmark/README>` to check models supported by Espressif SoCs.
 
 For details on flash models, see Section :doc:`Flashing Models <../flash_model/README>` .
 
