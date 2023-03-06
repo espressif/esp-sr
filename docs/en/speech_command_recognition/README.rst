@@ -42,19 +42,19 @@ Please see the flow diagram for commands recognition below:
 
 .. _command-requirements:
 
-Requirements of Speech Commands
+Format of Speech Commands
 -------------------------------
 
-Currently, MultiNet supports up to **200** commands. There are some limitation when designing speech commands:
+Different MultiNets support different format:
 
 -  Chinese
 
-    Use Pinyin for Chinese speech commands, and add a space in between. For example, the Chinese speech command for turning on the air conditioner is "da kai kong tiao"; the Chinese speech command for turning on the green light is "da kai lv se deng".
+    MultiNet5 and MultiNet6 sse Pinyin for Chinese speech commands. Please use :project_file:`tool/multinet_pinyin.py` to get pinyin of Chinese.
 
 -  English
 
-    Use phonetic symbols for English speech commands, and add a space in between. For example, the English speech command for turnning on the light is "TkN nN jc LiT". Users can use the tool provided by us to do the convention. To find this tool, go to :project_file:`tool/multinet_g2p.py` .
-
+    MultiNet5 use phonemes for English speech commands. Simplicity, we use chats to denote different phoneme.Please use :project_file:`tool/multinet_g2p.py` to do the convention.
+    MultiNet6 use grapheme for English speech commands. You do not need any convention.
 
 Suggestions on Customizing Speech Commands
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -73,7 +73,25 @@ When customizing speech command words, please pay attention to the following sug
 Speech Commands Customization Methods
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Multinet supports flexible methods to customize speech commands. Users can do it either online or offline and can also add/delete/modify speech commands dynamically.
+MultiNet6 customize speech commands:
+
+- For English, words are used as units. Please modify a text file :project_file:`model/multinet_model/fst/commands_en.txt` by the following format:
+
+    ::
+
+        # command_id command_sentence
+        1 TELL ME A JOKE
+        2 MAKE A COFFEE
+
+- For Chinese, pinyin are used as units. Please modify a text file :project_file:`model/multinet_model/fst/commands_cn.txt` by the following format. :project_file:`tool/multinet_pinyin.py` help tp get Pinyin of Chinese.
+
+    ::
+
+        # command_id command_sentence
+        1 da kai kong tiao
+        2 guan bi kong tiao
+
+Multinet5 supports flexible methods to customize speech commands. Users can do it either online or offline and can also add/delete/modify speech commands dynamically.
 
 .. only:: latex
 
