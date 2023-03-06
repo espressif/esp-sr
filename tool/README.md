@@ -10,7 +10,7 @@ For English, words are used as units. Please prepare a list of commands written 
 2 MAKE A COFFEE
 ```
 
-For Chinese, pinyin are used as units. Please prepare a list of commands written in a text file `commands_cn.txt` of the following format:
+For Chinese, pinyin are used as units. [multinet_pinyin.py](./multinet_pinyin.py) help tp get Pinyin of Chinese. Please prepare a list of commands written in a text file `commands_cn.txt` of the following format:
 ```
 # command_id command_sentence
 1 da kai kong tiao

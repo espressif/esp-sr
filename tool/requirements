@@ -1,2 +1,3 @@
 g2p-en
-sentencepiece==0.1.97
+pypinyin
+pypinyin_dict

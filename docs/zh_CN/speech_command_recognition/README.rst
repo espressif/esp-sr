@@ -42,18 +42,19 @@ MultiNet 输入为经过前端语音算法（AFE）处理过的音频（格式�
 
 .. _command-requirements:
 
-命令词设计要求
+命令词格式要求
 ----------------
 
-目前，MultiNet 最多支持 **200** 条命令词。命令词需要满足特定的格式，具体如下：
+不同版本的MultiNet命令词格式不同。命令词需要满足特定的格式，具体如下：
 
 -  中文
 
-    中文命令词需要使用汉语拼音，并且每个字的拼音拼写间要间隔一个空格。比如“打开空调”，应该写成 “da kai kong tiao”，比如“打开绿色灯”，需要写成“da kai lv se deng”。
+    MultiNet5和MultiNet6使用汉语拼音作为基本识别单元，并且每个字的拼音拼写间隔一个空格。比如“打开空调”，应该写成 “da kai kong tiao”，请使用以下工具将汉字转为拼音： :project_file:`tool/multinet_pinyin.py` 。
 
 -  英文
 
-    英文命令词需要使用特定音标表示，每个单词的音标间用空格隔开，比如“turn on the light”，需要写成“TkN nN jc LiT”。具体可使用我们提供的工具进行转换，详细可见： :project_file:`tool/multinet_g2p.py` 。
+    MultiNet5: 使用音标作为基本识别单元。为简单起见，将每个音标映射为单个字母表示，比如“turn on the light”，需要写成“TkN nN jc LiT”。请使用我们提供的工具进行转换，详细可见： :project_file:`tool/multinet_g2p.py` 。
+    MultiNet6: 使用subwords作为识别单元，用户可以直接输入所需短语。比如“turn on the light”，直接写为“turn on the light”即可。
 
 
 自定义要求
@@ -83,7 +84,29 @@ MultiNet 支持多种且灵活的命令词设置方式，可通过在线或离�
 离线设置命令词
 ^^^^^^^^^^^^^^^
 
-MultiNet 支持两种离线设置命令词的方法：
+MultiNet6 离线设置命令词的方法：
+
+- 中文通过修改  :project_file:`model/multinet_model/fst/commands_cn.txt`
+
+    格式如下，第一个数字代表command id, 后面为指令的中文拼音，两者由空格隔开，拼音间也由空格隔开
+
+    ::
+
+        # command_id command_sentence
+        1 da kai kong tiao
+        2 guan bi kong tiao
+
+- 英语通过修改  :project_file:`model/multinet_model/fst/commands_en.txt`
+
+    格式如下，第一个数字代表command id, 后面为指令的英语短语，两者由空格隔开，单词间也由空格隔开
+
+    ::
+
+        # command_id command_sentence
+        1 TELL ME A JOKE
+        2 MAKE A COFFEE
+
+MultiNet5 支持两种离线设置命令词的方法：
 
 -  通过 ``menuconfig``
 
