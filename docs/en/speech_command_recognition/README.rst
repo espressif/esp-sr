@@ -76,7 +76,7 @@ MultiNet6 customize speech commands
 
 
 MultiNet5 customize speech commands
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 There are two methods to customize speech commands offline:
 
