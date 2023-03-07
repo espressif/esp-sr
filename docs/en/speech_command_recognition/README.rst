@@ -49,12 +49,12 @@ Different MultiNets support different format:
 
 -  Chinese
 
-    MultiNet5 and MultiNet6 sse Pinyin for Chinese speech commands. Please use :project_file:`tool/multinet_pinyin.py` to get pinyin of Chinese.
+    MultiNet5 and MultiNet6 use Pinyin for Chinese speech commands. Please use :project_file:`tool/multinet_pinyin.py` to get pinyin of Chinese.
 
 -  English
 
-    MultiNet5 use phonemes for English speech commands. Simplicity, we use chats to denote different phoneme.Please use :project_file:`tool/multinet_g2p.py` to do the convention.
-    MultiNet6 use grapheme for English speech commands. You do not need any convention.
+    MultiNet5 use phonemes for English speech commands. For simplicity, we use characters to denote different phonemes. Please use :project_file:`tool/multinet_g2p.py` to do the convention.
+    MultiNet6 use grapheme for English speech commands. You do not need any conversion.
 
 Suggestions on Customizing Speech Commands
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -83,7 +83,7 @@ MultiNet6 customize speech commands:
         1 TELL ME A JOKE
         2 MAKE A COFFEE
 
-- For Chinese, pinyin are used as units. Please modify a text file :project_file:`model/multinet_model/fst/commands_cn.txt` by the following format. :project_file:`tool/multinet_pinyin.py` help tp get Pinyin of Chinese.
+- For Chinese, pinyin are used as units. Please modify a text file :project_file:`model/multinet_model/fst/commands_cn.txt` by the following format. :project_file:`tool/multinet_pinyin.py` help to get Pinyin of Chinese.
 
     ::
 
@@ -91,7 +91,7 @@ MultiNet6 customize speech commands:
         1 da kai kong tiao
         2 guan bi kong tiao
 
-Multinet5 supports flexible methods to customize speech commands. Users can do it either online or offline and can also add/delete/modify speech commands dynamically.
+Multinet5 supports flexible methods to customize speech commands. You can do it either online or offline and can also add/delete/modify speech commands dynamically.
 
 .. only:: latex
 
