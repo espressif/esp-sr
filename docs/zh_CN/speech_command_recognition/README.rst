@@ -47,15 +47,7 @@ MultiNet 输入为经过前端语音算法（AFE）处理过的音频（格式�
 
 不同版本的MultiNet命令词格式不同。命令词需要满足特定的格式，具体如下：
 
--  中文
-
     MultiNet5和MultiNet6使用汉语拼音作为基本识别单元，并且每个字的拼音拼写间隔一个空格。比如“打开空调”，应该写成 “da kai kong tiao”，请使用以下工具将汉字转为拼音： :project_file:`tool/multinet_pinyin.py` 。
-
--  英文
-
-    MultiNet5: 使用音标作为基本识别单元。为简单起见，将每个音标映射为单个字母表示，比如“turn on the light”，需要写成“TkN nN jc LiT”。请使用我们提供的工具进行转换，详细可见： :project_file:`tool/multinet_g2p.py` 。
-    MultiNet6: 使用subwords作为识别单元，用户可以直接输入所需短语。比如“turn on the light”，直接写为“turn on the light”即可。
-
 
 自定义要求
 ~~~~~~~~~~~
@@ -96,17 +88,7 @@ MultiNet6 离线设置命令词的方法：
         1 da kai kong tiao
         2 guan bi kong tiao
 
-- 英语通过修改  :project_file:`model/multinet_model/fst/commands_en.txt`
-
-    格式如下，第一个数字代表command id, 后面为指令的英语短语，两者由空格隔开，单词间也由空格隔开
-
-    ::
-
-        # command_id command_sentence
-        1 TELL ME A JOKE
-        2 MAKE A COFFEE
-
-MultiNet5 支持两种离线设置命令词的方法：
+MultiNet5 离线设置命令词的方法：
 
 -  通过 ``menuconfig``
 
@@ -119,7 +101,7 @@ MultiNet5 支持两种离线设置命令词的方法：
 
     注意，单个 Command ID 可以支持多个短语，比如“打开空调”和“开空调”表示的意义相同，则可以将其写在同一个 Command ID 对应的词条中，用英文字符“,”隔开相邻词条（“,”前后无需空格）。
 
-    1. 在代码里调用以下 API：
+    2. 在代码里调用以下 API：
 
     ::
 
@@ -140,19 +122,12 @@ MultiNet5 支持两种离线设置命令词的方法：
 
 -  通过修改代码
 
-    该方法中，用户直接在代码中编写命令词，并传给 MultiNet。在实际产品开发和使用中，用户可以通过网络/UART/SPI 等多种接口，传递所需的命令词并随时更换命令词。详情可参考 ESP-Skainet 中的 example。
-
-在线设置命令词
-^^^^^^^^^^^^^^
-
-MultiNet 还支持在运行过程中，在线动态设置命令词（添加/删除/修改），且整个过程无须更换模型或调整参数。详情可参考 ESP-Skainet 中 example。
-
-具体 API 说明请参考　:project_file:`src/esp_mn_speech_commands.c` 。
+    该方法中，用户直接在代码中编写命令词，并传给 MultiNet。在实际产品开发和使用中，用户可以通过网络/UART/SPI 等多种接口，传递所需的命令词并随时更换命令词。具体 API 说明请参考　:project_file:`src/esp_mn_speech_commands.c` 和 ESP-Skainet 中的 example。
 
 MultiNet 的使用
 ----------------
 
-MultiNet 命令词识别需要和 ESP-SR 中的 AFE 声学算法模块一起运行（此外，AFE 运行还需要使能 WakeNet 功能，具体请参考 :doc:`AFE 介绍及使用 <../audio_front_end/README>` ）。
+MultiNet 命令词识别建议和 ESP-SR 中的 AFE 声学算法模块一起运行，具体请参考 :doc:`AFE 介绍及使用 <../audio_front_end/README>` ）。
 
 当用户配置完成 AFE 后，请按照以下步骤配置和运行 MultiNet。
 
@@ -191,11 +166,6 @@ MultiNet 运行
 
 MultiNet 识别结果
 ~~~~~~~~~~~~~~~~~
-
-MultiNet 命令词识别支持两种基本模式：
-
-* 单次识别
-* 连续识别
 
 命令词识别必须和唤醒搭配使用，当唤醒后可以运行命令词的检测。
 
@@ -237,7 +207,7 @@ MultiNet 命令词识别支持两种基本模式：
 
     该状态表示长时间未检测到命令词，自动退出。等待下次唤醒。
 
-因此：
+单次识别模式和连续识别模式：
 当命令词识别返回状态为 ``ESP_MN_STATE_DETECTED`` 时退出命令词识别，则为单次识别模式；
 当命令词识别返回状态为 ``ESP_MN_STATE_TIMEOUT`` 时退出命令词识别，则为连续识别模式；
 
