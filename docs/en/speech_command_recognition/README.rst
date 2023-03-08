@@ -47,14 +47,8 @@ Format of Speech Commands
 
 Different MultiNets support different format:
 
--  Chinese
-
-    MultiNet5 and MultiNet6 sse Pinyin for Chinese speech commands. Please use :project_file:`tool/multinet_pinyin.py` to get pinyin of Chinese.
-
--  English
-
-    MultiNet5 use phonemes for English speech commands. Simplicity, we use chats to denote different phoneme.Please use :project_file:`tool/multinet_g2p.py` to do the convention.
-    MultiNet6 use grapheme for English speech commands. You do not need any convention.
+    - MultiNet5 use phonemes for English speech commands. For simplicity, we use characters to denote different phonemes. Please use :project_file:`tool/multinet_g2p.py` to do the convention.
+    - MultiNet6 use grapheme for English speech commands. You do not need any conversion.
 
 Suggestions on Customizing Speech Commands
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -63,19 +57,16 @@ When customizing speech command words, please pay attention to the following sug
 
 .. list::
 
-    -  The recommended length of Chinese speech commands is generally 4-6 Chinese characters. Too short leads to high false recognition rate and too long is inconvenient for users to remember
     :esp32s3: -  The recommended length of English speech commands is generally 4-6 words
     -  Mixed Chinese and English is not supported in command words
     -  The command word cannot contain Arabic numerals and special characters
-    -  Avoid common command words like "hello"
-    -  The greater the pronunciation difference of each Chinese character / word in the command words, the better the performance
 
 Speech Commands Customization Methods
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-MultiNet6 customize speech commands:
-
-- For English, words are used as units. Please modify a text file :project_file:`model/multinet_model/fst/commands_en.txt` by the following format:
+MultiNet6 customize speech commands
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- Words are used as units. Please modify a text file :project_file:`model/multinet_model/fst/commands_en.txt` by the following format:
 
     ::
 
@@ -83,25 +74,11 @@ MultiNet6 customize speech commands:
         1 TELL ME A JOKE
         2 MAKE A COFFEE
 
-- For Chinese, pinyin are used as units. Please modify a text file :project_file:`model/multinet_model/fst/commands_cn.txt` by the following format. :project_file:`tool/multinet_pinyin.py` help tp get Pinyin of Chinese.
 
-    ::
+MultiNet5 customize speech commands
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-        # command_id command_sentence
-        1 da kai kong tiao
-        2 guan bi kong tiao
-
-Multinet5 supports flexible methods to customize speech commands. Users can do it either online or offline and can also add/delete/modify speech commands dynamically.
-
-.. only:: latex
-
-    .. figure:: ../../_static/QR_multinet_g2p.png
-        :alt: menuconfig_add_speech_commands
-
-Customize Speech Commands Offline
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-There are two methods for users to customize speech commands offline:
+There are two methods to customize speech commands offline:
 
 -  Via ``menuconfig``
 
@@ -114,7 +91,7 @@ There are two methods for users to customize speech commands offline:
 
     Please note that a single ``Command ID`` can correspond to more than one commands. For example, "da kai kong tiao" and "kai kong tiao" have the same meaning. Therefore, users can assign the same command id to these two commands and separate them with "," (no space required before and after).
 
-    1. Call the following API:
+    2. Call the following API:
 
     ::
 
@@ -135,19 +112,12 @@ There are two methods for users to customize speech commands offline:
 
 -  Via modifying code
 
-    Users directly customize the speech commands in the code and pass these commands to the MultiNet. In the actual user scenarios, users can pass these commands via various interfaces including network / UART / SPI. For details, see the example described in ESP-Skainet.
-
-Customize speech commands online
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-MultiNet allows users to add/delete/modify speech commands dynamically during the operation, without the need to change models or modifying parameters. For details, see the example described in ESP-Skainet.
-
-For detailed description of APIs, please refer to :project_file:`src/esp_mn_speech_commands.c` .
+    Users directly customize the speech commands in the code and pass these commands to the MultiNet. In the actual user scenarios, users can pass these commands via various interfaces including network / UART / SPI. For detailed description of APIs. Please refer to :project_file:`src/esp_mn_speech_commands.c` and examples described in ESP-Skainet.
 
 Use MultiNet
 ------------
 
-MultiNet speech commands recognition must be used together with audio front-end (AFE) in ESP-SR (What's more, AFE must be used together with WakeNet). For details, see Section :doc:`AFE Introduction and Use <../audio_front_end/README>` .
+We suggest to use MultiNet together with audio front-end (AFE) in ESP-SR. For details, see Section :doc:`AFE Introduction and Use <../audio_front_end/README>` .
 
 After configuring AFE, users can follow the steps below to configure and run MultiNet.
 
@@ -187,11 +157,6 @@ Users can start MultiNet after enabling AFE and WakeNet, but must pay attention 
 MultiNet Output
 ~~~~~~~~~~~~~~~
 
-Speech commands recognition supports two basic modes:
-
-   * Single recognition
-   * Continuous recognition
-
 Speech command recognition must be used with WakeNet. After wake-up, MultiNet detection can start.
 
 Afer running, MultiNet returns the recognition output of the current frame in real time ``mn_state``, which is currently divided into the following identification states:
@@ -228,13 +193,13 @@ Afer running, MultiNet returns the recognition output of the current frame in re
 
     Users can use ``phrase_id[0]`` and ``prob[0]`` get the recognition result with the highest probability.
 
-    -  ESP_MN_STATE_TIMEOUT
+-  ESP_MN_STATE_TIMEOUT
 
     Indicates the speech commands has not been detected for a long time and will exit automatically and wait to be waked up again.
 
-Therefore:
+Single recognition mode and Continuous recognition mode:
 * Single recognition mode: exit the speech recognition when the return status is ``ESP_MN_STATE_DETECTED``
-* Continuous recognition: exit the speech recognition when the return status is ``ESP_MN_STATE_TIMEOUT``
+* Continuous recognition mode: exit the speech recognition when the return status is ``ESP_MN_STATE_TIMEOUT``
 
 Resource Occupancy
 ------------------
