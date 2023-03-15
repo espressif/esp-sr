@@ -1,7 +1,7 @@
 # Change log for esp-sr
 
 ## Unreleased
-
+- 6x reduction in model loading time. The latency of MultiNet6 loading is reduced from 12s to 2s.
 
 ## 1.2.0
 - ESP-DSP dependency is now installed from the component registry
