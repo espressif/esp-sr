@@ -47,36 +47,21 @@ MultiNet 输入为经过前端语音算法（AFE）处理过的音频（格式�
 
 不同版本的MultiNet命令词格式不同。命令词需要满足特定的格式，具体如下：
 
-    MultiNet5和MultiNet6使用汉语拼音作为基本识别单元，并且每个字的拼音拼写间隔一个空格。比如“打开空调”，应该写成 “da kai kong tiao”，请使用以下工具将汉字转为拼音： :project_file:`tool/multinet_pinyin.py` 。
+    
 
-自定义要求
-~~~~~~~~~~~
+自定义命令词方法
+--------------
 
-在设计命令词时有如下要求和建议：
+.. note::
+    不支持中英文混合
+    不能含有阿拉伯数字和特殊字符
 
-.. list::
+MultiNet 支持多种且灵活的命令词设置方式，可通过在线或离线方法设置命令词，还允许随时动态增加/删除/修改命令词。
 
-    -  中文推荐长度一般为 4-6 个汉字，过短导致误识别率高，过长不方便用户记忆
-    :esp32s3: - 英文推荐长度一般为 4-6 个单词
-    -  不支持中英文混合
-    -  不能含有阿拉伯数字和特殊字符
-    -  应避免使用常用语
-    -  命令词中每个汉字/单词的发音相差越大越好
-
-自定义方法
-~~~~~~~~~~~
-
-MultiNet 支持多种且灵活的命令词设置方式，可通过在线或离线方法设置命令词，还允许随时动态增加/删除/修改命令词
-
-.. only:: latex
-
-    .. figure:: ../../_static/QR_multinet_g2p.png
-        :alt: menuconfig_add_speech_commands
-
-离线设置命令词
-^^^^^^^^^^^^^^^
-
-MultiNet6 离线设置命令词的方法：
+MultiNet5和MultiNet6使用汉语拼音作为基本识别单元。比如“打开空调”，应该写成 “da kai kong tiao”，请使用以下工具将汉字转为拼音： :project_file:`tool/multinet_pinyin.py` 。
+ 
+MultiNet6 定义方法：
+~~~~~~~~~~~~~~~~~~
 
 - 中文通过修改  :project_file:`model/multinet_model/fst/commands_cn.txt`
 
@@ -88,7 +73,8 @@ MultiNet6 离线设置命令词的方法：
         1 da kai kong tiao
         2 guan bi kong tiao
 
-MultiNet5 离线设置命令词的方法：
+MultiNet5 定义方法：
+~~~~~~~~~~~~~~~~~~
 
 -  通过 ``menuconfig``
 
@@ -120,9 +106,6 @@ MultiNet5 离线设置命令词的方法：
         */
         esp_err_t esp_mn_commands_update_from_sdkconfig(esp_mn_iface_t *multinet, const model_iface_data_t *model_data);
 
--  通过修改代码
-
-    该方法中，用户直接在代码中编写命令词，并传给 MultiNet。在实际产品开发和使用中，用户可以通过网络/UART/SPI 等多种接口，传递所需的命令词并随时更换命令词。具体 API 说明请参考　:project_file:`src/esp_mn_speech_commands.c` 和 ESP-Skainet 中的 example。
 
 MultiNet 的使用
 ----------------

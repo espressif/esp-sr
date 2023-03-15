@@ -42,31 +42,18 @@ Please see the flow diagram for commands recognition below:
 
 .. _command-requirements:
 
-Format of Speech Commands
--------------------------------
-
-Different MultiNets support different format:
-
-    - MultiNet5 use phonemes for English speech commands. For simplicity, we use characters to denote different phonemes. Please use :project_file:`tool/multinet_g2p.py` to do the convention.
-    - MultiNet6 use grapheme for English speech commands. You do not need any conversion.
-
-Suggestions on Customizing Speech Commands
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-When customizing speech command words, please pay attention to the following suggestions:
-
-.. list::
-
-    :esp32s3: -  The recommended length of English speech commands is generally 4-6 words
-    -  Mixed Chinese and English is not supported in command words
-    -  The command word cannot contain Arabic numerals and special characters
-
 Speech Commands Customization Methods
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------------
+
+.. note::
+    Mixed Chinese and English is not supported in command words. 
+
+    The command word cannot contain Arabic numerals and special characters.  
+
 
 MultiNet6 customize speech commands
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- Words are used as units. Please modify a text file :project_file:`model/multinet_model/fst/commands_en.txt` by the following format:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+MultiNet6 use grapheme for English speech commands. You can add/modify speech commands by words directly. Please modify a text file :project_file:`model/multinet_model/fst/commands_en.txt` by the following format:
 
     ::
 
@@ -76,8 +63,9 @@ MultiNet6 customize speech commands
 
 
 MultiNet5 customize speech commands
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+MultiNet5 use phonemes for English speech commands. For simplicity, we use characters to denote different phonemes. Please use :project_file:`tool/multinet_g2p.py` to do the convention.  
 There are two methods to customize speech commands offline:
 
 -  Via ``menuconfig``
@@ -109,10 +97,6 @@ There are two methods to customize speech commands offline:
         *     - ESP_ERR_INVALID_STATE   Fail
         */
         esp_err_t esp_mn_commands_update_from_sdkconfig(esp_mn_iface_t *multinet, const model_iface_data_t *model_data);
-
--  Via modifying code
-
-    Users directly customize the speech commands in the code and pass these commands to the MultiNet. In the actual user scenarios, users can pass these commands via various interfaces including network / UART / SPI. For detailed description of APIs. Please refer to :project_file:`src/esp_mn_speech_commands.c` and examples described in ESP-Skainet.
 
 Use MultiNet
 ------------
