@@ -50,14 +50,12 @@ Speech Commands Customization Methods
 
     The command word cannot contain Arabic numerals and special characters.
 
-    Command id cannot be set to 0.
-
     Please refer to Chinese version documentation for Chinese speech commands customization methods. 
 
 
 MultiNet6 customize speech commands
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-MultiNet6 use grapheme for English speech commands. You can add/modify speech commands by words directly. Please modify a text file :project_file:`model/multinet_model/fst/commands_en.txt` by the following format:
+MultiNet6 use grapheme for English speech commands. You can add/modify speech commands by words directly. Please modify a text file :project_file:`model/multinet_model/fst/commands_en.txt` by the following format (command id cannot be set to 0):
 
     ::
 
