@@ -50,6 +50,8 @@ Speech Commands Customization Methods
 
     The command word cannot contain Arabic numerals and special characters.
 
+    Command id cannot be set to 0.
+
     Please refer to Chinese version documentation for Chinese speech commands customization methods. 
 
 
