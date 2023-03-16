@@ -20,6 +20,6 @@ ESP-SR 用户指南
     语音指令 MultiNet <speech_command_recognition/README>
     语音合成（仅支持中文）<speech_synthesis/readme>
     模型加载 <flash_model/README>
-    资源消耗 <benchmark/README>
-    测试报告 <test_report/README>
+    性能测试结果 <benchmark/README>
+    性能测试方法 <test_report/README>
     术语表 <glossary/glossary>
