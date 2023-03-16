@@ -157,17 +157,6 @@ Resource Occupancy
 Word Error Rate Performance Test
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-+-----------+-----------+
-| Model     |  aishell  |
-| Type      |   test    |
-+===========+===========+
-| MultiNet  |    9.5%   |
-| 5_cn      |           |
-+-----------+-----------+
-| MultiNet  |    5.2%   |
-| 6_cn      |           |
-+-----------+-----------+
-
 +-------------+-------------+-------------+ 
 | Model       | librispeech | librispeech |
 | Type        |  test-clean | test-other  |
@@ -176,10 +165,6 @@ Word Error Rate Performance Test
 +-------------+-------------+-------------+
 | MultiNet6-en| 9.0%        | 21.3%       |
 +-------------+-------------+-------------+
-
-.. note::
-
-    The Pinyin withon tone is used to calculate Chinese WER In this test.
 
 Speech Commands Performance Test
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
