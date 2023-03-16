@@ -169,15 +169,19 @@ Word Error Rate Performance Test
 +-----------+-----------+
 
 +-------------+-------------+-------------+ 
-| Distance    | librispeech | librispeech |
-|             |  test-clean | test-other  |
+| Model       | librispeech | librispeech |
+| Type        |  test-clean | test-other  |
 +=============+=============+=============+
 | MultiNet5-en| 16.5%       | 41.4%       |
 +-------------+-------------+-------------+
 | MultiNet6-en| 9.0%        | 21.3%       |
 +-------------+-------------+-------------+
 
-speech commands Performance Test
+.. note::
+
+    The Pinyin withon tone is used to calculate Chinese WER In this test.
+
+Speech Commands Performance Test
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 +-----------+-----------+----------+------------+-------------+
@@ -187,10 +191,10 @@ speech commands Performance Test
 |           |           |          | dB)        | dB)         |
 +===========+===========+==========+============+=============+
 | MultiNet  | 3 m       |          |            |             |
-| 5_cn      |           |          |            |             |
+| 5_en      |           |          |            |             |
 +-----------+-----------+----------+------------+-------------+
 | MultiNet  | 3 m       |          |            |             |
-| 6_cm      |           |          |            |             |
+| 6_en      |           |          |            |             |
 +-----------+-----------+----------+------------+-------------+
 
 

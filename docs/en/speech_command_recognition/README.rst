@@ -48,7 +48,9 @@ Speech Commands Customization Methods
 .. note::
     Mixed Chinese and English is not supported in command words. 
 
-    The command word cannot contain Arabic numerals and special characters.  
+    The command word cannot contain Arabic numerals and special characters.
+
+    Please refer to Chinese version documentation for Chinese speech commands customization methods. 
 
 
 MultiNet6 customize speech commands
@@ -189,14 +191,3 @@ Resource Occupancy
 ------------------
 
 For the resource occupancy for this model, see :doc:`Resource Occupancy <../benchmark/README>`.
-
-
-Other configurations
------------------------
-
-Threshold setting
-~~~~~~~~~~~~~~~~~
-
-::
-
-    More functions are still under development.
