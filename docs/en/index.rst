@@ -19,6 +19,6 @@ ESP-SR User Guide
     Speech Command Word MultiNet <speech_command_recognition/README>
     Speech Synthesis (Only Supports Chinese Language) <speech_synthesis/readme>
     Flashing Models <flash_model/README>
-    Resource Overhead <benchmark/README>
-    Test Report <test_report/README>
+    Performance Test Results <benchmark/README>
+    Performance Test Methods <test_report/README>
     Glossary <glossary/glossary>
