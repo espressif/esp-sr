@@ -25,7 +25,6 @@ void set_model_base_path(const char *base_path)
 static srmodel_list_t* srmodel_list_alloc(void)
 {
     srmodel_list_t *models = (srmodel_list_t*) malloc(sizeof(srmodel_list_t));
-    models->mmap_handle = NULL;
     models->model_data = NULL;
     models->model_name = NULL;
     models->num = 0;
@@ -71,7 +70,6 @@ srmodel_list_t *read_models_form_spiffs(esp_vfs_spiffs_conf_t *conf)
             return models;
         } else {
             models->num = model_num;
-            models->partition_label = (char *)conf->partition_label;
             models->model_name = malloc(models->num*sizeof(char*));
             for (int i=0; i<models->num; i++)
                 models->model_name[i] = (char*) calloc(MODEL_NAME_MAX_LENGTH, sizeof(char));
@@ -104,13 +102,13 @@ srmodel_list_t *read_models_form_spiffs(esp_vfs_spiffs_conf_t *conf)
 }
 
 
-srmodel_list_t* srmodel_spiffs_init(const char *partition_label)
+srmodel_list_t* srmodel_spiffs_init(const esp_partition_t *part)
 {
-    ESP_LOGI(TAG, "\nInitializing models from SPIFFS, partition label: %s\n", partition_label);
+    ESP_LOGI(TAG, "\nInitializing models from SPIFFS, partition label: %s\n", part->label);
 
     esp_vfs_spiffs_conf_t conf = {
         .base_path = SRMODE_BASE_PATH,
-        .partition_label = partition_label,
+        .partition_label = part->label,
         .max_files = 5,
         .format_if_mount_failed = true
     };
@@ -131,7 +129,7 @@ srmodel_list_t* srmodel_spiffs_init(const char *partition_label)
     }
 
     size_t total = 0, used = 0;
-    ret = esp_spiffs_info(partition_label, &total, &used);
+    ret = esp_spiffs_info(part->label, &total, &used);
     if (ret != ESP_OK) {
         ESP_LOGE(TAG, "Failed to get SPIFFS partition information (%s)\n", esp_err_to_name(ret));
     } else {
@@ -139,18 +137,20 @@ srmodel_list_t* srmodel_spiffs_init(const char *partition_label)
     }
 
     // Read all model from path
-    return read_models_form_spiffs(&conf);
+    srmodel_list_t *models = read_models_form_spiffs(&conf);
+    models->partition = (esp_partition_t *)part;
+    return models;
 }
 
 
 void srmodel_spiffs_deinit(srmodel_list_t *models)
 {
-    if (models->partition_label != NULL) {
-        esp_err_t ret = esp_vfs_spiffs_unregister(models->partition_label);
+    if (models->partition != NULL) {
+        esp_err_t ret = esp_vfs_spiffs_unregister(models->partition->label);
         if (ret != ESP_OK) {
             ESP_LOGW(TAG, "Already unregistered\n");
         } else {
-            ESP_LOGI(TAG, "%s has been unregistered\n", models->partition_label);
+            ESP_LOGI(TAG, "%s has been unregistered\n", models->partition->label);
         }
     }
 
@@ -236,7 +236,7 @@ static uint32_t read_int32(char *data) {
 	return value;
 }
 
-srmodel_list_t *srmodel_mmap_init(esp_partition_t *part)
+srmodel_list_t *srmodel_mmap_init(const esp_partition_t *part)
 {
     if (static_srmodels == NULL) 
         static_srmodels = srmodel_list_alloc();
@@ -244,9 +244,8 @@ srmodel_list_t *srmodel_mmap_init(esp_partition_t *part)
         return static_srmodels;
     
     srmodel_list_t *models = static_srmodels;
-    void *root = NULL;
-    models->mmap_handle = (spi_flash_mmap_handle_t *)malloc(sizeof(spi_flash_mmap_handle_t));
-    esp_err_t err=esp_partition_mmap(part, 0, part->size, SPI_FLASH_MMAP_DATA, &root, models->mmap_handle);
+    const void *root;
+    esp_err_t err=esp_partition_mmap(part, 0, part->size, SPI_FLASH_MMAP_DATA, &root, &models->mmap_handle);
     if (err != ESP_OK) {
         ESP_LOGE(TAG, "Can not map %s partition!\n", part->label);
         return NULL;
@@ -254,9 +253,9 @@ srmodel_list_t *srmodel_mmap_init(esp_partition_t *part)
         ESP_LOGI(TAG, "partition %s size: %d by mmap\n", part->label, part->size);
     }
 
-    models->partition_label = part->label;
-    char *start = root;
-    char *data = root;    
+    models->partition = (esp_partition_t *)part;
+    char *start = (char *)root;
+    char *data = (char *)root;    
     int str_len = SRMODEL_STRING_LENGTH;
     int int_len = 4;
     //read model number
@@ -277,7 +276,7 @@ srmodel_list_t *srmodel_mmap_init(esp_partition_t *part)
         model_data->num = file_num;
         data += int_len;
         model_data->files = (char **) malloc(sizeof(char*)*file_num);
-        model_data->data = (void **) malloc(sizeof(void*)*file_num);
+        model_data->data = (char **) malloc(sizeof(void*)*file_num);
         model_data->sizes = (int *) malloc(sizeof(int)*file_num);
 
         for (int j=0; j<file_num; j++) {
@@ -399,7 +398,7 @@ srmodel_list_t* srmodel_sdcard_init(const char *base_path)
             return models;
         } else {
             models->num = model_num;
-            models->partition_label = NULL;
+            models->partition = NULL;
             models->model_name = malloc(models->num*sizeof(char*));
             for (int i=0; i<models->num; i++) 
                 models->model_name[i] = (char*) calloc(MODEL_NAME_MAX_LENGTH, sizeof(char));
