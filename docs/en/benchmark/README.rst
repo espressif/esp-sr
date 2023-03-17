@@ -159,7 +159,7 @@ Word Error Rate Performance Test
 
 +-------------+-------------+-------------+ 
 | Model       | librispeech | librispeech |
-| Type        |  test-clean | test-other  |
+| Type        | test-clean  | test-other  |
 +=============+=============+=============+
 | MultiNet5-en| 16.5%       | 41.4%       |
 +-------------+-------------+-------------+

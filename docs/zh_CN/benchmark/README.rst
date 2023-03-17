@@ -158,8 +158,8 @@ Word Error Rate 性能测试
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 +-----------+-----------+
-| Model     |  aishell  |
-| Type      |   test    |
+| Model     | aishell   |
+| Type      | test      |
 +===========+===========+
 | MultiNet  |    9.5%   |
 | 5_cn      |           |
