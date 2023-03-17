@@ -2,6 +2,8 @@ import io
 import os
 import argparse
 import shutil
+from pack_model import pack_models
+
 def calculate_total_size(folder_path):
     total_size = 0
     for file_name in os.listdir(folder_path):
@@ -12,98 +14,115 @@ def calculate_total_size(folder_path):
             total_size = total_size + os.path.getsize(path)
     return total_size
 
+def copy_wakenet_from_sdkconfig(model_path, sdkconfig_path, target_path):
+    """
+    Copy wakenet model from model_path to target_path based on sdkconfig
+    """
+    with io.open(sdkconfig_path, "r") as f:
+        models_string = ''
+        for label in f:
+            label = label.strip("\n")
+            if 'CONFIG_SR_WN' in label and label[0] != '#':
+                models_string += label
+
+    models = []
+    if "CONFIG_SR_WN_WN7Q8_XIAOAITONGXUE" in models_string:
+        models.append('wn7q8_xiaoaitongxue')
+    if "CONFIG_SR_WN_WN7_XIAOAITONGXUE" in models_string:
+        models.append('wn7_xiaoaitongxue')
+    if "CONFIG_SR_WN_WN8_HILEXIN" in models_string:
+        models.append('wn8_hilexin')
+    if "CONFIG_SR_WN_WN8_ALEXA" in models_string:
+        models.append('wn8_alexa')
+    if "CONFIG_SR_WN_WN8_HIESP" in models_string:
+        models.append('wn8_hiesp')
+    if "CONFIG_SR_WN_WN9_XIAOAITONGXUE" in models_string:
+        models.append('wn9_xiaoaitongxue')
+    if "CONFIG_SR_WN_WN9_HILEXIN" in models_string:
+        models.append('wn9_hilexin')
+    if "CONFIG_SR_WN_WN9_ALEXA" in models_string:
+        models.append('wn9_alexa')
+    if "CONFIG_SR_WN_WN9_HIESP" in models_string:
+        models.append('wn9_hiesp')
+    if "CONFIG_SR_WN_WN9_NIHAOXIAOZHI" in models_string:
+        models.append('wn9_nihaoxiaozhi')
+    if "CONFIG_SR_WN_WN9_CUSTOMWORD" in models_string:
+        models.append('wn9_customword')
+    
+    for item in models:
+        shutil.copytree(model_path + '/wakenet_model/' + item, target_path+'/'+item)
+
+def copy_multinet_from_sdkconfig(model_path, sdkconfig_path, target_path):
+    """
+    Copy multinet model from model_path to target_path based on sdkconfig
+    """
+    with io.open(sdkconfig_path, "r") as f:
+        models_string = ''
+        for label in f:
+            label = label.strip("\n")
+            if 'CONFIG_SR_MN' in label and label[0] != '#':
+                models_string += label
+
+    models = []
+    if "CONFIG_SR_MN_CN_MULTINET3_SINGLE_RECOGNITION" in models_string and len(models) < 2:
+        models.append('mn3_cn')
+    elif "CONFIG_SR_MN_CN_MULTINET4_5_SINGLE_RECOGNITION_QUANT8" in models_string:
+        models.append('mn4q8_cn')
+    elif "CONFIG_SR_MN_CN_MULTINET4_5_SINGLE_RECOGNITION" in models_string and len(models) < 2:
+        models.append('mn4_cn')
+    elif "CONFIG_SR_MN_CN_MULTINET5_RECOGNITION_QUANT8" in models_string and len(models) < 2:
+        models.append('mn5q8_cn')
+    elif "CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION_QUANT8" in models_string and len(models) < 2:
+        models.append('mn5q8_en')
+    elif "CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION" in models_string and len(models) < 2:
+        models.append('mn5_en')
+    elif "CONFIG_SR_MN_EN_MULTINET6_QUANT" in models_string and len(models) < 2:
+        models.append('mn6_en')
+    elif "CONFIG_SR_MN_CN_MULTINET6_QUANT" in models_string and len(models) < 2:
+        models.append('mn6_cn')
+    
+    if "MULTINET6" in models_string:
+        models.append('fst')
+
+    for item in models:
+        shutil.copytree(model_path + '/multinet_model/' + item, target_path+'/'+item)
+
+
+def copy_nsnet_from_sdkconfig(model_path, sdkconfig_path, target_path):
+    """
+    Copy nsnet model from model_path to target_path based on sdkconfig
+    """
+    with io.open(sdkconfig_path, "r") as f:
+        models_string = ''
+        for label in f:
+            label = label.strip("\n")
+            if 'CONFIG_SR_NSN' in label and label[0] != '#':
+                models_string += label
+
+    models = []
+    if "CONFIG_SR_NSN_NSNET1" in models_string:
+        models.append('nsnet1')
+
+    for item in models:
+        shutil.copytree(model_path + '/nsnet_model/' + item, target_path+'/'+item)
+
 if __name__ == '__main__':
-    # input parameter
     parser = argparse.ArgumentParser(description='Model generator tool')
     parser.add_argument('-d1', '--project_path')
     parser.add_argument('-d2', '--model_path')
+    parser.add_argument('-d3', '--build_path')
     args = parser.parse_args()
 
     sdkconfig_path = args.project_path + '/sdkconfig'
     model_path = args.model_path + '/model'
+    target_path = args.build_path + '/srmodels'
 
-    print(sdkconfig_path)
-    print(model_path)
+    if os.path.exists(target_path):
+        shutil.rmtree(target_path)
+    os.makedirs(target_path)
 
-with io.open(sdkconfig_path, "r") as f:
-    WN_STRING = ''
-    MN_STRING = ''
-    NSN_STRING = ''
-    for label in f:
-        label = label.strip("\n")
-        if 'CONFIG_SR_WN' in label and label[0] != '#':
-            WN_STRING += label
-        if 'CONFIG_SR_MN' in label and label[0] != '#':
-            MN_STRING += label
-        if 'CONFIG_SR_NSN' in label and label[0] != '#':
-            NSN_STRING += label
-
-wakenet_model = []
-if "CONFIG_SR_WN_WN7Q8_XIAOAITONGXUE" in WN_STRING:
-    wakenet_model.append('wn7q8_xiaoaitongxue')
-if "CONFIG_SR_WN_WN7_XIAOAITONGXUE" in WN_STRING:
-    wakenet_model.append('wn7_xiaoaitongxue')
-if "CONFIG_SR_WN_WN8_HILEXIN" in WN_STRING:
-    wakenet_model.append('wn8_hilexin')
-if "CONFIG_SR_WN_WN8_ALEXA" in WN_STRING:
-    wakenet_model.append('wn8_alexa')
-if "CONFIG_SR_WN_WN8_HIESP" in WN_STRING:
-    wakenet_model.append('wn8_hiesp')
-if "CONFIG_SR_WN_WN9_XIAOAITONGXUE" in WN_STRING:
-    wakenet_model.append('wn9_xiaoaitongxue')
-if "CONFIG_SR_WN_WN9_HILEXIN" in WN_STRING:
-    wakenet_model.append('wn9_hilexin')
-if "CONFIG_SR_WN_WN9_ALEXA" in WN_STRING:
-    wakenet_model.append('wn9_alexa')
-if "CONFIG_SR_WN_WN9_HIESP" in WN_STRING:
-    wakenet_model.append('wn9_hiesp')
-if "CONFIG_SR_WN_WN9_NIHAOXIAOZHI" in WN_STRING:
-    wakenet_model.append('wn9_nihaoxiaozhi')
-if "CONFIG_SR_WN_WN9_CUSTOMWORD" in WN_STRING:
-    wakenet_model.append('wn9_customword')
-
-multinet_model = []
-if "CONFIG_SR_MN_CN_MULTINET3_SINGLE_RECOGNITION" in MN_STRING and len(multinet_model) < 2:
-    multinet_model.append('mn3_cn')
-elif "CONFIG_SR_MN_CN_MULTINET4_5_SINGLE_RECOGNITION_QUANT8" in MN_STRING:
-    multinet_model.append('mn4q8_cn')
-elif "CONFIG_SR_MN_CN_MULTINET4_5_SINGLE_RECOGNITION" in MN_STRING and len(multinet_model) < 2:
-    multinet_model.append('mn4_cn')
-elif "CONFIG_SR_MN_CN_MULTINET5_RECOGNITION_QUANT8" in MN_STRING and len(multinet_model) < 2:
-    multinet_model.append('mn5q8_cn')
-
-if "CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION_QUANT8" in MN_STRING and len(multinet_model) < 2:
-    multinet_model.append('mn5q8_en')
-elif "CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION" in MN_STRING and len(multinet_model) < 2:
-    multinet_model.append('mn5_en')
-elif "CONFIG_SR_MN_EN_MULTINET6_QUANT" in MN_STRING and len(multinet_model) < 2:
-    multinet_model.append('mn6_en')
-elif "CONFIG_SR_MN_CN_MULTINET6_QUANT" in MN_STRING and len(multinet_model) < 2:
-    multinet_model.append('mn6_cn')
-
-nsnet_model = ''
-if "CONFIG_SR_NSN_NSNET1" in NSN_STRING:
-    nsnet_model = 'nsnet1'
-
-print(wakenet_model)
-print(multinet_model)
-print(nsnet_model)
-
-target_model = args.project_path + '/target'
-if os.path.exists(target_model):
-    shutil.rmtree(target_model)
-os.makedirs(target_model)
-if len(wakenet_model) != 0:
-    for wakenet_model_item in wakenet_model:
-        shutil.copytree(model_path + '/wakenet_model/' + wakenet_model_item, target_model+'/'+wakenet_model_item)
-if len(multinet_model) != 0:
-    for multinet_model_item in multinet_model:
-        shutil.copytree(model_path + '/multinet_model/' + multinet_model_item, target_model+'/'+multinet_model_item)
-if nsnet_model != '':
-    shutil.copytree(model_path + '/nsnet_model/' + nsnet_model, target_model+'/'+nsnet_model)
-
-# os.system("cp %s %s" % (wakenet_model+'/_MODEL_INFO_', target_model))
-shutil.copytree(f'{model_path}/multinet_model/fst', target_model + '/fst')
-
-total_size = calculate_total_size(target_model)
-print("Recommended model partition size: ", str(int((total_size / 1024 + 900) / 4 ) * 4) + 'KB')
+    copy_multinet_from_sdkconfig(model_path, sdkconfig_path, target_path)
+    copy_wakenet_from_sdkconfig(model_path, sdkconfig_path, target_path)
+    total_size = calculate_total_size(target_path)
+    pack_models(target_path, "srmodels.bin")
+    print("Recommended model partition size: ", str(int((total_size / 1024 + 900) / 4 ) * 4) + 'KB')

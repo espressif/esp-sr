@@ -81,70 +81,29 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
         "-Wl,--end-group")
 
     set(MVMODEL_EXE ${COMPONENT_PATH}/model/movemodel.py)
+    idf_build_get_property(build_dir BUILD_DIR)
+    set(image_file ${build_dir}/srmodels/srmodels.bin)
+
     add_custom_command(
-         OUTPUT ${PROJECT_DIR}/target/_MODEL_INFO_
-         COMMENT "Running move model..."
-         COMMAND python ${MVMODEL_EXE} -d1 ${PROJECT_DIR} -d2 ${COMPONENT_PATH}
-         DEPENDS ${COMPONENT_DIR}/model/
-         VERBATIM)
+        OUTPUT ${image_file}
+        COMMENT "Move and Pack models..."
+        COMMAND python ${MVMODEL_EXE} -d1 ${PROJECT_DIR} -d2 ${COMPONENT_PATH} -d3 ${build_dir}
+        DEPENDS ${PROJECT_DIR}/sdkconfig
+        VERBATIM)
 
-    add_custom_target(model)
-    add_dependencies(${COMPONENT_LIB} model)
-
-    idf_build_get_property(idf_path IDF_PATH)
-    set(spiffsgen_py ${PYTHON} ${idf_path}/components/spiffs/spiffsgen.py)
-
-    get_filename_component(base_dir_full_path ${PROJECT_DIR}/target/ ABSOLUTE)
+    add_custom_target(srmodels_bin ALL DEPENDS ${image_file})
+    add_dependencies(flash srmodels_bin)
 
     partition_table_get_partition_info(size "--partition-name model" "size")
     partition_table_get_partition_info(offset "--partition-name model" "offset")
 
-    if("${size}" AND "${offset}" AND CONFIG_MODEL_IN_SPIFFS AND CONFIG_USE_WAKENET)
-        set(image_file ${CMAKE_BINARY_DIR}/model.bin)
-
-        if(CONFIG_SPIFFS_USE_MAGIC)
-            set(use_magic "--use-magic")
-        endif()
-
-        if(CONFIG_SPIFFS_USE_MAGIC_LENGTH)
-            set(use_magic_len "--use-magic-len")
-        endif()
-
-        if(CONFIG_SPIFFS_FOLLOW_SYMLINKS)
-            set(follow_symlinks "--follow-symlinks")
-        endif()
-
-        # Execute SPIFFS image generation; this always executes as there is no way to specify for CMake to watch for
-        # contents of the base dir changing.
-        add_custom_target(spiffs_model_bin ALL
-            COMMAND ${spiffsgen_py} ${size} ${base_dir_full_path} ${image_file}
-            --page-size=${CONFIG_SPIFFS_PAGE_SIZE}
-            --obj-name-len=${CONFIG_SPIFFS_OBJ_NAME_LEN}
-            --meta-len=${CONFIG_SPIFFS_META_LENGTH}
-            ${follow_symlinks}
-            ${use_magic}
-            ${use_magic_len}
-            DEPENDS ${PROJECT_DIR}/target/_MODEL_INFO_
-            )
-
-        set_property(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}" APPEND PROPERTY
-            ADDITIONAL_MAKE_CLEAN_FILES
-            ${image_file})
-
-        idf_component_get_property(main_args esptool_py FLASH_ARGS)
-        idf_component_get_property(sub_args esptool_py FLASH_SUB_ARGS)
-        # Last (optional) parameter is the encryption for the target. In our
-        # case, spiffs is not encrypt so pass FALSE to the function.
-        esptool_py_flash_target(model-flash "${main_args}" "${sub_args}" ALWAYS_PLAINTEXT)
-        esptool_py_flash_to_partition(model-flash "model" "${image_file}")
-
-        add_dependencies(model-flash spiffs_model_bin)
-
+    if("${size}" AND "${offset}")
+        # add_dependencies(model-flash srmodels_bin)
+        # esptool_py_flash_to_partition(model-flash "model" "${image_file}")
         esptool_py_flash_to_partition(flash "model" "${image_file}")
-        add_dependencies(flash spiffs_model_bin)
     else()
-        set(message "Failed to create SPIFFS image for partition 'model'. "
-                    "Check project configuration if using the correct partition table file.")
+        set(message "Failed to find model in partition table file"
+                    "Please add a line(Name=model, Size>recommended size in log) to the partition file.")
     endif()
 elseif(${IDF_TARGET} STREQUAL "esp32s2")
     set(COMPONENT_ADD_INCLUDEDIRS 

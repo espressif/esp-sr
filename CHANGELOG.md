@@ -1,7 +1,8 @@
 # Change log for esp-sr
 
 ## Unreleased
-- 6x reduction in model loading time. The latency of MultiNet6 loading is reduced from 12s to 2s.
+- Read all parameters sequentially, which reduces about 5x in model loading time.
+- Use esp_partition_mmap to replace spiffs file system, which further reduces about 3x in model loading time
 
 ## 1.2.0
 - ESP-DSP dependency is now installed from the component registry
