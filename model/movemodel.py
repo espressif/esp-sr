@@ -2,6 +2,7 @@ import io
 import os
 import argparse
 import shutil
+import math
 from pack_model import pack_models
 
 def calculate_total_size(folder_path):
@@ -64,22 +65,24 @@ def copy_multinet_from_sdkconfig(model_path, sdkconfig_path, target_path):
                 models_string += label
 
     models = []
-    if "CONFIG_SR_MN_CN_MULTINET3_SINGLE_RECOGNITION" in models_string and len(models) < 2:
+    if "CONFIG_SR_MN_CN_MULTINET3_SINGLE_RECOGNITION" in models_string:
         models.append('mn3_cn')
     elif "CONFIG_SR_MN_CN_MULTINET4_5_SINGLE_RECOGNITION_QUANT8" in models_string:
         models.append('mn4q8_cn')
-    elif "CONFIG_SR_MN_CN_MULTINET4_5_SINGLE_RECOGNITION" in models_string and len(models) < 2:
+    elif "CONFIG_SR_MN_CN_MULTINET4_5_SINGLE_RECOGNITION" in models_string:
         models.append('mn4_cn')
-    elif "CONFIG_SR_MN_CN_MULTINET5_RECOGNITION_QUANT8" in models_string and len(models) < 2:
+    elif "CONFIG_SR_MN_CN_MULTINET5_RECOGNITION_QUANT8" in models_string:
         models.append('mn5q8_cn')
-    elif "CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION_QUANT8" in models_string and len(models) < 2:
-        models.append('mn5q8_en')
-    elif "CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION" in models_string and len(models) < 2:
-        models.append('mn5_en')
-    elif "CONFIG_SR_MN_EN_MULTINET6_QUANT" in models_string and len(models) < 2:
-        models.append('mn6_en')
-    elif "CONFIG_SR_MN_CN_MULTINET6_QUANT" in models_string and len(models) < 2:
+    elif "CONFIG_SR_MN_CN_MULTINET6_QUANT" in models_string:
         models.append('mn6_cn')
+    
+    if "CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION_QUANT8" in models_string:
+        models.append('mn5q8_en')
+    elif "CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION" in models_string:
+        models.append('mn5_en')
+    elif "CONFIG_SR_MN_EN_MULTINET6_QUANT" in models_string:
+        models.append('mn6_en')
+
     
     if "MULTINET6" in models_string:
         models.append('fst')
@@ -116,6 +119,7 @@ if __name__ == '__main__':
     sdkconfig_path = args.project_path + '/sdkconfig'
     model_path = args.model_path + '/model'
     target_path = args.build_path + '/srmodels'
+    image_file = "srmodels.bin"
 
     if os.path.exists(target_path):
         shutil.rmtree(target_path)
@@ -123,6 +127,7 @@ if __name__ == '__main__':
 
     copy_multinet_from_sdkconfig(model_path, sdkconfig_path, target_path)
     copy_wakenet_from_sdkconfig(model_path, sdkconfig_path, target_path)
-    total_size = calculate_total_size(target_path)
-    pack_models(target_path, "srmodels.bin")
-    print("Recommended model partition size: ", str(int((total_size / 1024 + 900) / 4 ) * 4) + 'KB')
+    pack_models(target_path, image_file)
+    total_size = os.path.getsize(os.path.join(target_path, image_file))
+    recommended_size = int(math.ceil(total_size/1024))
+    print("Recommended model partition size: %dK" % (recommended_size))

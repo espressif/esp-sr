@@ -104,7 +104,8 @@ def pack_models(model_path, out_file="srmodels.bin"):
         
         out_bin += model_bin
     assert len(out_bin) == header_len
-    out_bin += data_bin
+    if data_bin != None:
+        out_bin += data_bin
 
     out_file = os.path.join(model_path, out_file)
     with open(out_file, "wb") as f:

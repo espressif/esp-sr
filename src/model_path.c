@@ -28,7 +28,7 @@ static srmodel_list_t* srmodel_list_alloc(void)
     models->model_data = NULL;
     models->model_name = NULL;
     models->num = 0;
-    models->partition_label = NULL;
+    models->partition = NULL;
 
     return models;
 }
@@ -247,10 +247,10 @@ srmodel_list_t *srmodel_mmap_init(const esp_partition_t *part)
     const void *root;
     esp_err_t err=esp_partition_mmap(part, 0, part->size, SPI_FLASH_MMAP_DATA, &root, &models->mmap_handle);
     if (err != ESP_OK) {
-        ESP_LOGE(TAG, "Can not map %s partition!\n", part->label);
+        ESP_LOGE(TAG, "Can not map %s partition!", part->label);
         return NULL;
     } else {
-        ESP_LOGI(TAG, "partition %s size: %d by mmap\n", part->label, part->size);
+        ESP_LOGI(TAG, "partition %s size: %d by mmap", part->label, part->size);
     }
 
     models->partition = (esp_partition_t *)part;
@@ -270,7 +270,6 @@ srmodel_list_t *srmodel_mmap_init(const esp_partition_t *part)
         models->model_name[i] = (char*)malloc((strlen(data)+1)*sizeof(char));
         strcpy(models->model_name[i], data);
         data += str_len;
-        printf("%s\n", models->model_name[i]);
         //read model number
         int file_num = read_int32(data);
         model_data->num = file_num;
@@ -321,6 +320,7 @@ void srmodel_mmap_deinit(srmodel_list_t *models)
         free(models);
     }
     models = NULL;
+    static_srmodels = NULL;
 }
 
 #endif
@@ -462,7 +462,7 @@ srmodel_list_t* esp_srmodel_init(const char* partition_label)
     if (part) {
         return srmodel_mmap_init(part);
     } else {
-        ESP_LOGE(TAG, "Can not find %s in partition table\n", partition_label);
+        ESP_LOGE(TAG, "Can not find %s in partition table", partition_label);
     }
     
     return NULL;
@@ -480,7 +480,7 @@ void esp_srmodel_deinit(srmodel_list_t *models)
 #ifdef CONFIG_IDF_TARGET_ESP32
     return srmodel_config_deinit(models);
 #else
-    return srmodel_spiffs_deinit(models);
+    return srmodel_mmap_deinit(models);
 #endif
 
 #else

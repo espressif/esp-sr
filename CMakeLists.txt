@@ -1,6 +1,6 @@
 if(IDF_TARGET STREQUAL "esp32")
     set(COMPONENT_ADD_INCLUDEDIRS 
-    src/include
+        src/include
         esp-tts/esp_tts_chinese/include
         include/esp32
         )
