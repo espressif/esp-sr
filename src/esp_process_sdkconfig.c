@@ -874,9 +874,7 @@ char *get_id_name_en(int i)
 
 esp_mn_error_t* esp_mn_commands_update_from_sdkconfig(const esp_mn_iface_t *multinet,  model_iface_data_t *model_data)
 {
-#ifdef CONFIG_SR_MN_CN_MULTINET6_QUANT
-    return NULL;
-#else if  CONFIG_SR_MN_EN_MULTINET6_QUANT
+#if defined CONFIG_SR_MN_CN_MULTINET6_QUANT || defined CONFIG_SR_MN_EN_MULTINET6_QUANT
     return NULL;
 #endif
 
