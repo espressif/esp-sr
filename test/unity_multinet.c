@@ -51,14 +51,15 @@ TEST_CASE("multinet create/destroy API & memory leak", "[mn]")
     int mem_leak = start_size - last_end_size;
     printf("create&destroy times:%d, memory leak:%d\n", 1, mem_leak);
 
-    for (int i=0; i<3; i++) {
+    for (int i=0; i<5; i++) {
         printf("init partition ...\n");
         models = esp_srmodel_init("model");
         model_name = esp_srmodel_filter(models, ESP_MN_PREFIX, NULL);
         multinet = esp_mn_handle_from_name(model_name);
 
-        printf("create ...\n");
-        model_data = multinet->create(model_name, 6000);
+        int time_out = 3000+i*2000;
+        printf("create ..., time out = %d\n", time_out);
+        model_data = multinet->create(model_name, time_out);
 
         printf("destroy ...\n");
         multinet->destroy(model_data);

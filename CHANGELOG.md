@@ -1,8 +1,13 @@
 # Change log for esp-sr
 
 ## Unreleased
+
+## 1.2.1
+- Fix bugs in model loader
 - Read all parameters sequentially, which reduces about 5x in model loading time.
 - Use esp_partition_mmap to replace spiffs file system, which further reduces about 3x in model loading time
+- Add WakeNet API unity test
+- Add MultiNet API unity test
 
 ## 1.2.0
 - ESP-DSP dependency is now installed from the component registry

@@ -50,14 +50,22 @@ TEST_CASE("wakenet create/destroy API & memory leak", "[wn]")
     int mem_leak = start_size - last_end_size;
     printf("create&destroy times:%d, memory leak:%d\n", 1, mem_leak);
 
-    for (int i=0; i<3; i++) {
+    for (int i=0; i<6; i++) {
         printf("init partition ...\n");
         models = esp_srmodel_init("model");
         model_name = esp_srmodel_filter(models, ESP_WN_PREFIX, NULL);
         wakenet = esp_wn_handle_from_name(model_name);
 
         printf("create ...\n");
-        model_data = wakenet->create(model_name, DET_MODE_3CH_95);
+        // typedef enum {
+        //     DET_MODE_90 = 0,       // Normal
+        //     DET_MODE_95 = 1,       // Aggressive
+        //     DET_MODE_2CH_90 = 2,
+        //     DET_MODE_2CH_95 = 3,
+        //     DET_MODE_3CH_90 = 4,
+        //     DET_MODE_3CH_95 = 5,
+        // } det_mode_t;
+        model_data = wakenet->create(model_name, i);
 
         printf("destroy ...\n");
         wakenet->destroy(model_data);
