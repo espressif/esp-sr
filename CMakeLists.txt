@@ -1,35 +1,38 @@
 if(IDF_TARGET STREQUAL "esp32")
-    set(COMPONENT_ADD_INCLUDEDIRS 
+    set(include_dirs 
         src/include
         esp-tts/esp_tts_chinese/include
         include/esp32
         )
-    set(COMPONENT_SRCS
+    set(srcs
         src/model_path.c
         src/esp_mn_speech_commands.c
         src/esp_process_sdkconfig.c
         )
 
-    set(COMPONENT_REQUIRES
+    set(requires
         json
         spiffs
+        esp_partition
         )
 
-    register_component()
+    idf_component_register(SRCS ${srcs}
+                       INCLUDE_DIRS ${include_dirs}
+                       REQUIRES ${requires}
+                       PRIV_REQUIRES spi_flash)
 
     target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32")
     target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese/esp32")
-IF (IDF_VERSION_MAJOR GREATER 3)
     add_prebuilt_library(esp_audio_processor "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32/libesp_audio_processor.a" PRIV_REQUIRES ${COMPONENT_NAME})
     add_prebuilt_library(wakenet "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32/libwakenet.a" PRIV_REQUIRES ${COMPONENT_NAME})
     add_prebuilt_library(multinet "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32/libmultinet.a" PRIV_REQUIRES ${COMPONENT_NAME})
     add_prebuilt_library(esp_audio_front_end "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32/libesp_audio_front_end.a" PRIV_REQUIRES ${COMPONENT_NAME})
-ENDIF (IDF_VERSION_MAJOR GREATER 3)
+
     target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
         multinet
         dl_lib
         c_speech_features
-    wakeword_model
+        wakeword_model
         multinet2_ch
         esp_audio_processor 
         esp_audio_front_end
@@ -38,23 +41,28 @@ ENDIF (IDF_VERSION_MAJOR GREATER 3)
         wakenet
         "-Wl,--end-group")
 elseif(${IDF_TARGET} STREQUAL "esp32s3")
-    set(COMPONENT_ADD_INCLUDEDIRS 
-    src/include
+    set(include_dirs 
+        src/include
         esp-tts/esp_tts_chinese/include
         include/esp32s3
         )
-    set(COMPONENT_SRCS
+    set(srcs
         src/model_path.c
         src/esp_mn_speech_commands.c
         src/esp_process_sdkconfig.c
         )
 
-    set(COMPONENT_REQUIRES
+    set(requires
         json
         spiffs
+        esp_partition
         )
 
-    register_component()
+    idf_component_register(SRCS ${srcs}
+                       INCLUDE_DIRS ${include_dirs}
+                       REQUIRES ${requires}
+                       PRIV_REQUIRES spi_flash)
+
     target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32s3")
     target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese/esp32s3")
 
@@ -106,22 +114,22 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
                     "Please add a line(Name=model, Size>recommended size in log) to the partition file.")
     endif()
 elseif(${IDF_TARGET} STREQUAL "esp32s2")
-    set(COMPONENT_ADD_INCLUDEDIRS 
-        esp-tts/esp_tts_chinese/include
-        )
+    idf_component_register(SRCS .
+                       INCLUDE_DIRS  esp-tts/esp_tts_chinese/include
+                       REQUIRES esp_partition
+                       PRIV_REQUIRES spi_flash)
 
-    register_component()
     target_link_libraries(${COMPONENT_TARGET} INTERFACE "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese/esp32s2")
     target_link_libraries(${COMPONENT_TARGET} INTERFACE "-Wl,--start-group"
         esp_tts_chinese
         voice_set_xiaole
          "-Wl,--end-group")
 elseif(${IDF_TARGET} STREQUAL "esp32c3")
-    set(COMPONENT_ADD_INCLUDEDIRS 
-        esp-tts/esp_tts_chinese/include
-        )
-
-    register_component()
+    idf_component_register(SRCS .
+                       INCLUDE_DIRS  esp-tts/esp_tts_chinese/include
+                       REQUIRES esp_partition
+                       PRIV_REQUIRES spi_flash)
+                       
     target_link_libraries(${COMPONENT_TARGET} INTERFACE "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese/esp32c3")
     target_link_libraries(${COMPONENT_TARGET} INTERFACE "-Wl,--start-group"
         esp_tts_chinese

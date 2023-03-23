@@ -7,20 +7,19 @@
 
 typedef struct 
 {
-    // char *name;      // the name of model, like "wn9_hilexin"(wakenet9, hilexin)
-    int num;         // the number of files
-    char **files;           // the model files, like wn9_index, wn9_data
+    int num;                 // the number of files
+    char **files;            // the model files, like wn9_index, wn9_data
     char **data;             // the pointer of file data
     int *sizes;              // the size of different file
 } srmodel_data_t;
 
 typedef struct 
 {
-    char **model_name;                   // the name of models, like "wn9_hilexin"(wakenet9, hilexin), "mn5_en"(multinet5, english)
+    char **model_name;                        // the name of models, like "wn9_hilexin"(wakenet9, hilexin), "mn5_en"(multinet5, english)
     esp_partition_t *partition;               // partition label used to save the files of model
-    spi_flash_mmap_handle_t mmap_handle; // mmap_handle if using esp_partition_mmap else NULL; 
-    int num;                             // the number of models
-    srmodel_data_t **model_data;         // the model data , NULL if spiffs format
+    esp_partition_mmap_handle_t mmap_handle;  // mmap_handle if using esp_partition_mmap else NULL;  // support esp-idf v5.0
+    int num;                                  // the number of models
+    srmodel_data_t **model_data;              // the model data , NULL if spiffs format
 } srmodel_list_t;
 
 

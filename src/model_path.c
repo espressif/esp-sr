@@ -236,7 +236,7 @@ static uint32_t read_int32(char *data) {
 	return value;
 }
 
-srmodel_list_t *srmodel_mmap_init(const esp_partition_t *part)
+srmodel_list_t *srmodel_mmap_init(const esp_partition_t *partition)
 {
     if (static_srmodels == NULL) 
         static_srmodels = srmodel_list_alloc();
@@ -245,15 +245,9 @@ srmodel_list_t *srmodel_mmap_init(const esp_partition_t *part)
     
     srmodel_list_t *models = static_srmodels;
     const void *root;
-    esp_err_t err=esp_partition_mmap(part, 0, part->size, SPI_FLASH_MMAP_DATA, &root, &models->mmap_handle);
-    if (err != ESP_OK) {
-        ESP_LOGE(TAG, "Can not map %s partition!", part->label);
-        return NULL;
-    } else {
-        ESP_LOGI(TAG, "partition %s size: %d by mmap", part->label, part->size);
-    }
+    ESP_ERROR_CHECK(esp_partition_mmap(partition, 0, partition->size, ESP_PARTITION_MMAP_DATA, &root, &models->mmap_handle));
 
-    models->partition = (esp_partition_t *)part;
+    models->partition = (esp_partition_t *)partition;
     char *start = (char *)root;
     char *data = (char *)root;    
     int str_len = SRMODEL_STRING_LENGTH;
@@ -295,6 +289,7 @@ srmodel_list_t *srmodel_mmap_init(const esp_partition_t *part)
         }
         models->model_data[i] = model_data;
     }
+    ESP_LOGI(TAG, "Successfully map %s partition", partition->label);
 
     set_model_base_path(NULL);
     return models;
@@ -303,8 +298,8 @@ srmodel_list_t *srmodel_mmap_init(const esp_partition_t *part)
 void srmodel_mmap_deinit(srmodel_list_t *models)
 {
     if (models != NULL) {
-        // esp_partition_munmap(models->mmap_handle); // support esp-idf v5.0
-        spi_flash_munmap(models->mmap_handle);
+        esp_partition_munmap(models->mmap_handle); // support esp-idf v5.0
+        // spi_flash_munmap(models->mmap_handle);
 
         if (models->num>0) {
             for (int i=0; i<models->num; i++) {
@@ -452,15 +447,14 @@ srmodel_list_t* esp_srmodel_init(const char* partition_label)
 #ifdef CONFIG_IDF_TARGET_ESP32
     return srmodel_config_init();
 #else
-    const esp_partition_t* part = NULL;
+    const esp_partition_t* partition = NULL;
     // find spiffs partition 
-    part = esp_partition_find_first(
+    partition = esp_partition_find_first(
         ESP_PARTITION_TYPE_DATA, ESP_PARTITION_SUBTYPE_ANY, partition_label
         );
-    return srmodel_mmap_init(part);
-    
-    if (part) {
-        return srmodel_mmap_init(part);
+
+    if (partition) {
+        return srmodel_mmap_init(partition);
     } else {
         ESP_LOGE(TAG, "Can not find %s in partition table", partition_label);
     }

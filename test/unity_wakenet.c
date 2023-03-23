@@ -44,9 +44,7 @@ TEST_CASE("wakenet create/destroy API & memory leak", "[wn]")
 
     // test memory leak
     int first_end_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
-    int first_end_internal_size = heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
     int last_end_size = first_end_size;
-    int last_end_internal_size = first_end_internal_size;
     int mem_leak = start_size - last_end_size;
     printf("create&destroy times:%d, memory leak:%d\n", 1, mem_leak);
 
@@ -72,7 +70,6 @@ TEST_CASE("wakenet create/destroy API & memory leak", "[wn]")
         esp_srmodel_deinit(models);
 
         last_end_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
-        last_end_internal_size = heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
         mem_leak = start_size - last_end_size;
         printf("create&destroy times:%d, memory leak:%d\n", i+2, mem_leak);
     }

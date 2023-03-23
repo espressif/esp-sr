@@ -31,6 +31,7 @@ TEST_CASE("multinet create/destroy API & memory leak", "[mn]")
     // test model loading time
     struct timeval tv_start, tv_end;
     gettimeofday(&tv_start, NULL);
+    printf("load multinet!\n");
     model_iface_data_t *model_data = multinet->create(model_name, 6000);
     gettimeofday(&tv_end, NULL);
     int tv_ms=(tv_end.tv_sec-tv_start.tv_sec)*1000+(tv_end.tv_usec-tv_start.tv_usec)/1000;
