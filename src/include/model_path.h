@@ -5,16 +5,14 @@
 #include "esp_partition.h"
 #endif
 
-typedef struct 
-{
+typedef struct {
     int num;                 // the number of files
     char **files;            // the model files, like wn9_index, wn9_data
     char **data;             // the pointer of file data
     int *sizes;              // the size of different file
 } srmodel_data_t;
 
-typedef struct 
-{
+typedef struct {
     char **model_name;                        // the name of models, like "wn9_hilexin"(wakenet9, hilexin), "mn5_en"(multinet5, english)
     esp_partition_t *partition;               // partition label used to save the files of model
     esp_partition_mmap_handle_t mmap_handle;  // mmap_handle if using esp_partition_mmap else NULL;  // support esp-idf v5.0
@@ -29,14 +27,14 @@ typedef struct
  * @brief Return all avaliable models in flash.
  *
  * @param partition_label    The spiffs label defined in your partition file used to save models.
- * 
+ *
  * @return all avaliable models,save as srmodel_list_t.
  */
-srmodel_list_t* esp_srmodel_init(const char* partition_label);
+srmodel_list_t *esp_srmodel_init(const char *partition_label);
 
 /**
  * @brief Free srmodel_list_t and unregister SPIFFS filesystem if open SPIFFS filesystem.
- * 
+ *
  * @param models    The srmodel_list_t point allocated by esp_srmodel_init function.
  *
  * @return all avaliable models in spiffs,save as srmodel_list_t.
@@ -45,12 +43,12 @@ void esp_srmodel_deinit(srmodel_list_t *models);
 
 /**
  * @brief Return the first model name containing the specified keywords
- *        If keyword is NULL, we will ignore the keyword. 
- * 
+ *        If keyword is NULL, we will ignore the keyword.
+ *
  * @param models      The srmodel_list_t point allocated by esp_srmodel_init function.
- * @param keyword1    The specified keyword1 , like ESP_WN_PREDIX(the prefix of wakenet), 
+ * @param keyword1    The specified keyword1 , like ESP_WN_PREDIX(the prefix of wakenet),
  *                                                  ESP_MN_PREFIX(the prefix of multinet),
- *                                                
+ *
  * @param keyword2    The specified keyword2, like ESP_MN_ENGLISH(the english multinet)
  *                                                 ESP_MN_CHINESE(the chinese multinet)
  *                                                "alexa" (the "alexa" wakenet)
@@ -61,7 +59,7 @@ char *esp_srmodel_filter(srmodel_list_t *models, const char *keyword1, const cha
 
 /**
  * @brief Check whether the specified model name exists or not.
- * 
+ *
  * @param models      The srmodel_list_t point allocated by esp_srmodel_init function.
  * @param model_name  The specified model name
  * @return return index in models if model name exists otherwise return -1
@@ -72,14 +70,14 @@ int esp_srmodel_exists(srmodel_list_t *models, char *model_name);
  * @brief Initialize and mount SPIFFS filesystem, return all avaliable models in spiffs.
  *
  * @param part    The spiffs partition.
- * 
+ *
  * @return all avaliable models in spiffs,save as srmodel_list_t.
  */
-srmodel_list_t* srmodel_spiffs_init(const esp_partition_t *part);
+srmodel_list_t *srmodel_spiffs_init(const esp_partition_t *part);
 
 /**
  * @brief unregister SPIFFS filesystem and free srmodel_list_t.
- * 
+ *
  * @param models    The srmodel_list_t point allocated by srmodel_spiffs_init function.
  *
  * @return all avaliable models in spiffs,save as srmodel_list_t.
@@ -95,8 +93,8 @@ void srmodel_spiffs_deinit(srmodel_list_t *models);
 char *get_model_base_path(void);
 
 /**
- * @brief Return static srmodel pointer. 
- *        static srmodel pointer will be set after esp_srmodel_init 
+ * @brief Return static srmodel pointer.
+ *        static srmodel pointer will be set after esp_srmodel_init
  *
  * @return the pointer of srmodel_list_t
  */
@@ -109,10 +107,10 @@ srmodel_list_t *get_static_srmodels(void);
  * @brief Return model_coeff_getter_t pointer base on model_name
  *
  * @warning Just support ESP32 to load old wakenet
- * 
+ *
  * @param model_name    The model name
  *
  * @return model_coeff_getter_t pointer or NULL
  */
-model_coeff_getter_t* srmodel_get_model_coeff(char *model_name);
+model_coeff_getter_t *srmodel_get_model_coeff(char *model_name);
 #endif

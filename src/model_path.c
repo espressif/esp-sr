@@ -22,9 +22,9 @@ void set_model_base_path(const char *base_path)
     SRMODE_BASE_PATH = (char *)base_path;
 }
 
-static srmodel_list_t* srmodel_list_alloc(void)
+static srmodel_list_t *srmodel_list_alloc(void)
 {
-    srmodel_list_t *models = (srmodel_list_t*) malloc(sizeof(srmodel_list_t));
+    srmodel_list_t *models = (srmodel_list_t *) malloc(sizeof(srmodel_list_t));
     models->model_data = NULL;
     models->model_name = NULL;
     models->num = 0;
@@ -36,10 +36,11 @@ static srmodel_list_t* srmodel_list_alloc(void)
 #ifdef ESP_PLATFORM
 srmodel_list_t *read_models_form_spiffs(esp_vfs_spiffs_conf_t *conf)
 {
-    if (static_srmodels == NULL) 
+    if (static_srmodels == NULL) {
         static_srmodels = srmodel_list_alloc();
-    else
+    } else {
         return static_srmodels;
+    }
 
     srmodel_list_t *models = static_srmodels;
 
@@ -49,20 +50,21 @@ srmodel_list_t *read_models_form_spiffs(esp_vfs_spiffs_conf_t *conf)
     int model_num = 0;
     int idx = 0;
 
-    if (dir != NULL)
-    {
+    if (dir != NULL) {
         // get the number of models
-        while ((ret = readdir(dir)) != NULL)
-        { // NULL if reach the end of directory
+        while ((ret = readdir(dir)) != NULL) {
+            // NULL if reach the end of directory
 
-            if (ret->d_type == DT_DIR) // continue if d_type is not file
+            if (ret->d_type == DT_DIR) { // continue if d_type is not file
                 continue;
+            }
 
             int len = strlen(ret->d_name);
             char *suffix = ret->d_name + len - 12;
 
-            if (strcmp(suffix, "_MODEL_INFO_") == 0)
+            if (strcmp(suffix, "_MODEL_INFO_") == 0) {
                 model_num ++;
+            }
         }
 
         // allocate model names
@@ -70,26 +72,27 @@ srmodel_list_t *read_models_form_spiffs(esp_vfs_spiffs_conf_t *conf)
             return models;
         } else {
             models->num = model_num;
-            models->model_name = malloc(models->num*sizeof(char*));
-            for (int i=0; i<models->num; i++)
-                models->model_name[i] = (char*) calloc(MODEL_NAME_MAX_LENGTH, sizeof(char));
+            models->model_name = malloc(models->num * sizeof(char *));
+            for (int i = 0; i < models->num; i++) {
+                models->model_name[i] = (char *) calloc(MODEL_NAME_MAX_LENGTH, sizeof(char));
+            }
         }
 
         // read & save model names
         closedir(dir);
         dir = opendir(conf->base_path);
-        while ((ret = readdir(dir)) != NULL)
-        { // NULL if reach the end of directory
+        while ((ret = readdir(dir)) != NULL) {
+            // NULL if reach the end of directory
 
-            if (ret->d_type == DT_DIR) // continue if d_type is not file
+            if (ret->d_type == DT_DIR) { // continue if d_type is not file
                 continue;
+            }
 
             int len = strlen(ret->d_name);
             char *suffix = ret->d_name + len - 12;
 
-            if (strcmp(suffix, "_MODEL_INFO_") == 0)
-            {
-                memcpy(models->model_name[idx], ret->d_name, (len-13)*sizeof(char));
+            if (strcmp(suffix, "_MODEL_INFO_") == 0) {
+                memcpy(models->model_name[idx], ret->d_name, (len - 13)*sizeof(char));
                 // models->model_name[idx][len-13] = '\0';
                 idx ++;
             }
@@ -102,7 +105,7 @@ srmodel_list_t *read_models_form_spiffs(esp_vfs_spiffs_conf_t *conf)
 }
 
 
-srmodel_list_t* srmodel_spiffs_init(const esp_partition_t *part)
+srmodel_list_t *srmodel_spiffs_init(const esp_partition_t *part)
 {
     ESP_LOGI(TAG, "\nInitializing models from SPIFFS, partition label: %s\n", part->label);
 
@@ -155,8 +158,8 @@ void srmodel_spiffs_deinit(srmodel_list_t *models)
     }
 
     if (models != NULL) {
-        if (models->num>0) {
-            for (int i=0; i<models->num; i++) {
+        if (models->num > 0) {
+            for (int i = 0; i < models->num; i++) {
                 free(models->model_name[i]);
             }
             free(models->model_name);
@@ -169,16 +172,17 @@ void srmodel_spiffs_deinit(srmodel_list_t *models)
 
 srmodel_list_t *srmodel_config_init()
 {
-    if (static_srmodels == NULL) 
+    if (static_srmodels == NULL) {
         static_srmodels = srmodel_list_alloc();
-    else
+    } else {
         return static_srmodels;
+    }
 
     srmodel_list_t *models = static_srmodels;
     models->num = 2;
-    models->model_name = malloc(models->num*sizeof(char*));
-    for (int i=0; i<models->num; i++) {
-        models->model_name[i] = (char*) calloc(MODEL_NAME_MAX_LENGTH, sizeof(char));
+    models->model_name = malloc(models->num * sizeof(char *));
+    for (int i = 0; i < models->num; i++) {
+        models->model_name[i] = (char *) calloc(MODEL_NAME_MAX_LENGTH, sizeof(char));
     }
 
     // If wakenet is selected in menuconfig, load the wakenet model
@@ -194,10 +198,10 @@ srmodel_list_t *srmodel_config_init()
         models->num --;
         free(models->model_name[models->num]);
     } else {
-        strcpy(models->model_name[models->num-1], MULTINET_MODEL_NAME);
+        strcpy(models->model_name[models->num - 1], MULTINET_MODEL_NAME);
     }
 
-    // could not find any avaliable models, return NULL 
+    // could not find any avaliable models, return NULL
     if (models->num == 0) {
         free(models->model_name);
         free(models);
@@ -210,8 +214,8 @@ srmodel_list_t *srmodel_config_init()
 void srmodel_config_deinit(srmodel_list_t *models)
 {
     if (models != NULL) {
-        if (models->num>0) {
-            for (int i=0; i<models->num; i++) {
+        if (models->num > 0) {
+            for (int i = 0; i < models->num; i++) {
                 free(models->model_name[i]);
             }
             free(models->model_name);
@@ -221,58 +225,60 @@ void srmodel_config_deinit(srmodel_list_t *models)
     models = NULL;
 }
 
-model_coeff_getter_t* srmodel_get_model_coeff(char *model_name)
+model_coeff_getter_t *srmodel_get_model_coeff(char *model_name)
 {
     model_coeff_getter_t *gettercb = (model_coeff_getter_t *)&WAKENET_COEFF;
     return gettercb;
 }
 
-static uint32_t read_int32(char *data) {
-	uint32_t value = 0;
-	value |= data[0] <<  0;
-	value |= data[1] <<  8;
-	value |= data[2] << 16;
-	value |= data[3] << 24;
-	return value;
+static uint32_t read_int32(char *data)
+{
+    uint32_t value = 0;
+    value |= data[0] <<  0;
+    value |= data[1] <<  8;
+    value |= data[2] << 16;
+    value |= data[3] << 24;
+    return value;
 }
 
 srmodel_list_t *srmodel_mmap_init(const esp_partition_t *partition)
 {
-    if (static_srmodels == NULL) 
+    if (static_srmodels == NULL) {
         static_srmodels = srmodel_list_alloc();
-    else
+    } else {
         return static_srmodels;
-    
+    }
+
     srmodel_list_t *models = static_srmodels;
     const void *root;
     ESP_ERROR_CHECK(esp_partition_mmap(partition, 0, partition->size, ESP_PARTITION_MMAP_DATA, &root, &models->mmap_handle));
 
     models->partition = (esp_partition_t *)partition;
     char *start = (char *)root;
-    char *data = (char *)root;    
+    char *data = (char *)root;
     int str_len = SRMODEL_STRING_LENGTH;
     int int_len = 4;
     //read model number
     models->num = read_int32(data);
     data += int_len;
-    models->model_data = (srmodel_data_t **)malloc(sizeof(srmodel_data_t*) * models->num);
-    models->model_name = (char **)malloc(sizeof(char*) * models->num);
+    models->model_data = (srmodel_data_t **)malloc(sizeof(srmodel_data_t *) * models->num);
+    models->model_name = (char **)malloc(sizeof(char *) * models->num);
 
-    for (int i=0; i<models->num; i++) {
+    for (int i = 0; i < models->num; i++) {
         srmodel_data_t *model_data = (srmodel_data_t *) malloc(sizeof(srmodel_data_t));
         // read model name
-        models->model_name[i] = (char*)malloc((strlen(data)+1)*sizeof(char));
+        models->model_name[i] = (char *)malloc((strlen(data) + 1) * sizeof(char));
         strcpy(models->model_name[i], data);
         data += str_len;
         //read model number
         int file_num = read_int32(data);
         model_data->num = file_num;
         data += int_len;
-        model_data->files = (char **) malloc(sizeof(char*)*file_num);
-        model_data->data = (char **) malloc(sizeof(void*)*file_num);
-        model_data->sizes = (int *) malloc(sizeof(int)*file_num);
+        model_data->files = (char **) malloc(sizeof(char *)*file_num);
+        model_data->data = (char **) malloc(sizeof(void *)*file_num);
+        model_data->sizes = (int *) malloc(sizeof(int) * file_num);
 
-        for (int j=0; j<file_num; j++) {
+        for (int j = 0; j < file_num; j++) {
             //read file name
             // model_data->files[j] = (char*)malloc(str_len*sizeof(char));
             // memcpy(model_data->files[j], data, str_len);
@@ -301,8 +307,8 @@ void srmodel_mmap_deinit(srmodel_list_t *models)
         esp_partition_munmap(models->mmap_handle); // support esp-idf v5.0
         // spi_flash_munmap(models->mmap_handle);
 
-        if (models->num>0) {
-            for (int i=0; i<models->num; i++) {
+        if (models->num > 0) {
+            for (int i = 0; i < models->num; i++) {
                 free(models->model_data[i]->files);
                 free(models->model_data[i]->data);
                 free(models->model_data[i]->sizes);
@@ -330,33 +336,35 @@ srmodel_list_t *get_static_srmodels(void)
     return static_srmodels;
 }
 
-static char* join_path(const char* dirname, const char *filename)
+static char *join_path(const char *dirname, const char *filename)
 {
-    if (dirname == NULL || filename == NULL)
+    if (dirname == NULL || filename == NULL) {
         return NULL;
+    }
     int dirname_len = strlen(dirname);
     int filename_len = strlen(filename);
-    int len = filename_len + dirname_len + 2; 
+    int len = filename_len + dirname_len + 2;
     char *path = calloc(len, sizeof(char));
     memcpy(path, dirname, dirname_len);
-    if (dirname[dirname_len-1] == '/') {
-        memcpy(path+dirname_len, filename, filename_len);
+    if (dirname[dirname_len - 1] == '/') {
+        memcpy(path + dirname_len, filename, filename_len);
     } else {
         path[dirname_len] = '/';
-        memcpy(path+dirname_len+1, filename, filename_len);
+        memcpy(path + dirname_len + 1, filename, filename_len);
     }
     return path;
 }
 
 // read srmodel from sdcard
-srmodel_list_t* srmodel_sdcard_init(const char *base_path)
+srmodel_list_t *srmodel_sdcard_init(const char *base_path)
 {
     printf("Initializing models from path: %s\n", base_path);
-    if (static_srmodels == NULL) 
+    if (static_srmodels == NULL) {
         static_srmodels = srmodel_list_alloc();
-    else
+    } else {
         return static_srmodels;
-    
+    }
+
     srmodel_list_t *models = static_srmodels;
     set_model_base_path(base_path);
 
@@ -365,13 +373,12 @@ srmodel_list_t* srmodel_sdcard_init(const char *base_path)
     dir = opendir(base_path);
     int model_num = 0;
     int idx = 0;
-    FILE* fp;
+    FILE *fp;
 
-    if (dir != NULL)
-    {
+    if (dir != NULL) {
         // get the number of models
-        while ((ret = readdir(dir)) != NULL)
-        { // NULL if reach the end of directory
+        while ((ret = readdir(dir)) != NULL) {
+            // NULL if reach the end of directory
 
             if (ret->d_type == DT_DIR) { // if d_type is directory
                 char *sub_path = join_path(base_path, ret->d_name);
@@ -394,16 +401,17 @@ srmodel_list_t* srmodel_sdcard_init(const char *base_path)
         } else {
             models->num = model_num;
             models->partition = NULL;
-            models->model_name = malloc(models->num*sizeof(char*));
-            for (int i=0; i<models->num; i++) 
-                models->model_name[i] = (char*) calloc(MODEL_NAME_MAX_LENGTH, sizeof(char));
+            models->model_name = malloc(models->num * sizeof(char *));
+            for (int i = 0; i < models->num; i++) {
+                models->model_name[i] = (char *) calloc(MODEL_NAME_MAX_LENGTH, sizeof(char));
+            }
         }
-        
 
-        // read & save model names 
+
+        // read & save model names
         dir = opendir(base_path);
-        while ((ret = readdir(dir)) != NULL)
-        { // NULL if reach the end of directory
+        while ((ret = readdir(dir)) != NULL) {
+            // NULL if reach the end of directory
 
             if (ret->d_type == DT_DIR) { // if d_type is directory
                 char *sub_path = join_path(base_path, ret->d_name);
@@ -428,8 +436,8 @@ srmodel_list_t* srmodel_sdcard_init(const char *base_path)
 void srmodel_sdcard_deinit(srmodel_list_t *models)
 {
     if (models != NULL) {
-        if (models->num>0) {
-            for (int i=0; i<models->num; i++) {
+        if (models->num > 0) {
+            for (int i = 0; i < models->num; i++) {
                 free(models->model_name[i]);
             }
         }
@@ -440,31 +448,31 @@ void srmodel_sdcard_deinit(srmodel_list_t *models)
 
 
 
-srmodel_list_t* esp_srmodel_init(const char* partition_label)
+srmodel_list_t *esp_srmodel_init(const char *partition_label)
 {
 #ifdef ESP_PLATFORM
 
 #ifdef CONFIG_IDF_TARGET_ESP32
     return srmodel_config_init();
 #else
-    const esp_partition_t* partition = NULL;
-    // find spiffs partition 
+    const esp_partition_t *partition = NULL;
+    // find spiffs partition
     partition = esp_partition_find_first(
-        ESP_PARTITION_TYPE_DATA, ESP_PARTITION_SUBTYPE_ANY, partition_label
-        );
+                    ESP_PARTITION_TYPE_DATA, ESP_PARTITION_SUBTYPE_ANY, partition_label
+                );
 
     if (partition) {
         return srmodel_mmap_init(partition);
     } else {
         ESP_LOGE(TAG, "Can not find %s in partition table", partition_label);
     }
-    
+
     return NULL;
 #endif
 
 #else
     return srmodel_sdcard_init(partition_label);
-#endif 
+#endif
 }
 
 void esp_srmodel_deinit(srmodel_list_t *models)
@@ -485,30 +493,39 @@ void esp_srmodel_deinit(srmodel_list_t *models)
 // repackage strstr function to support needle==NULL
 static char *esp_strstr(const char *haystack, const char *needle)
 {
-    if (needle == NULL) return (char *)haystack;
-    else return (char *)strstr(haystack, needle);
+    if (needle == NULL) {
+        return (char *)haystack;
+    } else {
+        return (char *)strstr(haystack, needle);
+    }
 }
 
-char *esp_srmodel_filter(srmodel_list_t *models, const char *keyword1, const char *keyword2) 
+char *esp_srmodel_filter(srmodel_list_t *models, const char *keyword1, const char *keyword2)
 {
-    if (models == NULL) return NULL;
-    
+    if (models == NULL) {
+        return NULL;
+    }
+
     // return the first model name including specific keyword
-    for (int i=0; i<models->num; i++) {
+    for (int i = 0; i < models->num; i++) {
 
         if (esp_strstr(models->model_name[i], keyword1) != NULL) {
-            if (esp_strstr(models->model_name[i], keyword2) != NULL)
+            if (esp_strstr(models->model_name[i], keyword2) != NULL) {
                 return models->model_name[i];
+            }
         }
     }
 
     return NULL;
 }
 
-int esp_srmodel_exists(srmodel_list_t *models, char *model_name) {
-    if (models == NULL) return -1;
-    
-    for (int i=0; i<models->num; i++) {
+int esp_srmodel_exists(srmodel_list_t *models, char *model_name)
+{
+    if (models == NULL) {
+        return -1;
+    }
+
+    for (int i = 0; i < models->num; i++) {
         if (strcmp(models->model_name[i], model_name) == 0) {
             return i;
         }
