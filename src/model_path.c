@@ -260,8 +260,8 @@ srmodel_list_t *srmodel_mmap_init(const esp_partition_t *partition)
 #if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 0, 0)
     int free_pages = spi_flash_mmap_get_free_pages(ESP_PARTITION_MMAP_DATA);
     uint32_t storage_size = free_pages * 64 * 1024; // Byte
-    ESP_LOGI(TAG, "The storage free size is %ld KB", storage_size);
-    ESP_LOGI(TAG, "The partition size is %ld KB", partition->size/1024);
+    ESP_LOGI(TAG, "The storage free size is %ld KB", storage_size / 1024);
+    ESP_LOGI(TAG, "The partition size is %ld KB", partition->size / 1024);
     if (storage_size < partition->size) {
         ESP_LOGE(TAG, "The storage free size of this board is less than %s partition required size", partition->label);
     }
