@@ -55,8 +55,11 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
     set(requires
         json
         spiffs
-        esp_partition
         )
+
+    IF (IDF_VERSION_MAJOR GREATER 4)
+        list(APPEND requires esp_partition)
+    ENDIF (IDF_VERSION_MAJOR GREATER 4)
 
     idf_component_register(SRCS ${srcs}
                        INCLUDE_DIRS ${include_dirs}
@@ -106,8 +109,6 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
     partition_table_get_partition_info(offset "--partition-name model" "offset")
 
     if("${size}" AND "${offset}")
-        # add_dependencies(model-flash srmodels_bin)
-        # esptool_py_flash_to_partition(model-flash "model" "${image_file}")
         esptool_py_flash_to_partition(flash "model" "${image_file}")
     else()
         set(message "Failed to find model in partition table file"

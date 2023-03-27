@@ -5,6 +5,8 @@
 #include "esp_partition.h"
 #endif
 
+#define ESP_SR_IDF_V5
+
 typedef struct {
     int num;                 // the number of files
     char **files;            // the model files, like wn9_index, wn9_data
@@ -15,7 +17,7 @@ typedef struct {
 typedef struct {
     char **model_name;                        // the name of models, like "wn9_hilexin"(wakenet9, hilexin), "mn5_en"(multinet5, english)
     esp_partition_t *partition;               // partition label used to save the files of model
-    esp_partition_mmap_handle_t mmap_handle;  // mmap_handle if using esp_partition_mmap else NULL;  // support esp-idf v5.0
+    void * mmap_handle;                       // mmap_handle if using esp_partition_mmap else NULL; 
     int num;                                  // the number of models
     srmodel_data_t **model_data;              // the model data , NULL if spiffs format
 } srmodel_list_t;
