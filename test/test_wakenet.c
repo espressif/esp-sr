@@ -32,25 +32,23 @@ TEST_CASE("wakenet create/destroy API & memory leak", "[wn]")
     gettimeofday(&tv_start, NULL);
     model_iface_data_t *model_data = wakenet->create(model_name, DET_MODE_3CH_95);
     gettimeofday(&tv_end, NULL);
-    int tv_ms=(tv_end.tv_sec-tv_start.tv_sec)*1000+(tv_end.tv_usec-tv_start.tv_usec)/1000;
+    int tv_ms = (tv_end.tv_sec - tv_start.tv_sec) * 1000 + (tv_end.tv_usec - tv_start.tv_usec) / 1000;
     printf("create latency:%d ms\n", tv_ms);
 
     // test model memory concumption
     int create_size = start_size - heap_caps_get_free_size(MALLOC_CAP_8BIT);
     int create_internal_size = start_internal_size - heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
-    printf("Internal RAM: %d, PSRAM:%d\n", create_internal_size, create_size-create_internal_size);
+    printf("Internal RAM: %d, PSRAM:%d\n", create_internal_size, create_size - create_internal_size);
     wakenet->destroy(model_data);
     esp_srmodel_deinit(models);
 
     // test memory leak
     int first_end_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
-    int first_end_internal_size = heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
     int last_end_size = first_end_size;
-    int last_end_internal_size = first_end_internal_size;
     int mem_leak = start_size - last_end_size;
     printf("create&destroy times:%d, memory leak:%d\n", 1, mem_leak);
 
-    for (int i=0; i<6; i++) {
+    for (int i = 0; i < 6; i++) {
         printf("init partition ...\n");
         models = esp_srmodel_init("model");
         model_name = esp_srmodel_filter(models, ESP_WN_PREFIX, NULL);
@@ -72,9 +70,8 @@ TEST_CASE("wakenet create/destroy API & memory leak", "[wn]")
         esp_srmodel_deinit(models);
 
         last_end_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
-        last_end_internal_size = heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
         mem_leak = start_size - last_end_size;
-        printf("create&destroy times:%d, memory leak:%d\n", i+2, mem_leak);
+        printf("create&destroy times:%d, memory leak:%d\n", i + 2, mem_leak);
     }
 
     TEST_ASSERT_EQUAL(true, (mem_leak) < 1000 && last_end_size == first_end_size);
@@ -102,21 +99,23 @@ TEST_CASE("wakenet detect API & cpu loading", "[wn]")
             memset(buffer, 0, audio_chunksize);
         }
         int res = wakenet->detect(model_data, buffer);
-        if (res > 0)
+        if (res > 0) {
             detected = 1;
+        }
 
         chunks++;
-        if (detected == 1)
+        if (detected == 1) {
             break;
+        }
     }
     gettimeofday(&tv_end, NULL);
-    int tv_ms=(tv_end.tv_sec-tv_start.tv_sec)*1000+(tv_end.tv_usec-tv_start.tv_usec)/1000;
-    int run_ms = (chunks)*audio_chunksize/sizeof(int16_t)*1000/frequency;
-    float cpu_loading = tv_ms*100.0/run_ms;
-    printf("Done! Took %d ms to parse %d ms worth of samples in %d iterations. CPU loading(single core):%.1f%%\n", 
+    int tv_ms = (tv_end.tv_sec - tv_start.tv_sec) * 1000 + (tv_end.tv_usec - tv_start.tv_usec) / 1000;
+    int run_ms = (chunks) * audio_chunksize / sizeof(int16_t) * 1000 / frequency;
+    float cpu_loading = tv_ms * 100.0 / run_ms;
+    printf("Done! Took %d ms to parse %d ms worth of samples in %d iterations. CPU loading(single core):%.1f%%\n",
            tv_ms, run_ms, chunks, cpu_loading);
-    
+
     wakenet->destroy(model_data);
     esp_srmodel_deinit(models);
-    TEST_ASSERT_EQUAL(true, (cpu_loading<75 && detected==1));
+    TEST_ASSERT_EQUAL(true, (cpu_loading < 75 && detected == 1));
 }

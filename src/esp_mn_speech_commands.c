@@ -33,7 +33,7 @@ esp_err_t esp_mn_commands_free(void)
 
 int esp_mn_commands_num(void)
 {
-    esp_mn_node_t * t = esp_mn_root;
+    esp_mn_node_t *t = esp_mn_root;
     int i = 0;
     while (t->next) {
         t = t->next;
@@ -46,7 +46,7 @@ esp_err_t esp_mn_commands_clear(void)
 {
     ESP_RETURN_ON_FALSE(NULL != esp_mn_root, ESP_ERR_INVALID_STATE, TAG, "The mn commands is not initialized");
 
-    esp_mn_node_t * t = esp_mn_root->next;
+    esp_mn_node_t *t = esp_mn_root->next;
     while (t) {
         esp_mn_node_t *cur_node = t;
         t = t->next;
@@ -65,7 +65,9 @@ esp_err_t esp_mn_commands_add(int command_id, char *phoneme_string)
     ESP_RETURN_ON_FALSE(ESP_MN_MAX_PHRASE_NUM >= last_node_elem_num, ESP_ERR_INVALID_STATE, TAG, "The number of speech commands phrase must less than 200");
 
     esp_mn_phrase_t *phrase = esp_mn_phrase_alloc(command_id, phoneme_string);
-    if (phrase == NULL) return ESP_ERR_INVALID_STATE;
+    if (phrase == NULL) {
+        return ESP_ERR_INVALID_STATE;
+    }
 
     esp_mn_node_t *new_node = esp_mn_node_alloc(phrase);
     while (temp->next != NULL) {
@@ -96,14 +98,16 @@ esp_err_t esp_mn_commands_modify(char *old_phoneme_string, char *new_phoneme_str
     // replace old phrase with new phrase
     if (flag) {
         esp_mn_phrase_t *phrase = esp_mn_phrase_alloc(command_id, new_phoneme_string);
-        if (phrase == NULL) return ESP_ERR_INVALID_STATE;
+        if (phrase == NULL) {
+            return ESP_ERR_INVALID_STATE;
+        }
         esp_mn_phrase_free(temp->phrase);
         temp->phrase = phrase;
     } else {
         ESP_LOGE(TAG, "No such speech command: \"%s\"", old_phoneme_string);
         return ESP_ERR_INVALID_STATE;
     }
-    
+
     return ESP_OK;
 }
 
@@ -111,7 +115,7 @@ esp_err_t esp_mn_commands_remove(char *phoneme_string)
 {
     esp_mn_node_t *temp = esp_mn_root;
     ESP_RETURN_ON_FALSE(NULL != esp_mn_root, ESP_ERR_INVALID_STATE, TAG, "The mn commands is not initialized");
-    
+
     // search phoneme_string to get node point
     bool flag = false;
     while (temp->next) {
@@ -138,22 +142,24 @@ esp_err_t esp_mn_commands_remove(char *phoneme_string)
 esp_mn_phrase_t *esp_mn_commands_get_from_index(int index)
 {
     ESP_RETURN_ON_FALSE(NULL != esp_mn_root, NULL, TAG, "The mn commands is not initialized");
-    
-    // phrase index also is phrase id, which is the depth from this phrase node to root node 
+
+    // phrase index also is phrase id, which is the depth from this phrase node to root node
     esp_mn_node_t *temp = esp_mn_root;
-    for (int i=-1; i<index; i++) {
-        if (temp->next == NULL) return NULL;
+    for (int i = -1; i < index; i++) {
+        if (temp->next == NULL) {
+            return NULL;
+        }
         temp = temp->next;
     }
-    
+
     return temp->phrase;
 }
 
 esp_mn_phrase_t *esp_mn_commands_get_from_string(const char *phoneme_string)
 {
     ESP_RETURN_ON_FALSE(NULL != esp_mn_root, NULL, TAG, "The mn commands is not initialized");
-    
-    // phrase index also is phrase id, which is the depth from this phrase node to root node 
+
+    // phrase index also is phrase id, which is the depth from this phrase node to root node
     esp_mn_node_t *temp = esp_mn_root;
     while (temp->next) {
         if (strcmp(phoneme_string, temp->next->phrase->phoneme_string) == 0) {
@@ -161,7 +167,7 @@ esp_mn_phrase_t *esp_mn_commands_get_from_string(const char *phoneme_string)
         }
         temp = temp->next;
     }
-    
+
     return NULL;
 }
 
@@ -170,8 +176,9 @@ esp_mn_error_t *esp_mn_commands_update(const esp_mn_iface_t *multinet, model_ifa
     ESP_RETURN_ON_FALSE(NULL != esp_mn_root, NULL, TAG, "The mn commands is not initialize");
     esp_mn_error_t *error = multinet->set_speech_commands(model_data, esp_mn_root);
 
-    if (error->num == 0) 
+    if (error->num == 0) {
         return NULL;
+    }
 
     return error;
 }
@@ -179,7 +186,7 @@ esp_mn_error_t *esp_mn_commands_update(const esp_mn_iface_t *multinet, model_ifa
 void esp_mn_commands_print(void)
 {
     ESP_LOGI(TAG, "---------------------SPEECH COMMANDS---------------------");
-    esp_mn_node_t* temp = esp_mn_root;
+    esp_mn_node_t *temp = esp_mn_root;
     int phrase_id = 0;
     while (temp->next) {
         temp = temp->next;
@@ -198,11 +205,11 @@ void *_esp_mn_calloc_(int n, int size)
 #endif
 }
 
-esp_mn_phrase_t *esp_mn_phrase_alloc(int command_id, char *phoneme_string) 
+esp_mn_phrase_t *esp_mn_phrase_alloc(int command_id, char *phoneme_string)
 {
 
     int phoneme_string_len = strlen(phoneme_string);
-    if (phoneme_string_len > ESP_MN_MAX_PHRASE_LEN || phoneme_string_len<1) {
+    if (phoneme_string_len > ESP_MN_MAX_PHRASE_LEN || phoneme_string_len < 1) {
         ESP_LOGE(TAG, "The Length of \"%s\" > ESP_MN_MAX_PHRASE_LEN", phoneme_string);
         return NULL;
     }
