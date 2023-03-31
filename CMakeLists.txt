@@ -13,8 +13,11 @@ if(IDF_TARGET STREQUAL "esp32")
     set(requires
         json
         spiffs
-        esp_partition
         )
+
+    IF (IDF_VERSION_MAJOR GREATER 4)
+        list(APPEND requires esp_partition)
+    ENDIF (IDF_VERSION_MAJOR GREATER 4)
 
     idf_component_register(SRCS ${srcs}
                        INCLUDE_DIRS ${include_dirs}

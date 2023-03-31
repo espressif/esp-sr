@@ -75,6 +75,8 @@ def copy_multinet_from_sdkconfig(model_path, sdkconfig_path, target_path):
         models.append('mn5q8_cn')
     elif "CONFIG_SR_MN_CN_MULTINET6_QUANT" in models_string:
         models.append('mn6_cn')
+    elif "CONFIG_SR_MN_CN_MULTINET6_AC_QUANT" in models_string:
+        models.append('mn6_cn_ac')
     
     if "CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION_QUANT8" in models_string:
         models.append('mn5q8_en')
@@ -127,6 +129,7 @@ if __name__ == '__main__':
 
     copy_multinet_from_sdkconfig(model_path, sdkconfig_path, target_path)
     copy_wakenet_from_sdkconfig(model_path, sdkconfig_path, target_path)
+    copy_nsnet_from_sdkconfig(model_path, sdkconfig_path, target_path)
     pack_models(target_path, image_file)
     total_size = os.path.getsize(os.path.join(target_path, image_file))
     recommended_size = int(math.ceil(total_size/1024))
