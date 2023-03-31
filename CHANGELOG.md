@@ -4,8 +4,9 @@
 - Available storage is less than the remaining flash space on IDF v5.0.   
 If you can not map model partition successfully, please check the left free storage by `spi_flash_mmap_get_free_pages(ESP_PARTITION_MMAP_DATA)`
 
-## Unreleased
+## 1.3.0 
 - Update the partition APIs to keep compatible with both IDF v4.4 and IDF v5.0
+- Add a new Chinese MultiNet6 mdoel for air conditioner controller 
 
 ## 1.2.1
 - Fix bugs in model loader

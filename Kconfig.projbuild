@@ -147,7 +147,11 @@ choice CHINESE_SR_MN_MODEL_SEL
         depends on IDF_TARGET_ESP32S3
     
     config SR_MN_CN_MULTINET6_QUANT
-        bool "chinese recognition (mn6_cn)"
+        bool "general chinese recognition (mn6_cn)"
+        depends on IDF_TARGET_ESP32S3
+    
+    config SR_MN_CN_MULTINET6_AC_QUANT
+        bool "chinese recognition for air conditioner controller (mn6_cn_ac)"
         depends on IDF_TARGET_ESP32S3
 endchoice
 
@@ -166,7 +170,7 @@ choice ENGLISH_SR_MN_MODEL_SEL
         depends on IDF_TARGET_ESP32S3
     
     config SR_MN_EN_MULTINET6_QUANT
-        bool "english recognition (mn6_en)"
+        bool "general english recognition (mn6_en)"
         depends on IDF_TARGET_ESP32S3
 
 endchoice
