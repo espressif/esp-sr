@@ -118,25 +118,41 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
                     "Please add a line(Name=model, Size>recommended size in log) to the partition file.")
     endif()
 elseif(${IDF_TARGET} STREQUAL "esp32s2")
+    set(requires
+    spiffs
+    )
+
+    IF (IDF_VERSION_MAJOR GREATER 4)
+        list(APPEND requires esp_partition)
+    ENDIF (IDF_VERSION_MAJOR GREATER 4)
+
     idf_component_register(SRCS .
                        INCLUDE_DIRS  esp-tts/esp_tts_chinese/include
-                       REQUIRES esp_partition
+                       REQUIRES ${requires}
                        PRIV_REQUIRES spi_flash)
 
     target_link_libraries(${COMPONENT_TARGET} INTERFACE "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese/esp32s2")
     target_link_libraries(${COMPONENT_TARGET} INTERFACE "-Wl,--start-group"
         esp_tts_chinese
         voice_set_xiaole
-         "-Wl,--end-group")
+        "-Wl,--end-group")
 elseif(${IDF_TARGET} STREQUAL "esp32c3")
+    set(requires
+    spiffs
+    )
+
+    IF (IDF_VERSION_MAJOR GREATER 4)
+        list(APPEND requires esp_partition)
+    ENDIF (IDF_VERSION_MAJOR GREATER 4)
+
     idf_component_register(SRCS .
-                       INCLUDE_DIRS  esp-tts/esp_tts_chinese/include
-                       REQUIRES esp_partition
-                       PRIV_REQUIRES spi_flash)
+                   INCLUDE_DIRS  esp-tts/esp_tts_chinese/include
+                   REQUIRES ${requires}
+                   PRIV_REQUIRES spi_flash)
                        
     target_link_libraries(${COMPONENT_TARGET} INTERFACE "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese/esp32c3")
     target_link_libraries(${COMPONENT_TARGET} INTERFACE "-Wl,--start-group"
         esp_tts_chinese
         voice_set_xiaole
-         "-Wl,--end-group")
+        "-Wl,--end-group")
 endif()
