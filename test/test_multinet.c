@@ -115,3 +115,72 @@ TEST_CASE("multinet detect/get_results API & cpu loading", "[mn]")
     esp_srmodel_deinit(models);
     TEST_ASSERT_EQUAL(true, (cpu_loading < 75 && tv_ms > 0));
 }
+
+TEST_CASE("multinet switch loader mode", "[mn]")
+{
+    vTaskDelay(500 / portTICK_PERIOD_MS);
+    srmodel_list_t *models = esp_srmodel_init("model");
+    char *model_name = esp_srmodel_filter(models, "mn6", NULL);
+    if (model_name != NULL) {
+        esp_mn_iface_t *multinet = esp_mn_handle_from_name(model_name);
+
+        int start_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
+        int start_internal_size = heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
+        struct timeval tv_start, tv_end;
+        gettimeofday(&tv_start, NULL);
+
+        model_iface_data_t *model_data = multinet->create(model_name, 6000);
+        int create_size = start_size - heap_caps_get_free_size(MALLOC_CAP_8BIT);
+        int create_internal_size = start_internal_size - heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
+        int first_create_size = create_size;
+        printf("Internal RAM: %d, PSRAM:%d\n\n", create_internal_size, create_size-create_internal_size);
+
+        model_data = multinet->switch_loader_mode(model_data, ESP_MN_LOAD_FROM_PSRAM_FLASH);
+        create_size = start_size - heap_caps_get_free_size(MALLOC_CAP_8BIT);
+        create_internal_size = start_internal_size - heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
+        printf("Internal RAM: %d, PSRAM:%d\n\n", create_internal_size, create_size-create_internal_size);
+
+        model_data = multinet->switch_loader_mode(model_data, ESP_MN_LOAD_FROM_PSRAM);
+        create_size = start_size - heap_caps_get_free_size(MALLOC_CAP_8BIT);
+        create_internal_size = start_internal_size - heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
+        printf("Internal RAM: %d, PSRAM:%d\n\n", create_internal_size, create_size-create_internal_size);
+
+        model_data = multinet->switch_loader_mode(model_data, ESP_MN_LOAD_FROM_PSRAM);
+        model_data = multinet->switch_loader_mode(model_data, ESP_MN_LOAD_FROM_PSRAM_FLASH);
+        create_size = start_size - heap_caps_get_free_size(MALLOC_CAP_8BIT);
+        create_internal_size = start_internal_size - heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
+        printf("Internal RAM: %d, PSRAM:%d\n\n", create_internal_size, create_size-create_internal_size);
+
+        model_data = multinet->switch_loader_mode(model_data, ESP_MN_LOAD_FROM_FLASH);
+        create_size = start_size - heap_caps_get_free_size(MALLOC_CAP_8BIT);
+        create_internal_size = start_internal_size - heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
+        printf("Internal RAM: %d, PSRAM:%d\n\n", create_internal_size, create_size-create_internal_size);
+
+        model_data = multinet->switch_loader_mode(model_data, ESP_MN_LOAD_FROM_FLASH);
+        model_data = multinet->switch_loader_mode(model_data, ESP_MN_LOAD_FROM_PSRAM);
+        model_data = multinet->switch_loader_mode(model_data, ESP_MN_LOAD_FROM_FLASH);
+        model_data = multinet->switch_loader_mode(model_data, ESP_MN_LOAD_FROM_PSRAM_FLASH);
+        create_size = start_size - heap_caps_get_free_size(MALLOC_CAP_8BIT);
+        create_internal_size = start_internal_size - heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
+        printf("Internal RAM: %d, PSRAM:%d\n\n", create_internal_size, create_size-create_internal_size);
+
+
+        gettimeofday(&tv_end, NULL);
+        int tv_ms=(tv_end.tv_sec-tv_start.tv_sec)*1000+(tv_end.tv_usec-tv_start.tv_usec)/1000;
+        printf("create latency:%d ms\n", tv_ms);
+        multinet->destroy(model_data);
+
+        int first_end_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
+        int first_end_internal_size = heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
+        int last_end_size = first_end_size;
+        int last_end_internal_size = first_end_internal_size;
+        int mem_leak = start_size - last_end_size;
+        printf("create&destroy times:%d, memory leak:%d\n", 1, mem_leak);
+        esp_srmodel_deinit(models);
+        TEST_ASSERT_EQUAL(true, (mem_leak) < 1000 && first_create_size == create_size);
+    } else {
+        printf("Just support multinet6 and the later versions\n");
+        TEST_ASSERT_EQUAL(true, 1);
+    }
+
+}

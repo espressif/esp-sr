@@ -17,6 +17,15 @@ typedef enum {
     ESP_MN_STATE_TIMEOUT = 2,       // time out
 } esp_mn_state_t;
 
+//Set multinet loading mode
+//The memory comsumption is decreased with increasing mode, 
+//As a consequence also the CPU loading rate goes up
+typedef enum {
+	ESP_MN_LOAD_FROM_PSRAM = 0,          // Load all weights from PSRAM. Fastest computation with Maximum memory consumption
+	ESP_MN_LOAD_FROM_PSRAM_FLASH = 1,    // Load some weights from PSRAM and laod the rest from FLASH (default)
+    ESP_MN_LOAD_FROM_FLASH = 2,          // Load more weights from FLASH. Minimum memory consumption with slowest computation
+} esp_mn_loader_mode_t;
+
 typedef enum {
 	ESP_MN_GREEDY_SEARCH = 0,          // greedy search
 	ESP_MN_BEAM_SEARCH = 1,            // beam search
@@ -65,6 +74,18 @@ typedef struct _mn_node_ {
  * @returns Handle to the model data.
  */
 typedef model_iface_data_t* (*esp_mn_iface_op_create_t)(const char *model_name, int duration);
+
+/**
+ * @brief Switch multinet mode to change memory consumption and CPU loading
+ * 
+ * @warning Just Support multinet6 or later versions
+ *
+ * @param model The model object to query
+ * @param mode  The multinet loader mode
+ *
+ * @returns Handle to the model data.
+ */
+typedef model_iface_data_t* (*esp_mn_iface_op_switch_loader_mode_t)(model_iface_data_t *model, esp_mn_loader_mode_t mode);
 
 /**
  * @brief Callback function type to fetch the amount of samples that need to be passed to the detect function
@@ -173,4 +194,5 @@ typedef struct {
     esp_mn_iface_op_open_log_t open_log;
     esp_mn_iface_op_clean_t clean;
     esp_wn_iface_op_set_speech_commands set_speech_commands;
+    esp_mn_iface_op_switch_loader_mode_t switch_loader_mode;
 } esp_mn_iface_t;
