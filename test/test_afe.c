@@ -25,13 +25,15 @@ TEST_CASE("audio_front_end create/destroy API & memory leak", "[afe]")
     int start_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
     int start_internal_size = heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
     srmodel_list_t *models = esp_srmodel_init("model");
-    char *model_name = esp_srmodel_filter(models, ESP_WN_PREFIX, NULL);
+    char *model_name = esp_srmodel_filter(models, ESP_WN_PREFIX, "hiesp");
+    char *model_name2 = esp_srmodel_filter(models, ESP_WN_PREFIX, "hilexin");
     
     esp_afe_sr_iface_t *afe_handle = (esp_afe_sr_iface_t *)&ESP_AFE_SR_HANDLE;
     afe_config_t afe_config = AFE_CONFIG_DEFAULT();
     afe_config.memory_alloc_mode = AFE_MEMORY_ALLOC_MORE_PSRAM;
     afe_config.wakenet_init = true;
     afe_config.wakenet_model_name = model_name;
+    afe_config.wakenet_model_name2 = model_name2;
     afe_config.voice_communication_init = false;
     
 

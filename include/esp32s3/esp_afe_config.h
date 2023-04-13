@@ -65,6 +65,7 @@ typedef struct {
     int voice_communication_agc_gain;       // AGC gain(dB) for voice communication
     vad_mode_t vad_mode;                    // The value can be: VAD_MODE_0, VAD_MODE_1, VAD_MODE_2, VAD_MODE_3, VAD_MODE_4
     char *wakenet_model_name;               // The model name of wakenet
+    char *wakenet_model_name2;              // The second model name of wakenet
     det_mode_t wakenet_mode;
     afe_sr_mode_t afe_mode;
     int afe_perferred_core;
@@ -114,6 +115,7 @@ typedef struct {
     .voice_communication_agc_gain = 15, \
     .vad_mode = VAD_MODE_3, \
     .wakenet_model_name = NULL, \
+    .wakenet_model_name2 = NULL, \
     .wakenet_mode = DET_MODE_2CH_90, \
     .afe_mode = SR_MODE_LOW_COST, \
     .afe_perferred_core = 0, \
