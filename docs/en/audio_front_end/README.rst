@@ -295,9 +295,9 @@ The usage of AEC is similar to that of WakeNet. Users can disable or enable AEC 
         -  :cpp:enumerator:`AFE_MN_PEAK_NO_AGC` : feed original audio signals to MultiNet.
 
     -  :cpp:member:`pcm_config` : configures the audio signals fed through :cpp:func:`feed` :
-       * :cpp:member:`total_ch_num` : total number of channels
-       * :cpp:member:`mic_num` : number of mic channels
-       * :cpp:member:`ref_num` : number of REF channels
+        - :cpp:member:`total_ch_num` : total number of channels
+        - :cpp:member:`mic_num` : number of mic channels
+        - :cpp:member:`ref_num` : number of REF channels
 
         There are some limitation when configuring these parameters. For details, see Section :ref:`input-audio-1` .
 
@@ -319,7 +319,7 @@ The usage of AEC is similar to that of WakeNet. Users can disable or enable AEC 
     Feed Audio Data
     ^^^^^^^^^^^^^^^
 
-    After initializing AFE, users need to input audio data into AFE by :cpp:func: `feed` function for processing. The format of input audio data can be found in Section :ref:`input-audio-1` .
+    After initializing AFE, users need to input audio data into AFE by :cpp:func:`feed` function for processing. The format of input audio data can be found in Section :ref:`input-audio-1` .
 
     ::
 
