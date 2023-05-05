@@ -32,7 +32,9 @@ static srmodel_list_t *srmodel_list_alloc(void)
     models->model_data = NULL;
     models->model_name = NULL;
     models->num = 0;
+#ifdef ESP_PLATFORM
     models->partition = NULL;
+#endif
     models->mmap_handle = NULL;
 
     return models;
@@ -431,7 +433,9 @@ srmodel_list_t *srmodel_sdcard_init(const char *base_path)
             return models;
         } else {
             models->num = model_num;
+#ifdef ESP_PLATFORM
             models->partition = NULL;
+#endif
             models->model_name = malloc(models->num * sizeof(char *));
             for (int i = 0; i < models->num; i++) {
                 models->model_name[i] = (char *) calloc(MODEL_NAME_MAX_LENGTH, sizeof(char));
