@@ -6,8 +6,9 @@ If you can not map model partition successfully, please check the left free stor
 
 ## unreleased
 - Bugfix: remove all cxx11:string
-- Bugfix: remove esp-partition require for esp32s2 & esp32c3 on idf v4.4
-- Add more loader option for multinet to blance CPU and memory consumption
+- Bugfix: remove esp-partition for esp32s2 & esp32c3 on idf v4.4
+- Add more loader option for multinet to blance CPU and memory consumption (doing)
+- Update multinet API to add/modify/check new commands in the code
 
 ## 1.3.0 
 - Update the partition APIs to keep compatible with both IDF v4.4 and IDF v5.0

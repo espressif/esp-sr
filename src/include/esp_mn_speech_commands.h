@@ -109,10 +109,7 @@ esp_mn_phrase_t *esp_mn_commands_get_from_string(const char *string);
  * 
  * @Warning: Must be used after [add/remove/modify/clear] function, 
  *           otherwise the language model of multinet can not be updated.
- *
- * @param multinet            The multinet handle
- * @param model_data          The model object to query
- *
+ * 
  * @return
  *     - NULL                 Success
  *     - others               The list of error phrase which can not be parsed by multinet.

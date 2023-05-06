@@ -188,7 +188,12 @@ typedef esp_mn_error_t* (*esp_wn_iface_op_set_speech_commands)(model_iface_data_
 */
 typedef void (*esp_mn_iface_op_print_active_speech_commands)(model_iface_data_t *model_data);
 
-
+/**
+ * @brief Check if input string can be tokenized
+ * 
+ * @param model_data     The model object to query
+ * @param str            The input string
+*/
 typedef int (*esp_mn_iface_op_check_speech_command)(model_iface_data_t *model_data, char *str);
 
 typedef struct {
