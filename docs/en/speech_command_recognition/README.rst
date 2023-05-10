@@ -99,7 +99,7 @@ MultiNet5 use phonemes for English speech commands. For simplicity, we use chara
             */
             esp_err_t esp_mn_commands_update_from_sdkconfig(esp_mn_iface_t *multinet, const model_iface_data_t *model_data);
 
-Customize speech commands via API calls
+Customize Speech Commands Via API calls
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Alternatively, speech commands can be modified via API calls, this method works for both MultiNet5 and MultiNet6.
 
@@ -123,7 +123,7 @@ Alternatively, speech commands can be modified via API calls, this method works 
         esp_mn_error_t *esp_mn_commands_update();
 
     .. note::
-        The modifications will not be applied, thus not printed out, util you call ``esp_mn_commands_update()``.
+        The modifications will not be applied, thus not printed out, until you call ``esp_mn_commands_update()``.
 
 - Apply new changes, the add/remove/modify/clear actions will not take effect util this function is called.
 

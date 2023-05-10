@@ -110,9 +110,9 @@ MultiNet5 定义方法：
         esp_err_t esp_mn_commands_update_from_sdkconfig(esp_mn_iface_t *multinet, const model_iface_data_t *model_data);
 
 
-通过调用API修改
-~~~~~~~~~~~~~~~
-指令还可以通过调用API修改，这种方法对于 MultiNet5 和 MultiNet6 都适用。
+通过调用 API 修改
+~~~~~~~~~~~~~~~~~
+指令还可以通过调用 API 修改，这种方法对于 MultiNet5 和 MultiNet6 都适用。
 
 - 打印现有指令。
 
@@ -200,7 +200,7 @@ MultiNet5 定义方法：
         */
         esp_err_t esp_mn_commands_modify(char *old_string, char *new_string);
 
-- 清空所有指令.
+- 清空所有指令。
 
     ::
 
