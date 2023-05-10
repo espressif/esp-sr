@@ -4,9 +4,13 @@
 #include "esp_log.h"
 #include "esp_heap_caps.h"
 #include "esp_mn_speech_commands.h"
+#include "esp_mn_iface.h"
 
 static char *TAG = "MN_COMMAND";
 static esp_mn_node_t *esp_mn_root = NULL;
+static esp_mn_iface_t *esp_mn_model_handle = NULL;
+static model_iface_data_t *esp_mn_model_data = NULL;
+
 
 #define ESP_RETURN_ON_FALSE(a, err_code, log_tag, format, ...) do {                             \
         if (!(a)) {                                                                             \
@@ -15,10 +19,14 @@ static esp_mn_node_t *esp_mn_root = NULL;
         }                                                                                       \
     } while(0)
 
-esp_err_t esp_mn_commands_alloc(void)
+esp_err_t esp_mn_commands_alloc(esp_mn_iface_t *multinet, model_iface_data_t *model_data)
 {
-    ESP_RETURN_ON_FALSE(NULL == esp_mn_root, ESP_ERR_INVALID_STATE, TAG, "The mn commands already initialized");
+    if (esp_mn_root != NULL) {
+        esp_mn_commands_free();
+    }
     esp_mn_root = esp_mn_node_alloc(NULL);
+    esp_mn_model_handle = multinet;
+    esp_mn_model_data = model_data;
     return ESP_OK;
 }
 
@@ -27,6 +35,8 @@ esp_err_t esp_mn_commands_free(void)
     esp_mn_commands_clear();
     esp_mn_node_free(esp_mn_root);
     esp_mn_root = NULL;
+    esp_mn_model_handle = NULL;
+    esp_mn_model_data = NULL;
 
     return ESP_OK;
 }
@@ -57,14 +67,53 @@ esp_err_t esp_mn_commands_clear(void)
     return ESP_OK;
 }
 
-esp_err_t esp_mn_commands_add(int command_id, char *phoneme_string)
-{
+esp_mn_node_t *esp_mn_command_search(char *string) {
+    int command_id;
     esp_mn_node_t *temp = esp_mn_root;
     ESP_RETURN_ON_FALSE(NULL != esp_mn_root, ESP_ERR_INVALID_STATE, TAG, "The mn commands is not initialized");
-    int last_node_elem_num = esp_mn_commands_num();
-    ESP_RETURN_ON_FALSE(ESP_MN_MAX_PHRASE_NUM >= last_node_elem_num, ESP_ERR_INVALID_STATE, TAG, "The number of speech commands phrase must less than 200");
 
-    esp_mn_phrase_t *phrase = esp_mn_phrase_alloc(command_id, phoneme_string);
+    while (temp->next) {
+        temp = temp->next;
+        if (strcmp(string, temp->phrase->string) == 0) {
+            return temp;
+        }
+    }
+    return NULL;
+}
+
+esp_err_t esp_mn_commands_add(int command_id, char *string)
+{
+    if (NULL == esp_mn_root || esp_mn_model_handle == NULL || esp_mn_model_data == NULL) {
+        ESP_LOGE(TAG, "Please create mn model first.\n");
+        return ESP_ERR_INVALID_STATE;
+    }
+    esp_mn_node_t *temp = esp_mn_root;
+    int last_node_elem_num = esp_mn_commands_num();
+    ESP_RETURN_ON_FALSE(ESP_MN_MAX_PHRASE_NUM >= last_node_elem_num, ESP_ERR_INVALID_STATE, TAG, "The number of speech commands exceed ESP_MN_MAX_PHRASE_NUM");
+
+    if (esp_mn_model_handle->check_speech_command(esp_mn_model_data, string) == 0) {
+        // error message is printed inside check_speech_command
+        ESP_LOGE(TAG, "invalid command, please check format, %s.\n", string);
+        return ESP_ERR_INVALID_STATE;
+    }
+
+    temp = esp_mn_command_search(string);
+
+    if (temp != NULL) {
+        // command already exists
+        if (command_id != temp->phrase->command_id) {
+            // change command id
+            temp->phrase->command_id = command_id;
+        } else {
+            // it's exactly the same, do nothing
+            ESP_LOGI(TAG, "command %d: (%s) already exists.", command_id, string);
+        }
+        return ESP_OK;
+    }
+
+    temp = esp_mn_root;
+
+    esp_mn_phrase_t *phrase = esp_mn_phrase_alloc(command_id, string);
     if (phrase == NULL) {
         return ESP_ERR_INVALID_STATE;
     }
@@ -78,48 +127,43 @@ esp_err_t esp_mn_commands_add(int command_id, char *phoneme_string)
     return ESP_OK;
 }
 
-esp_err_t esp_mn_commands_modify(char *old_phoneme_string, char *new_phoneme_string)
+esp_err_t esp_mn_commands_modify(char *old_string, char *new_string)
 {
+    if (esp_mn_model_handle->check_speech_command(esp_mn_model_data, new_string) == 0) {
+        // error message is printed inside check_speech_command
+        return ESP_ERR_INVALID_STATE;
+    }
     esp_mn_node_t *temp = esp_mn_root;
     ESP_RETURN_ON_FALSE(NULL != esp_mn_root, ESP_ERR_INVALID_STATE, TAG, "The mn commands is not initialized");
 
-    // search old phoneme_string to get command id
-    bool flag = false;
-    int command_id;
-    while (temp->next) {
-        temp = temp->next;
-        if (strcmp(old_phoneme_string, temp->phrase->phoneme_string) == 0) {
-            command_id = temp->phrase->command_id;
-            flag = true;
-            break;
-        }
-    }
+    // search old string to get command id
+    temp = esp_mn_command_search(old_string);
 
     // replace old phrase with new phrase
-    if (flag) {
-        esp_mn_phrase_t *phrase = esp_mn_phrase_alloc(command_id, new_phoneme_string);
+    if (temp != NULL) {
+        esp_mn_phrase_t *phrase = esp_mn_phrase_alloc(temp->phrase->command_id, new_string);
         if (phrase == NULL) {
             return ESP_ERR_INVALID_STATE;
         }
         esp_mn_phrase_free(temp->phrase);
         temp->phrase = phrase;
     } else {
-        ESP_LOGE(TAG, "No such speech command: \"%s\"", old_phoneme_string);
+        ESP_LOGE(TAG, "No such speech command: \"%s\"", old_string);
         return ESP_ERR_INVALID_STATE;
     }
 
     return ESP_OK;
 }
 
-esp_err_t esp_mn_commands_remove(char *phoneme_string)
+esp_err_t esp_mn_commands_remove(char *string)
 {
     esp_mn_node_t *temp = esp_mn_root;
     ESP_RETURN_ON_FALSE(NULL != esp_mn_root, ESP_ERR_INVALID_STATE, TAG, "The mn commands is not initialized");
 
-    // search phoneme_string to get node point
+    // search string to get node point
     bool flag = false;
     while (temp->next) {
-        if (strcmp(phoneme_string, temp->next->phrase->phoneme_string) == 0) {
+        if (strcmp(string, temp->next->phrase->string) == 0) {
             flag = true;
             break;
         }
@@ -132,7 +176,7 @@ esp_err_t esp_mn_commands_remove(char *phoneme_string)
         esp_mn_node_free(rm_node);
         return ESP_OK;
     } else {
-        ESP_LOGE(TAG, "No such speech command: \"%s\"", phoneme_string);
+        ESP_LOGE(TAG, "No such speech command: \"%s\"", string);
         return ESP_ERR_INVALID_STATE;
     }
 
@@ -155,14 +199,14 @@ esp_mn_phrase_t *esp_mn_commands_get_from_index(int index)
     return temp->phrase;
 }
 
-esp_mn_phrase_t *esp_mn_commands_get_from_string(const char *phoneme_string)
+esp_mn_phrase_t *esp_mn_commands_get_from_string(const char *string)
 {
     ESP_RETURN_ON_FALSE(NULL != esp_mn_root, NULL, TAG, "The mn commands is not initialized");
 
     // phrase index also is phrase id, which is the depth from this phrase node to root node
     esp_mn_node_t *temp = esp_mn_root;
     while (temp->next) {
-        if (strcmp(phoneme_string, temp->next->phrase->phoneme_string) == 0) {
+        if (strcmp(string, temp->next->phrase->string) == 0) {
             return temp->next->phrase;
         }
         temp = temp->next;
@@ -171,10 +215,10 @@ esp_mn_phrase_t *esp_mn_commands_get_from_string(const char *phoneme_string)
     return NULL;
 }
 
-esp_mn_error_t *esp_mn_commands_update(const esp_mn_iface_t *multinet, model_iface_data_t *model_data)
+esp_mn_error_t *esp_mn_commands_update()
 {
     ESP_RETURN_ON_FALSE(NULL != esp_mn_root, NULL, TAG, "The mn commands is not initialize");
-    esp_mn_error_t *error = multinet->set_speech_commands(model_data, esp_mn_root);
+    esp_mn_error_t *error = esp_mn_model_handle->set_speech_commands(esp_mn_model_data, esp_mn_root);
 
     if (error->num == 0) {
         return NULL;
@@ -190,7 +234,7 @@ void esp_mn_commands_print(void)
     int phrase_id = 0;
     while (temp->next) {
         temp = temp->next;
-        ESP_LOGI(TAG, "Command ID%d, phrase ID%d: %s", temp->phrase->command_id, phrase_id, temp->phrase->phoneme_string);
+        ESP_LOGI(TAG, "Command ID%d, phrase ID%d: %s", temp->phrase->command_id, phrase_id, temp->phrase->string);
         phrase_id++;
     }
     ESP_LOGI(TAG, "---------------------------------------------------------\n");
@@ -205,21 +249,21 @@ void *_esp_mn_calloc_(int n, int size)
 #endif
 }
 
-esp_mn_phrase_t *esp_mn_phrase_alloc(int command_id, char *phoneme_string)
+esp_mn_phrase_t *esp_mn_phrase_alloc(int command_id, char *string)
 {
 
-    int phoneme_string_len = strlen(phoneme_string);
-    if (phoneme_string_len > ESP_MN_MAX_PHRASE_LEN || phoneme_string_len < 1) {
-        ESP_LOGE(TAG, "The Length of \"%s\" > ESP_MN_MAX_PHRASE_LEN", phoneme_string);
-        return NULL;
-    }
+    int string_len = strlen(string);
+    ESP_RETURN_ON_FALSE( string_len > 0, NULL, TAG, "input string is empty");
 
     esp_mn_phrase_t *phrase = _esp_mn_calloc_(1, sizeof(esp_mn_phrase_t));
     ESP_RETURN_ON_FALSE(NULL != phrase, NULL, TAG, "Fail to alloc mn phrase");
+
+    phrase->string = malloc((string_len+1) * sizeof(char));
+    memcpy(phrase->string, string, string_len);
+    phrase->string[string_len] = '\0';
     phrase->command_id = command_id;
     phrase->threshold = 0;
     phrase->wave = NULL;
-    memcpy(phrase->phoneme_string, phoneme_string, phoneme_string_len);
 
     return phrase;
 }
@@ -227,6 +271,12 @@ esp_mn_phrase_t *esp_mn_phrase_alloc(int command_id, char *phoneme_string)
 void esp_mn_phrase_free(esp_mn_phrase_t *phrase)
 {
     if (phrase != NULL) {
+        if (phrase->wave != NULL) {
+            free(phrase->wave);
+        }
+        if (phrase->string != NULL) {
+            free(phrase->string);
+        }
         free(phrase);
     }
 }

@@ -110,6 +110,109 @@ MultiNet5 定义方法：
         esp_err_t esp_mn_commands_update_from_sdkconfig(esp_mn_iface_t *multinet, const model_iface_data_t *model_data);
 
 
+通过调用 API 修改
+~~~~~~~~~~~~~~~~~
+指令还可以通过调用 API 修改，这种方法对于 MultiNet5 和 MultiNet6 都适用。
+
+- 打印现有指令。
+
+    ::
+
+        /**
+        * @brief Update the speech commands of MultiNet
+        * 
+        * @Warning: Must be used after [add/remove/modify/clear] function, 
+        *           otherwise the language model of multinet can not be updated.
+        *
+        * @param multinet            The multinet handle
+        * @param model_data          The model object to query
+        *
+        * @return
+        *     - NULL                 Success
+        *     - others               The list of error phrase which can not be parsed by multinet.
+        */
+        esp_mn_error_t *esp_mn_commands_update();
+
+    .. note::
+        所有修改操作在调用 ``esp_mn_commands_update()`` 后才会被打印出来。
+
+- 应用新的修改操作，所有添加、移除、修改及清空操作在调用后才会被应用。
+
+    ::
+
+        /**
+        * @brief Update the speech commands of MultiNet
+        * 
+        * @Warning: Must be used after [add/remove/modify/clear] function, 
+        *           otherwise the language model of multinet can not be updated.
+        *
+        * @return
+        *     - NULL                 Success
+        *     - others               The list of error phrase which can not be parsed by multinet.
+        */
+        esp_mn_error_t *esp_mn_commands_update();
+
+
+- 添加一条新指令，如果指令格式不正确则返回 ``ESP_ERR_INVALID_STATE``。
+
+    ::
+
+        /**
+        * @brief Add one speech commands with command string and command ID
+        *
+        * @param command_id      The command ID
+        * @param string  The command string of the speech commands
+        *
+        * @return
+        *     - ESP_OK                  Success
+        *     - ESP_ERR_INVALID_STATE   Fail
+        */
+        esp_err_t esp_mn_commands_add(int command_id, char *string);
+
+- 移除一条指令，如果该指令不存在则返回 ``ESP_ERR_INVALID_STATE``。
+
+    ::
+
+        /**
+        * @brief Remove one speech commands by command string
+        *
+        * @param string  The command string of the speech commands
+        *
+        * @return
+        *     - ESP_OK                  Success
+        *     - ESP_ERR_INVALID_STATE   Fail
+        */
+        esp_err_t esp_mn_commands_remove(char *string);
+
+- 修改一条指令，如果该指令不存在则返回 ``ESP_ERR_INVALID_STATE``。
+
+    ::
+
+        /**
+        * @brief Modify one speech commands with new command string
+        *
+        * @param old_string  The old command string of the speech commands
+        * @param new_string  The new command string of the speech commands
+        *
+        * @return
+        *     - ESP_OK                  Success
+        *     - ESP_ERR_INVALID_STATE   Fail
+        */
+        esp_err_t esp_mn_commands_modify(char *old_string, char *new_string);
+
+- 清空所有指令。
+
+    ::
+
+        /**
+        * @brief Clear all speech commands in linked list
+        *
+        * @return
+        *     - ESP_OK                  Success
+        *     - ESP_ERR_INVALID_STATE   Fail
+        */
+        esp_err_t esp_mn_commands_clear(void);
+        
 MultiNet 的使用
 ----------------
 

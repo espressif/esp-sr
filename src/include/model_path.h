@@ -16,7 +16,9 @@ typedef struct {
 
 typedef struct {
     char **model_name;                        // the name of models, like "wn9_hilexin"(wakenet9, hilexin), "mn5_en"(multinet5, english)
+#ifdef ESP_PLATFORM
     esp_partition_t *partition;               // partition label used to save the files of model
+#endif
     void * mmap_handle;                       // mmap_handle if using esp_partition_mmap else NULL; 
     int num;                                  // the number of models
     srmodel_data_t **model_data;              // the model data , NULL if spiffs format
@@ -75,7 +77,9 @@ int esp_srmodel_exists(srmodel_list_t *models, char *model_name);
  *
  * @return all avaliable models in spiffs,save as srmodel_list_t.
  */
+#ifdef ESP_PLATFORM
 srmodel_list_t *srmodel_spiffs_init(const esp_partition_t *part);
+#endif
 
 /**
  * @brief unregister SPIFFS filesystem and free srmodel_list_t.

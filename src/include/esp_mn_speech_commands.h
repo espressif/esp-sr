@@ -29,7 +29,7 @@ It is easy to add one speech command into linked list and remove one speech comm
  *     - ESP_ERR_NO_MEM          No memory
  *     - ESP_ERR_INVALID_STATE   The Speech Commands link has been initialized
  */
-esp_err_t esp_mn_commands_alloc(void);
+esp_err_t esp_mn_commands_alloc(esp_mn_iface_t *multinet, model_iface_data_t *model_data);
 
 /**
  * @brief Clear the speech commands linked list and free root node.
@@ -41,39 +41,39 @@ esp_err_t esp_mn_commands_alloc(void);
 esp_err_t esp_mn_commands_free(void);
 
 /**
- * @brief Add one speech commands with phoneme string and command ID
+ * @brief Add one speech commands with command string and command ID
  *
  * @param command_id      The command ID
- * @param phoneme_string  The phoneme string of the speech commands
+ * @param string  The command string of the speech commands
  *
  * @return
  *     - ESP_OK                  Success
  *     - ESP_ERR_INVALID_STATE   Fail
  */
-esp_err_t esp_mn_commands_add(int command_id, char *phoneme_string);
+esp_err_t esp_mn_commands_add(int command_id, char *string);
 
 /**
- * @brief Modify one speech commands with new phoneme string
+ * @brief Modify one speech commands with new command string
  *
- * @param old_phoneme_string  The old phoneme string of the speech commands
- * @param new_phoneme_string  The new phoneme string of the speech commands
+ * @param old_string  The old command string of the speech commands
+ * @param new_string  The new command string of the speech commands
  *
  * @return
  *     - ESP_OK                  Success
  *     - ESP_ERR_INVALID_STATE   Fail
  */
-esp_err_t esp_mn_commands_modify(char *old_phoneme_string, char *new_phoneme_string);
+esp_err_t esp_mn_commands_modify(char *old_string, char *new_string);
 
 /**
- * @brief Remove one speech commands by phoneme string
+ * @brief Remove one speech commands by command string
  *
- * @param phoneme_string  The phoneme string of the speech commands
+ * @param string  The command string of the speech commands
  *
  * @return
  *     - ESP_OK                  Success
  *     - ESP_ERR_INVALID_STATE   Fail
  */
-esp_err_t esp_mn_commands_remove(char *phoneme_string);
+esp_err_t esp_mn_commands_remove(char *string);
 
 /**
  * @brief Clear all speech commands in linked list
@@ -96,40 +96,32 @@ esp_err_t esp_mn_commands_clear(void);
 esp_mn_phrase_t *esp_mn_commands_get_from_index(int index);
 
 /**
- * @brief Get phrase from phoneme string
+ * @brief Get phrase from command string
  *
  * @return
  *     - esp_mn_phrase_t*        Success
  *     - NULL                    Fail
  */
-esp_mn_phrase_t *esp_mn_commands_get_from_string(const char *phoneme_string);
+esp_mn_phrase_t *esp_mn_commands_get_from_string(const char *string);
 
 /**
  * @brief Update the speech commands of MultiNet
  * 
  * @Warning: Must be used after [add/remove/modify/clear] function, 
  *           otherwise the language model of multinet can not be updated.
- *
- * @param multinet            The multinet handle
- * @param model_data          The model object to query
- *
+ * 
  * @return
  *     - NULL                 Success
  *     - others               The list of error phrase which can not be parsed by multinet.
  */
-esp_mn_error_t *esp_mn_commands_update(const esp_mn_iface_t *multinet, model_iface_data_t *model_data);
+esp_mn_error_t *esp_mn_commands_update();
 
 /**
- * @brief Print the MultiNet Speech Commands.
- */
-void esp_mn_print_commands(void);
-
-/**
- * @brief Initialze the esp_mn_phrase_t struct by command id and phoneme string .
+ * @brief Initialze the esp_mn_phrase_t struct by command id and command string .
  *
  * @return the pointer of esp_mn_phrase_t
  */
-esp_mn_phrase_t *esp_mn_phrase_alloc(int command_id, char *phoneme_string);
+esp_mn_phrase_t *esp_mn_phrase_alloc(int command_id, char *string);
 
 /**
  * @brief Free esp_mn_phrase_t pointer.
