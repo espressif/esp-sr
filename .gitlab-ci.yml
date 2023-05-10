@@ -58,7 +58,8 @@ build_esp_sr_pdf:
   script:
     - cd $DOCS_DIR
     - ./check_lang_folder_sync.sh
-    - build-docs -bs latex -l $DOCLANG -t $DOCTGT
+    - pip install -r requirements.txt
+    - build-docs --skip-reqs-check -bs latex -l $DOCLANG -t $DOCTGT
   parallel:
     matrix:
       - DOCLANG: ["en", "zh_CN"]
