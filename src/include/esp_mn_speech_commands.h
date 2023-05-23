@@ -29,7 +29,7 @@ It is easy to add one speech command into linked list and remove one speech comm
  *     - ESP_ERR_NO_MEM          No memory
  *     - ESP_ERR_INVALID_STATE   The Speech Commands link has been initialized
  */
-esp_err_t esp_mn_commands_alloc(esp_mn_iface_t *multinet, model_iface_data_t *model_data);
+esp_err_t esp_mn_commands_alloc(const esp_mn_iface_t *multinet, model_iface_data_t *model_data);
 
 /**
  * @brief Clear the speech commands linked list and free root node.
