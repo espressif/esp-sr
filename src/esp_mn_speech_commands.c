@@ -70,7 +70,7 @@ esp_err_t esp_mn_commands_clear(void)
 esp_mn_node_t *esp_mn_command_search(char *string) 
 {
     esp_mn_node_t *temp = esp_mn_root;
-    if(NULL != esp_mn_root) {
+    if(NULL == esp_mn_root) {
         return NULL;
     }
 
