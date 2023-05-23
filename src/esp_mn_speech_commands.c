@@ -8,7 +8,7 @@
 
 static char *TAG = "MN_COMMAND";
 static esp_mn_node_t *esp_mn_root = NULL;
-static esp_mn_iface_t *esp_mn_model_handle = NULL;
+const static esp_mn_iface_t *esp_mn_model_handle = NULL;
 static model_iface_data_t *esp_mn_model_data = NULL;
 
 
@@ -19,7 +19,7 @@ static model_iface_data_t *esp_mn_model_data = NULL;
         }                                                                                       \
     } while(0)
 
-esp_err_t esp_mn_commands_alloc(esp_mn_iface_t *multinet, model_iface_data_t *model_data)
+esp_err_t esp_mn_commands_alloc(const esp_mn_iface_t *multinet, model_iface_data_t *model_data)
 {
     if (esp_mn_root != NULL) {
         esp_mn_commands_free();
@@ -67,10 +67,12 @@ esp_err_t esp_mn_commands_clear(void)
     return ESP_OK;
 }
 
-esp_mn_node_t *esp_mn_command_search(char *string) {
-    int command_id;
+esp_mn_node_t *esp_mn_command_search(char *string) 
+{
     esp_mn_node_t *temp = esp_mn_root;
-    ESP_RETURN_ON_FALSE(NULL != esp_mn_root, ESP_ERR_INVALID_STATE, TAG, "The mn commands is not initialized");
+    if(NULL == esp_mn_root) {
+        return NULL;
+    }
 
     while (temp->next) {
         temp = temp->next;

@@ -7,7 +7,7 @@ if(IDF_TARGET STREQUAL "esp32")
                     test_afe.c 
                     test_multinet.c)
 
-elseif(IDF_TARGET STREQUAL "esp32")
+elseif(IDF_TARGET STREQUAL "esp32s3")
     list(APPEND srcs test_wakenet.c
                     test_afe.c 
                     test_multinet.c)
