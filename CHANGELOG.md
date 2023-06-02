@@ -4,6 +4,9 @@
 - Available storage is less than the remaining flash space on IDF v5.0.   
 If you can not map model partition successfully, please check the left free storage by `spi_flash_mmap_get_free_pages(ESP_PARTITION_MMAP_DATA)` or update IDF to v5.1 or later.
 
+# unreleased
+- Output text of ctc greedy search result when no command can be detected.
+
 ## 1.3.1
 - Bugfix: remove all cxx11:string
 - Bugfix: remove esp-partition for esp32s2 & esp32c3 on idf v4.4

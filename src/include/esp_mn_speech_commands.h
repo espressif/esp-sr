@@ -23,7 +23,10 @@ It is easy to add one speech command into linked list and remove one speech comm
 
 /**
  * @brief Initialze the speech commands singly linked list.
- *
+ * 
+ * @param multinet      The handle of multinet
+ * @param model_data    The model data
+ * 
  * @return
  *     - ESP_OK                  Success
  *     - ESP_ERR_NO_MEM          No memory
@@ -43,8 +46,8 @@ esp_err_t esp_mn_commands_free(void);
 /**
  * @brief Add one speech commands with command string and command ID
  *
- * @param command_id      The command ID
- * @param string  The command string of the speech commands
+ * @param command_id    The command ID
+ * @param string        The command string of the speech commands
  *
  * @return
  *     - ESP_OK                  Success
@@ -55,8 +58,8 @@ esp_err_t esp_mn_commands_add(int command_id, char *string);
 /**
  * @brief Modify one speech commands with new command string
  *
- * @param old_string  The old command string of the speech commands
- * @param new_string  The new command string of the speech commands
+ * @param old_string    The old command string of the speech commands
+ * @param new_string    The new command string of the speech commands
  *
  * @return
  *     - ESP_OK                  Success
@@ -67,7 +70,7 @@ esp_err_t esp_mn_commands_modify(char *old_string, char *new_string);
 /**
  * @brief Remove one speech commands by command string
  *
- * @param string  The command string of the speech commands
+ * @param string    The command string of the speech commands
  *
  * @return
  *     - ESP_OK                  Success
@@ -85,9 +88,22 @@ esp_err_t esp_mn_commands_remove(char *string);
 esp_err_t esp_mn_commands_clear(void);
 
 /**
+ * @brief Get string of command from command_id
+ * 
+ * @param command_id    The command ID
+ * 
+ * @return
+ *     - char*                   Success
+ *     - NULL                    Fail
+ */
+char *esp_mn_commands_get_string(int command_id);
+
+/**
  * @brief Get phrase from index, which is the depth from the phrase node to root node 
  *
- * @Warning: The first phrase index is 0, the second phrase index is 1, and so on.
+ * @warning: The first phrase index is 0, the second phrase index is 1, and so on.
+ * 
+ * @param index    The phrase index in speech commands list
  * 
  * @return
  *     - esp_mn_phrase_t*        Success
@@ -98,6 +114,8 @@ esp_mn_phrase_t *esp_mn_commands_get_from_index(int index);
 /**
  * @brief Get phrase from command string
  *
+ * @param string    The string of the command
+ * 
  * @return
  *     - esp_mn_phrase_t*        Success
  *     - NULL                    Fail
@@ -126,7 +144,7 @@ esp_mn_phrase_t *esp_mn_phrase_alloc(int command_id, char *string);
 /**
  * @brief Free esp_mn_phrase_t pointer.
  * 
- * @param phrase              The esp_mn_phrase_t pointer
+ * @param phrase    The esp_mn_phrase_t pointer
  */
 void esp_mn_phrase_free(esp_mn_phrase_t *phrase);
 
@@ -140,7 +158,7 @@ esp_mn_node_t *esp_mn_node_alloc(esp_mn_phrase_t *phrase);
 /**
  * @brief Free esp_mn_node_t pointer.
  * 
- * @param node               The esp_mn_node_free pointer
+ * @param node    The esp_mn_node_free pointer
  */
 void esp_mn_node_free(esp_mn_node_t *node);
 
