@@ -187,7 +187,10 @@ esp_err_t esp_mn_commands_remove(char *string)
 
 esp_mn_phrase_t *esp_mn_commands_get_from_index(int index)
 {
-    ESP_RETURN_ON_FALSE(NULL != esp_mn_root, NULL, TAG, "The mn commands is not initialized");
+    if (NULL == esp_mn_root) {
+        ESP_LOGW(TAG, "%s", "The mn commands is not initialized");
+        return NULL;
+    }
 
     // phrase index also is phrase id, which is the depth from this phrase node to root node
     esp_mn_node_t *temp = esp_mn_root;
@@ -203,13 +206,35 @@ esp_mn_phrase_t *esp_mn_commands_get_from_index(int index)
 
 esp_mn_phrase_t *esp_mn_commands_get_from_string(const char *string)
 {
-    ESP_RETURN_ON_FALSE(NULL != esp_mn_root, NULL, TAG, "The mn commands is not initialized");
+    if (NULL == esp_mn_root) {
+        ESP_LOGW(TAG, "%s", "The mn commands is not initialized");
+        return NULL;
+    }
 
     // phrase index also is phrase id, which is the depth from this phrase node to root node
     esp_mn_node_t *temp = esp_mn_root;
     while (temp->next) {
         if (strcmp(string, temp->next->phrase->string) == 0) {
             return temp->next->phrase;
+        }
+        temp = temp->next;
+    }
+
+    return NULL;
+}
+
+char *esp_mn_commands_get_string(int command_id)
+{
+    if (NULL == esp_mn_root) {
+        ESP_LOGW(TAG, "%s", "The mn commands is not initialized");
+        return NULL;
+    }
+
+    // phrase index also is phrase id, which is the depth from this phrase node to root node
+    esp_mn_node_t *temp = esp_mn_root;
+    while (temp->next) {
+        if (temp->next->phrase->command_id == command_id) {
+            return temp->next->phrase->string;
         }
         temp = temp->next;
     }
@@ -260,7 +285,7 @@ esp_mn_phrase_t *esp_mn_phrase_alloc(int command_id, char *string)
     esp_mn_phrase_t *phrase = _esp_mn_calloc_(1, sizeof(esp_mn_phrase_t));
     ESP_RETURN_ON_FALSE(NULL != phrase, NULL, TAG, "Fail to alloc mn phrase");
 
-    phrase->string = malloc((string_len+1) * sizeof(char));
+    phrase->string = _esp_mn_calloc_(string_len+1, sizeof(char));
     memcpy(phrase->string, string, string_len);
     phrase->string[string_len] = '\0';
     phrase->command_id = command_id;
