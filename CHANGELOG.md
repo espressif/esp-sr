@@ -6,6 +6,7 @@ If you can not map model partition successfully, please check the left free stor
 
 # unreleased
 - Output text of ctc greedy search result when no command can be detected.
+- Modify the default Chinese commands
 
 ## 1.3.1
 - Bugfix: remove all cxx11:string
