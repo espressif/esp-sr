@@ -4,9 +4,10 @@
 - Available storage is less than the remaining flash space on IDF v5.0.   
 If you can not map model partition successfully, please check the left free storage by `spi_flash_mmap_get_free_pages(ESP_PARTITION_MMAP_DATA)` or update IDF to v5.1 or later.
 
-# unreleased
+# 1.3.2
 - Output text of ctc greedy search result when no command can be detected.
 - Modify the default Chinese commands
+- Remove __pycache__ in esp-sr/model folder
 
 ## 1.3.1
 - Bugfix: remove all cxx11:string
