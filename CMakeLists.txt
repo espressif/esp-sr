@@ -103,7 +103,9 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
         COMMENT "Move and Pack models..."
         COMMAND python ${MVMODEL_EXE} -d1 ${PROJECT_DIR} -d2 ${COMPONENT_PATH} -d3 ${build_dir}
         DEPENDS ${PROJECT_DIR}/sdkconfig
-        VERBATIM)
+        VERBATIM
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E rm -rf ${COMPONENT_PATH}/model/__pycache__)
 
     add_custom_target(srmodels_bin ALL DEPENDS ${image_file})
     add_dependencies(flash srmodels_bin)
