@@ -3,6 +3,8 @@ import os
 import argparse
 import shutil
 import math
+import sys
+sys.dont_write_bytecode = True
 from pack_model import pack_models
 
 def calculate_total_size(folder_path):
