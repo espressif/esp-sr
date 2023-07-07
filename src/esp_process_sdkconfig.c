@@ -938,5 +938,5 @@ esp_mn_error_t *esp_mn_commands_update_from_sdkconfig(const esp_mn_iface_t *mult
 end:
     esp_mn_commands_print();
 
-    return esp_mn_commands_update(multinet, model_data);
+    return esp_mn_commands_update();
 }
