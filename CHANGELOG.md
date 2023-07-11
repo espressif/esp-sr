@@ -4,11 +4,14 @@
 - Available storage is less than the remaining flash space on IDF v5.0.   
 If you can not map model partition successfully, please check the left free storage by `spi_flash_mmap_get_free_pages(ESP_PARTITION_MMAP_DATA)` or update IDF to v5.1 or later.
 
-# 1.3.3
+## 1.3.4
+- Fix the bug of multinet5q8 whrn adding new speech commands
+
+## 1.3.3
 - Fix the crash of multinet5q8 when speech commands are triggered
 - Update esp_mn_commands_update() in esp_process_sdkconfig.c
 
-# 1.3.2
+## 1.3.2
 - Output text of ctc greedy search result when no command can be detected.
 - Modify the default Chinese commands
 - Remove __pycache__ in esp-sr/model folder
