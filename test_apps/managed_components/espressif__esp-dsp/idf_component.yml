@@ -1,0 +1,9 @@
+dependencies:
+  idf:
+    version: '>=4.2'
+description: ESP-DSP is the official DSP library for Espressif SoCs.
+documentation: https://docs.espressif.com/projects/esp-dsp/en/latest/index.html
+issues: https://github.com/espressif/esp-dsp/issues
+repository: https://github.com/espressif/esp-dsp.git
+url: https://github.com/espressif/esp-dsp
+version: 1.4.4
