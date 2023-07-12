@@ -22,6 +22,7 @@ IGNORE_WARNINGS = [
     r'1/2 app partitions are too small',
     r'This clock source will be affected by the DFS of the power management',
     r'The current IDF version does not support using the gptimer API',
+    r'pkg_resources is deprecated as an API',
 ]
 
 def _get_idf_version():
