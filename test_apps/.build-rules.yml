@@ -1,0 +1,4 @@
+test_apps:
+  enable:
+    - if: IDF_TARGET in ["esp32s3"]
+      temporary: false

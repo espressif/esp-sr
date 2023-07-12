@@ -25,7 +25,7 @@ TEST_CASE("wakenet create/destroy API & memory leak", "[wn]")
     int start_internal_size = heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
     srmodel_list_t *models = esp_srmodel_init("model");
     char *model_name = esp_srmodel_filter(models, ESP_WN_PREFIX, NULL);
-    esp_wn_iface_t *wakenet = esp_wn_handle_from_name(model_name);
+    esp_wn_iface_t *wakenet = (esp_wn_iface_t*)esp_wn_handle_from_name(model_name);
 
     // test model loading time
     struct timeval tv_start, tv_end;
@@ -52,7 +52,7 @@ TEST_CASE("wakenet create/destroy API & memory leak", "[wn]")
         printf("init partition ...\n");
         models = esp_srmodel_init("model");
         model_name = esp_srmodel_filter(models, ESP_WN_PREFIX, NULL);
-        wakenet = esp_wn_handle_from_name(model_name);
+        wakenet = (esp_wn_iface_t*)esp_wn_handle_from_name(model_name);
 
         printf("create ...\n");
         // typedef enum {
@@ -82,7 +82,7 @@ TEST_CASE("wakenet detect API & cpu loading", "[wn]")
     vTaskDelay(500 / portTICK_PERIOD_MS);
     srmodel_list_t *models = esp_srmodel_init("model");
     char *model_name = esp_srmodel_filter(models, ESP_WN_PREFIX, NULL);
-    esp_wn_iface_t *wakenet = esp_wn_handle_from_name(model_name);
+    esp_wn_iface_t *wakenet = (esp_wn_iface_t*)esp_wn_handle_from_name(model_name);
     model_iface_data_t *model_data = wakenet->create(model_name, DET_MODE_95);
     int frequency = wakenet->get_samp_rate(model_data);
     int audio_chunksize = wakenet->get_samp_chunksize(model_data) * sizeof(int16_t);
