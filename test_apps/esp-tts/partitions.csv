@@ -1,0 +1,3 @@
+# Name,  Type, SubType, Offset,  Size
+factory, app,  factory, 0x010000, 4M
+voice_data, data,  fat, 0x410000, 3890K 

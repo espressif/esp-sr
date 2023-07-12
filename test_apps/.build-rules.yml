@@ -1,4 +1,9 @@
-test_apps:
+test_apps/esp-sr:
   enable:
     - if: IDF_TARGET in ["esp32s3"]
+      temporary: false
+
+test_apps/esp-tts:
+  enable:
+    - if: IDF_TARGET in ["esp32s3", "esp32"]
       temporary: false

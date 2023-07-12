@@ -27,7 +27,7 @@ docs/_static/DejaVuSans.ttf
 docs/_static/NotoSansSC-Regular.otf
 
 # ci
-test_apps/dependencies.lock
-test_apps/managed_components
-test_apps/*/build_*
+test_apps/*/dependencies.lock
+test_apps/*/managed_components
+test_apps/*/*/build_*
 pytest_log
