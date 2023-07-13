@@ -8,6 +8,7 @@ from pytest_embedded import Dut
     [
         'mn5q8_cn',
         'mn6_cn',
+        'mn7_en',
     ],
 )
 def test_multinet(dut: Dut)-> None:
