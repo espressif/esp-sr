@@ -79,16 +79,17 @@ def copy_multinet_from_sdkconfig(model_path, sdkconfig_path, target_path):
         models.append('mn6_cn')
     elif "CONFIG_SR_MN_CN_MULTINET6_AC_QUANT" in models_string:
         models.append('mn6_cn_ac')
-    
+
     if "CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION_QUANT8" in models_string:
         models.append('mn5q8_en')
     elif "CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION" in models_string:
         models.append('mn5_en')
     elif "CONFIG_SR_MN_EN_MULTINET6_QUANT" in models_string:
         models.append('mn6_en')
+    elif "CONFIG_SR_MN_EN_MULTINET7_QUANT" in models_string:
+        models.append('mn7_en')
 
-    
-    if "MULTINET6" in models_string:
+    if "MULTINET6" in models_string or "MULTINET7" in models_string:
         models.append('fst')
 
     for item in models:

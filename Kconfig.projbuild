@@ -173,6 +173,10 @@ choice ENGLISH_SR_MN_MODEL_SEL
     config SR_MN_EN_MULTINET6_QUANT
         bool "general english recognition (mn6_en)"
         depends on IDF_TARGET_ESP32S3
+    
+    config SR_MN_EN_MULTINET7_QUANT
+        bool "general english recognition (mn7_en)"
+        depends on IDF_TARGET_ESP32S3
 
 endchoice
 
