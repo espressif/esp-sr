@@ -27,7 +27,7 @@ TEST_CASE("chinese tts create/destroy API & memory leak", "[tts]")
     int start_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
     int start_internal_size = heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
     /*** 1. create esp tts handle ***/
-    void* voicedata;
+    const void* voicedata;
     const esp_partition_t* partition=esp_partition_find_first(ESP_PARTITION_TYPE_DATA, ESP_PARTITION_SUBTYPE_ANY, "voice_data");
     assert(partition != NULL);
 #if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 0, 0)

@@ -1,31 +1,125 @@
 stages:
   - build
+  - build_docs
   - deploy_docs
   - deploy
-
-
 
 variables:
   # Versioned esp-idf-doc env image to use for all document building jobs
   ESP_DOCS_ENV_IMAGE: "$CI_DOCKER_REGISTRY/esp-idf-doc-env-v5.0"
   ESP_SR_PATH: "$CI_PROJECT_DIR"
-  IDF_PATH: $CI_PROJECT_DIR/esp-idf
-  IDF_REPO: ${GITLAB_SSH_SERVER}/espressif/esp-idf.git
+  BATCH_BUILD: "1"
+  V: "0"
+  IDF_CI_BUILD: "1"
+  DOCKER_TARGET_TEST_v5_0_ENV_IMAGE: "$CI_DOCKER_REGISTRY/target-test-env-v5.0:3"
+
+before_script:
+  # add gitlab ssh key
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  - echo -n $GITLAB_KEY > ~/.ssh/id_rsa_base64
+  - base64 --decode --ignore-garbage ~/.ssh/id_rsa_base64 > ~/.ssh/id_rsa
+  - chmod 600 ~/.ssh/id_rsa
+  - echo -e "Host gitlab.espressif.cn\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+  - git --version
+  - git submodule update --init --recursive --force
+  - pip install idf_build_apps
+  - pip install -r test_apps/requirements.txt
 
 
-.setup_idf_ci_env: &setup_idf_ci_env
-  - source esp-idf/tools/ci/utils.sh
-  - source esp-idf/tools/ci/configure_ci_environment.sh
-  - esp-idf/tools/idf_tools.py install
-  - esp-idf/tools/idf_tools.py export
+.build_test_script: &build_test_script
+  - python ./tools/ci/build_apps.py $EXAMPLES_PATH -t all
 
-.build_template:
+.build_test_script: &build_test_script
+  - python ./test_apps/build_apps.py $EXAMPLES_PATH -t all
+
+.build_test_template:
   stage: build
+  tags:
+    - build
+  artifacts:
+    when: always
+    paths:
+      - "**/build*/size.json"
+      - "**/build*/build_log.txt"
+      - "**/build*/*.bin"
+      # upload to s3 server to save the artifacts size
+      - "**/build*/*.map"
+      - "**/build*/*.elf"
+      - "**/build*/flasher_args.json"
+      - "**/build*/flash_project_args"
+      - "**/build*/config/sdkconfig.json"
+      - "**/build*/bootloader/*.bin"
+      - "**/build*/bootloader/*.elf"
+      - "**/build*/partition_table/*.bin"
+      - "**/build*/srmodels/*.bin"
+      - size_info.txt
+    expire_in: 1 week
+  variables:
+    EXAMPLES_PATH: "test_apps"
+  script:
+    - *build_test_script 
+
+build_esp_sr:
+  extends: .build_test_template
+  image: espressif/idf:release-v5.0
+  variables:
+    EXAMPLES_PATH: "test_apps/esp-sr"
+
+build_esp_tts:
+  extends: .build_test_template
+  image: espressif/idf:release-v5.0
+  variables:
+    EXAMPLES_PATH: "test_apps/esp-tts"
+
+.test_template: &test_template
+  image: DOCKER_TARGET_TEST_v5_0_ENV_IMAGE
+  stage: target_test
+  timeout: 10 hour
+  variables:
+    GIT_DEPTH: 1
+    SUBMODULES_TO_FETCH: "none"
+  cache:
+    # Usually do not need submodule-cache in target_test
+    - key: pip-cache
+      paths:
+        - .cache/pip
+      policy: pull
+
+.pytest_template:
+  <<: *test_template
+  artifacts:
+    when: always
+    paths:
+      - XUNIT_RESULT.xml
+      - pytest_log/
+    reports:
+      junit: XUNIT_RESULT.xml
+    expire_in: 4 days
+  variables:
+    TEST_TARGET: 'esp32s3'
+    TEST_FOLDER: 'test_apps'
+    TEST_ENV: 'esp32s3'
+  script:
+    - pytest ${TEST_FOLDER} --target ${TEST_TARGET} --env ${TEST_ENV} --junitxml=XUNIT_RESULT.xml
+
+.if-dev-push: &if-dev-push
+  if: '$CI_COMMIT_REF_NAME != "master" && $CI_COMMIT_BRANCH !~ /^release\/v/ && $CI_COMMIT_TAG !~ /^v\d+\.\d+(\.\d+)?($|-)/ && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")'
+.if-protected: &if-protected
+  if: '($CI_COMMIT_REF_NAME == "master" || $CI_COMMIT_BRANCH =~ /^release\/v/ || $CI_COMMIT_TAG =~ /^v\d+\.\d+(\.\d+)?($|-)/)'
+
+.rules:test:test_esp_sr:
+  rules:
+    - <<: *if-protected
+    - <<: *if-dev-push
+
+.build_doc_template:
+  stage: build_docs
   image: $ESP_DOCS_ENV_IMAGE
 
 build_esp_sr_html:
   extends:
-    - .build_template
+    - .build_doc_template
   variables:
     DOCS_DIR: $CI_PROJECT_DIR/docs
   artifacts:
@@ -46,7 +140,7 @@ build_esp_sr_html:
 
 build_esp_sr_pdf:
   extends:
-    - .build_template
+    - .build_doc_template
   variables:
     DOCS_DIR: $CI_PROJECT_DIR/docs
   artifacts:
