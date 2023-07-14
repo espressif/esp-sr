@@ -31,3 +31,4 @@ test_apps/*/dependencies.lock
 test_apps/*/managed_components
 test_apps/*/*/build_*
 pytest_log
+XUNIT_RESULT.xml

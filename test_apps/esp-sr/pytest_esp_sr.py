@@ -14,7 +14,10 @@ from pytest_embedded import Dut
     ],
 )
 def test_multinet(dut: Dut)-> None:
-    dut.run_all_single_board_cases(group="mn")
+    # dut.run_all_single_board_cases(group="mn")
+    dut.expect_exact('Press ENTER to see the list of tests.')
+    dut.write('[mn]')
+    dut.expect_unity_test_output(timeout = 1000)
 
 
 @pytest.mark.target('esp32s3')
@@ -27,7 +30,10 @@ def test_multinet(dut: Dut)-> None:
     ],
 )
 def test_wakenet(dut: Dut)-> None:
-    dut.run_all_single_board_cases(group="wn")
+    # dut.run_all_single_board_cases(group="wn")
+    dut.expect_exact('Press ENTER to see the list of tests.')
+    dut.write('[wn]')
+    dut.expect_unity_test_output(timeout = 1000)
 
 
 @pytest.mark.target('esp32s3')
@@ -39,4 +45,7 @@ def test_wakenet(dut: Dut)-> None:
     ],
 )
 def test_afe(dut: Dut)-> None:
-    dut.run_all_single_board_cases(group="afe")
+    # dut.run_all_single_board_cases(group="afe")
+    dut.expect_exact('Press ENTER to see the list of tests.')
+    dut.write('[afe]')
+    dut.expect_unity_test_output(timeout = 1000)
