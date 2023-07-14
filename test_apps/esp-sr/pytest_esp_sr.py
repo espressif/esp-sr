@@ -7,7 +7,9 @@ from pytest_embedded import Dut
     'config',
     [
         'mn5q8_cn',
+        'mn5q8_en',
         'mn6_cn',
+        'mn6_en',
         'mn7_en',
     ],
 )
@@ -20,7 +22,7 @@ def test_multinet(dut: Dut)-> None:
 @pytest.mark.parametrize(
     'config',
     [
-        'mn5q8_cn',
+        'mn5q8_en',
         'wn9_hilexin',
     ],
 )

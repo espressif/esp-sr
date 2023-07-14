@@ -1,5 +1,6 @@
 stages:
   - build
+  - target_test
   - build_docs
   - deploy_docs
   - deploy
@@ -28,9 +29,6 @@ before_script:
 
 
 .build_test_script: &build_test_script
-  - python ./tools/ci/build_apps.py $EXAMPLES_PATH -t all
-
-.build_test_script: &build_test_script
   - python ./test_apps/build_apps.py $EXAMPLES_PATH -t all
 
 .build_test_template:
@@ -53,7 +51,6 @@ before_script:
       - "**/build*/bootloader/*.elf"
       - "**/build*/partition_table/*.bin"
       - "**/build*/srmodels/*.bin"
-      - size_info.txt
     expire_in: 1 week
   variables:
     EXAMPLES_PATH: "test_apps"
@@ -112,6 +109,22 @@ build_esp_tts:
   rules:
     - <<: *if-protected
     - <<: *if-dev-push
+
+test_esp_sr:
+  extends:
+    - .pytest_template
+  needs:
+    - job: "build_esp_sr"
+      artifacts: true
+      optional: true
+  tags: 
+    - 'esp32s3'
+  image: $DOCKER_TARGET_TEST_v5_0_ENV_IMAGE
+  variables:
+    TEST_TARGET: 'esp32s3'
+    TEST_FOLDER: './test_apps/esp-sr'
+    TEST_ENV: 'esp32s3'
+    IDF_VERSION: "5.0"
 
 .build_doc_template:
   stage: build_docs
