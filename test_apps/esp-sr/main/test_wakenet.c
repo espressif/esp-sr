@@ -15,6 +15,7 @@
 #include "esp_wn_iface.h"
 #include "esp_wn_models.h"
 #include "hilexin.h"
+#include "hiesp.h"
 #include "dl_lib_convq_queue.h"
 #include <sys/time.h>
 
@@ -91,10 +92,21 @@ TEST_CASE("wakenet detect API & cpu loading", "[wn]")
     int detected = 0;
     struct timeval tv_start, tv_end;
     gettimeofday(&tv_start, NULL);
+    unsigned char* data = NULL;
+    size_t data_size = 0;
+    if (strstr(model_name, "hiesp") != NULL) {
+        data = (unsigned char*)hiesp;
+        data_size = sizeof(hiesp);
+        printf("wake word: Hi, ESP, size:%d\n", data_size);
+    } else if(strstr(model_name, "hilexin") != NULL) {
+        data = (unsigned char*)hilexin;
+        data_size = sizeof(hilexin);
+        printf("wake word: hi,lexin, size:%d\n", data_size);
+    }
 
     while (1) {
-        if ((chunks + 1)*audio_chunksize <= sizeof(hilexin)) {
-            memcpy(buffer, hilexin + chunks * audio_chunksize, audio_chunksize);
+        if ((chunks + 1)*audio_chunksize <= data_size) {
+            memcpy(buffer, data + chunks * audio_chunksize, audio_chunksize);
         } else {
             memset(buffer, 0, audio_chunksize);
         }

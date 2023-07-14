@@ -1,7 +1,7 @@
 stages:
   - build
+  - target_test
   - build_docs
-  - deploy_docs
   - deploy
 
 variables:
@@ -24,14 +24,73 @@ before_script:
   - git --version
   - git submodule update --init --recursive --force
   - pip install idf_build_apps
-  - pip install -r test_apps/requirements.txt
+
+.if-protected: &if-protected
+  if: '($CI_COMMIT_REF_NAME == "master" || $CI_COMMIT_BRANCH =~ /^release\/v/ || $CI_COMMIT_TAG =~ /^v\d+\.\d+(\.\d+)?($|-)/)'
+
+.if-dev-push: &if-dev-push
+  if: '$CI_COMMIT_REF_NAME != "master" && $CI_COMMIT_BRANCH !~ /^release\/v/ && $CI_COMMIT_TAG !~ /^v\d+\.\d+(\.\d+)?($|-)/ && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")'
+
+.if-label-build: &if-label-build
+  if: '$CI_MERGE_REQUEST_LABELS =~ /^(?:[^,\n\r]+,)*build(?:,[^,\n\r]+)*$/i'
+
+.patterns-test_esp_tts: &patterns-test_esp_tts
+  - "esp-tts/**/*"
+  - "test_apps/esp-tts/**/*"
+  - "CMakeList.txt"
+
+.patterns-test_esp_sr: &patterns-test_esp_sr
+  - "lib/**/*"
+  - "include/**/*"
+  - "src/**/*"
+  - "model/**/*"
+  - "test_apps/esp-sr/**/*"
+  - "CMakeList.txt"
+
+.patterns-build_system: &patterns-build_system
+  - "test_apps/build_apps.py"
+  - "conftest.py"
+  - "pytest.ini"
+  - "CMakeList.txt"
+
+.patterns-build_docs: &patterns-build_docs
+  - "docs/**/*"
 
 
-.build_test_script: &build_test_script
-  - python ./tools/ci/build_apps.py $EXAMPLES_PATH -t all
+.rules:build:test_esp_sr:
+  rules:
+    - <<: *if-protected
+    - <<: *if-label-build
+    - <<: *if-dev-push
+      changes: *patterns-build_system
+    - <<: *if-dev-push
+      changes: *patterns-test_esp_sr
 
-.build_test_script: &build_test_script
-  - python ./test_apps/build_apps.py $EXAMPLES_PATH -t all
+.rules:build:test_esp_tts:
+  rules:
+    - <<: *if-protected
+    - <<: *if-label-build
+    - <<: *if-dev-push
+      changes: *patterns-build_system
+    - <<: *if-dev-push
+      changes: *patterns-test_esp_tts
+
+.rules:build_docs:docs:
+  rules:
+    - <<: *if-protected
+    - <<: *if-label-build
+    - <<: *if-dev-push
+      changes: *patterns-build_docs
+
+.rules:deploy:docs_preview:
+  rules:
+    - <<: *if-label-build
+    - <<: *if-dev-push
+      changes: *patterns-build_docs
+
+.rules:deploy:docs_production:
+  rules:
+    - <<: *if-protected
 
 .build_test_template:
   stage: build
@@ -53,21 +112,24 @@ before_script:
       - "**/build*/bootloader/*.elf"
       - "**/build*/partition_table/*.bin"
       - "**/build*/srmodels/*.bin"
-      - size_info.txt
     expire_in: 1 week
   variables:
     EXAMPLES_PATH: "test_apps"
   script:
-    - *build_test_script 
+    - python ./test_apps/build_apps.py $EXAMPLES_PATH -t all
 
 build_esp_sr:
-  extends: .build_test_template
+  extends: 
+    - .build_test_template
+    - .rules:build:test_esp_sr
   image: espressif/idf:release-v5.0
   variables:
     EXAMPLES_PATH: "test_apps/esp-sr"
 
 build_esp_tts:
-  extends: .build_test_template
+  extends: 
+    - .build_test_template
+    - .rules:build:test_esp_tts
   image: espressif/idf:release-v5.0
   variables:
     EXAMPLES_PATH: "test_apps/esp-tts"
@@ -101,17 +163,42 @@ build_esp_tts:
     TEST_FOLDER: 'test_apps'
     TEST_ENV: 'esp32s3'
   script:
+    - pip install -r test_apps/requirements.txt
     - pytest ${TEST_FOLDER} --target ${TEST_TARGET} --env ${TEST_ENV} --junitxml=XUNIT_RESULT.xml
 
-.if-dev-push: &if-dev-push
-  if: '$CI_COMMIT_REF_NAME != "master" && $CI_COMMIT_BRANCH !~ /^release\/v/ && $CI_COMMIT_TAG !~ /^v\d+\.\d+(\.\d+)?($|-)/ && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")'
-.if-protected: &if-protected
-  if: '($CI_COMMIT_REF_NAME == "master" || $CI_COMMIT_BRANCH =~ /^release\/v/ || $CI_COMMIT_TAG =~ /^v\d+\.\d+(\.\d+)?($|-)/)'
+test_esp_sr:
+  extends:
+    - .pytest_template
+    - .rules:build:test_esp_sr
+  needs:
+    - job: "build_esp_sr"
+      artifacts: true
+      optional: true
+  tags: 
+    - 'esp32s3'
+  image: $DOCKER_TARGET_TEST_v5_0_ENV_IMAGE
+  variables:
+    TEST_TARGET: 'esp32s3'
+    TEST_FOLDER: './test_apps/esp-sr'
+    TEST_ENV: 'esp32s3'
+    IDF_VERSION: "5.0"
 
-.rules:test:test_esp_sr:
-  rules:
-    - <<: *if-protected
-    - <<: *if-dev-push
+test_esp_tts:
+  extends:
+    - .pytest_template
+    - .rules:build:test_esp_tts
+  needs:
+    - job: "build_esp_tts"
+      artifacts: true
+      optional: true
+  tags: 
+    - 'esp32s3'
+  image: $DOCKER_TARGET_TEST_v5_0_ENV_IMAGE
+  variables:
+    TEST_TARGET: 'esp32s3'
+    TEST_FOLDER: './test_apps/esp-tts'
+    TEST_ENV: 'esp32s3'
+    IDF_VERSION: "5.0"
 
 .build_doc_template:
   stage: build_docs
@@ -120,6 +207,7 @@ build_esp_tts:
 build_esp_sr_html:
   extends:
     - .build_doc_template
+    - .rules:build_docs:docs
   variables:
     DOCS_DIR: $CI_PROJECT_DIR/docs
   artifacts:
@@ -141,6 +229,7 @@ build_esp_sr_html:
 build_esp_sr_pdf:
   extends:
     - .build_doc_template
+    - .rules:build_docs:docs
   variables:
     DOCS_DIR: $CI_PROJECT_DIR/docs
   artifacts:
@@ -161,7 +250,7 @@ build_esp_sr_pdf:
 
 
 .deploy_docs_template:
-  stage: deploy_docs
+  stage: deploy
   image: $ESP_DOCS_ENV_IMAGE
   tags:
     - deploy_docs
@@ -178,9 +267,7 @@ build_esp_sr_pdf:
 deploy_docs_preview:
   extends:
     - .deploy_docs_template
-  except:
-    refs:
-      - master
+    - .rules:deploy:docs_preview
   variables:
     TYPE: "preview"
     DOCS_BUILD_DIR: "${CI_PROJECT_DIR}/docs/_build/"
@@ -193,8 +280,7 @@ deploy_docs_preview:
 deploy_docs_production:
   extends:
     - .deploy_docs_template
-  only:
-    - master
+    - .rules:deploy:docs_production
   variables:
     TYPE: "production"
     DOCS_BUILD_DIR: "${CI_PROJECT_DIR}/docs/_build/"
