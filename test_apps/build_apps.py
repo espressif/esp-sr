@@ -24,6 +24,7 @@ IGNORE_WARNINGS = [
     r'The current IDF version does not support using the gptimer API',
     r'pkg_resources is deprecated as an API',
     r'the value \'y\' is invalid for SOC_PCNT_GROUPS',
+    r'\'1\' is not a valid value for the bool symbol SOC_PCNT_GROUPS',
 ]
 
 def _get_idf_version():
