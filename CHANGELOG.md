@@ -4,6 +4,11 @@
 - Available storage is less than the remaining flash space on IDF v5.0.   
 If you can not map model partition successfully, please check the left free storage by `spi_flash_mmap_get_free_pages(ESP_PARTITION_MMAP_DATA)` or update IDF to v5.1 or later.
 
+## 1.4.0
+- Add ci tests to check the APIs of wakenet, multinet and AFE work fine
+- Support to load and run two wakenet9 models at the same time in AFE
+- Reduce the latency of multinet6
+
 ## 1.3.4
 - Fix the bug of multinet5q8 whrn adding new speech commands
 
