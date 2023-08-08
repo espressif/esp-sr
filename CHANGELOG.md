@@ -6,7 +6,7 @@ If you can not map model partition successfully, please check the left free stor
 
 ## 1.4.0
 - Add ci tests to check the APIs of wakenet, multinet and AFE work fine
-- Support to load and run two wakenet9 at the same time in AFE
+- Support to load and run two wakenet9 models at the same time in AFE
 - Reduce the latency of multinet6
 
 ## 1.3.4
