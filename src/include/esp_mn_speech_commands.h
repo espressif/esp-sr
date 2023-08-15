@@ -163,6 +163,11 @@ esp_mn_node_t *esp_mn_node_alloc(esp_mn_phrase_t *phrase);
 void esp_mn_node_free(esp_mn_node_t *node);
 
 /**
- * @brief Print phrase linked list.
+ * @brief Print all commands in linked list.
  */
 void esp_mn_commands_print(void);
+
+/**
+ * @brief Print all active commands.
+ */
+void print_active_speech_commands(void);
