@@ -4,7 +4,7 @@
 - Available storage is less than the remaining flash space on IDF v5.0.   
 If you can not map model partition successfully, please check the left free storage by `spi_flash_mmap_get_free_pages(ESP_PARTITION_MMAP_DATA)` or update IDF to v5.1 or later.
 
-## unreleased
+## 1.4.1
 - Fix the wrong APIs of multinet2 when using ESP32 chip
 - VAD can work fine when WakeNet is disabled
 
