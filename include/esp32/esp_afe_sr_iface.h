@@ -27,6 +27,7 @@ typedef struct afe_fetch_result_t
     int data_size;                          // the size of data. The unit is byte.
     wakenet_state_t wakeup_state;           // the value is wakenet_state_t
     int wake_word_index;                    // if the wake word is detected. It will store the wake word index which start from 1.
+    int wakenet_model_index;                // if there are multiple wakenets, this value identifies which model be wakes up. Index start from 1.
     afe_vad_state_t vad_state;              // the value is afe_vad_state_t
     int trigger_channel_id;                 // the channel index of output
     int wake_word_length;                   // the length of wake word. It's unit is the number of samples.
@@ -111,7 +112,7 @@ typedef int (*esp_afe_sr_iface_op_reset_buffer_t)(esp_afe_sr_data_t *afe);
 
 /**
  * @brief Initial wakenet and wake words coefficient, or reset wakenet and wake words coefficient 
- *        when wakenet has been initialized.  
+ *        when wakenet has been initialized. It's only support wakenet 1 now.
  *
  * @param afe                The AFE_SR object to query
  * @param wakenet_word       The wakenet word, should be DEFAULT_WAKE_WORD or EXTRA_WAKE_WORD

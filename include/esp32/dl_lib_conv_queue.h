@@ -20,7 +20,7 @@ typedef float fptp_t;
 
 
 //Flags for matrices
-#define DL_MF_FOREIGNDATA (1<<0)  /*< Matrix *item data actually points to another matrix and should not be freed */
+// #define DL_MF_FOREIGNDATA (0)  /*< Matrix *item data actually points to another matrix and should not be freed */
 
 //Float convolution FIFO queue. 
 typedef struct {
@@ -39,6 +39,15 @@ typedef struct {
  * @return      The convolution queue, or NULL if out of memory
  */
 dl_conv_queue_t *dl_conv_queue_alloc(int n, int c);
+
+/**
+ * @brief Allocate a convolution queue from psram
+ *
+ * @param n     The length of queue
+ * @param c     The channel number of elements in the queue
+ * @return      The convolution queue, or NULL if out of memory
+ */
+dl_conv_queue_t *dl_conv_queue_alloc_from_psram(int n, int c);
 
 /**
  * @brief Free a convolution queue
