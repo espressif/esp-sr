@@ -103,28 +103,6 @@ Customize Speech Commands Via API calls
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Alternatively, speech commands can be modified via API calls, this method works for both MultiNet5 and MultiNet6.
 
-- Print active speech commands, this function will print out all speech commands that are active.
-
-    ::
-
-        /**
-        * @brief Update the speech commands of MultiNet
-        * 
-        * @Warning: Must be used after [add/remove/modify/clear] function, 
-        *           otherwise the language model of multinet can not be updated.
-        *
-        * @param multinet            The multinet handle
-        * @param model_data          The model object to query
-        *
-        * @return
-        *     - NULL                 Success
-        *     - others               The list of error phrase which can not be parsed by multinet.
-        */
-        esp_mn_error_t *esp_mn_commands_update();
-
-    .. note::
-        The modifications will not be applied, thus not printed out, until you call ``esp_mn_commands_update()``.
-
 - Apply new changes, the add/remove/modify/clear actions will not take effect util this function is called.
 
     ::
@@ -141,6 +119,8 @@ Alternatively, speech commands can be modified via API calls, this method works 
         */
         esp_mn_error_t *esp_mn_commands_update();
 
+    .. note::
+        The modifications will not be applied, thus not printed out, until you call ``esp_mn_commands_update()``.
 
 - Add a new speech command, will return ``ESP_ERR_INVALID_STATE`` if the input string is not in the correct format.
 
@@ -201,6 +181,24 @@ Alternatively, speech commands can be modified via API calls, this method works 
         *     - ESP_ERR_INVALID_STATE   Fail
         */
         esp_err_t esp_mn_commands_clear(void);
+
+- Print cached speech commands, this function will print out all cached speech commands. Cached speech commands will be applied after ``esp_mn_commands_update()`` is called.
+
+    ::
+
+        /**
+        * @brief Print all commands in linked list.
+        */
+        void esp_mn_commands_print(void);
+
+- Print active speech commands, this function will print out all active speech commands.
+
+    ::
+        
+        /**
+        * @brief Print all commands in linked list.
+        */
+        void print_active_speech_commands(void);
 
 Use MultiNet
 ------------

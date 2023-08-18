@@ -114,28 +114,6 @@ MultiNet5 定义方法：
 ~~~~~~~~~~~~~~~~~
 指令还可以通过调用 API 修改，这种方法对于 MultiNet5 和 MultiNet6 都适用。
 
-- 打印现有指令。
-
-    ::
-
-        /**
-        * @brief Update the speech commands of MultiNet
-        * 
-        * @Warning: Must be used after [add/remove/modify/clear] function, 
-        *           otherwise the language model of multinet can not be updated.
-        *
-        * @param multinet            The multinet handle
-        * @param model_data          The model object to query
-        *
-        * @return
-        *     - NULL                 Success
-        *     - others               The list of error phrase which can not be parsed by multinet.
-        */
-        esp_mn_error_t *esp_mn_commands_update();
-
-    .. note::
-        所有修改操作在调用 ``esp_mn_commands_update()`` 后才会被打印出来。
-
 - 应用新的修改操作，所有添加、移除、修改及清空操作在调用后才会被应用。
 
     ::
@@ -212,6 +190,25 @@ MultiNet5 定义方法：
         *     - ESP_ERR_INVALID_STATE   Fail
         */
         esp_err_t esp_mn_commands_clear(void);
+
+
+- 打印缓存的指令, 只有当调用 ``esp_mn_commands_update()`` 缓存指令才会被应用.
+
+    ::
+
+        /**
+        * @brief Print all commands in linked list.
+        */
+        void esp_mn_commands_print(void);
+
+- 打印当前已经被应用的指令.
+
+    ::
+        
+        /**
+        * @brief Print all commands in linked list.
+        */
+        void print_active_speech_commands(void);
         
 MultiNet 的使用
 ----------------
