@@ -267,7 +267,7 @@ void esp_mn_commands_print(void)
     ESP_LOGI(TAG, "---------------------------------------------------------\n");
 }
 
-void print_active_speech_commands(void)
+void esp_mn_active_commands_print(void)
 {
     ESP_LOGI(TAG, "---------------------ACTIVE SPEECH COMMANDS---------------------");
     esp_mn_model_handle->print_active_speech_commands(esp_mn_model_data);

@@ -175,7 +175,7 @@ test_esp_sr:
       artifacts: true
       optional: true
   tags: 
-    - 'esp32s3'
+    - esp32s3
   image: $DOCKER_TARGET_TEST_v5_0_ENV_IMAGE
   variables:
     TEST_TARGET: 'esp32s3'
@@ -192,7 +192,7 @@ test_esp_tts:
       artifacts: true
       optional: true
   tags: 
-    - 'esp32s3'
+    - esp32s3
   image: $DOCKER_TARGET_TEST_v5_0_ENV_IMAGE
   variables:
     TEST_TARGET: 'esp32s3'

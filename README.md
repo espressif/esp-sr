@@ -17,7 +17,7 @@ ESP-SR framework includes the following modules:
 
 These algorithms are provided in the form of a component, so they can be integrated into your projects with minimum effort.
 
-ESP32-S3 is recommended, which supports AI instructions and larger, high-speech octal SPI PSRAM.
+ESP32-S3 is recommended, which supports AI instructions and larger, high-speed octal SPI PSRAM.
 The new algorithms will no longer support ESP32 chips.
 
 
