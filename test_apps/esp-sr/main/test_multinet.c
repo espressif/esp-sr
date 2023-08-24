@@ -173,7 +173,7 @@ TEST_CASE("multinet set commands", "[mn]")
     } else {
         printf("Invalid language\n");
     }
-    print_active_speech_commands();
+    esp_mn_active_commands_print();
 
     multinet->destroy(model_data);
     esp_srmodel_deinit(models);
