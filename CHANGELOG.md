@@ -6,7 +6,7 @@ If you can not map model partition successfully, please check the left free stor
 
 ## 1.4.2
 - Reset timeout trigger of multinet6 when a new speech command is detected
-- Alloc all beams from PSRAM
+- Allocate all beams from PSRAM
 
 ## 1.4.1
 - Fix the wrong APIs of multinet2 when using ESP32 chip
