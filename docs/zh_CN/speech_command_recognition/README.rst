@@ -208,7 +208,7 @@ MultiNet5 定义方法：
         /**
         * @brief Print all commands in linked list.
         */
-        void print_active_speech_commands(void);
+        void esp_mn_active_commands_print(void);
         
 MultiNet 的使用
 ----------------

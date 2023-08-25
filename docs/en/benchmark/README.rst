@@ -1,13 +1,13 @@
-Resource Consumption
-=====================
+Benchmark
+==========
 
 :link_to_translation:`zh_CN:[中文]`
 
 AFE
 ---
 
-Resource Occupancy
-~~~~~~~~~~~~~~~~~~
+Resource Consumption
+~~~~~~~~~~~~~~~~~~~~
 
 .. only:: esp32
 
@@ -51,8 +51,8 @@ WakeNet
 
 .. _resource-occupancyesp32-1:
 
-Resource Occupancy
-~~~~~~~~~~~~~~~~~~
+Resource Consumption
+~~~~~~~~~~~~~~~~~~~~
 
 .. only:: esp32
 
@@ -119,8 +119,8 @@ MultiNet
 
 .. _resource-occupancyesp32-2:
 
-Resource Occupancy
-~~~~~~~~~~~~~~~~~~
+Resource Consumption
+~~~~~~~~~~~~~~~~~~~~
 
 .. only:: esp32
 
@@ -151,7 +151,7 @@ Resource Occupancy
     | MultiNet 5  | 16 KB       | 2310 KB     | 12 ms       | 32 ms       |
     | Q8          |             |             |             |             |
     +-------------+-------------+-------------+-------------+-------------+
-    | MultiNet 6  | 48 KB       | 4000 KB     | 12 ms       | 32 ms       |
+    | MultiNet 6  | 32 KB       | 4100 KB     | 12 ms       | 32 ms       |
     +-------------+-------------+-------------+-------------+-------------+
 
 Word Error Rate Performance Test
@@ -186,8 +186,8 @@ Speech Commands Performance Test
 TTS
 ---
 
-Resource Occupancy
-~~~~~~~~~~~~~~~~~~
+Resource Consumption
+~~~~~~~~~~~~~~~~~~~~
 
 Flash image size: 2.2 MB
 

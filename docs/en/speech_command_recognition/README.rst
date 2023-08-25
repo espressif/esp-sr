@@ -198,7 +198,7 @@ Alternatively, speech commands can be modified via API calls, this method works 
         /**
         * @brief Print all commands in linked list.
         */
-        void print_active_speech_commands(void);
+        void esp_mn_active_commands_print(void);
 
 Use MultiNet
 ------------

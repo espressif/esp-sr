@@ -1,12 +1,12 @@
-资源消耗
-========
+性能测试结果
+==============
 
 :link_to_translation:`en:[English]`
 
 AFE
 ---
 
-资源占用
+资源消耗
 ~~~~~~~~
 
 .. only:: esp32
@@ -51,7 +51,7 @@ WakeNet
 
 .. _resource-occupancyesp32-1:
 
-资源占用
+资源消耗
 ~~~~~~~~
 
 .. only:: esp32
@@ -119,7 +119,7 @@ MultiNet
 
 .. _resource-occupancyesp32-2:
 
-资源占用
+资源消耗
 ~~~~~~~~
 
 .. only:: esp32
@@ -151,7 +151,7 @@ MultiNet
     | MultiNet 5  | 16 KB       | 2310 KB     | 12 ms       | 32 ms       |
     | Q8          |             |             |             |             |
     +-------------+-------------+-------------+-------------+-------------+
-    | MultiNet 6  | 48 KB       | 4000 KB     | 12 ms       | 32 ms       |
+    | MultiNet 6  | 32 KB       | 4100 KB     | 12 ms       | 32 ms       |
     +-------------+-------------+-------------+-------------+-------------+
 
 Word Error Rate 性能测试
@@ -199,7 +199,7 @@ Speech Commands 性能测试(空调控制场景)
 TTS
 ---
 
-资源占用
+资源消耗
 ~~~~~~~~
 
 Flash image size: 2.2 MB
