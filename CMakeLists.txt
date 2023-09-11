@@ -155,4 +155,23 @@ elseif(${IDF_TARGET} STREQUAL "esp32c3")
         esp_tts_chinese
         voice_set_xiaole
         "-Wl,--end-group")
+elseif(${IDF_TARGET} STREQUAL "esp32c6")
+    set(requires
+    spiffs
+    )
+
+    IF (IDF_VERSION_MAJOR GREATER 4)
+        list(APPEND requires esp_partition)
+    ENDIF (IDF_VERSION_MAJOR GREATER 4)
+
+    idf_component_register(SRCS .
+                   INCLUDE_DIRS  esp-tts/esp_tts_chinese/include
+                   REQUIRES ${requires}
+                   PRIV_REQUIRES spi_flash)
+                       
+    target_link_libraries(${COMPONENT_TARGET} INTERFACE "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese/esp32c6")
+    target_link_libraries(${COMPONENT_TARGET} INTERFACE "-Wl,--start-group"
+        esp_tts_chinese
+        voice_set_xiaole
+        "-Wl,--end-group")
 endif()
