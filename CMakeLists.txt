@@ -1,4 +1,4 @@
-if(IDF_TARGET STREQUAL "esp32")
+IF(CONFIG_IDF_TARGET STREQUAL "esp32")
     set(include_dirs 
         src/include
         esp-tts/esp_tts_chinese/include
@@ -15,9 +15,9 @@ if(IDF_TARGET STREQUAL "esp32")
         spiffs
         )
 
-    IF (IDF_VERSION_MAJOR GREATER 4)
+    IF(IDF_VERSION_MAJOR GREATER 4)
         list(APPEND requires esp_partition)
-    ENDIF (IDF_VERSION_MAJOR GREATER 4)
+    ENDIF(IDF_VERSION_MAJOR GREATER 4)
 
     idf_component_register(SRCS ${srcs}
                        INCLUDE_DIRS ${include_dirs}
@@ -43,7 +43,7 @@ if(IDF_TARGET STREQUAL "esp32")
         voice_set_xiaole
         wakenet
         "-Wl,--end-group")
-elseif(${IDF_TARGET} STREQUAL "esp32s3")
+ELSEIF(CONFIG_IDF_TARGET STREQUAL "esp32s3")
     set(include_dirs 
         src/include
         esp-tts/esp_tts_chinese/include
@@ -60,9 +60,9 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
         spiffs
         )
 
-    IF (IDF_VERSION_MAJOR GREATER 4)
+    IF(IDF_VERSION_MAJOR GREATER 4)
         list(APPEND requires esp_partition)
-    ENDIF (IDF_VERSION_MAJOR GREATER 4)
+    ENDIF(IDF_VERSION_MAJOR GREATER 4)
 
     idf_component_register(SRCS ${srcs}
                        INCLUDE_DIRS ${include_dirs}
@@ -111,20 +111,20 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
     partition_table_get_partition_info(size "--partition-name model" "size")
     partition_table_get_partition_info(offset "--partition-name model" "offset")
 
-    if("${size}" AND "${offset}")
+    IF("${size}" AND "${offset}")
         esptool_py_flash_to_partition(flash "model" "${image_file}")
-    else()
+    ELSE()
         set(message "Failed to find model in partition table file"
                     "Please add a line(Name=model, Size>recommended size in log) to the partition file.")
-    endif()
-elseif(${IDF_TARGET} STREQUAL "esp32s2")
+    ENDIF()
+ELSEIF(CONFIG_IDF_TARGET STREQUAL "esp32s2")
     set(requires
     spiffs
     )
 
-    IF (IDF_VERSION_MAJOR GREATER 4)
+    IF(IDF_VERSION_MAJOR GREATER 4)
         list(APPEND requires esp_partition)
-    ENDIF (IDF_VERSION_MAJOR GREATER 4)
+    ENDIF(IDF_VERSION_MAJOR GREATER 4)
 
     idf_component_register(SRCS .
                        INCLUDE_DIRS  esp-tts/esp_tts_chinese/include
@@ -136,14 +136,14 @@ elseif(${IDF_TARGET} STREQUAL "esp32s2")
         esp_tts_chinese
         voice_set_xiaole
         "-Wl,--end-group")
-elseif(${IDF_TARGET} STREQUAL "esp32c3")
+ELSEIF(CONFIG_IDF_TARGET STREQUAL "esp32c3")
     set(requires
     spiffs
     )
 
-    IF (IDF_VERSION_MAJOR GREATER 4)
+    IF(IDF_VERSION_MAJOR GREATER 4)
         list(APPEND requires esp_partition)
-    ENDIF (IDF_VERSION_MAJOR GREATER 4)
+    ENDIF(IDF_VERSION_MAJOR GREATER 4)
 
     idf_component_register(SRCS .
                    INCLUDE_DIRS  esp-tts/esp_tts_chinese/include
@@ -155,4 +155,4 @@ elseif(${IDF_TARGET} STREQUAL "esp32c3")
         esp_tts_chinese
         voice_set_xiaole
         "-Wl,--end-group")
-endif()
+ENDIF()
