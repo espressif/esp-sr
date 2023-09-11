@@ -4,6 +4,12 @@
 - Available storage is less than the remaining flash space on IDF v5.0.   
 If you can not map model partition successfully, please check the left free storage by `spi_flash_mmap_get_free_pages(ESP_PARTITION_MMAP_DATA)` or update IDF to v5.1 or later.
 
+## unrelease
+- Add esp32c6 tts lib
+- Return the volume of wake word audio when one wake word is detected
+- Reduce MultiNet6 SRAM size from 48KB to 32 KB
+- Add "Hi M Five" wake word model from M5Stack
+
 ## 1.4.2
 - Reset timeout trigger of multinet6 when a new speech command is detected
 - Allocate all beams from PSRAM

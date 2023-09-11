@@ -47,6 +47,28 @@ def copy_wakenet_from_sdkconfig(model_path, sdkconfig_path, target_path):
         models.append('wn9_alexa')
     if "CONFIG_SR_WN_WN9_HIESP" in models_string:
         models.append('wn9_hiesp')
+    if "CONFIG_SR_WN_WN9_HIMFIVE" in models_string:
+        models.append('wn9_himfive')
+    if "CONFIG_SR_WN_WN9_NIHAOXIAOZHI" in models_string:
+        models.append('wn9_nihaoxiaozhi')
+    if "CONFIG_SR_WN_WN9_CUSTOMWORD" in models_string:
+        models.append('wn9_customword')
+    
+    for item in models:
+        shutil.copytree(model_path + '/wakenet_model/' + item, target_path+'/'+item)
+
+def copy_multinet_from_sdkconfig(model_path, sdkconfig_path, target_path):
+    """
+    Copy multinet model from model_path to target_path based on sdkconfig
+    """
+    with io.open(sdkconfig_path, "r") as f:
+        models_string = ''
+        for label in f:
+            label = label.strip("\n")
+            if 'CONFIG_SR_MN' in label and label[0] != '#':
+                models_string += label
+
+    models = []
     if "CONFIG_SR_WN_WN9_NIHAOXIAOZHI" in models_string:
         models.append('wn9_nihaoxiaozhi')
     if "CONFIG_SR_WN_WN9_CUSTOMWORD" in models_string:
