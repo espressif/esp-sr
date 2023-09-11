@@ -1,4 +1,4 @@
-IF(CONFIG_IDF_TARGET STREQUAL "esp32")
+IF(CONFIG_IDF_TARGET_ESP32)
     set(include_dirs 
         src/include
         esp-tts/esp_tts_chinese/include
@@ -43,7 +43,7 @@ IF(CONFIG_IDF_TARGET STREQUAL "esp32")
         voice_set_xiaole
         wakenet
         "-Wl,--end-group")
-ELSEIF(CONFIG_IDF_TARGET STREQUAL "esp32s3")
+ELSEIF(CONFIG_IDF_TARGET_ESP32S3)
     set(include_dirs 
         src/include
         esp-tts/esp_tts_chinese/include
@@ -117,7 +117,7 @@ ELSEIF(CONFIG_IDF_TARGET STREQUAL "esp32s3")
         set(message "Failed to find model in partition table file"
                     "Please add a line(Name=model, Size>recommended size in log) to the partition file.")
     ENDIF()
-ELSEIF(CONFIG_IDF_TARGET STREQUAL "esp32s2")
+ELSEIF(CONFIG_IDF_TARGET_ESP32S2)
     set(requires
     spiffs
     )
@@ -136,7 +136,7 @@ ELSEIF(CONFIG_IDF_TARGET STREQUAL "esp32s2")
         esp_tts_chinese
         voice_set_xiaole
         "-Wl,--end-group")
-ELSEIF(CONFIG_IDF_TARGET STREQUAL "esp32c3")
+ELSEIF(CONFIG_IDF_TARGET_ESP32C3)
     set(requires
     spiffs
     )
