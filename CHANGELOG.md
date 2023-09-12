@@ -9,6 +9,7 @@ If you can not map model partition successfully, please check the left free stor
 - Return the volume of wake word audio when one wake word is detected
 - Reduce MultiNet6 SRAM size from 48KB to 32 KB
 - Add "Hi M Five" wake word model from M5Stack
+- Remove all MultiNet4 models
 
 ## 1.4.2
 - Reset timeout trigger of multinet6 when a new speech command is detected
