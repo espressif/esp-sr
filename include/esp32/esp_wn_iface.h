@@ -1,6 +1,10 @@
 #pragma once
 #include "stdint.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //Opaque model data container
 typedef struct model_iface_data_t model_iface_data_t;
 
@@ -183,3 +187,7 @@ typedef struct {
     esp_wn_iface_op_clean_t clean;
     esp_wn_iface_op_destroy_t destroy;
 } esp_wn_iface_t;
+
+#ifdef __cplusplus
+}
+#endif

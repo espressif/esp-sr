@@ -2,6 +2,10 @@
 #include "esp_err.h"
 #include "esp_mn_iface.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @brief Check chip config to ensure optimum performance
  */
@@ -21,3 +25,7 @@ void check_chip_config(void);
  *     - ESP_ERR_INVALID_STATE   Fail
  */
 esp_mn_error_t* esp_mn_commands_update_from_sdkconfig(const esp_mn_iface_t *multinet, model_iface_data_t *model_data);
+
+#ifdef __cplusplus
+}
+#endif

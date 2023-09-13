@@ -139,6 +139,7 @@ typedef struct {
     .debug_init = false, \
     .debug_hook = {{AFE_DEBUG_HOOK_MASE_TASK_IN, NULL}, {AFE_DEBUG_HOOK_FETCH_TASK_IN, NULL}}, \
 }
+#endif
 
 #ifdef __cplusplus
 }

@@ -21,6 +21,10 @@
 #include "esp_system.h"
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // #ifdef CONFIG_IDF_TARGET_ESP32S3
 // #include "dl_tie728_bzero.h"
 // #endif
@@ -248,6 +252,10 @@ inline static void dl_matrix_set(dl_matrix2d_t *m, const int x, const int y, fpt
 }
 
 void matrix_get_range(const dl_matrix2d_t *m, fptp_t *rmin, fptp_t *rmax);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

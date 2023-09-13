@@ -32,6 +32,10 @@
 #include "esp32s3/rom/cache.h"
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef int padding_state;
 
 // /**
@@ -407,5 +411,8 @@ dl_matrix2d_t *dl_basic_conv_layer(const dl_matrix2d_t *in, const dl_matrix2d_t 
 dl_matrix2d_t *dl_basic_conv_layer_quantised_weight(const dl_matrix2d_t *in, const dl_matrix2dq_t *weight, const dl_matrix2d_t *bias, int filter_width, int filter_height, 
                                                      const int out_channels, const int stride_x, const int stride_y,  padding_state pad, const dl_matrix2d_t* out);
 
+#ifdef __cplusplus
+}
 #endif
 
+#endif
