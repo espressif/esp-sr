@@ -18,6 +18,9 @@
 #include "dl_lib_conv_queue.h"
 #include "dl_lib.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 //fixed-point convolution FIFO queue. 
 //[nch, n, c]
@@ -372,4 +375,8 @@ void test_lstm_convq(int size, int in_dim, int lstm_cell);
 void dl_nn_tanh_i162(dl_convq_queue_t **cqm, int offset, int nch);
 void dl_copy_queue_item_by_qmf(dl_convq_queue_t *cq, fptp_t* item, int m_bit, int f_bit, int offset, int ch);
 void dl_convq_queue_mc_bzero(dl_convq_queue_t **cqm, int nch);
+#ifdef __cplusplus
+}
+#endif
+
 #endif

@@ -15,6 +15,10 @@
 #include "esp_err.h"
 #include "esp_mn_iface.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
 esp_mn_node_t is a singly linked list which is used to manage speech commands. 
 It is easy to add one speech command into linked list and remove one speech command from linked list.
@@ -171,3 +175,7 @@ void esp_mn_commands_print(void);
  * @brief Print all active commands.
  */
 void esp_mn_active_commands_print(void);
+
+#ifdef __cplusplus
+}
+#endif

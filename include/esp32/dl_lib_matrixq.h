@@ -17,6 +17,10 @@
 #include <stdint.h>
 #include "dl_lib_matrix.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef int16_t qtp_t;
 
 //Quantized matrix. Uses fixed numbers and has the storage for the rows/columns inverted 
@@ -374,5 +378,10 @@ fptp_t dl_matrixq_get(const dl_matrix2dq_t *m, const int x, const int y);
  * @param val   Value to write to that position
  */
 void dl_matrixq_set(dl_matrix2dq_t *m, const int x, const int y, fptp_t val);
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

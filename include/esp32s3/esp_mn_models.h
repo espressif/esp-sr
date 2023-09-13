@@ -4,7 +4,9 @@
 //Contains declarations of all available speech recognion models. Pair this up with the right coefficients and you have a model that can recognize
 //a specific phrase or word.
 
-
+#ifdef __cplusplus
+extern "C" {
+#endif
 /**
  * @brief Get the multinet handle from model name
  *
@@ -59,3 +61,6 @@ if (r>0) {
 model->destroy(model_data)
 
 */
+#ifdef __cplusplus
+}
+#endif

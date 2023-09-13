@@ -19,6 +19,10 @@
 #include "dl_lib_matrixq8.h"
 #include "cJSON.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //Set this if the coefficient requested is a batch-normalization popvar matrix which needs to be preprocessed by
 //dl_batch_normalize_get_sqrtvar first.
 #define COEF_GETTER_HINT_BNVAR (1<<0)
@@ -68,5 +72,9 @@ typedef struct {
     const alphabet_t* (*getter_alphabet)(void *arg);
     const cJSON* (*getter_config)(void *arg);
 } model_coeff_getter_t;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

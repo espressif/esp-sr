@@ -5,7 +5,9 @@
 #include "esp_partition.h"
 #endif
 
-#define ESP_SR_IDF_V5
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct {
     int num;                 // the number of files
@@ -119,4 +121,9 @@ srmodel_list_t *get_static_srmodels(void);
  * @return model_coeff_getter_t pointer or NULL
  */
 model_coeff_getter_t *srmodel_get_model_coeff(char *model_name);
+#endif
+
+
+#ifdef __cplusplus
+}
 #endif

@@ -1,6 +1,9 @@
 #pragma once
 #include "stdint.h"
 #include "esp_wn_iface.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define ESP_MN_RESULT_MAX_NUM 5
 #define ESP_MN_MAX_PHRASE_NUM 400
@@ -213,3 +216,7 @@ typedef struct {
     esp_mn_iface_op_print_active_speech_commands print_active_speech_commands;
     esp_mn_iface_op_check_speech_command check_speech_command;
 } esp_mn_iface_t;
+
+#ifdef __cplusplus
+}
+#endif

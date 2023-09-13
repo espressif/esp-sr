@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #if defined CONFIG_USE_AFE
 #include "esp_afe_sr_iface.h"
 
@@ -24,4 +28,8 @@ extern const esp_afe_sr_iface_t esp_afe_vc_v1;
 #define ESP_AFE_SR_HANDLE esp_afe_sr_v1
 #define ESP_AFE_VC_HANDLE esp_afe_vc_v1
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
