@@ -25,6 +25,8 @@ typedef struct afe_fetch_result_t
 {
     int16_t *data;                          // the data of audio.
     int data_size;                          // the size of data. The unit is byte.
+    float data_volume;                      // the volume of input audio, the unit is decibel(dB). This value is calculated before agc. (note: invalid in vc).
+                                            // if enable wakenet, the window length is the receptive fields of wakenet(about 1.5s), otherwise is the frame length. 
     wakenet_state_t wakeup_state;           // the value is wakenet_state_t
     int wake_word_index;                    // if the wake word is detected. It will store the wake word index which start from 1.
     int wakenet_model_index;                // if there are multiple wakenets, this value identifies which model be wakes up. Index start from 1.
