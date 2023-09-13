@@ -1,6 +1,9 @@
 #pragma once
 #include "esp_wn_iface.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 // The prefix of wakenet model name is used to filter all wakenet from availabel models.
 #define ESP_WN_PREFIX "wn"
@@ -96,6 +99,10 @@ char* esp_wn_wakeword_from_name(const char *model_name);
 #else
 #define WAKENET_MODEL_NAME "NULL"
 #define WAKENET_COEFF "COEFF_NULL"
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 /*

@@ -2,6 +2,10 @@
 #include "stdint.h"
 #include "esp_afe_config.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //AFE: Audio Front-End 
 //SR:  Speech Recognition
 //afe_sr/AFE_SR: the audio front-end for speech recognition
@@ -200,3 +204,7 @@ typedef struct {
     esp_afe_sr_iface_op_enable_se_t enable_se;
     esp_afe_sr_iface_op_destroy_t destroy;
 } esp_afe_sr_iface_t;
+
+#ifdef __cplusplus
+}
+#endif

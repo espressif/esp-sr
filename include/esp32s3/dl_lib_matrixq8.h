@@ -19,6 +19,10 @@
 #include "dl_lib.h"
 #include "dl_lib_matrixq.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef int8_t q8tp_t;
 
 typedef struct {
@@ -68,4 +72,9 @@ dl_matrix2dq8_t *dl_matrixq8_copy_to_psram(const dl_matrix2dq8_t *m);
  */
 dl_matrix2dq8_t *dl_matrixq8_from_matrix2d(const dl_matrix2d_t *m, dl_matrix2dq8_t *out);
 
+#ifdef __cplusplus
+}
 #endif
+
+#endif
+
