@@ -78,14 +78,13 @@ before_script:
 .rules:build_docs:docs:
   rules:
     - <<: *if-protected
-      changes: *patterns-build_docs
+    - <<: *if-label-build
     - <<: *if-dev-push
       changes: *patterns-build_docs
 
 .rules:deploy:docs_preview:
   rules:
     - <<: *if-label-build
-      changes: *patterns-build_docs
     - <<: *if-dev-push
       changes: *patterns-build_docs
 
