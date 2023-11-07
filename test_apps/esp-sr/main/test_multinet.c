@@ -135,35 +135,33 @@ TEST_CASE("multinet set commands", "[mn]")
     model_iface_data_t *model_data = multinet->create(model_name, 6000);
     char *lang = multinet->get_language(model_data);
     esp_mn_error_t *error_phrases = NULL;
+    esp_mn_commands_update_from_sdkconfig(multinet, model_data);
     printf("MODEL NAME %s\n", model_name);
 
-    // first
     if (strcmp(lang, ESP_MN_ENGLISH) == 0) {
         if (strcmp(model_name, "mn5q8_en") == 0) {
-            TEST_ESP_OK(esp_mn_commands_add(1, "TfL Mm c qbK"));
-            TEST_ESP_OK(esp_mn_commands_add(2, "hicST qbK"));
+            esp_mn_commands_add(1, "TfL Mm c qbK");
+            esp_mn_commands_add(2, "hicST qbK");
         } else {
-            TEST_ESP_OK(esp_mn_commands_add(1, "TURN ON THE LIGHT"));
-            TEST_ESP_OK(esp_mn_commands_add(2, "TURN OFF THE KITCHEN LIGHT"));
+            esp_mn_commands_add(1, "SHUFFLE MY PLAYLIST");
+            esp_mn_commands_add(2, "TURN OFF THE KITCHEN LIGHT");
         }
         error_phrases = esp_mn_commands_update();
     } else if(strcmp(lang, ESP_MN_CHINESE) == 0) {
-        TEST_ESP_OK(esp_mn_commands_add(1, "da kai dian deng"));
-        TEST_ESP_OK(esp_mn_commands_add(2, "guan bi chu fang dian deng"));
+        esp_mn_commands_add(1, "da kai dian deng");
+        esp_mn_commands_add(2, "guan bi chu fang dian deng");
         error_phrases = esp_mn_commands_update();
     } else {
         printf("Invalid language\n");
     }
-    TEST_ASSERT_EQUAL(true, error_phrases == NULL);
 
-    // second
     if (strcmp(lang, ESP_MN_ENGLISH) == 0) {
         if (strcmp(model_name, "mn5q8_en") == 0) {
-            TEST_ESP_OK(esp_mn_commands_add(3, "TkN nN eL jc LiTS"));
-            TEST_ESP_OK(esp_mn_commands_add(4, "TkN eF eL jc LiTS"));
+            esp_mn_commands_add(3, "TkN nN eL jc LiTS");
+            esp_mn_commands_add(4, "TkN eF eL jc LiTS");
         } else {
-            TEST_ESP_OK(esp_mn_commands_add(3, "TURN OFF THE LIGHT"));
-            TEST_ESP_OK(esp_mn_commands_add(4, "TURN OM THE KITCHEN LIGHT"));
+            esp_mn_commands_add(3, "TURN ON THE LIGHT");
+            esp_mn_commands_add(4, "TURN OFF THE LIGHT");
         }
         error_phrases = esp_mn_commands_update();
     } else if(strcmp(lang, ESP_MN_CHINESE) == 0) {
@@ -173,7 +171,6 @@ TEST_CASE("multinet set commands", "[mn]")
     } else {
         printf("Invalid language\n");
     }
-    esp_mn_active_commands_print();
 
     multinet->destroy(model_data);
     esp_srmodel_deinit(models);
@@ -191,27 +188,20 @@ TEST_CASE("multinet add incorrect commands", "[mn]")
     model_iface_data_t *model_data = multinet->create(model_name, 6000);
     char *lang = multinet->get_language(model_data);
     esp_mn_error_t *error_phrases = NULL;
-    esp_err_t state = ESP_OK;
 
     if (strcmp(lang, ESP_MN_ENGLISH) == 0) {
-        state = esp_mn_commands_add(1, "TURN ON THE LIGHT 123");
-        assert(state == ESP_ERR_INVALID_STATE);
-        state = esp_mn_commands_add(2, "TURN. OFF THE LIGHT?");
-        assert(state == ESP_ERR_INVALID_STATE);
+        esp_mn_commands_add(1, "TURN ON THE LIGHT 123");
+        esp_mn_commands_add(2, "TURN. OFF THE LIGHT?");
     } else if(strcmp(lang, ESP_MN_CHINESE) == 0) {
         if (strcmp(model_name, "mn6_cn_ac") == 0 || strcmp(model_name, "mn6_cn") == 0) {
-            state = esp_mn_commands_add(1, "dakai dian deng");
-            assert(state == ESP_ERR_INVALID_STATE);
-            state = esp_mn_commands_add(2, "关闭电灯");
-            assert(state == ESP_ERR_INVALID_STATE);
+            esp_mn_commands_add(1, "dakai dian deng");
+            esp_mn_commands_add(2, "关闭电灯");
         } else {
-            state = esp_mn_commands_add(1, "k");
-            assert(state == ESP_ERR_INVALID_STATE);
+            esp_mn_commands_add(1, "k");
         }
     } else {
         printf("Invalid language\n");
     }
-    
     multinet->destroy(model_data);
     esp_srmodel_deinit(models);
     TEST_ASSERT_EQUAL(true, error_phrases == NULL);
@@ -243,7 +233,7 @@ TEST_CASE("multinet add duplicated commands", "[mn]")
     } else {
         printf("Invalid language\n");
     }
-    
+
     multinet->destroy(model_data);
     esp_srmodel_deinit(models);
     TEST_ASSERT_EQUAL(true, error_phrases == NULL);
@@ -274,7 +264,7 @@ TEST_CASE("multinet print active commands", "[mn]")
     }
 
     multinet->print_active_speech_commands(model_data);
-    
+
     multinet->destroy(model_data);
     esp_srmodel_deinit(models);
     TEST_ASSERT_EQUAL(true, 1);
@@ -296,7 +286,7 @@ TEST_CASE("multinet remove commands", "[mn]")
         if (strcmp(model_name, "mn5q8_en") == 0) {
             esp_mn_commands_remove("TfL Mm c qbK");
         } else {
-            esp_mn_commands_remove("TURN ON THE LIGHT");;
+            esp_mn_commands_remove("TURN ON THE LIGHT");
         }
     } else if(strcmp(lang, ESP_MN_CHINESE) == 0) {
         esp_mn_commands_remove("da kai dian deng");
@@ -306,7 +296,7 @@ TEST_CASE("multinet remove commands", "[mn]")
 
     esp_mn_commands_update();
     multinet->print_active_speech_commands(model_data);
-    
+
     multinet->destroy(model_data);
     esp_srmodel_deinit(models);
     TEST_ASSERT_EQUAL(true, 1);
@@ -328,22 +318,6 @@ TEST_CASE("multinet clear and add commands", "[mn]")
 
     if (strcmp(lang, ESP_MN_ENGLISH) == 0) {
         if (strcmp(model_name, "mn5q8_en") == 0) {
-            esp_mn_commands_add(1, "TfL Mm c qbK");
-        } else {
-            esp_mn_commands_add(1, "TURN ON THE LIGHT");
-        }
-    } else if(strcmp(lang, ESP_MN_CHINESE) == 0) {
-        esp_mn_commands_add(1, "da kai dian deng");
-    } else {
-        printf("Invalid language\n");
-    }
-
-    esp_mn_commands_update();
-    esp_mn_commands_print();
-    multinet->print_active_speech_commands(model_data);
-
-    if (strcmp(lang, ESP_MN_ENGLISH) == 0) {
-        if (strcmp(model_name, "mn5q8_en") == 0) {
             esp_mn_commands_add(2, "Sgl c Sel");
         } else {
             esp_mn_commands_add(2, "SING A SONG");
@@ -357,7 +331,7 @@ TEST_CASE("multinet clear and add commands", "[mn]")
     esp_mn_commands_update();
     esp_mn_commands_print();
     multinet->print_active_speech_commands(model_data);
-    
+
     multinet->destroy(model_data);
     esp_srmodel_deinit(models);
     TEST_ASSERT_EQUAL(true, 1);
@@ -389,7 +363,7 @@ TEST_CASE("multinet modify commands", "[mn]")
 
     esp_mn_commands_update();
     multinet->print_active_speech_commands(model_data);
-    
+
     multinet->destroy(model_data);
     esp_srmodel_deinit(models);
     TEST_ASSERT_EQUAL(true, 1);

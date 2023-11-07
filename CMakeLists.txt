@@ -89,6 +89,7 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
         esp_audio_front_end
         esp_audio_processor
         multinet
+	flite_g2p
         esp_tts_chinese
         voice_set_xiaole
         wakenet
