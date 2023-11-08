@@ -5,6 +5,7 @@
 #include "esp_heap_caps.h"
 #include "esp_mn_speech_commands.h"
 #include "esp_mn_iface.h"
+#include "flite_g2p.h"
 
 static char *TAG = "MN_COMMAND";
 static esp_mn_node_t *esp_mn_root = NULL;
@@ -67,7 +68,7 @@ esp_err_t esp_mn_commands_clear(void)
     return ESP_OK;
 }
 
-esp_mn_node_t *esp_mn_command_search(char *string) 
+esp_mn_node_t *esp_mn_command_search(char *string)
 {
     esp_mn_node_t *temp = esp_mn_root;
     if(NULL == esp_mn_root) {
@@ -93,11 +94,20 @@ esp_err_t esp_mn_commands_add(int command_id, char *string)
     int last_node_elem_num = esp_mn_commands_num();
     ESP_RETURN_ON_FALSE(ESP_MN_MAX_PHRASE_NUM >= last_node_elem_num, ESP_ERR_INVALID_STATE, TAG, "The number of speech commands exceed ESP_MN_MAX_PHRASE_NUM");
 
+#ifdef CONFIG_SR_MN_EN_MULTINET7_QUANT
+    char *phonemes = flite_g2p(string, 1);
+    if (esp_mn_model_handle->check_speech_command(esp_mn_model_data, phonemes) == 0) {
+        // error message is printed inside check_speech_command
+        ESP_LOGE(TAG, "invalid command, please check format, %s (%s).\n", string, phonemes);
+        return ESP_ERR_INVALID_STATE;
+    }
+#else
     if (esp_mn_model_handle->check_speech_command(esp_mn_model_data, string) == 0) {
         // error message is printed inside check_speech_command
         ESP_LOGE(TAG, "invalid command, please check format, %s.\n", string);
         return ESP_ERR_INVALID_STATE;
     }
+#endif
 
     temp = esp_mn_command_search(string);
 
@@ -119,7 +129,9 @@ esp_err_t esp_mn_commands_add(int command_id, char *string)
     if (phrase == NULL) {
         return ESP_ERR_INVALID_STATE;
     }
-
+#ifdef CONFIG_SR_MN_EN_MULTINET7_QUANT
+    phrase->phonemes = phonemes;
+#endif
     esp_mn_node_t *new_node = esp_mn_node_alloc(phrase);
     while (temp->next != NULL) {
         temp = temp->next;
@@ -131,10 +143,18 @@ esp_err_t esp_mn_commands_add(int command_id, char *string)
 
 esp_err_t esp_mn_commands_modify(char *old_string, char *new_string)
 {
-    if (esp_mn_model_handle->check_speech_command(esp_mn_model_data, new_string) == 0) {
-        // error message is printed inside check_speech_command
+#ifdef CONFIG_SR_MN_EN_MULTINET7_QUANT
+    char *phonemes = flite_g2p(new_string, 1);
+    if (esp_mn_model_handle->check_speech_command(esp_mn_model_data, phonemes) == 0) {
+        ESP_LOGE(TAG, "invalid command, please check format, %s (%s).\n", new_string, phonemes);
         return ESP_ERR_INVALID_STATE;
     }
+#else
+    if (esp_mn_model_handle->check_speech_command(esp_mn_model_data, new_string) == 0) {
+        ESP_LOGE(TAG, "invalid command, please check format, %s.\n", new_string);
+        return ESP_ERR_INVALID_STATE;
+    }
+#endif
     esp_mn_node_t *temp = esp_mn_root;
     ESP_RETURN_ON_FALSE(NULL != esp_mn_root, ESP_ERR_INVALID_STATE, TAG, "The mn commands is not initialized");
 
@@ -147,6 +167,9 @@ esp_err_t esp_mn_commands_modify(char *old_string, char *new_string)
         if (phrase == NULL) {
             return ESP_ERR_INVALID_STATE;
         }
+#ifdef CONFIG_SR_MN_EN_MULTINET7_QUANT
+        phrase->phonemes = phonemes;
+#endif
         esp_mn_phrase_free(temp->phrase);
         temp->phrase = phrase;
     } else {
@@ -277,11 +300,7 @@ void esp_mn_active_commands_print(void)
 void *_esp_mn_calloc_(int n, int size)
 {
 #ifdef ESP_PLATFORM
-    void *data = heap_caps_calloc(n, size, MALLOC_CAP_SPIRAM);
-    if (data == NULL) {
-        data = calloc(n, size);
-    }
-    return data;
+    return heap_caps_calloc(n, size, MALLOC_CAP_SPIRAM);
 #else
     return calloc(n, size);
 #endif
@@ -302,6 +321,7 @@ esp_mn_phrase_t *esp_mn_phrase_alloc(int command_id, char *string)
     phrase->command_id = command_id;
     phrase->threshold = 0;
     phrase->wave = NULL;
+    phrase->phonemes = NULL;
 
     return phrase;
 }
@@ -314,6 +334,9 @@ void esp_mn_phrase_free(esp_mn_phrase_t *phrase)
         }
         if (phrase->string != NULL) {
             free(phrase->string);
+        }
+        if (phrase->phonemes != NULL) {
+            free(phrase->phonemes);
         }
         free(phrase);
     }
