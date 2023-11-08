@@ -12,6 +12,7 @@ If you can not map model partition successfully, please check the left free stor
 - Remove all MultiNet4 models
 - Update MultiNet7_en v2.0
 - Fix some bugs in AFE
+- Add Flite G2P module
 
 ## 1.4.2
 - Reset timeout trigger of multinet6 when a new speech command is detected
