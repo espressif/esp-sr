@@ -12,6 +12,14 @@ static esp_mn_node_t *esp_mn_root = NULL;
 const static esp_mn_iface_t *esp_mn_model_handle = NULL;
 static model_iface_data_t *esp_mn_model_data = NULL;
 
+void *_esp_mn_calloc_(int n, int size)
+{
+#ifdef ESP_PLATFORM
+    return heap_caps_calloc(n, size, MALLOC_CAP_SPIRAM);
+#else
+    return calloc(n, size);
+#endif
+}
 
 #define ESP_RETURN_ON_FALSE(a, err_code, log_tag, format, ...) do {                             \
         if (!(a)) {                                                                             \
@@ -130,7 +138,11 @@ esp_err_t esp_mn_commands_add(int command_id, char *string)
         return ESP_ERR_INVALID_STATE;
     }
 #ifdef CONFIG_SR_MN_EN_MULTINET7_QUANT
-    phrase->phonemes = phonemes;
+    int phoneme_len = strlen(phonemes);
+    phrase->phonemes = _esp_mn_calloc_(phoneme_len+1, sizeof(char));
+    memcpy(phrase->phonemes, phonemes, phoneme_len);
+    phrase->phonemes[phoneme_len] = '\0';
+    free(phonemes);
 #endif
     esp_mn_node_t *new_node = esp_mn_node_alloc(phrase);
     while (temp->next != NULL) {
@@ -168,7 +180,11 @@ esp_err_t esp_mn_commands_modify(char *old_string, char *new_string)
             return ESP_ERR_INVALID_STATE;
         }
 #ifdef CONFIG_SR_MN_EN_MULTINET7_QUANT
-        phrase->phonemes = phonemes;
+        int phoneme_len = strlen(phonemes);
+        phrase->phonemes = _esp_mn_calloc_(phoneme_len+1, sizeof(char));
+        memcpy(phrase->phonemes, phonemes, phoneme_len);
+        phrase->phonemes[phoneme_len] = '\0';
+        free(phonemes);
 #endif
         esp_mn_phrase_free(temp->phrase);
         temp->phrase = phrase;
@@ -295,15 +311,6 @@ void esp_mn_active_commands_print(void)
     ESP_LOGI(TAG, "---------------------ACTIVE SPEECH COMMANDS---------------------");
     esp_mn_model_handle->print_active_speech_commands(esp_mn_model_data);
     ESP_LOGI(TAG, "---------------------------------------------------------\n");
-}
-
-void *_esp_mn_calloc_(int n, int size)
-{
-#ifdef ESP_PLATFORM
-    return heap_caps_calloc(n, size, MALLOC_CAP_SPIRAM);
-#else
-    return calloc(n, size);
-#endif
 }
 
 esp_mn_phrase_t *esp_mn_phrase_alloc(int command_id, char *string)
