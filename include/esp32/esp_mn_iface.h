@@ -21,7 +21,7 @@ typedef enum {
 } esp_mn_state_t;
 
 //Set multinet loading mode
-//The memory comsumption is decreased with increasing mode, 
+//The memory comsumption is decreased with increasing mode,
 //As a consequence also the CPU loading rate goes up
 typedef enum {
     ESP_MN_LOAD_FROM_PSRAM = 0,          // Load all weights from PSRAM. Fastest computation with Maximum memory consumption
@@ -52,6 +52,7 @@ typedef struct{
 
 typedef struct {
     char *string;                               // command string
+    char *phonemes;                             // command phonemes, if applicable
     int16_t command_id;                         // the command id
     float threshold;                            // trigger threshold, default: 0
     int16_t *wave;                              // prompt wave data of the phrase
@@ -79,7 +80,7 @@ typedef model_iface_data_t* (*esp_mn_iface_op_create_t)(const char *model_name, 
 
 /**
  * @brief Switch multinet mode to change memory consumption and CPU loading
- * 
+ *
  * @warning Just Support multinet6 or later versions
  *
  * @param model The model object to query
@@ -109,7 +110,7 @@ typedef int (*esp_mn_iface_op_get_samp_chunksize_t)(model_iface_data_t *model);
 typedef int (*esp_mn_iface_op_get_samp_chunknum_t)(model_iface_data_t *model);
 
 /**
- * @brief Set the detection threshold to manually abjust the probability 
+ * @brief Set the detection threshold to manually abjust the probability
  *
  * @param model The model object to query
  * @param det_treshold The threshold to trigger speech commands, the range of det_threshold is 0.0~0.9999
@@ -127,7 +128,7 @@ typedef int (*esp_mn_iface_op_get_samp_rate_t)(model_iface_data_t *model);
 /**
  * @brief Get the language of model
  *
- * @param model       The language name 
+ * @param model       The language name
  * @return Language name string defined in esp_mn_models.h, eg: ESP_MN_CHINESE, ESP_MN_ENGLISH
  */
 typedef char * (*esp_mn_iface_op_get_language_t)(model_iface_data_t *model);
@@ -136,7 +137,7 @@ typedef char * (*esp_mn_iface_op_get_language_t)(model_iface_data_t *model);
  * @brief Feed samples of an audio stream to the speech recognition model and detect if there is a speech command found.
  *
  * @param model       The model object to query.
- * @param samples     An array of 16-bit signed audio samples. The array size used can be queried by the 
+ * @param samples     An array of 16-bit signed audio samples. The array size used can be queried by the
  *                    get_samp_chunksize function.
  * @return The state of multinet
  */
@@ -150,10 +151,10 @@ typedef esp_mn_state_t (*esp_mn_iface_op_detect_t)(model_iface_data_t *model, in
 typedef void (*esp_mn_iface_op_destroy_t)(model_iface_data_t *model);
 
 /**
- * @brief Get recognition results 
+ * @brief Get recognition results
  *
  * @param model       The Model object to query
- * 
+ *
  * @return The current results.
  */
 typedef esp_mn_results_t* (*esp_mn_iface_op_get_results_t)(model_iface_data_t *model);
@@ -186,14 +187,14 @@ typedef esp_mn_error_t* (*esp_wn_iface_op_set_speech_commands)(model_iface_data_
 
 /**
  * @brief Print out current commands in fst, note the ones "added" but not "updated" will not be shown here
- * 
+ *
  * @param model_data     The model object to query
 */
 typedef void (*esp_mn_iface_op_print_active_speech_commands)(model_iface_data_t *model_data);
 
 /**
  * @brief Check if input string can be tokenized
- * 
+ *
  * @param model_data     The model object to query
  * @param str            The input string
 */
@@ -206,7 +207,7 @@ typedef struct {
     esp_mn_iface_op_get_samp_chunknum_t get_samp_chunknum;
     esp_mn_iface_op_set_det_threshold_t set_det_threshold;
     esp_mn_iface_op_get_language_t get_language;
-    esp_mn_iface_op_detect_t detect; 
+    esp_mn_iface_op_detect_t detect;
     esp_mn_iface_op_destroy_t destroy;
     esp_mn_iface_op_get_results_t get_results;
     esp_mn_iface_op_open_log_t open_log;
