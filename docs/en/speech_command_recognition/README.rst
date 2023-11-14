@@ -46,28 +46,50 @@ Speech Commands Customization Methods
 --------------------------------------
 
 .. note::
-    Mixed Chinese and English is not supported in command words. 
+    Mixed Chinese and English is not supported in command words.
 
     The command word cannot contain Arabic numerals and special characters.
 
-    Please refer to Chinese version documentation for Chinese speech commands customization methods. 
+    Please refer to Chinese version documentation for Chinese speech commands customization methods.
+
+
+MultiNet7 customize speech commands
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+MultiNet7 use phonemes for English speech commands. Please modify a text file :project_file:`model/multinet_model/fst/commands_en.txt` by the following format:
+
+    ::
+
+        # command_id,command_grapheme,command_phoneme
+        1,tell me a joke,TfL Mm c qbK
+        2,sing a song,Sgl c Sel
+
+- Column 1: command ID, it should start from 1 and cannot be set to 0.
+- Column 2: command_grapheme, the command sentence. It is recommended to use lowercase letters unless it is an acronym that is meant to be pronounced differently.
+- Column 3: command_phoneme, the phoneme sequence of the command which is optional. To fill this column, please use :project_file:`tool/multinet_g2p.py` to do the Grapheme-to-Phoneme conversion and paste the results at the third column correspondingly (this is the recommended way).
+
+If Column 3 is left empty, then an internal Grapheme-to-Phoneme tool will be called at runtime. But there might be a little accuracy drop in this way due the different Grapheme-to-Phoneme algorithms used.
 
 
 MultiNet6 customize speech commands
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-MultiNet6 use grapheme for English speech commands. You can add/modify speech commands by words directly. Please modify a text file :project_file:`model/multinet_model/fst/commands_en.txt` by the following format (command id cannot be set to 0):
+MultiNet6 use grapheme for English speech commands, you can add/modify speech commands by words directly. Please modify a text file :project_file:`model/multinet_model/fst/commands_en.txt` by the following format:
 
     ::
 
-        # command_id command_sentence
-        1 TELL ME A JOKE
-        2 MAKE A COFFEE
+        # command_id,command_grapheme
+        1,TELL ME A JOKE
+        2,MAKE A COFFEE
+
+- Column 1: command ID, it should start from 1 and cannot be set to 0.
+- Column 2: command_grapheme, the command sentence. It is recommended to use all capital letters.
+
+The extra column in the default `commands_en.txt` is to keep it compatible with MultiNet7, there is no need to fill the third column when using MultiNet6.
 
 
 MultiNet5 customize speech commands
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-MultiNet5 use phonemes for English speech commands. For simplicity, we use characters to denote different phonemes. Please use :project_file:`tool/multinet_g2p.py` to do the convention.  
+MultiNet5 use phonemes for English speech commands. For simplicity, we use characters to denote different phonemes. Please use :project_file:`tool/multinet_g2p.py` to do the convention.
 
 - Via ``menuconfig``
 
@@ -101,7 +123,9 @@ MultiNet5 use phonemes for English speech commands. For simplicity, we use chara
 
 Customize Speech Commands Via API calls
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Alternatively, speech commands can be modified via API calls, this method works for both MultiNet5 and MultiNet6.
+Alternatively, speech commands can be modified via API calls, this method works for MultiNet5, MultiNet6 and MultiNet7.
+
+MutiNet5 requires the input command string to be phonemes, and MultiNet6 and MultiNet7 only accepts grapheme inputs to API calls.
 
 - Apply new changes, the add/remove/modify/clear actions will not take effect util this function is called.
 
@@ -109,8 +133,8 @@ Alternatively, speech commands can be modified via API calls, this method works 
 
         /**
         * @brief Update the speech commands of MultiNet
-        * 
-        * @Warning: Must be used after [add/remove/modify/clear] function, 
+        *
+        * @Warning: Must be used after [add/remove/modify/clear] function,
         *           otherwise the language model of multinet can not be updated.
         *
         * @return
@@ -194,7 +218,7 @@ Alternatively, speech commands can be modified via API calls, this method works 
 - Print active speech commands, this function will print out all active speech commands.
 
     ::
-        
+
         /**
         * @brief Print all commands in linked list.
         */
