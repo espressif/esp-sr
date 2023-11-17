@@ -29,6 +29,25 @@ choice AFE_INTERFACE_SEL
 
 endchoice
 
+config USE_NSNET
+    bool "use nsnet"
+    default "n"
+
+choice SR_NSN_MODEL_LOAD
+    prompt "Select deep noise suppression"
+    default SR_NSN_NSNET1
+    depends on USE_NSNET
+    help
+        Select the deep noise suppression to be loaded.
+
+    config SR_NSN_NONE
+        bool "None"
+
+    config SR_NSN_NSNET1
+        bool "Deep noise suppression v1 (nsnet1)"
+        depends on IDF_TARGET_ESP32S3
+
+endchoice
 
 config USE_WAKENET
     bool "use wakenet"

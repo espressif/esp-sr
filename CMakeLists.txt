@@ -93,6 +93,7 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
         esp_tts_chinese
         voice_set_xiaole
         wakenet
+	nsnet
         "-Wl,--end-group")
 
     set(MVMODEL_EXE ${COMPONENT_PATH}/model/movemodel.py)
