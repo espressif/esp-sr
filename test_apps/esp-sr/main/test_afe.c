@@ -49,7 +49,7 @@ const static char *task_stack[] = {"Extr", "Intr"};
 #endif
 
 
-TEST_CASE(">>>>>>>> audio_front_end SR create/destroy API & memory leak <<<<<<<<", "[afe]")
+TEST_CASE(">>>>>>>> audio_front_end SR create/destroy API & memory leak <<<<<<<<", "[afe_sr]")
 {
     int audio_chunksize = 0;
     int16_t *feed_buff = NULL;
@@ -303,7 +303,7 @@ void test_print_cpuloading(void *arg)
     vTaskDelete(NULL);
 }
 
-TEST_CASE("audio_front_end SR cpu loading and memory info", "[afe]")
+TEST_CASE("audio_front_end SR cpu loading and memory info", "[afe_sr]")
 {
     srmodel_list_t *models = esp_srmodel_init("model");
     if (models!=NULL) {
@@ -350,7 +350,7 @@ TEST_CASE("audio_front_end SR cpu loading and memory info", "[afe]")
 
 
 
-TEST_CASE("audio_front_end VC create/destroy API & memory leak", "[afe]")
+TEST_CASE("audio_front_end VC create/destroy API & memory leak", "[afe_vc]")
 {
     int start_total_mem_size = 0;
     int start_internal_mem_size = 0;
@@ -422,7 +422,7 @@ TEST_CASE("audio_front_end VC create/destroy API & memory leak", "[afe]")
     }
 }
 
-TEST_CASE("audio_front_end VC cpu loading and memory info", "[afe]")
+TEST_CASE("audio_front_end VC cpu loading and memory info", "[afe_vc]")
 {
     total_ram_size_before = heap_caps_get_free_size(MALLOC_CAP_8BIT);
     internal_ram_size_before = heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
