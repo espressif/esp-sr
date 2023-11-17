@@ -60,7 +60,7 @@ choice SR_WN_MODEL_LOAD
     config SR_WN_WN5X3_NIHAOXIAOXIN
         bool "nihaoxiaoxin (wn5_nihaoxiaoxinX3)"
         depends on IDF_TARGET_ESP32
-    
+
     config SR_WN_WN8_ALEXA
         bool "Alexa (wn8_alexa)"
         depends on IDF_TARGET_ESP32S3
@@ -68,7 +68,7 @@ choice SR_WN_MODEL_LOAD
     config SR_WN_WN9_HILEXIN
         bool "Hi,Lexin (wn9_hilexin)"
         depends on IDF_TARGET_ESP32S3
-    
+
     config SR_WN_WN9_XIAOAITONGXUE
         bool "xiaoaitongxue (wn9_xiaoaitongxue)"
         depends on IDF_TARGET_ESP32S3
@@ -80,7 +80,7 @@ choice SR_WN_MODEL_LOAD
     config SR_WN_WN9_HIESP
         bool "Hi,ESP (wn9_hiesp)"
         depends on IDF_TARGET_ESP32S3
-    
+
     config SR_WN_WN9_HIMFIVE
         bool "Hi,M Five (wn9_himfive)"
         depends on IDF_TARGET_ESP32S3
@@ -101,7 +101,7 @@ endchoice
 
 menu "Load Multiple Wake Words"
     depends on SR_WN_LOAD_MULIT_WORD
-    
+
     config SR_WN_WN9_HILEXIN_MULTI
     bool "Hi,Lexin (wn9_hilexin)"
     default False
@@ -141,13 +141,21 @@ choice CHINESE_SR_MN_MODEL_SEL
     config SR_MN_CN_MULTINET5_RECOGNITION_QUANT8
         bool "chinese recognition (mn5q8_cn)"
         depends on IDF_TARGET_ESP32S3
-    
+
     config SR_MN_CN_MULTINET6_QUANT
         bool "general chinese recognition (mn6_cn)"
         depends on IDF_TARGET_ESP32S3
-    
+
     config SR_MN_CN_MULTINET6_AC_QUANT
         bool "chinese recognition for air conditioner controller (mn6_cn_ac)"
+        depends on IDF_TARGET_ESP32S3
+
+    config SR_MN_CN_MULTINET7_QUANT
+        bool "general chinese recognition (mn7_cn)"
+        depends on IDF_TARGET_ESP32S3
+
+    config SR_MN_CN_MULTINET7_AC_QUANT
+        bool "chinese recognition for air conditioner controller (mn7_cn_ac)"
         depends on IDF_TARGET_ESP32S3
 
 endchoice
@@ -165,11 +173,11 @@ choice ENGLISH_SR_MN_MODEL_SEL
     config SR_MN_EN_MULTINET5_SINGLE_RECOGNITION_QUANT8
         bool "english recognition (mn5q8_en)"
         depends on IDF_TARGET_ESP32S3
-    
+
     config SR_MN_EN_MULTINET6_QUANT
         bool "general english recognition (mn6_en)"
         depends on IDF_TARGET_ESP32S3
-    
+
     config SR_MN_EN_MULTINET7_QUANT
         bool "general english recognition (mn7_en)"
         depends on IDF_TARGET_ESP32S3
