@@ -31,6 +31,9 @@ static int total_ram_size_before = 0;
 static int internal_ram_size_before = 0;
 static int psram_size_before = 0;
 
+
+
+#if (CONFIG_FREERTOS_VTASKLIST_INCLUDE_COREID && CONFIG_FREERTOS_GENERATE_RUN_TIME_STATS)
 const static char *task_state[] = {
     "Running",
     "Ready",
@@ -43,6 +46,7 @@ const static char *task_state[] = {
 * "Extr": Allocated task stack from psram, "Intr": Allocated task stack from internel
 */
 const static char *task_stack[] = {"Extr", "Intr"};
+#endif
 
 
 TEST_CASE(">>>>>>>> audio_front_end SR create/destroy API & memory leak <<<<<<<<", "[afe]")
