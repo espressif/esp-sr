@@ -39,6 +39,12 @@ typedef struct {
     int sample_rate;                        // sample rate of audio
 } afe_pcm_config_t;
 
+typedef enum {
+    NS_MODE_SSP = 0,                        // speech signal process method
+    NS_MODE_NET = 1,                        // deep noise suppression net method
+} afe_ns_mode_t;
+
+
 /**
  * @brief Function to get the debug audio data
  *
@@ -82,6 +88,8 @@ typedef struct {
     afe_pcm_config_t pcm_config;            // Config the channel num of original data which is fed to the afe feed function.
     bool debug_init;
     afe_debug_hook_t debug_hook[AFE_DEBUG_HOOK_MAX];
+    afe_ns_mode_t afe_ns_mode;
+    char *afe_ns_model_name;
 } afe_config_t;
 
 
@@ -111,6 +119,8 @@ typedef struct {
     .pcm_config.sample_rate = 16000, \
     .debug_init = false, \
     .debug_hook = {{AFE_DEBUG_HOOK_MASE_TASK_IN, NULL}, {AFE_DEBUG_HOOK_FETCH_TASK_IN, NULL}}, \
+    .afe_ns_mode = NS_MODE_SSP, \
+    .afe_ns_model_name = NULL, \
 }
 #elif CONFIG_IDF_TARGET_ESP32S3
 #define AFE_CONFIG_DEFAULT() { \
@@ -138,6 +148,8 @@ typedef struct {
     .pcm_config.sample_rate = 16000, \
     .debug_init = false, \
     .debug_hook = {{AFE_DEBUG_HOOK_MASE_TASK_IN, NULL}, {AFE_DEBUG_HOOK_FETCH_TASK_IN, NULL}}, \
+    .afe_ns_mode = NS_MODE_SSP, \
+    .afe_ns_model_name = NULL, \
 }
 #endif
 

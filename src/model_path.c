@@ -229,7 +229,8 @@ void srmodel_config_deinit(srmodel_list_t *models)
         }
         free(models);
     }
-    models = NULL;
+    // models is static_srmodels
+    static_srmodels = NULL;
 }
 
 model_coeff_getter_t *srmodel_get_model_coeff(char *model_name)

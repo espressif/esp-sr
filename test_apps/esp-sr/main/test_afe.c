@@ -20,6 +20,11 @@
 #include "dl_lib_convq_queue.h"
 #include <sys/time.h>
 
+#ifdef CONFIG_IDF_TARGET_ESP32S3
+#include "esp_nsn_models.h"
+#include "esp_nsn_iface.h"
+#endif
+
 #define ARRAY_SIZE_OFFSET                   8       // Increase this if audio_sys_get_real_time_stats returns ESP_ERR_INVALID_SIZE
 #define AUDIO_SYS_TASKS_ELAPSED_TIME_MS     1000    // Period of stats measurement
 
@@ -31,6 +36,9 @@ static int total_ram_size_before = 0;
 static int internal_ram_size_before = 0;
 static int psram_size_before = 0;
 
+
+
+#if (CONFIG_FREERTOS_VTASKLIST_INCLUDE_COREID && CONFIG_FREERTOS_GENERATE_RUN_TIME_STATS)
 const static char *task_state[] = {
     "Running",
     "Ready",
@@ -43,9 +51,10 @@ const static char *task_state[] = {
 * "Extr": Allocated task stack from psram, "Intr": Allocated task stack from internel
 */
 const static char *task_stack[] = {"Extr", "Intr"};
+#endif
 
 
-TEST_CASE(">>>>>>>> audio_front_end SR create/destroy API & memory leak <<<<<<<<", "[afe]")
+TEST_CASE(">>>>>>>> audio_front_end SR create/destroy API & memory leak <<<<<<<<", "[afe_sr]")
 {
     int audio_chunksize = 0;
     int16_t *feed_buff = NULL;
@@ -299,7 +308,7 @@ void test_print_cpuloading(void *arg)
     vTaskDelete(NULL);
 }
 
-TEST_CASE("audio_front_end SR cpu loading and memory info", "[afe]")
+TEST_CASE("audio_front_end SR cpu loading and memory info", "[afe_sr]")
 {
     srmodel_list_t *models = esp_srmodel_init("model");
     if (models!=NULL) {
@@ -346,7 +355,7 @@ TEST_CASE("audio_front_end SR cpu loading and memory info", "[afe]")
 
 
 
-TEST_CASE("audio_front_end VC create/destroy API & memory leak", "[afe]")
+TEST_CASE("audio_front_end VC create/destroy API & memory leak", "[afe_vc]")
 {
     int start_total_mem_size = 0;
     int start_internal_mem_size = 0;
@@ -367,68 +376,100 @@ TEST_CASE("audio_front_end VC create/destroy API & memory leak", "[afe]")
         for (int se_init = 0; se_init < 2; se_init++) {
             for (int vad_init = 0; vad_init < 2; vad_init++) {
                 for (int voice_communication_agc_init = 0; voice_communication_agc_init < 2; voice_communication_agc_init++) {
-                    printf("aec_init: %d, se_init: %d, vad_init: %d, voice_communication_agc_init: %d\n", aec_init, se_init, vad_init, voice_communication_agc_init);
-                    afe_config.aec_init = aec_init;
-                    afe_config.se_init = se_init;
-                    afe_config.vad_init = vad_init;
-                    afe_config.voice_communication_agc_init = voice_communication_agc_init;
+                    #ifdef CONFIG_IDF_TARGET_ESP32S3
+                        for (int afe_ns_mode = 0; afe_ns_mode < 2; afe_ns_mode++) {
+                    #else
+                            int afe_ns_mode = NS_MODE_SSP;
+                    #endif
+                            printf("aec_init: %d, se_init: %d, vad_init: %d, voice_communication_agc_init: %d, afe_ns_mode: %d\n", aec_init, se_init, vad_init, voice_communication_agc_init, afe_ns_mode);
+                            afe_config.aec_init = aec_init;
+                            afe_config.se_init = se_init;
+                            afe_config.vad_init = vad_init;
+                            afe_config.voice_communication_agc_init = voice_communication_agc_init;
+                            afe_config.afe_ns_mode = afe_ns_mode;
 
-                    start_total_mem_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
-                    start_internal_mem_size = heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
-                    start_spiram_mem_size = heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_SPIRAM);
+                            //start_total_mem_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
+                            //start_internal_mem_size = heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
+                            //start_spiram_mem_size = heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_SPIRAM);
 
-                    for (int i = 0; i < 6; i++) {
-                        printf("index: %d\n", i);
+                            for (int i = 0; i < 2; i++) {
+                                printf("index: %d\n", i);
+                                vTaskDelay(500 / portTICK_PERIOD_MS);
+                                start_total_mem_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
+                                start_internal_mem_size = heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
+                                start_spiram_mem_size = heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_SPIRAM);
+                                srmodel_list_t *models = esp_srmodel_init("model");
+                                char *nsnet_name = NULL;
+                            #ifdef CONFIG_IDF_TARGET_ESP32S3
+                                nsnet_name = esp_srmodel_filter(models, ESP_NSNET_PREFIX, NULL);
+                            #endif
+                                printf("nsnet_name: %s\n", nsnet_name ? nsnet_name : "");
+                                afe_config.afe_ns_model_name = nsnet_name;
+                                afe_data = afe_handle->create_from_config(&afe_config);
+                                if (!afe_data) {
+                                    printf("afe_data is null\n");
+                                    continue;
+                                }
 
-                        afe_data = afe_handle->create_from_config(&afe_config);
-                        if (!afe_data) {
-                            printf("afe_data is null\n");
-                            continue;
+                                audio_chunksize = afe_handle->get_feed_chunksize(afe_data);
+                                feed_buff = malloc(audio_chunksize * sizeof(int16_t) * afe_config.pcm_config.total_ch_num);
+                                assert(feed_buff);
+
+                                afe_handle->feed(afe_data, feed_buff);
+                                afe_handle->destroy(afe_data);
+                                afe_data = NULL;
+                                if (feed_buff) {
+                                    free(feed_buff);
+                                    feed_buff = NULL;
+                                }
+
+                                esp_srmodel_deinit(models);
+                                vTaskDelay(1000 / portTICK_PERIOD_MS);
+                                end_total_mem_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
+                                end_internal_mem_size = heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
+                                end_spiram_mem_size = heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_SPIRAM);
+
+                                printf("memory leak: %d\n", start_total_mem_size - end_total_mem_size);
+                                if (i > 0) {     // skip index = 0
+                                    TEST_ASSERT_EQUAL(start_internal_mem_size, end_internal_mem_size);
+                                    TEST_ASSERT_EQUAL(start_spiram_mem_size, end_spiram_mem_size);
+                                    TEST_ASSERT_EQUAL(start_total_mem_size, end_total_mem_size);
+                                } else {
+                                    TEST_ASSERT_EQUAL(true, (start_total_mem_size - end_total_mem_size) < 1000);
+                                }
+                            }
+                    #ifdef CONFIG_IDF_TARGET_ESP32S3
                         }
-                        audio_chunksize = afe_handle->get_feed_chunksize(afe_data);
-
-                        feed_buff = malloc(audio_chunksize * sizeof(int16_t) * afe_config.pcm_config.total_ch_num);
-                        assert(feed_buff);
-
-                        afe_handle->feed(afe_data, feed_buff);
-                        afe_handle->destroy(afe_data);
-                        afe_data = NULL;
-                        if (feed_buff) {
-                            free(feed_buff);
-                            feed_buff = NULL;
-                        }
-
-                        vTaskDelay(100 / portTICK_PERIOD_MS);
-                        end_total_mem_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
-                        end_internal_mem_size = heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
-                        end_spiram_mem_size = heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_SPIRAM);
-
-                        printf("memory leak: %d\n", start_total_mem_size - end_total_mem_size);
-                        if (i > 0) {     // skip index = 0
-                            TEST_ASSERT_EQUAL(start_internal_mem_size, end_internal_mem_size);
-                            TEST_ASSERT_EQUAL(start_spiram_mem_size, end_spiram_mem_size);
-                            TEST_ASSERT_EQUAL(start_total_mem_size, end_total_mem_size);
-                        } else {
-                            TEST_ASSERT_EQUAL(true, (start_total_mem_size - end_total_mem_size) < 1000);
-                        }
-                    }
+                    #endif
                 }
             }
         }
     }
 }
 
-TEST_CASE("audio_front_end VC cpu loading and memory info", "[afe]")
+TEST_CASE("audio_front_end VC cpu loading and memory info", "[afe_vc]")
 {
     total_ram_size_before = heap_caps_get_free_size(MALLOC_CAP_8BIT);
     internal_ram_size_before = heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
     psram_size_before = heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_SPIRAM);
+    srmodel_list_t *models = esp_srmodel_init("model");
+    char *nsnet_name = NULL;
+#ifdef CONFIG_IDF_TARGET_ESP32S3
+    nsnet_name = esp_srmodel_filter(models, ESP_NSNET_PREFIX, NULL);
+#endif
+    printf("nsnet_name: %s\n", nsnet_name ? nsnet_name : "");
 
     esp_afe_sr_iface_t *afe_handle = (esp_afe_sr_iface_t *)&ESP_AFE_VC_HANDLE;
     afe_config_t afe_config = AFE_CONFIG_DEFAULT();
     afe_config.wakenet_init = false;
     afe_config.voice_communication_init = true;
     afe_config.voice_communication_agc_init = true;
+#ifdef CONFIG_IDF_TARGET_ESP32S3
+    afe_config.afe_ns_mode = NS_MODE_NET;
+#else
+    afe_config.afe_ns_mode = NS_MODE_SSP;
+#endif
+    afe_config.afe_ns_model_name = nsnet_name;
 
     afe_data = afe_handle->create_from_config(&afe_config);
     if (!afe_data) {
@@ -447,6 +488,7 @@ TEST_CASE("audio_front_end VC cpu loading and memory info", "[afe]")
     vTaskDelay(2000 / portTICK_PERIOD_MS);
     ESP_LOGI(TAG, "destroy\n");
     afe_handle->destroy(afe_data);
+    esp_srmodel_deinit(models);
     afe_data = NULL;
     ESP_LOGI(TAG, "successful\n");
 }

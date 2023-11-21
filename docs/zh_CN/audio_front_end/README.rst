@@ -268,6 +268,10 @@ AEC 的使用和 WakeNet 相似，用户可以根据自己的需求来停止或�
             .pcm_config.mic_num = 2, \
             // 配置音频参考回路通道数
             .pcm_config.ref_num = 1, \
+            // 配置NS算法的模式，NS_MODE_SSP为信号处理算法，NS_MODE_NET为基于网络的降噪算法
+            .afe_ns_mode = NS_MODE_SSP, \
+            // 降噪网络的模型名字，默认为"nsnet1"
+            .afe_ns_model_name = "nsnet1", \
         }
 
 
