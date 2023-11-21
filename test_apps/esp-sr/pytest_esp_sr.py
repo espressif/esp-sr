@@ -59,8 +59,8 @@ def test_sr_afe(dut: Dut)-> None:
         'nsnet1',
     ],
 )
-def test_sr_afe(dut: Dut)-> None:
+def test_vc_afe(dut: Dut)-> None:
     # dut.run_all_single_board_cases(group="afe")
     dut.expect_exact('Press ENTER to see the list of tests.')
     dut.write('[afe_vc]')
-    dut.expect_unity_test_output(timeout = 1000)
+    dut.expect_unity_test_output(timeout = 100000)

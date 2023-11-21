@@ -394,7 +394,7 @@ TEST_CASE("audio_front_end VC create/destroy API & memory leak", "[afe_vc]")
 
                             for (int i = 0; i < 2; i++) {
                                 printf("index: %d\n", i);
-                                vTaskDelay(3000 / portTICK_PERIOD_MS);
+                                vTaskDelay(500 / portTICK_PERIOD_MS);
                                 start_total_mem_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
                                 start_internal_mem_size = heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
                                 start_spiram_mem_size = heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_SPIRAM);
@@ -424,7 +424,7 @@ TEST_CASE("audio_front_end VC create/destroy API & memory leak", "[afe_vc]")
                                 }
 
                                 esp_srmodel_deinit(models);
-                                vTaskDelay(3000 / portTICK_PERIOD_MS);
+                                vTaskDelay(1000 / portTICK_PERIOD_MS);
                                 end_total_mem_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
                                 end_internal_mem_size = heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
                                 end_spiram_mem_size = heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_SPIRAM);
