@@ -77,6 +77,7 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
     add_prebuilt_library(multinet "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32s3/libmultinet.a" PRIV_REQUIRES ${COMPONENT_NAME})
     add_prebuilt_library(esp_audio_front_end "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32s3/libesp_audio_front_end.a" PRIV_REQUIRES ${COMPONENT_NAME})
     add_prebuilt_library(hufzip "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32s3/libhufzip.a" PRIV_REQUIRES ${COMPONENT_NAME})
+    add_prebuilt_library(nsnet "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32s3/libnsnet.a" PRIV_REQUIRES ${COMPONENT_NAME})
 
     idf_component_get_property(esp_dsp_lib espressif__esp-dsp COMPONENT_LIB)
 
@@ -89,11 +90,11 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
         esp_audio_front_end
         esp_audio_processor
         multinet
-	flite_g2p
+        flite_g2p
         esp_tts_chinese
         voice_set_xiaole
+        nsnet
         wakenet
-	nsnet
         "-Wl,--end-group")
 
     set(MVMODEL_EXE ${COMPONENT_PATH}/model/movemodel.py)

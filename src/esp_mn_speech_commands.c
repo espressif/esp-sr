@@ -15,7 +15,10 @@ static model_iface_data_t *esp_mn_model_data = NULL;
 void *_esp_mn_calloc_(int n, int size)
 {
 #ifdef ESP_PLATFORM
-    return heap_caps_calloc(n, size, MALLOC_CAP_SPIRAM);
+    void *data = heap_caps_calloc(n, size, MALLOC_CAP_SPIRAM);
+    if (data == NULL) 
+        data = calloc(n, size);
+    return data;
 #else
     return calloc(n, size);
 #endif
