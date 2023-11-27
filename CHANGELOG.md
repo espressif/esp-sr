@@ -4,10 +4,11 @@
 - Available storage is less than the remaining flash space on IDF v5.0.   
 If you can not map model partition successfully, please check the left free storage by `spi_flash_mmap_get_free_pages(ESP_PARTITION_MMAP_DATA)` or update IDF to v5.1 or later.
 
-## unreleased
+## 1.6.0
 - Add Chinese MultiNet7 models
 - Add first Noise Suppression model: nsnet1
 - Add wakenet model trained by TTS samples: Jarvis and Computer
+- fix some bugs
 
 ## 1.5.1
 - Reduce Internal RAM of multinet7
