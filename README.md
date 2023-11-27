@@ -25,7 +25,22 @@ The new algorithms will no longer support ESP32 chips.
 
 Espressif wake word engine **WakeNet** is specially designed to provide a high performance and low memory footprint wake word detection algorithm for users, which enables devices always listen to wake words, such as “Alexa”, “Hi,lexin” and “Hi,ESP”.
 
-Currently, Espressif has not only provided an official wake word "Hi,Lexin","Hi,ESP" to the public for free, but also allows customized wake words. For details on how to customize your own wake words, please see [Espressif Speech Wake Words Customization Process](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/wake_word_engine/ESP_Wake_Words_Customization.html).
+Currently, Espressif has not only provided an official wake word "Hi,Lexin","Hi,ESP" to the public for free, but also allows customized wake words. For details on how to customize your own wake words, please see [Espressif Speech Wake Words Customization Process](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/wake_word_engine/ESP_Wake_Words_Customization.html).  
+
+The following wake words are supported in esp-sr:
+
+|wake words       |                 ESP32                 |         ESP32-S3       | 
+|:--------------- | :------------------------------------:| :---------------------:| 
+|Hi,乐鑫           |  wn5_hilexin, wn5_hilexinX3           | wn9_hilexin            | 
+|你好小智          |  wn5_nihaoxiaozhi,wn5_nihaoxiaozhiX3   | wn9_nihaoxiaozhi       |
+|Hi,ESP           |                                        | wn9_hiesp              | 
+|Hi,M Five        |                                        | wn9_himfive            | 
+|Alexa            |                                        | wn9_alexa              | 
+|小爱同学          |                                        | wn9_xiaoaitongxue      | 
+|Jarvis           |                                        | wn9_jarvis_tts         | 
+|Computer         |                                        | wn9_computer_tts       | 
+
+*NOTE:* `_tts` suffix means this WakeNet model is trained by TTS samples.  
 
 ## Speech Command Recognition
 

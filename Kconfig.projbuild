@@ -107,6 +107,14 @@ choice SR_WN_MODEL_LOAD
     config SR_WN_WN9_NIHAOXIAOZHI
         bool "nihaoxiaozhi (wn9_nihaoxiaozhi)"
         depends on IDF_TARGET_ESP32S3
+    
+    config SR_WN_WN9_JARVIS_TTS
+        bool "jarvis (wn9_jarvis_tts)"
+        depends on IDF_TARGET_ESP32S3
+    
+    config SR_WN_WN9_COMPUTER_TTS
+        bool "computer (wn9_computer_tts)"
+        depends on IDF_TARGET_ESP32S3
 
     config SR_WN_WN9_CUSTOMWORD
         bool "customized word (wn9_customword)"

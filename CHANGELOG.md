@@ -7,6 +7,7 @@ If you can not map model partition successfully, please check the left free stor
 ## unreleased
 - Add Chinese MultiNet7 models
 - Add first Noise Suppression model: nsnet1
+- Add wakenet model trained by TTS samples: Jarvis and Computer
 
 ## 1.5.1
 - Reduce Internal RAM of multinet7
