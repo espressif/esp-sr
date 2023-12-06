@@ -126,12 +126,12 @@ def copy_nsnet_from_sdkconfig(model_path, sdkconfig_path, target_path):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Model generator tool')
-    parser.add_argument('-d1', '--project_path')
+    parser.add_argument('-d1', '--sdkconfig_path')
     parser.add_argument('-d2', '--model_path')
     parser.add_argument('-d3', '--build_path')
     args = parser.parse_args()
 
-    sdkconfig_path = args.project_path + '/sdkconfig'
+    sdkconfig_path = args.sdkconfig_path
     model_path = args.model_path + '/model'
     target_path = args.build_path + '/srmodels'
     image_file = "srmodels.bin"
