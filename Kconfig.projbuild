@@ -109,11 +109,15 @@ choice SR_WN_MODEL_LOAD
         depends on IDF_TARGET_ESP32S3
     
     config SR_WN_WN9_JARVIS_TTS
-        bool "jarvis (wn9_jarvis_tts)"
+        bool "Jarvis (wn9_jarvis_tts)"
         depends on IDF_TARGET_ESP32S3
     
     config SR_WN_WN9_COMPUTER_TTS
         bool "computer (wn9_computer_tts)"
+        depends on IDF_TARGET_ESP32S3
+
+    config SR_WN_WN9_HEYWILLOW_TTS
+        bool "Hey,Willow (wn9_heywillow_tts)"
         depends on IDF_TARGET_ESP32S3
 
     config SR_WN_WN9_CUSTOMWORD
@@ -144,6 +148,18 @@ menu "Load Multiple Wake Words"
     config SR_WN_WN9_HIESP_MULTI
     bool "Hi,ESP (wn9_hiesp)"
     default False
+
+    config SR_WN_WN9_JARVIS_TTS_MULTI
+    bool "Jarvis (wn9_jarvis_tts)"
+    default False
+    
+    config SR_WN_WN9_COMPUTER_TTS_MULTI
+    bool "computer (wn9_computer_tts)"
+    default False
+
+    config SR_WN_WN9_HEYWILLOW_TTS_MULTI
+    bool "Hey,Willow (wn9_heywillow_tts)"
+    depends on IDF_TARGET_ESP32S3
 
 endmenu
 
