@@ -1,2 +1,2 @@
 # (neural network type)_(model data version)_(lable1_detection windown length_threshold for 90%_threshold for 95%)_(lable2 ...)_...
-wakenet9l_v3h24_alexa_3_0.625_0.645
+wakenet9l_v4h8_alexa_3_0.640_0.650
