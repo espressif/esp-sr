@@ -25,7 +25,7 @@ The new algorithms will no longer support ESP32 chips.
 
 Espressif wake word engine **WakeNet** is specially designed to provide a high performance and low memory footprint wake word detection algorithm for users, which enables devices always listen to wake words, such as “Alexa”, “Hi,lexin” and “Hi,ESP”.
 
-Currently, Espressif has not only provided an official wake word "Hi,Lexin","Hi,ESP" to the public for free, but also allows customized wake words. For details on how to customize your own wake words, please see [Espressif Speech Wake Words Customization Process](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/wake_word_engine/ESP_Wake_Words_Customization.html).  
+Espressif has not only provided an official wake word "Hi,Lexin","Hi,ESP" to the public for free, but also allows customized wake words. For details on how to customize your own wake words, please see [Espressif Speech Wake Words Customization Process](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/wake_word_engine/ESP_Wake_Words_Customization.html) or [Training Wake Words by TTS sample](https://github.com/espressif/esp-sr/issues/88).
 
 The following wake words are supported in esp-sr:
 
@@ -33,12 +33,13 @@ The following wake words are supported in esp-sr:
 |:--------------- | :------------------------------------:| :---------------------:| 
 |Hi,乐鑫           |  wn5_hilexin, wn5_hilexinX3           | wn9_hilexin            | 
 |你好小智          |  wn5_nihaoxiaozhi,wn5_nihaoxiaozhiX3   | wn9_nihaoxiaozhi       |
+|小爱同学          |                                        | wn9_xiaoaitongxue      | 
 |Hi,ESP           |                                        | wn9_hiesp              | 
 |Hi,M Five        |                                        | wn9_himfive            | 
 |Alexa            |                                        | wn9_alexa              | 
-|小爱同学          |                                        | wn9_xiaoaitongxue      | 
 |Jarvis           |                                        | wn9_jarvis_tts         | 
-|Computer         |                                        | wn9_computer_tts       | 
+|Computer         |                                        | wn9_computer_tts       |
+|Hey,Willow       |                                        | wn9_heywillow_tts      | 
 
 *NOTE:* `_tts` suffix means this WakeNet model is trained by TTS samples.  
 
@@ -47,6 +48,13 @@ The following wake words are supported in esp-sr:
 Espressif's speech command recognition model **MultiNet** is specially designed to provide a flexible off-line speech command recognition model. With this model, you can easily add your own speech commands, eliminating the need to train model again. 
 
 Currently, Espressif **MultiNet** supports up to 300 Chinese or English speech commands, such as “打开空调” (Turn on the air conditioner) and “打开卧室灯” (Turn on the bedroom light).
+
+The following MultiNet models are supported in esp-sr:  
+
+|language         |           ESP32            |         ESP32-S3              | 
+|:--------------- | :-------------------------:| :----------------------------:| 
+|Chinese          | mn2_cn                     | mn5q8_cn, mn6_cn, mn7_cn      | 
+|English          |                            | mn5q8_en, mn6_en, mn7_en      |
 
 ## Audio Front End
 
