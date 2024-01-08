@@ -404,12 +404,15 @@ srmodel_list_t *srmodel_sdcard_init(const char *base_path)
 
     struct dirent *ret;
     DIR *dir = NULL;
+    printf("Opening directory: %s\n", base_path);
     dir = opendir(base_path);
+    printf("Directory opened\n");
     int model_num = 0;
     int idx = 0;
     FILE *fp;
 
     if (dir != NULL) {
+        printf("Directory opened\n");
         // get the number of models
         while ((ret = readdir(dir)) != NULL) {
             // NULL if reach the end of directory
@@ -491,6 +494,12 @@ srmodel_list_t *esp_srmodel_init(const char *partition_label)
 #ifdef CONFIG_IDF_TARGET_ESP32
     return srmodel_config_init();
 #else
+
+#ifdef CONFIG_MODEL_IN_SDCARD
+    // Read model data from SD card 
+    return srmodel_sdcard_init(partition_label);
+#else
+    // Read model data from flash partition
     const esp_partition_t *partition = NULL;
     // find spiffs partition
     partition = esp_partition_find_first(
@@ -506,6 +515,7 @@ srmodel_list_t *esp_srmodel_init(const char *partition_label)
     return NULL;
 #endif
 
+#endif
 #else
     return srmodel_sdcard_init(partition_label);
 #endif
