@@ -15,7 +15,7 @@ To use our models in your project, you need to flash these models. Currently, ES
 
     ESP32-S3:
 
-    -  Load directly from SIP Flash File System (SPIFFS)
+    -  Load directly from SIP Flash File System (flash)
     -  Load from external SD card
 
     So that on ESP32-S3 you can:
@@ -42,10 +42,10 @@ Run ``idf.py menuconfig`` to navigate to ``ESP Speech Recognition``:
     Model Data Path
     ~~~~~~~~~~~~~~~
 
-    This option indicates the storage location of the model data: ``spiffs partition`` or ``SD Card``.
+    This option indicates the storage location of the model data: ``Read model data from flash`` or ``Read model data from SD card``.
 
-    -  ``spiffs partition`` means that the model data is stored in the SPIFFS partition, and the model data will be loaded from the SPIFFS partition
-    -  ``SD Card`` means that the model data is stored in the SD card, and the model data will be loaded from the SD card
+    -  ``Read model data from flash`` means that the model data is stored in the flash, and the model data will be loaded from the flash partition
+    -  ``Read model data from SD card`` means that the model data is stored in the SD card, and the model data will be loaded from the SD card
 
 Use AFE
 ~~~~~~~
@@ -135,9 +135,9 @@ Here, we only introduce the code implementation, which can also be found in `mod
 
 .. only:: esp32s3
 
-    ESP32-S3 can load model data from SPIFFS or SD card.
+    ESP32-S3 can load model data from flash or SD card.
 
-Load Model Data from SPIFFS
+Load Model Data from flash
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #. Write a partition table:
@@ -148,46 +148,29 @@ Load Model Data from SPIFFS
 
     Among them, ``SIZE`` can refer to the recommended size when the user uses ``idf.py build`` to compile, for example: ``Recommended model partition size: 500K``
 
-#. Initialize the SPIFFS partition: User can use ``esp_srmodel_init()`` API to initialize SPIFFS and return all loaded models.
+#. Initialize the flash partition: User can use ``esp_srmodel_init(partition_label)`` API to initialize flash and return all loaded models.
 
     -  base_path: The model storage ``base_path`` is ``srmodel`` and cannot be changed
     -  partition_label: The partition label of the model is ``model``, which needs to be consistent with the ``Name`` in the above partition table
 
-After completing the above configuration, the project will automatically generate ``model.bin`` after the project is compiled, and flash it to the SPIFFS partition.
+After completing the above configuration, the project will automatically generate ``model.bin`` after the project is compiled, and flash it to the flash partition.
 
 .. only:: esp32s3
 
     Load Model Data from SD Card
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    When configured to load model data from ``SD Card``, users need to:
+    When configured to load model data from ``Read model data from SD card``, users need to:
 
     -  Manually load model data from SD card
         After the above-mentioned configuration, users can compile the code, and copy the files in ``model/target`` to the root directory of the SD card.
 
-    -  Customized path
-        Users can also use customized path by configuring the :cpp:func:`get_model_base_path()` of ``model/model_path.c``.
-
-        .. only:: html
-
-            For example, users can configure the customized path to the ``espmodel`` in the SD card:
-
-                ::
-
-                    char *get_model_base_path(void)
-                    {
-                    #if defined CONFIG_MODEL_IN_SDCARD
-                        return "sdcard/espmodel";
-                    #elif defined CONFIG_MODEL_IN_SPIFFS
-                        return "srmodel";
-                    #else
-                        return NULL;
-                    #endif
-                    }
-
     -  Initialize SD card
         Users must initialize SD card so the chip can load SD card. Users of `ESP-Skainet <https://github.com/espressif/esp-skainet>`_ can call  ``esp_sdcard_init("/sdcard", num);`` to initialize any board supported SD cards. Otherwise, users need to write the initialization code themselves.
         After the above-mentioned steps, users can flash the project.
+    
+    - Read models
+         User use ``esp_srmodel_init(model_path)`` to read models in ``model_path`` of SD card.
 
 
 .. |select wake wake| image:: ../../_static/wn_menu1.png
@@ -202,10 +185,11 @@ After completing the above configuration, the project will automatically generat
 
     ::
 
-       //
-       // step1: initialize SPIFFS and return models in SPIFFS
-       //
-       srmodel_list_t *models = esp_srmodel_init("model");
+        //
+        // step1: return models in flash or in sdcard
+        //
+        char *model_path = your_model_path: // partition_label or model_path in sdcard;
+        models = esp_srmodel_init(model_path); 
 
        //
        // step2: select the specific model by keywords

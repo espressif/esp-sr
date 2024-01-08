@@ -2,14 +2,14 @@ menu "ESP Speech Recognition"
 
 choice MODEL_DATA_PATH
     prompt "model data path"
-    default MODEL_IN_SPIFFS
+    default MODEL_IN_FLASH
     depends on IDF_TARGET_ESP32S3
 
-    config MODEL_IN_SPIFFS
-        bool "spiffs partition"
+    config MODEL_IN_FLASH
+        bool "Read model data from flash"
 
     config MODEL_IN_SDCARD
-        bool "SD Card"
+        bool "Read model data from SD Card"
 endchoice
 
 

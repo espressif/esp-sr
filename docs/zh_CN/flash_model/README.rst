@@ -15,7 +15,7 @@
 
     ESP32-S3：
 
-    -  从 SPI 闪存文件系统 (SPIFFS) 分区加载
+    -  从 SPI 闪存(flash)文件系统分区加载
     -  从外部 SD 卡加载
 
     因此具有以下优势：
@@ -42,9 +42,9 @@
     Model Data Path
     ~~~~~~~~~~~~~~~
 
-    该选项表示模型数据的存储位置，支持选择 ``spiffs partition`` 或 ``SD Card`` 。
+    该选项表示模型数据的存储位置，支持选择 ``Read model data from flash`` 或 ``Read model data from SD Card`` 。
 
-    -  ``spiffs partition`` 表示模型数据存储在 SPIFFS 分区中，模型数据将会从 SPIFFS 分区中加载
+    -  ``Read model data from flash`` 表示模型数据存储在 flash 分区中，模型数据将会从 flash 分区中加载
     -  ``SD Card`` 表示模型数据存储在 SD 卡中，模型数据将会从 SD 卡中加载
 
 使用 AFE
@@ -135,25 +135,24 @@
 
 .. only:: esp32s3
 
-    ESP32-S3 支持从 Flash SPIFFS 或 SD 卡中直接加载模型数据，下方将分别介绍。
+    ESP32-S3 支持从 Flash 或 SD 卡中直接加载模型数据，下方将分别介绍。
 
-模型数据存储在 Flash SPIFFS
+模型数据存储在 Flash
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #.  编写分区表：
 
     ::
 
-        model,  data, spiffs,         , SIZE,
+        model,  data, data,         , SIZE,
 
     其中 SIZE 可以参考在用户使用 ``idf.py build`` 编译时的推荐大小，例如： ``Recommended model partition size: 500K`` 。
 
-#.  初始化 SPIFFS 分区：用户可以直接调用提供的 ``esp_srmodel_init()`` API 来初始化 SPIFFS，并返回 SPIFFS 中的模型。
+#.  初始化 partition 分区：用户可以直接调用提供的 ``esp_srmodel_init(partition_label)`` API 来获取 partition 中的模型。
 
-    -  base_path：模型的存储 ``base_path`` 为 ``srmodel``，不可更改
-    -  partition_label：模型的分区 label 为 ``model`` ，需要和上述分区表中的 ``Name`` 保持一致
+    -  partition_label：为partition table 中定义的模型的分区，需要和上述函数的入参保持一致
 
-完成上述配置后，模型会在工程编译完成后自动生成 ``model.bin`` ，并在用户调用 ``idf.py flash`` 时烧写到 SPIFFS 分区。
+完成上述配置后，模型会在工程编译完成后自动生成 ``srmodels.bin`` ，并在用户调用 ``idf.py flash`` 时烧写到指定 分区。
 
 .. only:: esp32s3
 
@@ -165,29 +164,12 @@
     -  手动移动模型数据至 SD 卡中
         用户完成以上配置后，可以先进行编译，编译完成后将 ``model/target`` 目录下的文件拷贝至 SD 卡的根目录。
 
-    -  自定义路径
-        如果用户想将模型放置于指定文件夹，可以自己修改位于 ``model/model_path.c`` 中的 :cpp:func:`get_model_base_path()` 函数。
-
-        .. only:: html
-
-            比如，如需指定文件夹为 SD 卡目录中的 ``espmodel``， 则可以修改该函数为：
-
-                ::
-
-                    char *get_model_base_path(void)
-                    {
-                    #if defined CONFIG_MODEL_IN_SDCARD
-                        return "sdcard/espmodel";
-                    #elif defined CONFIG_MODEL_IN_SPIFFS
-                        return "srmodel";
-                    #else
-                        return NULL;
-                    #endif
-                    }
-
     -  初始化 SD 卡
         用户需要初始化 SD 卡，来使系统能够记载 SD 卡。如果用户使用 `ESP-Skainet <https://github.com/espressif/esp-skainet>`_ ，可以直接调用 ``esp_sdcard_init("/sdcard", num);`` 来初始化其支持开发板的 SD 卡。否则，需要自己编写初始化程序。
         完成以上操作后，便可以进行工程的烧录。
+
+    -  自定义路径
+        使用``esp_srmodel_init(model_path)``来获取sdcard指定路径``esp_srmodel_init(partition_label)``中的所有model name。
 
 
 .. |select wake wake| image:: ../../_static/wn_menu1.png
@@ -203,9 +185,10 @@
     ::
 
             //
-            // step1: initialize SPIFFS and return models in SPIFFS
+            // step1: return models in flash
             //
-            srmodel_list_t *models = esp_srmodel_init();
+            char *model_path = your_model_path: // partition_label or model_path in sdcard;
+            models = esp_srmodel_init(model_path); 
 
             //
             // step2: select the specific model by keywords
