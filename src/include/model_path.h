@@ -18,6 +18,8 @@ typedef struct {
 
 typedef struct {
     char **model_name;                        // the name of models, like "wn9_hilexin"(wakenet9, hilexin), "mn5_en"(multinet5, english)
+    char **model_info;                        // the information of models, like "wakeNet9_v1h24_Hi,ESP_3_0.63_0.635", the format is as follows:
+                                              // (model type)_(version)_(word1)_(detection window)_(threshold1)_(threshold2)_(word2 ...)_...
 #ifdef ESP_PLATFORM
     esp_partition_t *partition;               // partition label used to save the files of model
 #endif
@@ -73,6 +75,16 @@ char *esp_srmodel_filter(srmodel_list_t *models, const char *keyword1, const cha
 int esp_srmodel_exists(srmodel_list_t *models, char *model_name);
 
 /**
+ * @brief Get wake words from model_name. 
+ *        If there are multiple wake words in one model, all wake words will be joined by ";". 
+ *
+ * @param models       The srmodel_list_t point allocated by srmodel_spiffs_init function.
+ * @param model_name   The specified model name
+ * @return The string of wake words.
+ */
+char *esp_srmodel_get_wake_words(srmodel_list_t *models, char *model_name);
+
+/**
  * @brief Initialize and mount SPIFFS filesystem, return all avaliable models in spiffs.
  *
  * @param part    The spiffs partition.
@@ -107,6 +119,7 @@ char *get_model_base_path(void);
  * @return the pointer of srmodel_list_t
  */
 srmodel_list_t *get_static_srmodels(void);
+
 
 
 #ifdef ESP_PLATFORM

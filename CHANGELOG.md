@@ -7,6 +7,8 @@ If you can not map model partition successfully, please check the left free stor
 ## unreleased 
 - Add hey willow wakenet model: wn9_heywillow_tts
 - Update wn9_alexa from v3 to v4
+- Add model info into srmodels_list_t
+- parse wake words from model_info string
 
 ## 1.6.0
 - Add Chinese MultiNet7 models
