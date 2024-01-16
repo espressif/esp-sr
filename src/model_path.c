@@ -26,11 +26,78 @@ void set_model_base_path(const char *base_path)
     SRMODE_BASE_PATH = (char *)base_path;
 }
 
+char *get_model_info(char *data, int size)
+{
+    char *model_info = NULL;
+    //Prase
+    //if the line starts with '#', the line is a comment
+    //else the line is model information
+    while(size > 0) {
+        if (*data == '#') {
+            while (*data != '\n' && size > 1) {
+                data ++;
+                size --;
+            }
+            data ++;
+            size --;
+            continue;
+        } else if (data != NULL && size > 0) {
+            model_info = (char*)malloc((size + 1) * sizeof(char));
+            memcpy(model_info, data, size);
+            if (model_info[size - 1] == '\n') {
+                model_info[size - 1] = '\0';
+            }
+            model_info[size] = '\0';
+            break;
+        }
+    }
+
+    return model_info;
+}
+
+char *get_wake_words_from_info(char *model_info)
+{
+    if (model_info == NULL)
+        return NULL;
+
+    int info_len = strlen(model_info);
+    char *temp = (char *) malloc(info_len + 1);
+    memcpy(temp, model_info, info_len);
+    temp[info_len] = '\0';
+    char *token = strtok(temp, "_");
+    char *wake_words = NULL;
+    int word_len = 0;
+    int i = 1;
+    while (token != NULL) {
+        if (i % 4 == 3) {
+            // find all valid wake word token
+            if (wake_words == NULL) {
+                word_len = strlen(token) + 1;
+                wake_words = (char*) malloc(word_len);
+                memcpy(wake_words, token, word_len-1);
+                wake_words[word_len-1] = '\0';
+            } else {
+                word_len += strlen(token) + 1;
+                wake_words = (char*) realloc(wake_words, word_len);
+                strcat(wake_words, ";");
+                strcat(wake_words, token);
+                wake_words[word_len-1] = '\0';
+            }
+        }
+        token = strtok(NULL, "_");
+        i++;
+    }
+
+    free(temp);
+    return wake_words;
+}
+
 static srmodel_list_t *srmodel_list_alloc(void)
 {
     srmodel_list_t *models = (srmodel_list_t *) malloc(sizeof(srmodel_list_t));
     models->model_data = NULL;
     models->model_name = NULL;
+    models->model_info = NULL;
     models->num = 0;
 #ifdef ESP_PLATFORM
     models->partition = NULL;
@@ -188,8 +255,10 @@ srmodel_list_t *srmodel_config_init()
     srmodel_list_t *models = static_srmodels;
     models->num = 2;
     models->model_name = malloc(models->num * sizeof(char *));
+    models->model_info = malloc(models->num * sizeof(char *));
     for (int i = 0; i < models->num; i++) {
         models->model_name[i] = (char *) calloc(MODEL_NAME_MAX_LENGTH, sizeof(char));
+        models->model_info[i] = NULL;
     }
 
     // If wakenet is selected in menuconfig, load the wakenet model
@@ -224,8 +293,12 @@ void srmodel_config_deinit(srmodel_list_t *models)
         if (models->num > 0) {
             for (int i = 0; i < models->num; i++) {
                 free(models->model_name[i]);
+                if (models->model_info[i] != NULL) {
+                    free(models->model_info[i]);
+                }
             }
             free(models->model_name);
+            free(models->model_info);
         }
         free(models);
     }
@@ -293,9 +366,11 @@ srmodel_list_t *srmodel_mmap_init(const esp_partition_t *partition)
     data += int_len;
     models->model_data = (srmodel_data_t **)malloc(sizeof(srmodel_data_t *) * models->num);
     models->model_name = (char **)malloc(sizeof(char *) * models->num);
+    models->model_info = (char **)malloc(sizeof(char *) * models->num);
 
     for (int i = 0; i < models->num; i++) {
         srmodel_data_t *model_data = (srmodel_data_t *) malloc(sizeof(srmodel_data_t));
+        models->model_info[i] = NULL;
         // read model name
         models->model_name[i] = (char *)malloc((strlen(data) + 1) * sizeof(char));
         strcpy(models->model_name[i], data);
@@ -310,8 +385,6 @@ srmodel_list_t *srmodel_mmap_init(const esp_partition_t *partition)
 
         for (int j = 0; j < file_num; j++) {
             //read file name
-            // model_data->files[j] = (char*)malloc(str_len*sizeof(char));
-            // memcpy(model_data->files[j], data, str_len);
             model_data->files[j] = data;
             data += str_len;
             //read file start index
@@ -322,6 +395,11 @@ srmodel_list_t *srmodel_mmap_init(const esp_partition_t *partition)
             int size = read_int32(data);
             data += int_len;
             model_data->sizes[j] = size;
+
+            // read model info
+            if (strcmp(model_data->files[j], "_MODEL_INFO_") == 0) {
+                models->model_info[i] = get_model_info(model_data->data[j], model_data->sizes[j]);
+            }
         }
         models->model_data[i] = model_data;
     }
@@ -347,11 +425,14 @@ void srmodel_mmap_deinit(srmodel_list_t *models)
                 free(models->model_data[i]->sizes);
                 free(models->model_data[i]);
                 free(models->model_name[i]);
+                if (models->model_info[i] != NULL)
+                    free(models->model_info[i]);
             }
         }
         free(models->model_data);
         free(models->model_name);
         free(models->mmap_handle);
+        free(models->model_info);
         free(models);
     }
     models = NULL;
@@ -404,15 +485,12 @@ srmodel_list_t *srmodel_sdcard_init(const char *base_path)
 
     struct dirent *ret;
     DIR *dir = NULL;
-    printf("Opening directory: %s\n", base_path);
     dir = opendir(base_path);
-    printf("Directory opened\n");
     int model_num = 0;
     int idx = 0;
     FILE *fp;
 
     if (dir != NULL) {
-        printf("Directory opened\n");
         // get the number of models
         while ((ret = readdir(dir)) != NULL) {
             // NULL if reach the end of directory
@@ -441,6 +519,7 @@ srmodel_list_t *srmodel_sdcard_init(const char *base_path)
             models->partition = NULL;
 #endif
             models->model_name = malloc(models->num * sizeof(char *));
+            models->model_info = malloc(models->num * sizeof(char *));
             for (int i = 0; i < models->num; i++) {
                 models->model_name[i] = (char *) calloc(MODEL_NAME_MAX_LENGTH, sizeof(char));
             }
@@ -458,6 +537,13 @@ srmodel_list_t *srmodel_sdcard_init(const char *base_path)
                 fp = fopen(info_file, "r");
                 if (fp != NULL) {
                     memcpy(models->model_name[idx], ret->d_name, strlen(ret->d_name));
+                    fseek(fp, 0L, SEEK_END);
+                    int file_size = ftell(fp);
+                    fseek(fp, 0, SEEK_SET);
+                    char *data = (char *)malloc(file_size);
+                    fread(data, file_size, 1, fp);
+                    models->model_info[idx] = get_model_info(data, file_size);
+                    free(data);
                     idx++;
                 }
                 fclose(fp);
@@ -478,6 +564,7 @@ void srmodel_sdcard_deinit(srmodel_list_t *models)
         if (models->num > 0) {
             for (int i = 0; i < models->num; i++) {
                 free(models->model_name[i]);
+                free(models->model_info[i]);
             }
         }
         free(models);
@@ -578,4 +665,18 @@ int esp_srmodel_exists(srmodel_list_t *models, char *model_name)
     }
 
     return -1;
+}
+
+char *esp_srmodel_get_wake_words(srmodel_list_t *models, char *model_name)
+{
+    if (models == NULL) {
+        return NULL;
+    }
+
+    for (int i = 0; i < models->num; i++) {
+        if (strcmp(models->model_name[i], model_name) == 0) {
+            return get_wake_words_from_info(models->model_info[i]);
+        }
+    }
+    return NULL;
 }

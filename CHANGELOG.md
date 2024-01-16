@@ -4,9 +4,11 @@
 - Available storage is less than the remaining flash space on IDF v5.0.   
 If you can not map model partition successfully, please check the left free storage by `spi_flash_mmap_get_free_pages(ESP_PARTITION_MMAP_DATA)` or update IDF to v5.1 or later.
 
-## unreleased 
+## 1.6.1
 - Add hey willow wakenet model: wn9_heywillow_tts
 - Update wn9_alexa from v3 to v4
+- Add model info into srmodels_list_t
+- parse wake words from model_info string
 
 ## 1.6.0
 - Add Chinese MultiNet7 models

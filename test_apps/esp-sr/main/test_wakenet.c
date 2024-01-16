@@ -54,6 +54,7 @@ TEST_CASE("wakenet create/destroy API & memory leak", "[wn]")
         models = esp_srmodel_init("model");
         model_name = esp_srmodel_filter(models, ESP_WN_PREFIX, NULL);
         wakenet = (esp_wn_iface_t*)esp_wn_handle_from_name(model_name);
+        // char *wake_words = esp_srmodel_get_wake_words(models, model_name);
 
         printf("create ...\n");
         // typedef enum {
@@ -68,6 +69,7 @@ TEST_CASE("wakenet create/destroy API & memory leak", "[wn]")
 
         printf("destroy ...\n");
         wakenet->destroy(model_data);
+        // free(wake_words);
         esp_srmodel_deinit(models);
 
         last_end_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
@@ -94,14 +96,16 @@ TEST_CASE("wakenet detect API & cpu loading", "[wn]")
     gettimeofday(&tv_start, NULL);
     unsigned char* data = NULL;
     size_t data_size = 0;
+    char *wake_words = NULL;
+    wake_words = esp_srmodel_get_wake_words(models, model_name);
     if (strstr(model_name, "hiesp") != NULL) {
         data = (unsigned char*)hiesp;
         data_size = sizeof(hiesp);
-        printf("wake word: Hi, ESP, size:%d\n", data_size);
+        printf("wake word: %s, size:%d\n", wake_words,  data_size);
     } else if(strstr(model_name, "hilexin") != NULL) {
         data = (unsigned char*)hilexin;
         data_size = sizeof(hilexin);
-        printf("wake word: hi,lexin, size:%d\n", data_size);
+        printf("wake word: %s, size:%d\n", wake_words,  data_size);
     }
 
     while (1) {

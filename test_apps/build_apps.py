@@ -13,7 +13,11 @@ import re
 from pathlib import Path
 from typing import List
 
-from idf_build_apps import LOGGER, App, build_apps, find_apps, setup_logging
+import logging
+from idf_build_apps import App, build_apps, find_apps, setup_logging
+
+LOGGER = logging.getLogger('idf_build_apps')
+
 
 PROJECT_ROOT = Path(__file__).parent.parent.absolute()
 print(PROJECT_ROOT)
