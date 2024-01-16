@@ -57,6 +57,9 @@ char *get_model_info(char *data, int size)
 
 char *get_wake_words_from_info(char *model_info)
 {
+    if (model_info == NULL)
+        return NULL;
+
     int info_len = strlen(model_info);
     char *temp = (char *) malloc(info_len + 1);
     memcpy(temp, model_info, info_len);
@@ -86,9 +89,7 @@ char *get_wake_words_from_info(char *model_info)
     }
 
     free(temp);
-
     return wake_words;
-
 }
 
 static srmodel_list_t *srmodel_list_alloc(void)
@@ -96,6 +97,7 @@ static srmodel_list_t *srmodel_list_alloc(void)
     srmodel_list_t *models = (srmodel_list_t *) malloc(sizeof(srmodel_list_t));
     models->model_data = NULL;
     models->model_name = NULL;
+    models->model_info = NULL;
     models->num = 0;
 #ifdef ESP_PLATFORM
     models->partition = NULL;
@@ -253,8 +255,10 @@ srmodel_list_t *srmodel_config_init()
     srmodel_list_t *models = static_srmodels;
     models->num = 2;
     models->model_name = malloc(models->num * sizeof(char *));
+    models->model_info = malloc(models->num * sizeof(char *));
     for (int i = 0; i < models->num; i++) {
         models->model_name[i] = (char *) calloc(MODEL_NAME_MAX_LENGTH, sizeof(char));
+        models->model_info[i] = NULL;
     }
 
     // If wakenet is selected in menuconfig, load the wakenet model
@@ -289,8 +293,12 @@ void srmodel_config_deinit(srmodel_list_t *models)
         if (models->num > 0) {
             for (int i = 0; i < models->num; i++) {
                 free(models->model_name[i]);
+                if (models->model_info[i] != NULL) {
+                    free(models->model_info[i]);
+                }
             }
             free(models->model_name);
+            free(models->model_info);
         }
         free(models);
     }
