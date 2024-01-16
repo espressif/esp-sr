@@ -28,33 +28,29 @@ void set_model_base_path(const char *base_path)
 
 char *get_model_info(char *data, int size)
 {
-    char *temp = malloc((size+1)*sizeof(char));
-    char *buffer = temp;
     char *model_info = NULL;
-    memcpy(buffer, data, size);
-    buffer[size] = '\0';
-    printf("buffer: %s\n", buffer);
-
     //Prase
     //if the line starts with '#', the line is a comment
     //else the line is model information
-    while(1) {
-        if (*buffer == '#') {
-            while (*buffer != '\n') {
-                buffer ++;
+    while(size > 0) {
+        if (*data == '#') {
+            while (*data != '\n' && size > 1) {
+                data ++;
+                size --;
             }
-            buffer ++;
+            data ++;
+            size --;
             continue;
-        } else if (buffer != NULL && buffer[0]) {
-            int info_len = strlen(buffer);
-            model_info = (char*) malloc((info_len+1)*sizeof(char));
-            memcpy(model_info, buffer, info_len);
-            model_info[info_len] = '\0';
-            printf("model info: %s\n", model_info);
+        } else if (data != NULL && size > 0) {
+            model_info = (char*)malloc((size + 1) * sizeof(char));
+            memcpy(model_info, data, size);
+            if (model_info[size - 1] == '\n') {
+                model_info[size - 1] = '\0';
+            }
+            model_info[size] = '\0';
             break;
         }
     }
-    free(temp);
 
     return model_info;
 }
@@ -85,7 +81,6 @@ char *get_wake_words_from_info(char *model_info)
                 wake_words[word_len-1] = '\0';
             }
         }
-        printf("token %d: %s\n", i, token);
         token = strtok(NULL, "_");
         i++;
     }
@@ -367,6 +362,7 @@ srmodel_list_t *srmodel_mmap_init(const esp_partition_t *partition)
 
     for (int i = 0; i < models->num; i++) {
         srmodel_data_t *model_data = (srmodel_data_t *) malloc(sizeof(srmodel_data_t));
+        models->model_info[i] = NULL;
         // read model name
         models->model_name[i] = (char *)malloc((strlen(data) + 1) * sizeof(char));
         strcpy(models->model_name[i], data);
@@ -391,7 +387,6 @@ srmodel_list_t *srmodel_mmap_init(const esp_partition_t *partition)
             int size = read_int32(data);
             data += int_len;
             model_data->sizes[j] = size;
-            printf("file %s\n", model_data->files[j]);
 
             // read model info
             if (strcmp(model_data->files[j], "_MODEL_INFO_") == 0) {
@@ -422,11 +417,14 @@ void srmodel_mmap_deinit(srmodel_list_t *models)
                 free(models->model_data[i]->sizes);
                 free(models->model_data[i]);
                 free(models->model_name[i]);
+                if (models->model_info[i] != NULL)
+                    free(models->model_info[i]);
             }
         }
         free(models->model_data);
         free(models->model_name);
         free(models->mmap_handle);
+        free(models->model_info);
         free(models);
     }
     models = NULL;
@@ -558,6 +556,7 @@ void srmodel_sdcard_deinit(srmodel_list_t *models)
         if (models->num > 0) {
             for (int i = 0; i < models->num; i++) {
                 free(models->model_name[i]);
+                free(models->model_info[i]);
             }
         }
         free(models);

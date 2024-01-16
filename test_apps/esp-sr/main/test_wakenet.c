@@ -54,6 +54,7 @@ TEST_CASE("wakenet create/destroy API & memory leak", "[wn]")
         models = esp_srmodel_init("model");
         model_name = esp_srmodel_filter(models, ESP_WN_PREFIX, NULL);
         wakenet = (esp_wn_iface_t*)esp_wn_handle_from_name(model_name);
+        // char *wake_words = esp_srmodel_get_wake_words(models, model_name);
 
         printf("create ...\n");
         // typedef enum {
@@ -68,6 +69,7 @@ TEST_CASE("wakenet create/destroy API & memory leak", "[wn]")
 
         printf("destroy ...\n");
         wakenet->destroy(model_data);
+        // free(wake_words);
         esp_srmodel_deinit(models);
 
         last_end_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
