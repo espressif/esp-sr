@@ -40,8 +40,9 @@ The following wake words are supported in esp-sr:
 |Jarvis           |                                        | wn9_jarvis_tts         | 
 |Computer         |                                        | wn9_computer_tts       |
 |Hey,Willow       |                                        | wn9_heywillow_tts      | 
-|Sophia           |                                        | wn9_sophia_tts         | 
-|你好小鑫         |                                        | wn9_nihaoxiaoxin_tts         |
+|Sophia           |                                        | wn9_sophia_tts         |
+|你好小鑫         |                                        | wn9_nihaoxiaoxin_tts   |
+|小美同学         |                                        | wn9_xiaomeitongxue_tts |
 
 *NOTE:* `_tts` suffix means this WakeNet model is trained by TTS samples.  
 
