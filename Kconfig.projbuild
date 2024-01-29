@@ -180,11 +180,10 @@ menu "Load Multiple Wake Words"
     config SR_WN_WN9_NIHAOXIAOXIN_TTS_MULTI
     bool "nihaoxiaoxin (wn9_nihaoxiaoxin_tts)"
     depends on IDF_TARGET_ESP32S3
-        depends on IDF_TARGET_ESP32S3
 
     config SR_WN_WN9_XIAOMEITONGXUE_TTS_MULTI
-        bool "xiaomeitongxue (wn9_xiaomeitongxue_tts)"
-        depends on IDF_TARGET_ESP32S3
+    bool "xiaomeitongxue (wn9_xiaomeitongxue_tts)"
+    depends on IDF_TARGET_ESP32S3
 
 endmenu
 
