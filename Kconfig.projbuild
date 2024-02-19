@@ -132,6 +132,10 @@ choice SR_WN_MODEL_LOAD
         bool "xiaomeitongxue (wn9_xiaomeitongxue_tts)"
         depends on IDF_TARGET_ESP32S3
 
+    config SR_WN_WN9_HIXIAOXING_TTS
+        bool "Hi,Xiaoxing (wn9_hixiaoxing_tts)"
+        depends on IDF_TARGET_ESP32S3
+
     config SR_WN_WN9_CUSTOMWORD
         bool "customized word (wn9_customword)"
         depends on IDF_TARGET_ESP32S3
