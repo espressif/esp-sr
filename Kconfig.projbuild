@@ -46,7 +46,9 @@ choice SR_NSN_MODEL_LOAD
     config SR_NSN_NSNET1
         bool "Deep noise suppression v1 (nsnet1)"
         depends on IDF_TARGET_ESP32S3
-
+    config SR_NSN_NSNET2
+        bool "Deep noise suppression v2 (nsnet2)"
+	depends on IDF_TARGET_ESP32S3
 endchoice
 
 config USE_WAKENET
@@ -120,22 +122,6 @@ choice SR_WN_MODEL_LOAD
         bool "Hey,Willow (wn9_heywillow_tts)"
         depends on IDF_TARGET_ESP32S3
 
-    config SR_WN_WN9_SOPHIA_TTS
-        bool "Sophia (wn9_sophia_tts)"
-        depends on IDF_TARGET_ESP32S3
-
-    config SR_WN_WN9_NIHAOXIAOXIN_TTS
-        bool "nihaoxiaoxin (wn9_nihaoxiaoxin_tts)"
-        depends on IDF_TARGET_ESP32S3
-
-    config SR_WN_WN9_XIAOMEITONGXUE_TTS
-        bool "xiaomeitongxue (wn9_xiaomeitongxue_tts)"
-        depends on IDF_TARGET_ESP32S3
-
-    config SR_WN_WN9_HIXIAOXING_TTS
-        bool "Hi,Xiaoxing (wn9_hixiaoxing_tts)"
-        depends on IDF_TARGET_ESP32S3
-
     config SR_WN_WN9_CUSTOMWORD
         bool "customized word (wn9_customword)"
         depends on IDF_TARGET_ESP32S3
@@ -175,18 +161,6 @@ menu "Load Multiple Wake Words"
 
     config SR_WN_WN9_HEYWILLOW_TTS_MULTI
     bool "Hey,Willow (wn9_heywillow_tts)"
-    depends on IDF_TARGET_ESP32S3
-
-    config SR_WN_WN9_SOPHIA_TTS_MULTI
-    bool "Sophia (wn9_sophia_tts)"
-    depends on IDF_TARGET_ESP32S3
-
-    config SR_WN_WN9_NIHAOXIAOXIN_TTS_MULTI
-    bool "nihaoxiaoxin (wn9_nihaoxiaoxin_tts)"
-    depends on IDF_TARGET_ESP32S3
-
-    config SR_WN_WN9_XIAOMEITONGXUE_TTS_MULTI
-    bool "xiaomeitongxue (wn9_xiaomeitongxue_tts)"
     depends on IDF_TARGET_ESP32S3
 
 endmenu
