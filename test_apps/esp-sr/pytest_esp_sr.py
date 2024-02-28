@@ -57,6 +57,7 @@ def test_sr_afe(dut: Dut)-> None:
     'config',
     [
         'nsnet1',
+        'nsnet2',
     ],
 )
 def test_vc_afe(dut: Dut)-> None:
