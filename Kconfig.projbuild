@@ -46,7 +46,9 @@ choice SR_NSN_MODEL_LOAD
     config SR_NSN_NSNET1
         bool "Deep noise suppression v1 (nsnet1)"
         depends on IDF_TARGET_ESP32S3
-
+    config SR_NSN_NSNET2
+        bool "Deep noise suppression v2 (nsnet2)"
+	depends on IDF_TARGET_ESP32S3
 endchoice
 
 config USE_WAKENET
@@ -136,6 +138,10 @@ choice SR_WN_MODEL_LOAD
         bool "Hi,Xiaoxing (wn9_hixiaoxing_tts)"
         depends on IDF_TARGET_ESP32S3
 
+    config SR_WN_WN9_MYCROFT_TTS
+        bool "Mycroft (wn9_mycroft_tts)"
+        depends on IDF_TARGET_ESP32S3
+
     config SR_WN_WN9_CUSTOMWORD
         bool "customized word (wn9_customword)"
         depends on IDF_TARGET_ESP32S3
@@ -187,6 +193,10 @@ menu "Load Multiple Wake Words"
 
     config SR_WN_WN9_XIAOMEITONGXUE_TTS_MULTI
     bool "xiaomeitongxue (wn9_xiaomeitongxue_tts)"
+    depends on IDF_TARGET_ESP32S3
+
+    config SR_WN_WN9_MYCROFT_TTS_MULTI
+    bool "Mycroft (wn9_mycroft_tts)"
     depends on IDF_TARGET_ESP32S3
 
 endmenu

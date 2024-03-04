@@ -2,8 +2,16 @@
 
 #include "esp_nsn_iface.h"
 
-// The prefix of nsnet model name is used to filter all wakenet from availabel models.
+/*
+The prefix of nset
+Now there are nsnet1 and nsnet2
+*/
 #define ESP_NSNET_PREFIX "nsnet"
 
-extern const esp_nsn_iface_t esp_nsnet1_quantized;
-#define ESP_NSN_HANDLE esp_nsnet1_quantized
+/**
+ * @brief Get the nsnet handle from model name
+ *
+ * @param model_name   The name of model 
+ * @returns The handle of multinet
+ */
+esp_nsn_iface_t *esp_nsnet_handle_from_name(char *model_name);

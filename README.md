@@ -41,6 +41,7 @@ The following wake words are supported in esp-sr:
 |Computer         |                                        | wn9_computer_tts       |
 |Hey,Willow       |                                        | wn9_heywillow_tts      | 
 |Sophia           |                                        | wn9_sophia_tts         |
+|Mycroft          |                                        | wn9_mycroft_tts        |
 |你好小鑫         |                                        | wn9_nihaoxiaoxin_tts   |
 |小美同学         |                                        | wn9_xiaomeitongxue_tts |
 |Hi,小星          |                                        | wn9_hixiaoxing_tts     |
