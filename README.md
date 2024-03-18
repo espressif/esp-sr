@@ -42,9 +42,11 @@ The following wake words are supported in esp-sr:
 |Hey,Willow       |                                        | wn9_heywillow_tts      | 
 |Sophia           |                                        | wn9_sophia_tts         |
 |Mycroft          |                                        | wn9_mycroft_tts        |
+|Hey,Printer      |                                        | wn9_heyprinter_tts     |
 |你好小鑫         |                                        | wn9_nihaoxiaoxin_tts   |
 |小美同学         |                                        | wn9_xiaomeitongxue_tts |
 |Hi,小星          |                                        | wn9_hixiaoxing_tts     |
+|小龙小龙         |                                         | wn9_小龙小龙_tts     |
 
 *NOTE:* `_tts` suffix means this WakeNet model is trained by TTS samples.  
 
