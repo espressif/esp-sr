@@ -46,7 +46,8 @@ The following wake words are supported in esp-sr:
 |你好小鑫         |                                        | wn9_nihaoxiaoxin_tts   |
 |小美同学         |                                        | wn9_xiaomeitongxue_tts |
 |Hi,小星          |                                        | wn9_hixiaoxing_tts     |
-|小龙小龙         |                                         | wn9_小龙小龙_tts     |
+|小龙小龙         |                                        | wn9_xiaolongxiaolong_tts    |
+|喵喵同学         |                                        | wn9_miaomiaotongxue_tts     |
 
 *NOTE:* `_tts` suffix means this WakeNet model is trained by TTS samples.  
 
