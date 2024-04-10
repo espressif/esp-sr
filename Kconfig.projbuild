@@ -154,6 +154,10 @@ choice SR_WN_MODEL_LOAD
         bool "喵喵同学 (wn9_miaomiaotongxue_tts)"
         depends on IDF_TARGET_ESP32S3
 
+    config SR_WN_WN9_HIJOY_TTS
+        bool "Hi,Joy (wn9_hijoy_tts)"
+        depends on IDF_TARGET_ESP32S3
+
     config SR_WN_WN9_CUSTOMWORD
         bool "customized word (wn9_customword)"
         depends on IDF_TARGET_ESP32S3
@@ -221,6 +225,10 @@ menu "Load Multiple Wake Words"
 
     config SR_WN_WN9_MYCROFT_TTS_MULTI
     bool "Mycroft (wn9_mycroft_tts)"
+    depends on IDF_TARGET_ESP32S3
+
+    config SR_WN_WN9_HIJOY_TTS_MULTI
+    bool "Hi,Joy (wn9_hijoy_tts)"
     depends on IDF_TARGET_ESP32S3
 
 endmenu

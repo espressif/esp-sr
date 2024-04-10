@@ -43,6 +43,7 @@ The following wake words are supported in esp-sr:
 |Sophia           |                                        | wn9_sophia_tts         |
 |Mycroft          |                                        | wn9_mycroft_tts        |
 |Hey,Printer      |                                        | wn9_heyprinter_tts     |
+|Hi,Joy           |                                        | wn9_hijoy_tts          |
 |你好小鑫         |                                        | wn9_nihaoxiaoxin_tts   |
 |小美同学         |                                        | wn9_xiaomeitongxue_tts |
 |Hi,小星          |                                        | wn9_hixiaoxing_tts     |
