@@ -25,7 +25,8 @@ The new algorithms will no longer support ESP32 chips.
 
 Espressif wake word engine **WakeNet** is specially designed to provide a high performance and low memory footprint wake word detection algorithm for users, which enables devices always listen to wake words, such as “Alexa”, “Hi,lexin” and “Hi,ESP”.
 
-Espressif has not only provided an official wake word "Hi,Lexin","Hi,ESP" to the public for free, but also allows customized wake words. For details on how to customize your own wake words, please see [Espressif Speech Wake Words Customization Process](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/wake_word_engine/ESP_Wake_Words_Customization.html) or [Training Wake Words by TTS sample](https://github.com/espressif/esp-sr/issues/88).
+Espressif offers two ways to customize the wake word, please refer to the following document to choose the one that meets your needs:   
+[Espressif Speech Wake Words Customization Process](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/wake_word_engine/ESP_Wake_Words_Customization.html) or [Training Wake Words by TTS sample](https://github.com/espressif/esp-sr/issues/88).
 
 The following wake words are supported in esp-sr:
 
@@ -49,8 +50,9 @@ The following wake words are supported in esp-sr:
 |Hi,小星          |                                        | wn9_hixiaoxing_tts     |
 |小龙小龙         |                                        | wn9_xiaolongxiaolong_tts    |
 |喵喵同学         |                                        | wn9_miaomiaotongxue_tts     |
+|Hi,Lily/Hi,莉莉  |                                        | wn9_hilili_tts         |
 
-*NOTE:* `_tts` suffix means this WakeNet model is trained by TTS samples.  
+*NOTE:* `_tts` suffix means this WakeNet model is trained by TTS samples.
 
 ## Speech Command Recognition
 

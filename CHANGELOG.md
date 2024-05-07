@@ -4,6 +4,9 @@
 - Available storage is less than the remaining flash space on IDF v5.0.   
 If you can not map model partition successfully, please check the left free storage by `spi_flash_mmap_get_free_pages(ESP_PARTITION_MMAP_DATA)` or update IDF to v5.1 or later.
 
+## 1.7.1
+- Add 喵喵同学，Hi,joy, (Hi,Lily/Hi,莉莉) wakenet model
+
 ## 1.7.0
 - Add first Noise Suppression model: nsnet2
 - Add more wake word model trained by TTS sample
