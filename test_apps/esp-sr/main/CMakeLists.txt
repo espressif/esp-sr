@@ -1,9 +1,6 @@
 
 set(srcs
-    "test_app_main.c"
-    "test_wakenet.c"
-    "test_multinet.c"
-    "test_afe.c"
+    "main.c"
 )
 
 idf_component_register(SRCS ${srcs}

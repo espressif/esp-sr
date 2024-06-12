@@ -156,6 +156,64 @@ esp_err_t esp_mn_commands_add(int command_id, char *string)
     return ESP_OK;
 }
 
+esp_err_t esp_mn_commands_phoneme_add(int command_id, char *string, char *phonemes)
+{
+    if (NULL == esp_mn_root || esp_mn_model_handle == NULL || esp_mn_model_data == NULL) {
+        ESP_LOGE(TAG, "Please create mn model first.\n");
+        return ESP_ERR_INVALID_STATE;
+    }
+    esp_mn_node_t *temp = esp_mn_root;
+    int last_node_elem_num = esp_mn_commands_num();
+    ESP_RETURN_ON_FALSE(ESP_MN_MAX_PHRASE_NUM >= last_node_elem_num, ESP_ERR_INVALID_STATE, TAG, "The number of speech commands exceed ESP_MN_MAX_PHRASE_NUM");
+
+#ifdef CONFIG_SR_MN_EN_MULTINET7_QUANT
+    if (esp_mn_model_handle->check_speech_command(esp_mn_model_data, phonemes) == 0) {
+        // error message is printed inside check_speech_command
+        ESP_LOGE(TAG, "invalid command, please check format, %s (%s).\n", string, phonemes);
+        return ESP_ERR_INVALID_STATE;
+    }
+#else
+    if (esp_mn_model_handle->check_speech_command(esp_mn_model_data, string) == 0) {
+        // error message is printed inside check_speech_command
+        ESP_LOGE(TAG, "invalid command, please check format, %s.\n", string);
+        return ESP_ERR_INVALID_STATE;
+    }
+#endif
+
+    temp = esp_mn_command_search(string);
+
+    if (temp != NULL) {
+        // command already exists
+        if (command_id != temp->phrase->command_id) {
+            // change command id
+            temp->phrase->command_id = command_id;
+        } else {
+            // it's exactly the same, do nothing
+            ESP_LOGI(TAG, "command %d: (%s) already exists.", command_id, string);
+        }
+        return ESP_OK;
+    }
+
+    temp = esp_mn_root;
+
+    esp_mn_phrase_t *phrase = esp_mn_phrase_alloc(command_id, string);
+    if (phrase == NULL) {
+        return ESP_ERR_INVALID_STATE;
+    }
+    int phoneme_len = strlen(phonemes);
+    phrase->phonemes = _esp_mn_calloc_(phoneme_len+1, sizeof(char));
+    memcpy(phrase->phonemes, phonemes, phoneme_len);
+    phrase->phonemes[phoneme_len] = '\0';
+    
+    esp_mn_node_t *new_node = esp_mn_node_alloc(phrase);
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = new_node;
+
+    return ESP_OK;
+}
+
 esp_err_t esp_mn_commands_modify(char *old_string, char *new_string)
 {
 #ifdef CONFIG_SR_MN_EN_MULTINET7_QUANT

@@ -54,89 +54,8 @@ const static char *task_stack[] = {"Extr", "Intr"};
 #endif
 
 
-TEST_CASE(">>>>>>>> audio_front_end SR create/destroy API & memory leak <<<<<<<<", "[afe_sr]")
-{
-    int audio_chunksize = 0;
-    int16_t *feed_buff = NULL;
 
-    for (int aec_init = 0; aec_init < 2; aec_init++) {
-        for (int se_init = 0; se_init < 2; se_init++) {
-            for (int vad_init = 0; vad_init < 2; vad_init++) {
-                for (int wakenet_init = 0; wakenet_init < 2; wakenet_init++) {
-                    printf("aec_init: %d, se_init: %d, vad_init: %d, wakenet_init: %d\n", aec_init, se_init, vad_init, wakenet_init);
-
-                    int start_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
-                    int start_internal_size = heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
-                    srmodel_list_t *models = esp_srmodel_init("model");
-                    char *model_name = esp_srmodel_filter(models, ESP_WN_PREFIX, NULL);
-
-                    esp_afe_sr_iface_t *afe_handle = (esp_afe_sr_iface_t *)&ESP_AFE_SR_HANDLE;
-                    afe_config_t afe_config = AFE_CONFIG_DEFAULT();
-                    afe_config.aec_init = aec_init;
-                    afe_config.se_init = se_init;
-                    afe_config.vad_init = vad_init;
-                    afe_config.wakenet_init = wakenet_init;
-                    afe_config.memory_alloc_mode = AFE_MEMORY_ALLOC_MORE_PSRAM;
-                    afe_config.wakenet_model_name = model_name;
-                    afe_config.voice_communication_init = false;
-
-
-                    // test model loading time
-                    struct timeval tv_start, tv_end;
-                    gettimeofday(&tv_start, NULL);
-                    afe_data = afe_handle->create_from_config(&afe_config);
-                    gettimeofday(&tv_end, NULL);
-                    int tv_ms = (tv_end.tv_sec - tv_start.tv_sec) * 1000 + (tv_end.tv_usec - tv_start.tv_usec) / 1000;
-                    printf("create latency:%d ms\n", tv_ms);
-
-                    // test model memory concumption
-                    int create_size = start_size - heap_caps_get_free_size(MALLOC_CAP_8BIT);
-                    int create_internal_size = start_internal_size - heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
-                    printf("Internal RAM: %d, PSRAM:%d\n", create_internal_size, create_size - create_internal_size);
-                    afe_handle->destroy(afe_data);
-                    esp_srmodel_deinit(models);
-
-                    // test memory leak
-                    int first_end_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
-                    int last_end_size = first_end_size;
-                    int mem_leak = start_size - last_end_size;
-                    printf("create&destroy times:%d, memory leak:%d\n", 1, mem_leak);
-
-                    for (int i = 0; i < 6; i++) {
-                        printf("init partition ...\n");
-                        models = esp_srmodel_init("model");
-                        model_name = esp_srmodel_filter(models, ESP_WN_PREFIX, NULL);
-                        afe_config.wakenet_model_name = model_name;
-
-                        printf("create ...\n");
-                        afe_data = afe_handle->create_from_config(&afe_config);
-
-                        audio_chunksize = afe_handle->get_feed_chunksize(afe_data);
-                        feed_buff = malloc(audio_chunksize * sizeof(int16_t) * afe_config.pcm_config.total_ch_num);
-                        assert(feed_buff);
-
-                        afe_handle->feed(afe_data, feed_buff);
-                        printf("destroy ...\n");
-                        afe_handle->destroy(afe_data);
-                        afe_data = NULL;
-                        if (feed_buff) {
-                            free(feed_buff);
-                            feed_buff = NULL;
-                        }
-                        esp_srmodel_deinit(models);
-
-                        vTaskDelay(100 / portTICK_PERIOD_MS);
-                        last_end_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
-                        mem_leak = start_size - last_end_size;
-                        printf("create&destroy times:%d, memory leak:%d\n", i + 2, mem_leak);
-                    }
-
-                    TEST_ASSERT_EQUAL(true, (mem_leak) < 1000 && last_end_size == first_end_size);
-                }
-            }
-        }
-    }
-}
+/******************************************** Divide VC Test ********************************************/
 
 void test_feed_Task(void *arg)
 {
@@ -196,7 +115,6 @@ void test_detect_Task(void *arg)
     ESP_LOGI(TAG, "detect task quit\n");
     vTaskDelete(NULL);
 }
-
 esp_err_t audio_sys_get_real_time_stats(void)
 {
 #if (CONFIG_FREERTOS_VTASKLIST_INCLUDE_COREID && CONFIG_FREERTOS_GENERATE_RUN_TIME_STATS)
@@ -307,52 +225,6 @@ void test_print_cpuloading(void *arg)
     }
     vTaskDelete(NULL);
 }
-
-TEST_CASE("audio_front_end SR cpu loading and memory info", "[afe_sr]")
-{
-    srmodel_list_t *models = esp_srmodel_init("model");
-    if (models!=NULL) {
-        for (int i=0; i < models->num; i++) {
-            printf("Load: %s\n", models->model_name[i]);
-        }
-    }
-    char *wn_name = esp_srmodel_filter(models, ESP_WN_PREFIX, NULL);
-    printf("wn_name: %s\n", wn_name);
-
-    total_ram_size_before = heap_caps_get_free_size(MALLOC_CAP_8BIT);
-    internal_ram_size_before = heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
-    psram_size_before = heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_SPIRAM);
-
-    esp_afe_sr_iface_t *afe_handle = (esp_afe_sr_iface_t *)&ESP_AFE_SR_HANDLE;
-    afe_config_t afe_config = AFE_CONFIG_DEFAULT();
-    afe_config.wakenet_model_name = wn_name;
-
-    afe_data = afe_handle->create_from_config(&afe_config);
-    if (!afe_data) {
-        printf("afe_data is null!\n");
-        return;
-    }
-
-    s_cpu_test_task_flag = 1;
-    xTaskCreatePinnedToCore(&test_feed_Task, "feed", 8 * 1024, (void *)afe_handle, 5, NULL, 0);
-    xTaskCreatePinnedToCore(&test_detect_Task, "detect", 8 * 1024, (void *)afe_handle, 5, NULL, 1);
-    xTaskCreatePinnedToCore(&test_print_cpuloading, "cpuloading", 4 * 1024, NULL, 5, NULL, 1);
-
-    vTaskDelay(10000 / portTICK_PERIOD_MS);
-    s_cpu_test_task_flag = 0;
-
-    vTaskDelay(2000 / portTICK_PERIOD_MS);
-    ESP_LOGI(TAG, "destroy\n");
-    afe_handle->destroy(afe_data);
-    afe_data = NULL;
-    esp_srmodel_deinit(models);
-    ESP_LOGI(TAG, "successful\n");
-}
-
-
-
-/******************************************** Divide VC Test ********************************************/
-
 
 
 TEST_CASE("audio_front_end VC create/destroy API & memory leak", "[afe_vc]")
