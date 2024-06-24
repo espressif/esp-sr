@@ -106,8 +106,8 @@ choice SR_WN_MODEL_LOAD
         bool "Hi,M Five (wn9_himfive)"
         depends on IDF_TARGET_ESP32S3
 
-    config SR_WN_WN9_NIHAOXIAOZHI
-        bool "你好小智 (wn9_nihaoxiaozhi)"
+    config SR_WN_WN9_NIHAOXIAOZHI_TTS
+        bool "你好小智 (wn9_nihaoxiaozhi_tts)"
         depends on IDF_TARGET_ESP32S3
     
     config SR_WN_WN9_JARVIS_TTS
@@ -197,6 +197,10 @@ menu "Load Multiple Wake Words"
 
     config SR_WN_WN9_XIAOAITONGXUE_MULTI
     bool "小爱同学 (wn9_xiaoaitongxue)"
+    default False
+
+    config SR_WN_WN9_NIHAOXIAOZHI_TTS_MULTI
+    bool "你好小智 (wn9_nihaoxiaozhi_tts)"
     default False
 
     config SR_WN_WN9_ALEXA_MULTI
