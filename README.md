@@ -33,7 +33,7 @@ The following wake words are supported in esp-sr:
 |wake words       |                 ESP32                 |         ESP32-S3       | 
 |:--------------- | :------------------------------------:| :---------------------:| 
 |Hi,乐鑫           |  wn5_hilexin, wn5_hilexinX3           | wn9_hilexin            | 
-|你好小智          |  wn5_nihaoxiaozhi,wn5_nihaoxiaozhiX3   | wn9_nihaoxiaozhi       |
+|你好小智          |  wn5_nihaoxiaozhi,wn5_nihaoxiaozhiX3   | wn9_nihaoxiaozhi_tts   |
 |小爱同学          |                                        | wn9_xiaoaitongxue      | 
 |Hi,ESP           |                                        | wn9_hiesp              | 
 |Hi,M Five        |                                        | wn9_himfive            | 
