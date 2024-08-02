@@ -4,6 +4,11 @@
 - Available storage is less than the remaining flash space on IDF v5.0.   
 If you can not map model partition successfully, please check the left free storage by `spi_flash_mmap_get_free_pages(ESP_PARTITION_MMAP_DATA)` or update IDF to v5.1 or later.
 
+## 1.8.0
+- Support esp-idf v5.3
+- Add more new wake words
+- Add setting "fixed_first_channel" in afe_config
+ 
 ## 1.7.1
 - Add 喵喵同学，Hi,joy, (Hi,Lily/Hi,莉莉) wakenet model
 
