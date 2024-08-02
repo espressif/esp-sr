@@ -60,6 +60,20 @@ esp_err_t esp_mn_commands_free(void);
 esp_err_t esp_mn_commands_add(int command_id, char *string);
 
 /**
+ * @brief Add one speech commands with command string, command phonemes and command ID
+ *        Please use multinet_g2p.py[esp-sr/tool/multinet_g2p.py] to generate phonemes from command string.
+ * 
+ * @param command_id    The command ID
+ * @param string        The command string of the speech commands
+ * @param phonemes      The phonemes of the speech commands
+ *
+ * @return
+ *     - ESP_OK                  Success
+ *     - ESP_ERR_INVALID_STATE   Fail
+ */
+esp_err_t esp_mn_commands_phoneme_add(int command_id, char *string, char *phonemes);
+
+/**
  * @brief Modify one speech commands with new command string
  *
  * @param old_string    The old command string of the speech commands
