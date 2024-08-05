@@ -30,6 +30,14 @@ void check_chip_config(void)
 #ifndef CONFIG_ESP32S3_DATA_CACHE_LINE_64B
     ESP_LOGW(TAG, "Data cache line recommends 64B");
 #endif
+#elif CONFIG_IDF_TARGET_ESP32P4
+#ifndef  CONFIG_SPIRAM_SPEED
+    ESP_LOGW(TAG, "PSRAM should be enabled and PSRAM freq should be not less than 80MHz");
+#endif
+#ifndef CONFIG_CACHE_L2_CACHE_LINE_128B
+    ESP_LOGW(TAG, "It is recommended to set the cache line to 128B");
+#endif
+
 #elif CONFIG_IDF_TARGET_ESP32
 #ifndef CONFIG_ESP32_DEFAULT_CPU_FREQ_240
     ESP_LOGW(TAG, "CPU freq should be 240MHz");
@@ -47,7 +55,7 @@ void check_chip_config(void)
     ESP_LOGW(TAG, "Flash mode should be QIO");
 #endif
 #else
-    ESP_LOGW(TAG, "ESP-SR-AFE only support ESP32/ESP32S3");
+    ESP_LOGW(TAG, "ESP-SR-AFE only support ESP32/ESP32S3/ESP32P4");
 #endif
 }
 
