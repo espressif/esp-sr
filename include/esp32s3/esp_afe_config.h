@@ -90,6 +90,8 @@ typedef struct {
     afe_debug_hook_t debug_hook[AFE_DEBUG_HOOK_MAX];
     afe_ns_mode_t afe_ns_mode;
     char *afe_ns_model_name;
+    bool fixed_first_channel;                // If true, the channel after first wake-up is fixed to raw data of microphone
+                                             // otherwise, select channel number by wakenet
 } afe_config_t;
 
 
@@ -121,6 +123,37 @@ typedef struct {
     .debug_hook = {{AFE_DEBUG_HOOK_MASE_TASK_IN, NULL}, {AFE_DEBUG_HOOK_FETCH_TASK_IN, NULL}}, \
     .afe_ns_mode = NS_MODE_SSP, \
     .afe_ns_model_name = NULL, \
+    .fixed_first_channel = true, \
+}
+#elif CONFIG_IDF_TARGET_ESP32P4
+#define AFE_CONFIG_DEFAULT() { \
+    .aec_init = true, \
+    .se_init = true, \
+    .vad_init = true, \
+    .wakenet_init = true, \
+    .voice_communication_init = false, \
+    .voice_communication_agc_init = false, \
+    .voice_communication_agc_gain = 15, \
+    .vad_mode = VAD_MODE_3, \
+    .wakenet_model_name = NULL, \
+    .wakenet_model_name_2 = NULL, \
+    .wakenet_mode = DET_MODE_90, \
+    .afe_mode = SR_MODE_HIGH_PERF, \
+    .afe_perferred_core = 0, \
+    .afe_perferred_priority = 5, \
+    .afe_ringbuf_size = 50, \
+    .memory_alloc_mode = AFE_MEMORY_ALLOC_INTERNAL_PSRAM_BALANCE, \
+    .afe_linear_gain = 1.0, \
+    .agc_mode = AFE_MN_PEAK_AGC_MODE_2, \
+    .pcm_config.total_ch_num = 3, \
+    .pcm_config.mic_num = 2, \
+    .pcm_config.ref_num = 1, \
+    .pcm_config.sample_rate = 16000, \
+    .debug_init = false, \
+    .debug_hook = {{AFE_DEBUG_HOOK_MASE_TASK_IN, NULL}, {AFE_DEBUG_HOOK_FETCH_TASK_IN, NULL}}, \
+    .afe_ns_mode = NS_MODE_SSP, \
+    .afe_ns_model_name = NULL, \
+    .fixed_first_channel = true, \
 }
 #elif CONFIG_IDF_TARGET_ESP32S3
 #define AFE_CONFIG_DEFAULT() { \
@@ -150,6 +183,7 @@ typedef struct {
     .debug_hook = {{AFE_DEBUG_HOOK_MASE_TASK_IN, NULL}, {AFE_DEBUG_HOOK_FETCH_TASK_IN, NULL}}, \
     .afe_ns_mode = NS_MODE_SSP, \
     .afe_ns_model_name = NULL, \
+    .fixed_first_channel = true, \
 }
 #endif
 

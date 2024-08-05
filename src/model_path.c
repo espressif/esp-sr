@@ -4,7 +4,9 @@
 #include "string.h"
 #include "model_path.h"
 #include "esp_wn_models.h"
+#ifndef CONFIG_IDF_TARGET_ESP32P4
 #include "esp_mn_models.h"
+#endif
 
 #ifdef ESP_PLATFORM
 #include <sys/dirent.h>
@@ -244,6 +246,7 @@ void srmodel_spiffs_deinit(srmodel_list_t *models)
 
 }
 
+#ifdef CONFIG_IDF_TARGET_ESP32
 srmodel_list_t *srmodel_config_init()
 {
     if (static_srmodels == NULL) {
@@ -305,6 +308,7 @@ void srmodel_config_deinit(srmodel_list_t *models)
     // models is static_srmodels
     static_srmodels = NULL;
 }
+#endif
 
 model_coeff_getter_t *srmodel_get_model_coeff(char *model_name)
 {
