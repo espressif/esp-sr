@@ -17,7 +17,7 @@ ESP-SR framework includes the following modules:
 
 These algorithms are provided in the form of a component, so they can be integrated into your projects with minimum effort.
 
-ESP32-S3 is recommended, which supports AI instructions and larger, high-speed octal SPI PSRAM.
+ESP32-S3/ESP32-P4 are recommended, which support AI instructions and larger, high-speed octal SPI PSRAM.
 The new algorithms will no longer support ESP32 chips.
 
 
@@ -30,7 +30,7 @@ Espressif offers two ways to customize the wake word, please refer to the follow
 
 The following wake words are supported in esp-sr:
 
-|wake words       |                 ESP32                 |         ESP32-S3       | 
+|wake words       |                 ESP32                 |  ESP32-S3/ESP32-P4     | 
 |:--------------- | :------------------------------------:| :---------------------:| 
 |Hi,乐鑫           |  wn5_hilexin, wn5_hilexinX3           | wn9_hilexin            | 
 |你好小智          |  wn5_nihaoxiaozhi,wn5_nihaoxiaozhiX3   | wn9_nihaoxiaozhi_tts   |
@@ -67,10 +67,10 @@ Currently, Espressif **MultiNet** supports up to 300 Chinese or English speech c
 
 The following MultiNet models are supported in esp-sr:  
 
-|language         |           ESP32            |         ESP32-S3              | 
-|:--------------- | :-------------------------:| :----------------------------:| 
-|Chinese          | mn2_cn                     | mn5q8_cn, mn6_cn, mn7_cn      | 
-|English          |                            | mn5q8_en, mn6_en, mn7_en      |
+|language         |           ESP32            |         ESP32-S3              |          ESP32-P4             | 
+|:--------------- | :-------------------------:| :----------------------------:| :----------------------------:|
+|Chinese          | mn2_cn                     | mn5q8_cn, mn6_cn, mn7_cn      |  mn7_cn                       |
+|English          |                            | mn5q8_en, mn6_en, mn7_en      |  mn7_en                       |
 
 ## Audio Front End
 
