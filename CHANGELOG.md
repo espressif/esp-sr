@@ -4,10 +4,8 @@
 - Available storage is less than the remaining flash space on IDF v5.0.   
 If you can not map model partition successfully, please check the left free storage by `spi_flash_mmap_get_free_pages(ESP_PARTITION_MMAP_DATA)` or update IDF to v5.1 or later.
 
-## To be released
-- Support esp32p4 for WakeNet
-- Support esp32p4 for MultiNet
-- Support esp32p4 for AFE_SR
+## 1.9.0
+- Support esp32p4 for WakeNet, MultiNet and AFE_SR
 
 
 ## 1.8.0
