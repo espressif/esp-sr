@@ -137,7 +137,7 @@ typedef struct {
     .vad_mode = VAD_MODE_3, \
     .wakenet_model_name = NULL, \
     .wakenet_model_name_2 = NULL, \
-    .wakenet_mode = DET_MODE_2CH_90, \
+    .wakenet_mode = DET_MODE_3CH_90, \
     .afe_mode = SR_MODE_LOW_COST, \
     .afe_perferred_core = 0, \
     .afe_perferred_priority = 5, \
