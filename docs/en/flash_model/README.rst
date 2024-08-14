@@ -127,7 +127,7 @@ How To Use
 
 After the above-mentioned configuration, users can initialize and start using the models following the examples described in the `ESP-Skainet <https://github.com/espressif/esp-skainet>`_ repo.
 
-Here, we only introduce the code implementation, which can also be found in `model_path.c <../src/model_path.c>`_ .
+Here, we only introduce the code implementation, which can also be found in :project_file:`src/model_path.c`.
 
 .. only:: esp32
 
@@ -168,7 +168,7 @@ After completing the above configuration, the project will automatically generat
     -  Initialize SD card
         Users must initialize SD card so the chip can load SD card. Users of `ESP-Skainet <https://github.com/espressif/esp-skainet>`_ can call  ``esp_sdcard_init("/sdcard", num);`` to initialize any board supported SD cards. Otherwise, users need to write the initialization code themselves.
         After the above-mentioned steps, users can flash the project.
-    
+
     - Read models
          User use ``esp_srmodel_init(model_path)`` to read models in ``model_path`` of SD card.
 
@@ -189,7 +189,7 @@ After completing the above configuration, the project will automatically generat
         // step1: return models in flash or in sdcard
         //
         char *model_path = your_model_path: // partition_label or model_path in sdcard;
-        models = esp_srmodel_init(model_path); 
+        models = esp_srmodel_init(model_path);
 
        //
        // step2: select the specific model by keywords
