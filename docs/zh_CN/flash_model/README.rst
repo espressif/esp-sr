@@ -127,7 +127,7 @@
 
 当用户完成以上的配置选择后，可参考 `ESP-Skainet <https://github.com/espressif/esp-skainet>`_ 应用层仓库中的介绍，进行初始化和使用。
 
-这里主要介绍模型加载在用户工程中的代码实现，用户也可直接参考代码 `model_path.c <../src/model_path.c>`_ 。
+这里主要介绍模型加载在用户工程中的代码实现，用户也可直接参考代码 :project_file:`src/model_path.c`。
 
 .. only:: esp32
 
@@ -188,7 +188,7 @@
             // step1: return models in flash
             //
             char *model_path = your_model_path: // partition_label or model_path in sdcard;
-            models = esp_srmodel_init(model_path); 
+            models = esp_srmodel_init(model_path);
 
             //
             // step2: select the specific model by keywords
