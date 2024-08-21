@@ -120,6 +120,25 @@ char *get_model_base_path(void);
  */
 srmodel_list_t *get_static_srmodels(void);
 
+/**
+ * @brief Load models from flash directly by address and length
+ *
+ * @param address    The address of flash 
+ * @param length     The length of data to load
+ *
+ * @return all avaliable models,save as srmodel_list_t.
+ */
+srmodel_list_t *srmodel_flash_init(uint32_t address, uint32_t length);
+
+/**
+ * @brief Free srmodel_list_t.
+ *
+ * @param models    The srmodel_list_t point allocated by srmodel_flash_init function.
+ *
+ * @return all avaliable models in flash, save as srmodel_list_t.
+ */
+void srmodel_flash_deinit(srmodel_list_t *models);
+
 
 
 #ifdef ESP_PLATFORM

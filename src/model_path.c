@@ -14,6 +14,7 @@
 #include "esp_log.h"
 #include "esp_spiffs.h"
 #include "esp_idf_version.h"
+#include "esp_flash_spi_init.h"
 #if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 0, 0)
 #include "spi_flash_mmap.h"
 #endif
@@ -413,6 +414,79 @@ srmodel_list_t *srmodel_mmap_init(const esp_partition_t *partition)
     return models;
 }
 
+
+srmodel_list_t *srmodel_flash_init(uint32_t address, uint32_t length)
+{
+    if (static_srmodels == NULL) {
+        static_srmodels = srmodel_list_alloc();
+    } else {
+        return static_srmodels;
+    }
+
+    srmodel_list_t *models = static_srmodels;
+    void *root = malloc(length);
+    if (root == NULL) {
+        ESP_LOGE(TAG, "Fail to allocate enough memory for model loading, size:%ld", length);
+        return models;
+    }
+
+    esp_flash_read(NULL, root, address, length); 
+    
+    models->mmap_handle = root;
+    models->partition = NULL;
+    char *start = (char *)root;
+    char *data = (char *)root;
+    int str_len = SRMODEL_STRING_LENGTH;
+    int int_len = 4;
+    //read model number
+    models->num = read_int32(data);
+    data += int_len;
+    models->model_data = (srmodel_data_t **)malloc(sizeof(srmodel_data_t *) * models->num);
+    models->model_name = (char **)malloc(sizeof(char *) * models->num);
+    models->model_info = (char **)malloc(sizeof(char *) * models->num);
+
+    for (int i = 0; i < models->num; i++) {
+        srmodel_data_t *model_data = (srmodel_data_t *) malloc(sizeof(srmodel_data_t));
+        models->model_info[i] = NULL;
+        // read model name
+        models->model_name[i] = (char *)malloc((strlen(data) + 1) * sizeof(char));
+        strcpy(models->model_name[i], data);
+        data += str_len;
+        //read model number
+        int file_num = read_int32(data);
+        model_data->num = file_num;
+        data += int_len;
+        model_data->files = (char **) malloc(sizeof(char *)*file_num);
+        model_data->data = (char **) malloc(sizeof(void *)*file_num);
+        model_data->sizes = (int *) malloc(sizeof(int) * file_num);
+
+        for (int j = 0; j < file_num; j++) {
+            //read file name
+            model_data->files[j] = data;
+            data += str_len;
+            //read file start index
+            int index = read_int32(data);
+            data += int_len;
+            model_data->data[j] = start + index;
+            //read file size
+            int size = read_int32(data);
+            data += int_len;
+            model_data->sizes[j] = size;
+
+            // read model info
+            if (strcmp(model_data->files[j], "_MODEL_INFO_") == 0) {
+                models->model_info[i] = get_model_info(model_data->data[j], model_data->sizes[j]);
+            }
+        }
+        models->model_data[i] = model_data;
+    }
+    ESP_LOGI(TAG, "Successfully read model from flash, address:%ld, length:%ld", address, length);
+
+    set_model_base_path(NULL);
+    return models;
+}
+
+
 void srmodel_mmap_deinit(srmodel_list_t *models)
 {
     if (models != NULL) {
@@ -438,6 +512,35 @@ void srmodel_mmap_deinit(srmodel_list_t *models)
         free(models->mmap_handle);
         free(models->model_info);
         free(models);
+    }
+    models = NULL;
+    static_srmodels = NULL;
+}
+
+
+
+void srmodel_flash_deinit(srmodel_list_t *models)
+{
+    if (models != NULL) {
+        if (models->num > 0) {
+            for (int i = 0; i < models->num; i++) {
+                free(models->model_data[i]->files);
+                free(models->model_data[i]->data);
+                free(models->model_data[i]->sizes);
+                free(models->model_data[i]);
+                free(models->model_name[i]);
+                if (models->model_info[i] != NULL)
+                    free(models->model_info[i]);
+            }
+        }
+        free(models->model_data);
+        free(models->model_name);
+        free(models->mmap_handle);
+        free(models->model_info);
+        free(models);
+
+        void *root = models->mmap_handle;
+        free(root);
     }
     models = NULL;
     static_srmodels = NULL;
