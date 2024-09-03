@@ -4,6 +4,10 @@
 - Available storage is less than the remaining flash space on IDF v5.0.   
 If you can not map model partition successfully, please check the left free storage by `spi_flash_mmap_get_free_pages(ESP_PARTITION_MMAP_DATA)` or update IDF to v5.1 or later.
 
+## 1.9.1
+- Support esp32p4 for nsnet2
+- Add a method to load model from rodata
+
 ## 1.9.0
 - Support esp32p4 for WakeNet, MultiNet and AFE_SR
 
