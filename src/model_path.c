@@ -326,41 +326,14 @@ static uint32_t read_int32(char *data)
     return value;
 }
 
-srmodel_list_t *srmodel_mmap_init(const esp_partition_t *partition)
+srmodel_list_t *srmodel_load(const void *root)
 {
     if (static_srmodels == NULL) {
         static_srmodels = srmodel_list_alloc();
-    } else {
-        return static_srmodels;
+        printf("create static models");
     }
 
     srmodel_list_t *models = static_srmodels;
-    const void *root;
-
-#if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 0, 0)
-    int free_pages = spi_flash_mmap_get_free_pages(ESP_PARTITION_MMAP_DATA);
-    uint32_t storage_size = free_pages * 64 * 1024; // Byte
-    ESP_LOGI(TAG, "The storage free size is %ld KB", storage_size / 1024);
-    ESP_LOGI(TAG, "The partition size is %ld KB", partition->size / 1024);
-    if (storage_size < partition->size) {
-        ESP_LOGE(TAG, "The storage free size of this board is less than %s partition required size", partition->label);
-    }
-    models->mmap_handle = (esp_partition_mmap_handle_t*)malloc(sizeof(esp_partition_mmap_handle_t));
-    ESP_ERROR_CHECK(esp_partition_mmap(partition, 0, partition->size, ESP_PARTITION_MMAP_DATA, &root, models->mmap_handle));
-#else
-    int free_pages = spi_flash_mmap_get_free_pages(SPI_FLASH_MMAP_DATA);
-    uint32_t storage_size = free_pages * 64 * 1024; // Byte
-    ESP_LOGI(TAG, "The storage free size is %d KB", storage_size / 1024);
-    ESP_LOGI(TAG, "The partition size is %d KB", partition->size / 1024);
-    if (storage_size < partition->size) {
-        ESP_LOGE(TAG, "The storage free size of board is less than %s partition size", partition->label);
-    }
-    models->mmap_handle = (spi_flash_mmap_handle_t*)malloc(sizeof(spi_flash_mmap_handle_t));
-    ESP_ERROR_CHECK(esp_partition_mmap(partition, 0, partition->size, SPI_FLASH_MMAP_DATA, &root, models->mmap_handle));
-#endif
-    
-
-    models->partition = (esp_partition_t *)partition;
     char *start = (char *)root;
     char *data = (char *)root;
     int str_len = SRMODEL_STRING_LENGTH;
@@ -407,20 +380,61 @@ srmodel_list_t *srmodel_mmap_init(const esp_partition_t *partition)
         }
         models->model_data[i] = model_data;
     }
-    ESP_LOGI(TAG, "Successfully map %s partition", partition->label);
-
+    ESP_LOGI(TAG, "Successfully load srmodels");
     set_model_base_path(NULL);
+    return models;
+}
+
+srmodel_list_t *srmodel_mmap_init(const esp_partition_t *partition)
+{
+    if (static_srmodels == NULL) {
+        static_srmodels = srmodel_list_alloc();
+    } else {
+        return static_srmodels;
+    }
+
+    srmodel_list_t *models = static_srmodels;
+    const void *root;
+
+#if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 0, 0)
+    int free_pages = spi_flash_mmap_get_free_pages(ESP_PARTITION_MMAP_DATA);
+    uint32_t storage_size = free_pages * 64 * 1024; // Byte
+    ESP_LOGI(TAG, "The storage free size is %ld KB", storage_size / 1024);
+    ESP_LOGI(TAG, "The partition size is %ld KB", partition->size / 1024);
+    if (storage_size < partition->size) {
+        ESP_LOGE(TAG, "The storage free size of this board is less than %s partition required size", partition->label);
+    }
+    models->mmap_handle = (esp_partition_mmap_handle_t*)malloc(sizeof(esp_partition_mmap_handle_t));
+    ESP_ERROR_CHECK(esp_partition_mmap(partition, 0, partition->size, ESP_PARTITION_MMAP_DATA, &root, models->mmap_handle));
+#else
+    int free_pages = spi_flash_mmap_get_free_pages(SPI_FLASH_MMAP_DATA);
+    uint32_t storage_size = free_pages * 64 * 1024; // Byte
+    ESP_LOGI(TAG, "The storage free size is %d KB", storage_size / 1024);
+    ESP_LOGI(TAG, "The partition size is %d KB", partition->size / 1024);
+    if (storage_size < partition->size) {
+        ESP_LOGE(TAG, "The storage free size of board is less than %s partition size", partition->label);
+    }
+    models->mmap_handle = (spi_flash_mmap_handle_t*)malloc(sizeof(spi_flash_mmap_handle_t));
+    ESP_ERROR_CHECK(esp_partition_mmap(partition, 0, partition->size, SPI_FLASH_MMAP_DATA, &root, models->mmap_handle));
+#endif
+    
+
+    models->partition = (esp_partition_t *)partition;
+    srmodel_load(root);
     return models;
 }
 
 void srmodel_mmap_deinit(srmodel_list_t *models)
 {
     if (models != NULL) {
+        if (models->mmap_handle) {
 #if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 0, 0)
-        esp_partition_munmap(*(esp_partition_mmap_handle_t *)models->mmap_handle); // support esp-idf v5
+            esp_partition_munmap(*(esp_partition_mmap_handle_t *)models->mmap_handle); // support esp-idf v5
 #else
-        spi_flash_munmap(*(spi_flash_mmap_handle_t *)models->mmap_handle);  // support esp-idf v4
-#endif
+            spi_flash_munmap(*(spi_flash_mmap_handle_t *)models->mmap_handle);  // support esp-idf v4
+#endif 
+        }
+
 
         if (models->num > 0) {
             for (int i = 0; i < models->num; i++) {
