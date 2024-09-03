@@ -3,7 +3,7 @@
 [![Documentation Status](./docs/_static/sr_doc_latest.svg)](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/index.html)
 [![Component Registry](https://components.espressif.com/components/espressif/esp-sr/badge.svg)](https://components.espressif.com/components/espressif/esp-sr)
 
-Espressif [ESP-SR](https://github.com/espressif/esp-sr) helps users build AI speech solutions based on ESP32 or ESP32-S3 chips.
+Espressif [ESP-SR](https://github.com/espressif/esp-sr) helps users build AI speech solutions based on ESP32-S3 or ESP32-P4 chips.
 
 Overview
 --------
