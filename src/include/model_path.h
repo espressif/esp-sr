@@ -120,6 +120,15 @@ char *get_model_base_path(void);
  */
 srmodel_list_t *get_static_srmodels(void);
 
+/**
+ * @brief Load models from binary data
+ *
+ * @param root   The binary model data.
+ *
+ * @return all avaliable models,save as srmodel_list_t.
+ */
+srmodel_list_t *srmodel_load(const void *root);
+
 
 
 #ifdef ESP_PLATFORM
