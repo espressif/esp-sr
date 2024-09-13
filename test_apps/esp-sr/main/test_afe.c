@@ -20,7 +20,7 @@
 #include "dl_lib_convq_queue.h"
 #include <sys/time.h>
 
-#ifdef CONFIG_IDF_TARGET_ESP32S3
+#if (CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32P4)
 #include "esp_nsn_models.h"
 #include "esp_nsn_iface.h"
 #endif
@@ -376,7 +376,7 @@ TEST_CASE("audio_front_end VC create/destroy API & memory leak", "[afe_vc]")
         for (int se_init = 0; se_init < 2; se_init++) {
             for (int vad_init = 0; vad_init < 2; vad_init++) {
                 for (int voice_communication_agc_init = 0; voice_communication_agc_init < 2; voice_communication_agc_init++) {
-                    #ifdef CONFIG_IDF_TARGET_ESP32S3
+                    #if (CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32P4)
                         for (int afe_ns_mode = 0; afe_ns_mode < 2; afe_ns_mode++) {
                     #else
                             int afe_ns_mode = NS_MODE_SSP;
@@ -400,7 +400,7 @@ TEST_CASE("audio_front_end VC create/destroy API & memory leak", "[afe_vc]")
                                 start_spiram_mem_size = heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_SPIRAM);
                                 srmodel_list_t *models = esp_srmodel_init("model");
                                 char *nsnet_name = NULL;
-                            #ifdef CONFIG_IDF_TARGET_ESP32S3
+                            #if (CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32P4)
                                 nsnet_name = esp_srmodel_filter(models, ESP_NSNET_PREFIX, NULL);
                             #endif
                                 printf("nsnet_name: %s\n", nsnet_name ? nsnet_name : "");
@@ -438,7 +438,7 @@ TEST_CASE("audio_front_end VC create/destroy API & memory leak", "[afe_vc]")
                                     TEST_ASSERT_EQUAL(true, (start_total_mem_size - end_total_mem_size) < 1000);
                                 }
                             }
-                    #ifdef CONFIG_IDF_TARGET_ESP32S3
+                    #if (CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32P4)
                         }
                     #endif
                 }
@@ -454,7 +454,7 @@ TEST_CASE("audio_front_end VC cpu loading and memory info", "[afe_vc]")
     psram_size_before = heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_SPIRAM);
     srmodel_list_t *models = esp_srmodel_init("model");
     char *nsnet_name = NULL;
-#ifdef CONFIG_IDF_TARGET_ESP32S3
+#if (CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32P4)
     nsnet_name = esp_srmodel_filter(models, ESP_NSNET_PREFIX, NULL);
 #endif
     printf("nsnet_name: %s\n", nsnet_name ? nsnet_name : "");
@@ -464,7 +464,7 @@ TEST_CASE("audio_front_end VC cpu loading and memory info", "[afe_vc]")
     afe_config.wakenet_init = false;
     afe_config.voice_communication_init = true;
     afe_config.voice_communication_agc_init = true;
-#ifdef CONFIG_IDF_TARGET_ESP32S3
+#if (CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32P4)
     afe_config.afe_ns_mode = NS_MODE_NET;
 #else
     afe_config.afe_ns_mode = NS_MODE_SSP;

@@ -35,7 +35,7 @@ config USE_NSNET
 
 choice SR_NSN_MODEL_LOAD
     prompt "Select deep noise suppression"
-    default SR_NSN_NSNET1
+    default SR_NSN_NSNET2
     depends on USE_NSNET
     help
         Select the deep noise suppression to be loaded.
