@@ -122,7 +122,7 @@ build_esp_sr:
   extends: 
     - .build_test_template
     - .rules:build:test_esp_sr
-  image: espressif/idf:release-v5.0
+  image: espressif/idf:release-v5.3
   variables:
     EXAMPLES_PATH: "test_apps/esp-sr"
 
@@ -130,7 +130,7 @@ build_esp_tts:
   extends: 
     - .build_test_template
     - .rules:build:test_esp_tts
-  image: espressif/idf:release-v5.0
+  image: espressif/idf:release-v5.3
   variables:
     EXAMPLES_PATH: "test_apps/esp-tts"
 
@@ -174,14 +174,18 @@ test_esp_sr:
     - job: "build_esp_sr"
       artifacts: true
       optional: true
+  parallel:
+    matrix:
+      - TEST_TARGET: esp32p4
+        TEST_ENV: esp32p4
+      - TEST_TARGET: esp32s3
+        TEST_ENV: esp32s3
   tags: 
-    - esp32s3
-  image: $DOCKER_TARGET_TEST_v5_0_ENV_IMAGE
+    - ${TEST_ENV}
+  image: $DOCKER_TARGET_TEST_v5_3_ENV_IMAGE
   variables:
-    TEST_TARGET: 'esp32s3'
     TEST_FOLDER: './test_apps/esp-sr'
-    TEST_ENV: 'esp32s3'
-    IDF_VERSION: "5.0"
+    IDF_VERSION: "5.3"
 
 test_esp_tts:
   extends:
@@ -191,14 +195,18 @@ test_esp_tts:
     - job: "build_esp_tts"
       artifacts: true
       optional: true
+  parallel:
+    matrix:
+      - TEST_TARGET: esp32p4
+        TEST_ENV: esp32p4
+      - TEST_TARGET: esp32s3
+        TEST_ENV: esp32s3
   tags: 
-    - esp32s3
-  image: $DOCKER_TARGET_TEST_v5_0_ENV_IMAGE
+    - ${TEST_ENV}
+  image: $DOCKER_TARGET_TEST_v5_3_ENV_IMAGE
   variables:
-    TEST_TARGET: 'esp32s3'
     TEST_FOLDER: './test_apps/esp-tts'
-    TEST_ENV: 'esp32s3'
-    IDF_VERSION: "5.0"
+    IDF_VERSION: "5.3"
 
 .build_doc_template:
   stage: build_docs
@@ -224,7 +232,7 @@ build_esp_sr_html:
   parallel:
     matrix:
       - DOCLANG: ["en", "zh_CN"]
-        DOCTGT: ["esp32", "esp32s3"]
+        DOCTGT: ["esp32", "esp32s3", "esp32p4"]
 
 build_esp_sr_pdf:
   extends:
@@ -246,7 +254,7 @@ build_esp_sr_pdf:
   parallel:
     matrix:
       - DOCLANG: ["en", "zh_CN"]
-        DOCTGT: ["esp32", "esp32s3"]
+        DOCTGT: ["esp32", "esp32s3", "esp32p4"]
 
 
 .deploy_docs_template:
