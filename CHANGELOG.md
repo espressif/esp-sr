@@ -4,6 +4,10 @@
 - Available storage is less than the remaining flash space on IDF v5.0.   
 If you can not map model partition successfully, please check the left free storage by `spi_flash_mmap_get_free_pages(ESP_PARTITION_MMAP_DATA)` or update IDF to v5.1 or later.
 
+## 1.9.3
+- Fix nsnet2 crash
+- Add esp32p4 ci test
+
 ## 1.9.2
 - Improve nsnet2 performance
 
