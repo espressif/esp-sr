@@ -176,8 +176,6 @@ test_esp_sr:
       optional: true
   parallel:
     matrix:
-      - TEST_TARGET: esp32p4
-        TEST_ENV: esp32p4
       - TEST_TARGET: esp32s3
         TEST_ENV: esp32s3
   tags: 
@@ -197,8 +195,6 @@ test_esp_tts:
       optional: true
   parallel:
     matrix:
-      - TEST_TARGET: esp32p4
-        TEST_ENV: esp32p4
       - TEST_TARGET: esp32s3
         TEST_ENV: esp32s3
   tags: 

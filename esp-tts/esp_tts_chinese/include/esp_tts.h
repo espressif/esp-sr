@@ -129,7 +129,7 @@ void esp_tts_stream_reset(esp_tts_handle_t tts_handle);
 void esp_tts_destroy(esp_tts_handle_t tts_handle);
 
 #ifdef __cplusplus
-extern "C" {
+}
 #endif
 
 #endif

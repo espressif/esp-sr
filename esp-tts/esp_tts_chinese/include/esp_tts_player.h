@@ -61,7 +61,7 @@ unsigned char* esp_tts_stream_play_by_concat(esp_tts_player_handle_t player, con
 void esp_tts_player_destroy(esp_tts_player_handle_t player);
 
 #ifdef __cplusplus
-extern "C" {
+}
 #endif
 
 #endif
