@@ -7,7 +7,7 @@ from pytest_embedded import Dut
 @pytest.mark.parametrize(
     'config',
     [
-        'xiaoxin',
+        's3',
     ],
 )
 def test_tts(dut: Dut)-> None:
