@@ -178,6 +178,10 @@ choice SR_WN_MODEL_LOAD
         bool "小滨小滨/小冰小冰 (wn9_xiaobinxiaobin_tts)"
         depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
 
+    config SR_WN_WN9_HAIXIAOWU_TTS
+        bool "Hi,小巫 (wn9_haixiaowu_tts)"
+        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+
     config SR_WN_WN9_ASTROLABE_TTS
         bool "Astrolabe (wn9_astrolabe_tts)"
         depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
@@ -279,6 +283,10 @@ menu "Load Multiple Wake Words"
 
     config SR_WN_WN9_XIAOBINXIAOBIN_TTS_MULTI
     bool "小滨小滨/小冰小冰 (wn9_xiaobinxiaobin_tts)"
+    depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+
+    config SR_WN_WN9_HAIXIAOWU_TTS_MULTI
+    bool "Hi,小巫 (wn9_haixiaowu_tts)"
     depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
 
     config SR_WN_WN9_ASTROLABE_TTS_MULTI
