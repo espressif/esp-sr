@@ -7,14 +7,13 @@ This file is used in CI generate binary files for different kinds of apps
 """
 
 import argparse
-import sys
+import logging
 import os
 import re
+import sys
 from pathlib import Path
-from typing import List
 
-import logging
-from idf_build_apps import App, build_apps, find_apps, setup_logging
+from idf_build_apps import build_apps, find_apps, setup_logging
 
 LOGGER = logging.getLogger('idf_build_apps')
 
@@ -59,8 +58,6 @@ def get_cmake_apps(
         target=target,
         build_dir=f'{idf_ver}/build_@t_@w',
         config_rules_str=config_rules_str,
-        build_log_path='build_log.txt',
-        size_json_path='size.json',
         check_warnings=True,
         preserve=True,
         default_build_targets=default_build_targets,

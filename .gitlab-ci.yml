@@ -6,12 +6,12 @@ stages:
 
 variables:
   # Versioned esp-idf-doc env image to use for all document building jobs
-  ESP_DOCS_ENV_IMAGE: "$CI_DOCKER_REGISTRY/esp-idf-doc-env-v5.0"
+  ESP_DOCS_ENV_IMAGE: "$CI_DOCKER_REGISTRY/esp-idf-doc-env-v5.3:1-1"
   ESP_SR_PATH: "$CI_PROJECT_DIR"
   BATCH_BUILD: "1"
   V: "0"
   IDF_CI_BUILD: "1"
-  DOCKER_TARGET_TEST_v5_0_ENV_IMAGE: "$CI_DOCKER_REGISTRY/target-test-env-v5.0:3"
+  DOCKER_TARGET_TEST_v5_0_ENV_IMAGE: "$CI_DOCKER_REGISTRY/target-test-env-v5.3:1"
 
 before_script:
   # add gitlab ssh key
@@ -23,7 +23,7 @@ before_script:
   - echo -e "Host gitlab.espressif.cn\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
   - git --version
   - git submodule update --init --recursive --force
-  - pip install idf_build_apps==1.1.4
+  - pip install idf_build_apps
 
 .if-protected: &if-protected
   if: '($CI_COMMIT_REF_NAME == "master" || $CI_COMMIT_BRANCH =~ /^release\/v/ || $CI_COMMIT_TAG =~ /^v\d+\.\d+(\.\d+)?($|-)/)'
@@ -228,7 +228,7 @@ build_esp_sr_html:
   parallel:
     matrix:
       - DOCLANG: ["en", "zh_CN"]
-        DOCTGT: ["esp32", "esp32s3", "esp32p4"]
+        DOCTGT: ["esp32", "esp32s3"]
 
 build_esp_sr_pdf:
   extends:
@@ -250,7 +250,7 @@ build_esp_sr_pdf:
   parallel:
     matrix:
       - DOCLANG: ["en", "zh_CN"]
-        DOCTGT: ["esp32", "esp32s3", "esp32p4"]
+        DOCTGT: ["esp32", "esp32s3"]
 
 
 .deploy_docs_template:
