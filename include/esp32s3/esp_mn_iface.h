@@ -198,7 +198,7 @@ typedef void (*esp_mn_iface_op_print_active_speech_commands)(model_iface_data_t 
  * @param model_data     The model object to query
  * @param str            The input string
 */
-typedef int (*esp_mn_iface_op_check_speech_command)(model_iface_data_t *model_data, char *str);
+typedef int (*esp_mn_iface_op_check_speech_command)(model_iface_data_t *model_data, const char *str);
 
 typedef struct {
     esp_mn_iface_op_create_t create;

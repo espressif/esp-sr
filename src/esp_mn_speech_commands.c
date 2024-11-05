@@ -79,7 +79,7 @@ esp_err_t esp_mn_commands_clear(void)
     return ESP_OK;
 }
 
-esp_mn_node_t *esp_mn_command_search(char *string)
+esp_mn_node_t *esp_mn_command_search(const char *string)
 {
     esp_mn_node_t *temp = esp_mn_root;
     if(NULL == esp_mn_root) {
@@ -95,7 +95,7 @@ esp_mn_node_t *esp_mn_command_search(char *string)
     return NULL;
 }
 
-esp_err_t esp_mn_commands_add(int command_id, char *string)
+esp_err_t esp_mn_commands_add(int command_id, const char *string)
 {
     if (NULL == esp_mn_root || esp_mn_model_handle == NULL || esp_mn_model_data == NULL) {
         ESP_LOGE(TAG, "Please create mn model first.\n");
@@ -156,7 +156,7 @@ esp_err_t esp_mn_commands_add(int command_id, char *string)
     return ESP_OK;
 }
 
-esp_err_t esp_mn_commands_phoneme_add(int command_id, char *string, char *phonemes)
+esp_err_t esp_mn_commands_phoneme_add(int command_id, const char *string, const char *phonemes)
 {
     if (NULL == esp_mn_root || esp_mn_model_handle == NULL || esp_mn_model_data == NULL) {
         ESP_LOGE(TAG, "Please create mn model first.\n");
@@ -214,7 +214,7 @@ esp_err_t esp_mn_commands_phoneme_add(int command_id, char *string, char *phonem
     return ESP_OK;
 }
 
-esp_err_t esp_mn_commands_modify(char *old_string, char *new_string)
+esp_err_t esp_mn_commands_modify(const char *old_string, const char *new_string)
 {
 #ifdef CONFIG_SR_MN_EN_MULTINET7_QUANT
     char *phonemes = flite_g2p(new_string, 1);
@@ -257,7 +257,7 @@ esp_err_t esp_mn_commands_modify(char *old_string, char *new_string)
     return ESP_OK;
 }
 
-esp_err_t esp_mn_commands_remove(char *string)
+esp_err_t esp_mn_commands_remove(const char *string)
 {
     esp_mn_node_t *temp = esp_mn_root;
     ESP_RETURN_ON_FALSE(NULL != esp_mn_root, ESP_ERR_INVALID_STATE, TAG, "The mn commands is not initialized");
@@ -374,7 +374,7 @@ void esp_mn_active_commands_print(void)
     ESP_LOGI(TAG, "---------------------------------------------------------\n");
 }
 
-esp_mn_phrase_t *esp_mn_phrase_alloc(int command_id, char *string)
+esp_mn_phrase_t *esp_mn_phrase_alloc(int command_id, const char *string)
 {
 
     int string_len = strlen(string);

@@ -1,4 +1,4 @@
-version: "1.9.3"
+version: "1.9.4"
 description: esp_sr provides basic algorithms for Speech Recognition applications
 url: https://github.com/espressif/esp-sr
 dependencies:

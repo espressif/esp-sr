@@ -15,6 +15,6 @@ void flite_g2p_result_print_string(flite_g2p_result *result, int map_phonemes);
 
 char *flite_g2p_result_get_string(flite_g2p_result *result, int map_phonemes);
 
-char *flite_g2p(char *graphemes, int map_phonemes);
+char *flite_g2p(const char *graphemes, int map_phonemes);
 
 #endif
