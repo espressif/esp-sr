@@ -112,7 +112,7 @@ TEST_CASE(">>>>>>>> audio_front_end SR create/destroy API & memory leak <<<<<<<<
                         afe_data = afe_handle->create_from_config(&afe_config);
 
                         audio_chunksize = afe_handle->get_feed_chunksize(afe_data);
-                        feed_buff = malloc(audio_chunksize * sizeof(int16_t) * afe_config.pcm_config.total_ch_num);
+                        feed_buff = (int16_t *) malloc(audio_chunksize * sizeof(int16_t) * afe_config.pcm_config.total_ch_num);
                         assert(feed_buff);
 
                         afe_handle->feed(afe_data, feed_buff);
@@ -145,7 +145,7 @@ void test_feed_Task(void *arg)
     esp_afe_sr_iface_t *afe_handle = (esp_afe_sr_iface_t *)arg;
     int feed_chunksize = afe_handle->get_feed_chunksize(afe_data);
     int total_nch = afe_handle->get_total_channel_num(afe_data);
-    int16_t *i2s_buff = malloc(feed_chunksize * sizeof(int16_t) * total_nch);
+    int16_t *i2s_buff = (int16_t *) malloc(feed_chunksize * sizeof(int16_t) * total_nch);
     assert(i2s_buff);
     ESP_LOGI(TAG, "feed task start\n");
     // FILE *fp = fopen("/sdcard/out", "w");
@@ -169,7 +169,7 @@ void test_detect_Task(void *arg)
     // esp_afe_sr_iface_t *afe_handle = &ESP_AFE_SR_HANDLE;
     esp_afe_sr_iface_t *afe_handle = (esp_afe_sr_iface_t *)arg;
     int fetch_chunksize = afe_handle->get_fetch_chunksize(afe_data);
-    int16_t *buff = malloc(fetch_chunksize * sizeof(int16_t));
+    int16_t *buff = (int16_t *) malloc(fetch_chunksize * sizeof(int16_t));
     assert(buff);
     ESP_LOGI(TAG, "------------detect start------------\n");
 
@@ -208,21 +208,29 @@ esp_err_t audio_sys_get_real_time_stats(void)
 
     // Allocate array to store current task states
     start_array_size = uxTaskGetNumberOfTasks() + ARRAY_SIZE_OFFSET;
-    start_array = malloc(sizeof(TaskStatus_t) * start_array_size);
+    start_array = (TaskStatus_t*) malloc(sizeof(TaskStatus_t) * start_array_size);
     assert(start_array);
     // Get current task states
     start_array_size = uxTaskGetSystemState(start_array, start_array_size, &start_run_time);
     if (start_array_size == 0) {
         ESP_LOGE(TAG, "Insufficient array size for uxTaskGetSystemState. Trying increasing ARRAY_SIZE_OFFSET");
         ret = ESP_FAIL;
-        goto exit;
+        if (start_array) {
+            free(start_array);
+            start_array = NULL;
+        }
+        if (end_array) {
+            free(end_array);
+            end_array = NULL;
+        }
+        return ret;
     }
 
     vTaskDelay(pdMS_TO_TICKS(AUDIO_SYS_TASKS_ELAPSED_TIME_MS));
 
     // Allocate array to store tasks states post delay
     end_array_size = uxTaskGetNumberOfTasks() + ARRAY_SIZE_OFFSET;
-    end_array = malloc(sizeof(TaskStatus_t) * end_array_size);
+    end_array = (TaskStatus_t*) malloc(sizeof(TaskStatus_t) * end_array_size);
     assert(end_array);
 
     // Get post delay task states
@@ -230,7 +238,15 @@ esp_err_t audio_sys_get_real_time_stats(void)
     if (end_array_size == 0) {
         ESP_LOGE(TAG, "Insufficient array size for uxTaskGetSystemState. Trying increasing ARRAY_SIZE_OFFSET");
         ret = ESP_FAIL;
-        goto exit;
+        if (start_array) {
+            free(start_array);
+            start_array = NULL;
+        }
+        if (end_array) {
+            free(end_array);
+            end_array = NULL;
+        }
+        return ret;
     }
 
     // Calculate total_elapsed_time in units of run time stats clock period.
@@ -238,7 +254,15 @@ esp_err_t audio_sys_get_real_time_stats(void)
     if (total_elapsed_time == 0) {
         ESP_LOGE(TAG, "Delay duration too short. Trying increasing AUDIO_SYS_TASKS_ELAPSED_TIME_MS");
         ret = ESP_FAIL;
-        goto exit;
+        if (start_array) {
+            free(start_array);
+            start_array = NULL;
+        }
+        if (end_array) {
+            free(end_array);
+            end_array = NULL;
+        }
+        return ret;
     }
 
     ESP_LOGI(TAG, "| Task              | Run Time    | Per | Prio | HWM       | State   | CoreId   | Stack ");
@@ -277,15 +301,6 @@ esp_err_t audio_sys_get_real_time_stats(void)
     printf("\n");
     ret = ESP_OK;
 
-exit:    // Common return path
-    if (start_array) {
-        free(start_array);
-        start_array = NULL;
-    }
-    if (end_array) {
-        free(end_array);
-        end_array = NULL;
-    }
     return ret;
 #else
     ESP_LOGW(TAG, "Please enbale `CONFIG_FREERTOS_VTASKLIST_INCLUDE_COREID` and `CONFIG_FREERTOS_GENERATE_RUN_TIME_STATS` in menuconfig");
@@ -386,7 +401,7 @@ TEST_CASE("audio_front_end VC create/destroy API & memory leak", "[afe_vc]")
                             afe_config.se_init = se_init;
                             afe_config.vad_init = vad_init;
                             afe_config.voice_communication_agc_init = voice_communication_agc_init;
-                            afe_config.afe_ns_mode = afe_ns_mode;
+                            afe_config.afe_ns_mode = (afe_ns_mode_t)afe_ns_mode;
 
                             //start_total_mem_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
                             //start_internal_mem_size = heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
@@ -412,7 +427,7 @@ TEST_CASE("audio_front_end VC create/destroy API & memory leak", "[afe_vc]")
                                 }
 
                                 audio_chunksize = afe_handle->get_feed_chunksize(afe_data);
-                                feed_buff = malloc(audio_chunksize * sizeof(int16_t) * afe_config.pcm_config.total_ch_num);
+                                feed_buff = (int16_t *) malloc(audio_chunksize * sizeof(int16_t) * afe_config.pcm_config.total_ch_num);
                                 assert(feed_buff);
 
                                 afe_handle->feed(afe_data, feed_buff);

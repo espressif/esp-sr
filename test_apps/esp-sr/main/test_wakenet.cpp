@@ -65,7 +65,7 @@ TEST_CASE("wakenet create/destroy API & memory leak", "[wn]")
         //     DET_MODE_3CH_90 = 4,
         //     DET_MODE_3CH_95 = 5,
         // } det_mode_t;
-        model_data = wakenet->create(model_name, i);
+        model_data = wakenet->create(model_name, (det_mode_t)i);
 
         printf("destroy ...\n");
         wakenet->destroy(model_data);
@@ -89,7 +89,7 @@ TEST_CASE("wakenet detect API & cpu loading", "[wn]")
     model_iface_data_t *model_data = wakenet->create(model_name, DET_MODE_95);
     int frequency = wakenet->get_samp_rate(model_data);
     int audio_chunksize = wakenet->get_samp_chunksize(model_data) * sizeof(int16_t);
-    int16_t *buffer = malloc(audio_chunksize);
+    int16_t *buffer = (int16_t *) malloc(audio_chunksize);
     int chunks = 0;
     int detected = 0;
     struct timeval tv_start, tv_end;

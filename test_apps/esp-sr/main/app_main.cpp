@@ -7,12 +7,11 @@
    CONDITIONS OF ANY KIND, either express or implied.
 */
 
+#include "unity.h"
 #include <stdio.h>
 #include <string.h>
-#include "unity.h"
 
-
-void app_main(void)
+extern "C" void app_main(void)
 {
     /* These are the different ways of running registered tests.
      * In practice, only one of them is usually needed.

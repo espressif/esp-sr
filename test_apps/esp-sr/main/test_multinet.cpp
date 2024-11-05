@@ -88,7 +88,7 @@ TEST_CASE("multinet cpu loading", "[mn]")
         printf("commands: da kai kong tiao, size:%d\n", data_size);
     }
     
-    int16_t *buffer = malloc(audio_chunksize);
+    int16_t *buffer = (int16_t *) malloc(audio_chunksize);
     int chunks = 0;
     struct timeval tv_start, tv_end;
     gettimeofday(&tv_start, NULL);
