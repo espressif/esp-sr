@@ -1,6 +1,10 @@
 #ifndef _ESP_TTS_VOICE_H_
 #define _ESP_TTS_VOICE_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct {
 	char *voice_name;       // voice set name 
 	char *format;           // the format of voice data, currently support pcm and amrwb
@@ -16,5 +20,7 @@ typedef struct {
 	unsigned char *data;    // the audio data of all syllables
 } esp_tts_voice_t;
 
-
+#ifdef __cplusplus
+}
+#endif
 #endif

@@ -1,7 +1,7 @@
 
 set(srcs
-    "test_app_main.c"
-    "test_chinese_tts.c"
+    "app_main.cpp"
+    "test_chinese_tts.cpp"
 )
 
 idf_component_register(SRCS ${srcs}

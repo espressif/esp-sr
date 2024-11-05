@@ -40,7 +40,7 @@ typedef void * esp_tts_handle_t;
  *         - NULL: Init failed
  *         - Others: The instance of voice set
  */
-esp_tts_voice_t *esp_tts_voice_set_init(const esp_tts_voice_t *template, void *data);
+esp_tts_voice_t *esp_tts_voice_set_init(const esp_tts_voice_t *voice_template, void *data);
 
 /**
  * @brief Init an instance of the TTS voice set structure.
