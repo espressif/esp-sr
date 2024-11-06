@@ -99,6 +99,8 @@ before_script:
   artifacts:
     when: always
     paths:
+      - "**/build*/size.json"
+      - "**/build*/build_log.txt"
       - "**/build*/*.bin"
       # upload to s3 server to save the artifacts size
       - "**/build*/*.map"
