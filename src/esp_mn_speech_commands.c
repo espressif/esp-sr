@@ -1,3 +1,9 @@
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wincompatible-pointer-types"
+#pragma GCC diagnostic ignored "-Wimplicit-function-declaration"
+#pragma GCC diagnostic ignored "-Wint-conversion"
+#pragma GCC diagnostic ignored "-Wreturn-mismatch"
 #include <stdio.h>
 #include <stdlib.h>
 #include "string.h"
@@ -426,3 +432,4 @@ void esp_mn_node_free(esp_mn_node_t *node)
         free(node);
     }
 }
+#pragma GCC diagnostic pop

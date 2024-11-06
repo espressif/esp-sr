@@ -1,3 +1,9 @@
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wincompatible-pointer-types"
+#pragma GCC diagnostic ignored "-Wimplicit-function-declaration"
+#pragma GCC diagnostic ignored "-Wint-conversion"
+#pragma GCC diagnostic ignored "-Wreturn-mismatch"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -951,3 +957,5 @@ end:
 
     return esp_mn_commands_update();
 }
+
+#pragma GCC diagnostic pop

@@ -1,3 +1,9 @@
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wincompatible-pointer-types"
+#pragma GCC diagnostic ignored "-Wimplicit-function-declaration"
+#pragma GCC diagnostic ignored "-Wint-conversion"
+#pragma GCC diagnostic ignored "-Wreturn-mismatch"
 #include "stdio.h"
 #include <sys/stat.h>
 #include <dirent.h>
@@ -698,3 +704,4 @@ char *esp_srmodel_get_wake_words(srmodel_list_t *models, char *model_name)
     }
     return NULL;
 }
+#pragma GCC diagnostic pop
