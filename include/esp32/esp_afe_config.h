@@ -113,10 +113,12 @@ typedef struct {
     .memory_alloc_mode = AFE_MEMORY_ALLOC_INTERNAL_PSRAM_BALANCE, \
     .afe_linear_gain = 1.0, \
     .agc_mode = AFE_MN_PEAK_AGC_MODE_2, \
-    .pcm_config.total_ch_num = 2, \
-    .pcm_config.mic_num = 1, \
-    .pcm_config.ref_num = 1, \
-    .pcm_config.sample_rate = 16000, \
+    .pcm_config = { \
+        .total_ch_num = 2, \
+        .mic_num = 1, \
+        .ref_num = 1, \
+        .sample_rate = 16000, \
+    }, \
     .debug_init = false, \
     .debug_hook = {{AFE_DEBUG_HOOK_MASE_TASK_IN, NULL}, {AFE_DEBUG_HOOK_FETCH_TASK_IN, NULL}}, \
     .afe_ns_mode = NS_MODE_SSP, \
@@ -142,10 +144,12 @@ typedef struct {
     .memory_alloc_mode = AFE_MEMORY_ALLOC_MORE_PSRAM, \
     .afe_linear_gain = 1.0, \
     .agc_mode = AFE_MN_PEAK_AGC_MODE_2, \
-    .pcm_config.total_ch_num = 3, \
-    .pcm_config.mic_num = 2, \
-    .pcm_config.ref_num = 1, \
-    .pcm_config.sample_rate = 16000, \
+    .pcm_config = { \
+        .total_ch_num = 3, \
+        .mic_num = 2, \
+        .ref_num = 1, \
+        .sample_rate = 16000, \
+    }, \
     .debug_init = false, \
     .debug_hook = {{AFE_DEBUG_HOOK_MASE_TASK_IN, NULL}, {AFE_DEBUG_HOOK_FETCH_TASK_IN, NULL}}, \
     .afe_ns_mode = NS_MODE_SSP, \

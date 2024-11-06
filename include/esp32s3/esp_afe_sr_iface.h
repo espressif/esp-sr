@@ -112,7 +112,7 @@ typedef afe_fetch_result_t* (*esp_afe_sr_iface_op_fetch_t)(esp_afe_sr_data_t *af
  * @brief reset ringbuf of AFE.
  *
  * @param afe          The AFE_SR object to query
- * @return             -1: fail, 0: success
+ * @return             -1: fail, 1: success
  */
 typedef int (*esp_afe_sr_iface_op_reset_buffer_t)(esp_afe_sr_data_t *afe);
 
@@ -122,7 +122,7 @@ typedef int (*esp_afe_sr_iface_op_reset_buffer_t)(esp_afe_sr_data_t *afe);
  *
  * @param afe                The AFE_SR object to query
  * @param wakenet_word       The wakenet word, should be DEFAULT_WAKE_WORD or EXTRA_WAKE_WORD
- * @return             0: fail, 1: success
+ * @return             -1: fail, 1: success
  */
 typedef int (*esp_afe_sr_iface_op_set_wakenet_t)(esp_afe_sr_data_t *afe, char* model_name);
 
@@ -130,7 +130,7 @@ typedef int (*esp_afe_sr_iface_op_set_wakenet_t)(esp_afe_sr_data_t *afe, char* m
  * @brief Disable wakenet model.
  *
  * @param afe          The AFE_SR object to query
- * @return             0: fail, 1: success
+ * @return             -1: fail, 0: disabled, 1: enabled
  */
 typedef int (*esp_afe_sr_iface_op_disable_wakenet_t)(esp_afe_sr_data_t *afe);
 
@@ -138,7 +138,7 @@ typedef int (*esp_afe_sr_iface_op_disable_wakenet_t)(esp_afe_sr_data_t *afe);
  * @brief Enable wakenet model.
  *
  * @param afe          The AFE_SR object to query
- * @return             0: fail, 1: success
+ * @return             -1: fail, 0: disabled, 1: enabled
  */
 typedef int (*esp_afe_sr_iface_op_enable_wakenet_t)(esp_afe_sr_data_t *afe);
 
@@ -146,7 +146,7 @@ typedef int (*esp_afe_sr_iface_op_enable_wakenet_t)(esp_afe_sr_data_t *afe);
  * @brief Disable AEC algorithm.
  *
  * @param afe          The AFE_SR object to query
- * @return             0: fail, 1: success
+ * @return             -1: fail, 0: disabled, 1: enabled
  */
 typedef int (*esp_afe_sr_iface_op_disable_aec_t)(esp_afe_sr_data_t *afe);
 
@@ -154,7 +154,7 @@ typedef int (*esp_afe_sr_iface_op_disable_aec_t)(esp_afe_sr_data_t *afe);
  * @brief Enable AEC algorithm.
  *
  * @param afe          The AFE_SR object to query
- * @return             0: fail, 1: success
+ * @return             -1: fail, 0: disabled, 1: enabled
  */
 typedef int (*esp_afe_sr_iface_op_enable_aec_t)(esp_afe_sr_data_t *afe);
 
@@ -162,7 +162,7 @@ typedef int (*esp_afe_sr_iface_op_enable_aec_t)(esp_afe_sr_data_t *afe);
  * @brief Disable SE algorithm.
  *
  * @param afe          The AFE_SR object to query
- * @return             0: fail, 1: success
+ * @return             -1: fail, 0: disabled, 1: enabled
  */
 typedef int (*esp_afe_sr_iface_op_disable_se_t)(esp_afe_sr_data_t *afe);
 
@@ -170,7 +170,7 @@ typedef int (*esp_afe_sr_iface_op_disable_se_t)(esp_afe_sr_data_t *afe);
  * @brief Enable SE algorithm.
  *
  * @param afe          The AFE_SR object to query
- * @return             0: fail, 1: success
+ * @return             -1: fail, 0: disabled, 1: enabled
  */
 typedef int (*esp_afe_sr_iface_op_enable_se_t)(esp_afe_sr_data_t *afe);
 

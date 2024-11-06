@@ -57,7 +57,7 @@ esp_err_t esp_mn_commands_free(void);
  *     - ESP_OK                  Success
  *     - ESP_ERR_INVALID_STATE   Fail
  */
-esp_err_t esp_mn_commands_add(int command_id, char *string);
+esp_err_t esp_mn_commands_add(int command_id, const char *string);
 
 /**
  * @brief Add one speech commands with command string, command phonemes and command ID
@@ -71,7 +71,7 @@ esp_err_t esp_mn_commands_add(int command_id, char *string);
  *     - ESP_OK                  Success
  *     - ESP_ERR_INVALID_STATE   Fail
  */
-esp_err_t esp_mn_commands_phoneme_add(int command_id, char *string, char *phonemes);
+esp_err_t esp_mn_commands_phoneme_add(int command_id, const char *string, const char *phonemes);
 
 /**
  * @brief Modify one speech commands with new command string
@@ -83,7 +83,7 @@ esp_err_t esp_mn_commands_phoneme_add(int command_id, char *string, char *phonem
  *     - ESP_OK                  Success
  *     - ESP_ERR_INVALID_STATE   Fail
  */
-esp_err_t esp_mn_commands_modify(char *old_string, char *new_string);
+esp_err_t esp_mn_commands_modify(const char *old_string, const char *new_string);
 
 /**
  * @brief Remove one speech commands by command string
@@ -94,7 +94,7 @@ esp_err_t esp_mn_commands_modify(char *old_string, char *new_string);
  *     - ESP_OK                  Success
  *     - ESP_ERR_INVALID_STATE   Fail
  */
-esp_err_t esp_mn_commands_remove(char *string);
+esp_err_t esp_mn_commands_remove(const char *string);
 
 /**
  * @brief Clear all speech commands in linked list
@@ -157,7 +157,7 @@ esp_mn_error_t *esp_mn_commands_update();
  *
  * @return the pointer of esp_mn_phrase_t
  */
-esp_mn_phrase_t *esp_mn_phrase_alloc(int command_id, char *string);
+esp_mn_phrase_t *esp_mn_phrase_alloc(int command_id, const char *string);
 
 /**
  * @brief Free esp_mn_phrase_t pointer.

@@ -4,7 +4,9 @@
 #include "stdlib.h"
 #include "esp_tts_voice.h"
 
-
+#ifdef __cplusplus
+extern "C" {
+#endif
 typedef struct {
 	int *syll_idx;
 	int syll_num;
@@ -21,5 +23,9 @@ esp_tts_utt_t* esp_tts_parser_pinyin(char* pinyin, esp_tts_voice_t *voice);
 esp_tts_utt_t* esp_tts_utt_alloc(int syll_num, esp_tts_voice_t *voice);
 
 void esp_tts_utt_free(esp_tts_utt_t *utt);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -1,9 +1,9 @@
 
 set(srcs
-    "test_app_main.c"
-    "test_wakenet.c"
-    "test_multinet.c"
-    "test_afe.c"
+    "app_main.cpp"
+    "test_wakenet.cpp"
+    "test_multinet.cpp"
+    "test_afe.cpp"
 )
 
 idf_component_register(SRCS ${srcs}

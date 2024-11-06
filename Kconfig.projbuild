@@ -257,12 +257,12 @@ menu "Load Multiple Wake Words"
 
 
     config SR_WN_WN9_HEYWANDA_TTS_MULTI
-        bool "Hey,Wanda (wn9_heywanda_tts)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+    bool "Hey,Wanda (wn9_heywanda_tts)"
+    depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
 
     config SR_WN_WN9_HIMIAOMIAO_TTS_MULTI
-        bool "Hi,喵喵 (wn9_himiaomiao_tts)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+    bool "Hi,喵喵 (wn9_himiaomiao_tts)"
+    depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
 
 
     config SR_WN_WN9_MYCROFT_TTS_MULTI
