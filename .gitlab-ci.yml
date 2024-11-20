@@ -96,6 +96,7 @@ before_script:
   stage: build
   tags:
     - build
+  image: ${IMAGE}
   artifacts:
     when: always
     paths:
@@ -122,17 +123,20 @@ build_esp_sr:
   extends: 
     - .build_test_template
     - .rules:build:test_esp_sr
-  image: espressif/idf:release-v5.3
-  variables:
-    EXAMPLES_PATH: "test_apps/esp-sr"
+  parallel:
+    matrix:
+      - IMAGE: [espressif/idf:release-v5.3, espressif/idf:latest]
+        EXAMPLES_PATH: "test_apps/esp-sr"
+
 
 build_esp_tts:
   extends: 
     - .build_test_template
     - .rules:build:test_esp_tts
-  image: espressif/idf:release-v5.3
-  variables:
-    EXAMPLES_PATH: "test_apps/esp-tts"
+  parallel:
+    matrix:
+      - IMAGE: [espressif/idf:release-v5.3, espressif/idf:latest]
+        EXAMPLES_PATH: "test_apps/esp-tts"
 
 .test_template: &test_template
   image: DOCKER_TARGET_TEST_v5_0_ENV_IMAGE
