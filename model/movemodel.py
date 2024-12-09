@@ -1,11 +1,13 @@
-import io
-import os
 import argparse
-import shutil
+import io
 import math
+import os
+import shutil
 import sys
+
 sys.dont_write_bytecode = True
 from pack_model import pack_models
+
 
 def calculate_total_size(folder_path):
     total_size = 0
@@ -103,6 +105,26 @@ def copy_nsnet_from_sdkconfig(model_path, sdkconfig_path, target_path):
     for item in models:
         shutil.copytree(model_path + '/nsnet_model/' + item, target_path+'/'+item)
 
+def copy_vadnet_from_sdkconfig(model_path, sdkconfig_path, target_path):
+    """
+    Copy vadnet model from model_path to target_path based on sdkconfig
+    """
+    with io.open(sdkconfig_path, "r") as f:
+        models_string = ''
+        for label in f:
+            label = label.strip("\n")
+            if 'CONFIG_SR_VADNET' in label and label[0] != '#':
+                models_string += label
+
+    models = []
+    if "CONFIG_SR_VADNET_MODLE_SMALL" in models_string:
+        models.append('vadnet1_small')
+    elif "CONFIG_SR_VADNET_MODLE_MEDIUM" in models_string:
+        models.append('vadnet1_medium')
+    
+    for item in models:
+        shutil.copytree(model_path + '/vadnet_model/' + item, target_path+'/'+item)
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Model generator tool')
     parser.add_argument('-d1', '--sdkconfig_path')
@@ -122,6 +144,7 @@ if __name__ == '__main__':
     copy_multinet_from_sdkconfig(model_path, sdkconfig_path, target_path)
     copy_wakenet_from_sdkconfig(model_path, sdkconfig_path, target_path)
     copy_nsnet_from_sdkconfig(model_path, sdkconfig_path, target_path)
+    copy_vadnet_from_sdkconfig(model_path, sdkconfig_path, target_path)
     pack_models(target_path, image_file)
     total_size = os.path.getsize(os.path.join(target_path, image_file))
     recommended_size = int(math.ceil(total_size/1024))
