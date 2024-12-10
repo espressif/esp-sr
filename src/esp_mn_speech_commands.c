@@ -120,6 +120,10 @@ esp_err_t esp_mn_commands_add(int command_id, const char *string)
     }
 #endif
 
+// #if CONFIG_SR_MN_EN_MULTINET7_QUANT || CONFIG_SR_MN_EN_MULTINET6_QUANT || SR_MN_EN_MULTINET5_SINGLE_RECOGNITION_QUANT8
+//     ESP_LOGW(TAG, "For English, please use esp_mn_commands_phoneme_add() to add graphemes and phonemes!");
+// #endif
+
     temp = esp_mn_command_search(string);
 
     if (temp != NULL) {
@@ -166,13 +170,15 @@ esp_err_t esp_mn_commands_phoneme_add(int command_id, const char *string, const 
     int last_node_elem_num = esp_mn_commands_num();
     ESP_RETURN_ON_FALSE(ESP_MN_MAX_PHRASE_NUM >= last_node_elem_num, ESP_ERR_INVALID_STATE, TAG, "The number of speech commands exceed ESP_MN_MAX_PHRASE_NUM");
 
-#ifdef CONFIG_SR_MN_EN_MULTINET7_QUANT
+#if CONFIG_SR_MN_EN_MULTINET7_QUANT || CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION_QUANT8
+    // the unit of multinet7 or multinet5q8 is phoneme
     if (esp_mn_model_handle->check_speech_command(esp_mn_model_data, phonemes) == 0) {
         // error message is printed inside check_speech_command
         ESP_LOGE(TAG, "invalid command, please check format, %s (%s).\n", string, phonemes);
         return ESP_ERR_INVALID_STATE;
     }
 #else
+    // The unit of multinet6 is grapheme
     if (esp_mn_model_handle->check_speech_command(esp_mn_model_data, string) == 0) {
         // error message is printed inside check_speech_command
         ESP_LOGE(TAG, "invalid command, please check format, %s.\n", string);
@@ -195,16 +201,22 @@ esp_err_t esp_mn_commands_phoneme_add(int command_id, const char *string, const 
     }
 
     temp = esp_mn_root;
-
+#if CONFIG_SR_MN_EN_MULTINET5_SINGLE_RECOGNITION_QUANT8
+    //TODO:: add string for mn5
+    esp_mn_phrase_t *phrase = esp_mn_phrase_alloc(command_id, phonemes);
+#else
     esp_mn_phrase_t *phrase = esp_mn_phrase_alloc(command_id, string);
+#endif
     if (phrase == NULL) {
         return ESP_ERR_INVALID_STATE;
     }
-    int phoneme_len = strlen(phonemes);
-    phrase->phonemes = _esp_mn_calloc_(phoneme_len+1, sizeof(char));
-    memcpy(phrase->phonemes, phonemes, phoneme_len);
-    phrase->phonemes[phoneme_len] = '\0';
-    
+    if (phonemes) {
+        int phoneme_len = strlen(phonemes);
+        phrase->phonemes = _esp_mn_calloc_(phoneme_len+1, sizeof(char));
+        memcpy(phrase->phonemes, phonemes, phoneme_len);
+        phrase->phonemes[phoneme_len] = '\0';
+    }
+
     esp_mn_node_t *new_node = esp_mn_node_alloc(phrase);
     while (temp->next != NULL) {
         temp = temp->next;

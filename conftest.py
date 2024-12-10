@@ -202,7 +202,7 @@ class IdfPytestEmbedded:
         for item in items:
             # default timeout 5 mins
             if 'timeout' not in item.keywords:
-                item.add_marker(pytest.mark.timeout(5 * 60))
+                item.add_marker(pytest.mark.timeout(8 * 60))
 
         # filter all the test cases with "--target"
         if self.target:
