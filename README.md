@@ -55,10 +55,11 @@ The following wake words are supported in esp-sr:
 |喵喵同学         |                                        | wn9_miaomiaotongxue_tts|
 |Hi,喵喵          |                                        | wn9_himiaomiao_tts     |
 |Hi,Lily/Hi,莉莉  |                                        | wn9_hilili_tts         |
-|Hi,Telly/Hi,泰力 |                                        | wn9_hitelly_tts         |
+|Hi,Telly/Hi,泰力 |                                        | wn9_hitelly_tts        |
 |小滨小滨/小冰小冰|                                        | wn9_xiaobinxiaobin_tts |
 |Hi,小巫          |                                        | wn9_haixiaowu_tts      |
-|小鸭小鸭          |                                        | wn9_xiaoyaxiaoya_tts2 |
+|小鸭小鸭         |                                        | wn9_xiaoyaxiaoya_tts2  |
+|璃奈板           |                                        | wn9_linaiban_tts2      |
 
 *NOTE:* `_tts` suffix means this WakeNet model is trained by TTS samples. `_tts2` suffix means this WakeNet model is trained by TTS Pipeline V2.
 
