@@ -194,6 +194,10 @@ choice SR_WN_MODEL_LOAD
         bool "Hi,Jason (wn9_hijason_tts2)"
         depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
 
+    config SR_WN_WN9_LINAIBAN_TTS2
+        bool "璃奈板 (wn9_linaiban_tts2)"
+        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+
     config SR_WN_WN9_CUSTOMWORD
         bool "customized word (wn9_customword)"
         depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
@@ -307,6 +311,10 @@ menu "Load Multiple Wake Words"
 
     config SR_WN_WN9_HIJASON_TTS2_MULTI
     bool "Hi,Jason (wn9_hijason_tts2)"
+    depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+
+    config SR_WN_WN9_LINAIBAN_TTS2_MULTI
+    bool "璃奈板 (wn9_linaiban_tts2)"
     depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
 
 endmenu
