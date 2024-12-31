@@ -13,14 +13,9 @@ choice MODEL_DATA_PATH
 endchoice
 
 
-config USE_AFE
-	bool "use afe"
-	default "y"
-
 choice AFE_INTERFACE_SEL
 	prompt "Afe interface"
 	default AFE_INTERFACE_V1
-	depends on USE_AFE
 	help
 		Select the afe interface to be used.
 
@@ -29,187 +24,60 @@ choice AFE_INTERFACE_SEL
 
 endchoice
 
-config USE_NSNET
-    bool "use nsnet"
-    default "n"
-
 choice SR_NSN_MODEL_LOAD
-    prompt "Select deep noise suppression"
-    default SR_NSN_NSNET2
-    depends on USE_NSNET
+    prompt "Select noise suppression model"
+    default SR_NSN_WEBRTC
     help
-        Select the deep noise suppression to be loaded.
+        Select the noise suppression model to be loaded.
 
-    config SR_NSN_NONE
-        bool "None"
+    config SR_NSN_WEBRTC
+        bool "noise suppression (WebRTC)"
 
-    config SR_NSN_NSNET1
-        bool "Deep noise suppression v1 (nsnet1)"
-        depends on IDF_TARGET_ESP32S3
     config SR_NSN_NSNET2
         bool "Deep noise suppression v2 (nsnet2)"
-	depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+	    depends on IDF_TARGET_ESP32S3 ||  IDF_TARGET_ESP32P4
 endchoice
 
-config USE_WAKENET
-    bool "use wakenet"
-    default "y"
+choice SR_VAD_MODEL_LOAD
+    prompt "Select voice activity detection"
+    default SR_VADNET_WEBRTC
+    help
+        Select the vad model to be loaded.
+
+    config SR_VAD_WEBRTC
+        bool "voice activity detection (WebRTC)"
+    
+    config SR_VADNET1_MODLE_MEDIUM
+        bool "voice activity detection (vadnet1 medium)"
+	    depends on IDF_TARGET_ESP32S3 ||  IDF_TARGET_ESP32P4
+endchoice
 
 choice SR_WN_MODEL_LOAD
     prompt "Select wake words"
-    default SR_WN_WN9_HILEXIN
-    depends on USE_WAKENET
+    default SR_WN_WN5_HILEXIN
+    depends on IDF_TARGET_ESP32
     help
         Select the Wake Words to be loaded.
 
     config SR_WN_WN5_HILEXIN
-        bool "Hi,乐鑫 (wn5_hilexin)"
-        depends on IDF_TARGET_ESP32
+        bool "Hi,Lexin (wn5_hilexin)"
 
     config SR_WN_WN5X3_HILEXIN
-        bool "Hi,乐鑫 (wn5_hilexinX3)"
-        depends on IDF_TARGET_ESP32
+        bool "Hi,Lexin (wn5_hilexinX3)"
 
     config SR_WN_WN5_NIHAOXIAOZHI
-        bool "你好小智 (wn5_nihaoxiaozhi)"
-        depends on IDF_TARGET_ESP32
+        bool "nihaoxiaozhi (wn5_nihaoxiaozhi)"
 
     config SR_WN_WN5X3_NIHAOXIAOZHI
-        bool "你好小智 (wn5_nihaoxiaozhiX3)"
-        depends on IDF_TARGET_ESP32
+        bool "nihaoxiaozhi (wn5_nihaoxiaozhiX3)"
 
     config SR_WN_WN5X3_NIHAOXIAOXIN
-        bool "你好小鑫 (wn5_nihaoxiaoxinX3)"
-        depends on IDF_TARGET_ESP32
-
-    config SR_WN_WN8_ALEXA
-        bool "Alexa (wn8_alexa)"
-        depends on IDF_TARGET_ESP32S3
-
-    config SR_WN_WN9_HILEXIN
-        bool "Hi,乐鑫 (wn9_hilexin)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-
-    config SR_WN_WN9_XIAOAITONGXUE
-        bool "小爱同学 (wn9_xiaoaitongxue)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-
-    config SR_WN_WN9_ALEXA
-        bool "Alexa (wn9_alexa)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-
-    config SR_WN_WN9_HIESP
-        bool "Hi,ESP (wn9_hiesp)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-
-    config SR_WN_WN9_HIMFIVE
-        bool "Hi,M Five (wn9_himfive)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-    
-    config SR_WN_WN9_NIHAOXIAOZHI_TTS
-        bool "你好小智 (wn9_nihaoxiaozhi_tts)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-    
-    config SR_WN_WN9_JARVIS_TTS
-        bool "Jarvis (wn9_jarvis_tts)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-    
-    config SR_WN_WN9_COMPUTER_TTS
-        bool "computer (wn9_computer_tts)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-
-    config SR_WN_WN9_HEYWILLOW_TTS
-        bool "Hey,Willow (wn9_heywillow_tts)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-
-    config SR_WN_WN9_SOPHIA_TTS
-        bool "Sophia (wn9_sophia_tts)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-
-    config SR_WN_WN9_NIHAOXIAOXIN_TTS
-        bool "你好小鑫 (wn9_nihaoxiaoxin_tts)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-
-    config SR_WN_WN9_XIAOMEITONGXUE_TTS
-        bool "小美同学 (wn9_xiaomeitongxue_tts)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-
-    config SR_WN_WN9_HIXIAOXING_TTS
-        bool "Hi,小星 (wn9_hixiaoxing_tts)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-
-    config SR_WN_WN9_MYCROFT_TTS
-        bool "Mycroft (wn9_mycroft_tts)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-
-    config SR_WN_WN9_HEYPRINTER_TTS
-        bool "Hey,Printer (wn9_heyprinter_tts)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-
-    config SR_WN_WN9_XIAOLONGXIAOLONG_TTS
-        bool "小龙小龙 (wn9_xiaolongxiaolong_tts)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-
-    config SR_WN_WN9_MIAOMIAOTONGXUE_TTS
-        bool "喵喵同学 (wn9_miaomiaotongxue_tts)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-
-    config SR_WN_WN9_HIJOY_TTS
-        bool "Hi,Joy (wn9_hijoy_tts)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-
-    config SR_WN_WN9_HILILI_TTS
-        bool "Hi,Lily/Hi,莉莉 (wn9_hilili_tts)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-
-    config SR_WN_WN9_HITELLY_TTS
-        bool "Hi,Telly/Hi,泰力 (wn9_hitelly_tts)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-
-    config SR_WN_WN9_HEYWANDA_TTS
-        bool "Hey,Wanda (wn9_heywanda_tts)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-
-    config SR_WN_WN9_HIMIAOMIAO_TTS
-        bool "Hi,喵喵 (wn9_himiaomiao_tts)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-
-    config SR_WN_WN9_XIAOBINXIAOBIN_TTS
-        bool "小滨小滨/小冰小冰 (wn9_xiaobinxiaobin_tts)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-
-    config SR_WN_WN9_HAIXIAOWU_TTS
-        bool "Hi,小巫 (wn9_haixiaowu_tts)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-
-    config SR_WN_WN9_ASTROLABE_TTS
-        bool "Astrolabe (wn9_astrolabe_tts)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-
-    config SR_WN_WN9_XIAOYAXIAOYA_TTS2
-        bool "小鸭小鸭 (wn9_xiaoyaxiaoya_tts2)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-    
-    config SR_WN_WN9_HIJASON_TTS2
-        bool "Hi,Jason (wn9_hijason_tts2)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-
-    config SR_WN_WN9_LINAIBAN_TTS2
-        bool "璃奈板 (wn9_linaiban_tts2)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-
-    config SR_WN_WN9_CUSTOMWORD
-        bool "customized word (wn9_customword)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
-
-    config SR_WN_LOAD_MULIT_WORD
-        bool "Load Multiple Wake Words"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+        bool "nihaoxiaoxin (wn5_nihaoxiaoxinX3)"
 
 endchoice
 
 menu "Load Multiple Wake Words"
-    depends on SR_WN_LOAD_MULIT_WORD
+    depends on IDF_TARGET_ESP32S3 ||  IDF_TARGET_ESP32P4
 
     config SR_WN_WN9_HILEXIN_MULTI
     bool "Hi,乐鑫 (wn9_hilexin)"
@@ -241,94 +109,90 @@ menu "Load Multiple Wake Words"
 
     config SR_WN_WN9_HEYWILLOW_TTS_MULTI
     bool "Hey,Willow (wn9_heywillow_tts)"
-    depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+    default False
 
     config SR_WN_WN9_SOPHIA_TTS_MULTI
     bool "Sophia (wn9_sophia_tts)"
-    depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+    default False
 
     config SR_WN_WN9_NIHAOXIAOXIN_TTS_MULTI
     bool "你好小鑫 (wn9_nihaoxiaoxin_tts)"
-    depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+    default False
 
     config SR_WN_WN9_XIAOMEITONGXUE_TTS_MULTI
     bool "小美同学 (wn9_xiaomeitongxue_tts)"
-    depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+    default False
 
     config SR_WN_WN9_HEYPRINTER_TTS_MULTI
     bool "Hey,Printer (wn9_heyprinter_tts)"
-    depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+    default False
 
     config SR_WN_WN9_XIAOLONGXIAOLONG_TTS_MULTI
     bool "小龙小龙 (wn9_xiaolongxiaolong_tts)"
-    depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+    default False
 
     config SR_WN_WN9_MIAOMIAOTONGXUE_TTS_MULTI
     bool "喵喵同学 (wn9_miaomiaotongxue_tts)"
-    depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+    default False
 
 
     config SR_WN_WN9_HEYWANDA_TTS_MULTI
     bool "Hey,Wanda (wn9_heywanda_tts)"
-    depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+    default False
 
     config SR_WN_WN9_HIMIAOMIAO_TTS_MULTI
     bool "Hi,喵喵 (wn9_himiaomiao_tts)"
-    depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+    default False
 
 
     config SR_WN_WN9_MYCROFT_TTS_MULTI
     bool "Mycroft (wn9_mycroft_tts)"
-    depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+    default False
 
     config SR_WN_WN9_HIJOY_TTS_MULTI
     bool "Hi,Joy (wn9_hijoy_tts)"
-    depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+    default False
 
     config SR_WN_WN9_HILILI_TTS_MULTI
     bool "Hi,Lily/Hi,莉莉 (wn9_hilili_tts)"
-    depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+    default False
 
     config SR_WN_WN9_HITELLY_TTS_MULTI
     bool "Hi,Telly/Hi,泰力 (wn9_hitelly_tts)"
-    depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+    default False
 
     config SR_WN_WN9_XIAOBINXIAOBIN_TTS_MULTI
     bool "小滨小滨/小冰小冰 (wn9_xiaobinxiaobin_tts)"
-    depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+    default False
 
     config SR_WN_WN9_HAIXIAOWU_TTS_MULTI
     bool "Hi,小巫 (wn9_haixiaowu_tts)"
-    depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+    default False
 
     config SR_WN_WN9_ASTROLABE_TTS_MULTI
     bool "Astrolabe (wn9_astrolabe_tts)"
-    depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+    default False
 
     config SR_WN_WN9_XIAOYAXIAOYA_TTS2_MULTI
     bool "小鸭小鸭 (wn9_xiaoyaxiaoya_tts2)"
-    depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+    default False
 
     config SR_WN_WN9_HIJASON_TTS2_MULTI
     bool "Hi,Jason (wn9_hijason_tts2)"
-    depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+    default False
 
     config SR_WN_WN9_LINAIBAN_TTS2_MULTI
     bool "璃奈板 (wn9_linaiban_tts2)"
-    depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+    default False
 
 endmenu
 
-config USE_MULTINET
-    bool "use multinet"
-    default "y"
 
 choice CHINESE_SR_MN_MODEL_SEL
     prompt "Chinese Speech Commands Model"
-    default SR_MN_CN_MULTINET6_QUANT
-    depends on USE_MULTINET
+    default SR_MN_CN_NONE
     help
-        Select the Wake Word Engine to be used.
+        Select the Chinese Speech Commands Model.
 
     config SR_MN_CN_NONE
         bool "None"
@@ -362,9 +226,8 @@ endchoice
 choice ENGLISH_SR_MN_MODEL_SEL
     prompt "English Speech Commands Model"
     default SR_MN_EN_NONE
-    depends on USE_MULTINET
     help
-        Select the Wake Word Engine to be used.
+        Select the English Speech Commands Model.
 
     config SR_MN_EN_NONE
         bool "None"
