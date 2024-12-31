@@ -28,6 +28,8 @@ def copy_wakenet_from_sdkconfig(model_path, sdkconfig_path, target_path):
         for label in f:
             label = label.strip("\n")
             if 'CONFIG_SR_WN' in label and  '#' not in label[0]:
+                if '_NONE' in label:
+                    continue
                 if '=' in label:
                     label = label.split("=")[0]
                 if '_MULTI' in label:
