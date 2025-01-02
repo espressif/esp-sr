@@ -23,7 +23,8 @@ extern "C" {
 #define USE_AEC_FFT                      // Not kiss_fft
 #define AEC_USE_SPIRAM      0
 #define AEC_SAMPLE_RATE     16000        // Only Support 16000Hz
-#define AEC_FRAME_LENGTH_MS 16
+//#define AEC_FRAME_LENGTH_MS 16
+#define AEC_FRAME_LENGTH_MS 32
 #define AEC_FILTER_LENGTH   1200         // Number of samples of echo to cancel
 
 typedef void* aec_handle_t;

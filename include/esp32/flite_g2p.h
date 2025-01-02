@@ -9,7 +9,7 @@ typedef struct {
 
 void flite_g2p_result_free(flite_g2p_result *result);
 
-flite_g2p_result *flite_g2p_get_result(char *grapheme);
+flite_g2p_result *flite_g2p_get_result(const char *grapheme);
 
 void flite_g2p_result_print_string(flite_g2p_result *result, int map_phonemes);
 

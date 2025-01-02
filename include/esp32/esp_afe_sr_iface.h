@@ -29,6 +29,8 @@ typedef struct afe_fetch_result_t
 {
     int16_t *data;                          // the data of audio.
     int data_size;                          // the size of data. The unit is byte.
+    int16_t *vad_cache;                     // the cache data of vad. It's only valid when vad_cache_size > 0. It is used to complete the audio that was truncated.
+    int vad_cache_size;                     // the size of vad_cache. The unit is byte.
     float data_volume;                      // the volume of input audio, the unit is decibel(dB). This value is calculated before agc. (note: invalid in vc).
                                             // if enable wakenet, the window length is the receptive fields of wakenet(about 1.5s), otherwise is the frame length. 
     wakenet_state_t wakeup_state;           // the value is wakenet_state_t
@@ -36,7 +38,7 @@ typedef struct afe_fetch_result_t
     int wakenet_model_index;                // if there are multiple wakenets, this value identifies which model be wakes up. Index start from 1.
     afe_vad_state_t vad_state;              // the value is afe_vad_state_t
     int trigger_channel_id;                 // the channel index of output
-    int wake_word_length;                   // the length of wake word. It's unit is the number of samples.
+    int wake_word_length;                   // the length of wake word. The unit is the number of samples.
     int ret_value;                          // the return state of fetch function
     void* reserved;                         // reserved for future use
 } afe_fetch_result_t;
@@ -112,7 +114,7 @@ typedef afe_fetch_result_t* (*esp_afe_sr_iface_op_fetch_t)(esp_afe_sr_data_t *af
  * @brief reset ringbuf of AFE.
  *
  * @param afe          The AFE_SR object to query
- * @return             -1: fail, 0: success
+ * @return             -1: fail, 1: success
  */
 typedef int (*esp_afe_sr_iface_op_reset_buffer_t)(esp_afe_sr_data_t *afe);
 
@@ -122,7 +124,7 @@ typedef int (*esp_afe_sr_iface_op_reset_buffer_t)(esp_afe_sr_data_t *afe);
  *
  * @param afe                The AFE_SR object to query
  * @param wakenet_word       The wakenet word, should be DEFAULT_WAKE_WORD or EXTRA_WAKE_WORD
- * @return             0: fail, 1: success
+ * @return             -1: fail, 1: success
  */
 typedef int (*esp_afe_sr_iface_op_set_wakenet_t)(esp_afe_sr_data_t *afe, char* model_name);
 
@@ -130,7 +132,7 @@ typedef int (*esp_afe_sr_iface_op_set_wakenet_t)(esp_afe_sr_data_t *afe, char* m
  * @brief Disable wakenet model.
  *
  * @param afe          The AFE_SR object to query
- * @return             0: fail, 1: success
+ * @return             -1: fail, 0: disabled, 1: enabled
  */
 typedef int (*esp_afe_sr_iface_op_disable_wakenet_t)(esp_afe_sr_data_t *afe);
 
@@ -138,7 +140,7 @@ typedef int (*esp_afe_sr_iface_op_disable_wakenet_t)(esp_afe_sr_data_t *afe);
  * @brief Enable wakenet model.
  *
  * @param afe          The AFE_SR object to query
- * @return             0: fail, 1: success
+ * @return             -1: fail, 0: disabled, 1: enabled
  */
 typedef int (*esp_afe_sr_iface_op_enable_wakenet_t)(esp_afe_sr_data_t *afe);
 
@@ -146,7 +148,7 @@ typedef int (*esp_afe_sr_iface_op_enable_wakenet_t)(esp_afe_sr_data_t *afe);
  * @brief Disable AEC algorithm.
  *
  * @param afe          The AFE_SR object to query
- * @return             0: fail, 1: success
+ * @return             -1: fail, 0: disabled, 1: enabled
  */
 typedef int (*esp_afe_sr_iface_op_disable_aec_t)(esp_afe_sr_data_t *afe);
 
@@ -154,7 +156,7 @@ typedef int (*esp_afe_sr_iface_op_disable_aec_t)(esp_afe_sr_data_t *afe);
  * @brief Enable AEC algorithm.
  *
  * @param afe          The AFE_SR object to query
- * @return             0: fail, 1: success
+ * @return             -1: fail, 0: disabled, 1: enabled
  */
 typedef int (*esp_afe_sr_iface_op_enable_aec_t)(esp_afe_sr_data_t *afe);
 
@@ -162,7 +164,7 @@ typedef int (*esp_afe_sr_iface_op_enable_aec_t)(esp_afe_sr_data_t *afe);
  * @brief Disable SE algorithm.
  *
  * @param afe          The AFE_SR object to query
- * @return             0: fail, 1: success
+ * @return             -1: fail, 0: disabled, 1: enabled
  */
 typedef int (*esp_afe_sr_iface_op_disable_se_t)(esp_afe_sr_data_t *afe);
 
@@ -170,7 +172,7 @@ typedef int (*esp_afe_sr_iface_op_disable_se_t)(esp_afe_sr_data_t *afe);
  * @brief Enable SE algorithm.
  *
  * @param afe          The AFE_SR object to query
- * @return             0: fail, 1: success
+ * @return             -1: fail, 0: disabled, 1: enabled
  */
 typedef int (*esp_afe_sr_iface_op_enable_se_t)(esp_afe_sr_data_t *afe);
 

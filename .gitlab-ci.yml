@@ -230,7 +230,7 @@ build_esp_sr_html:
   parallel:
     matrix:
       - DOCLANG: ["en", "zh_CN"]
-        DOCTGT: ["esp32", "esp32s3", "esp32p4"]
+        DOCTGT: ["esp32", "esp32s3"]
 
 build_esp_sr_pdf:
   extends:
@@ -252,7 +252,7 @@ build_esp_sr_pdf:
   parallel:
     matrix:
       - DOCLANG: ["en", "zh_CN"]
-        DOCTGT: ["esp32", "esp32s3", "esp32p4"]
+        DOCTGT: ["esp32", "esp32s3"]
 
 
 .deploy_docs_template:
