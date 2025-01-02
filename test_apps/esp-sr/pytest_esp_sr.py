@@ -15,9 +15,7 @@ from pytest_embedded import Dut
     ],
 )
 def test_multinet_s3(dut: Dut)-> None:
-    # dut.run_all_single_board_cases(group="mn")
-    dut.expect_exact('Press ENTER to see the list of tests.')
-    dut.write('[mn]')
+    dut.run_all_single_board_cases(group="mn")
     dut.expect_unity_test_output(timeout = 1000)
 
 @pytest.mark.target('esp32p4')
@@ -30,9 +28,7 @@ def test_multinet_s3(dut: Dut)-> None:
     ],
 )
 def test_multinet_p4(dut: Dut)-> None:
-    # dut.run_all_single_board_cases(group="mn")
-    dut.expect_exact('Press ENTER to see the list of tests.')
-    dut.write('[mn]')
+    dut.run_all_single_board_cases(group="mn")
     dut.expect_unity_test_output(timeout = 1000)
 
 
@@ -46,9 +42,7 @@ def test_multinet_p4(dut: Dut)-> None:
     ],
 )
 def test_wakenet(dut: Dut)-> None:
-    # dut.run_all_single_board_cases(group="wn")
-    dut.expect_exact('Press ENTER to see the list of tests.')
-    dut.write('[wn]')
+    dut.run_all_single_board_cases(group="wn")
     dut.expect_unity_test_output(timeout = 1000)
 
 @pytest.mark.target('esp32p4')
@@ -61,9 +55,7 @@ def test_wakenet(dut: Dut)-> None:
     ],
 )
 def test_wakenet_p4(dut: Dut)-> None:
-    # dut.run_all_single_board_cases(group="wn")
-    dut.expect_exact('Press ENTER to see the list of tests.')
-    dut.write('[wn]')
+    dut.run_all_single_board_cases(group="wn")
     dut.expect_unity_test_output(timeout = 1000)
 
 @pytest.mark.target('esp32s3')
@@ -72,12 +64,11 @@ def test_wakenet_p4(dut: Dut)-> None:
     'config',
     [
         'wn9_hilexin',
+        'vadnet'
     ],
 )
 def test_sr_afe(dut: Dut)-> None:
-    # dut.run_all_single_board_cases(group="afe")
-    dut.expect_exact('Press ENTER to see the list of tests.')
-    dut.write('[afe_sr]')
+    dut.run_all_single_board_cases(group="afe_sr")
     dut.expect_unity_test_output(timeout = 1000)
 
 @pytest.mark.target('esp32p4')
@@ -89,9 +80,7 @@ def test_sr_afe(dut: Dut)-> None:
     ],
 )
 def test_sr_afe_p4(dut: Dut)-> None:
-    # dut.run_all_single_board_cases(group="afe")
-    dut.expect_exact('Press ENTER to see the list of tests.')
-    dut.write('[afe_sr]')
+    dut.run_all_single_board_cases(group="afe_sr")
     dut.expect_unity_test_output(timeout = 1000)
 
 
@@ -104,9 +93,7 @@ def test_sr_afe_p4(dut: Dut)-> None:
     ],
 )
 def test_vc_afe(dut: Dut)-> None:
-    # dut.run_all_single_board_cases(group="afe")
-    dut.expect_exact('Press ENTER to see the list of tests.')
-    dut.write('[afe_vc]')
+    dut.run_all_single_board_cases(group="afe_vc")
     dut.expect_unity_test_output(timeout = 100000)
 
 
@@ -119,7 +106,5 @@ def test_vc_afe(dut: Dut)-> None:
     ],
 )
 def test_vc_afe_p4(dut: Dut)-> None:
-    # dut.run_all_single_board_cases(group="afe")
-    dut.expect_exact('Press ENTER to see the list of tests.')
-    dut.write('[afe_vc]')
+    dut.run_all_single_board_cases(group="afe_vc")
     dut.expect_unity_test_output(timeout = 100000)

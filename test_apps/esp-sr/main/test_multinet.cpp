@@ -93,6 +93,7 @@ TEST_CASE("multinet cpu loading", "[mn]")
     struct timeval tv_start, tv_end;
     gettimeofday(&tv_start, NULL);
     esp_mn_state_t mn_state;
+    multinet->print_active_speech_commands(model_data);
 
     while (1) {
         if ((chunks + 1)*audio_chunksize <= data_size) {

@@ -108,7 +108,7 @@ typedef struct {
     .voice_communication_init = false, \
     .voice_communication_agc_init = false, \
     .voice_communication_agc_gain = 15, \
-    .vad_mode = VAD_MODE_3, \
+    .vad_mode = VAD_MODE_0, \
     .wakenet_model_name = NULL, \
     .wakenet_model_name_2 = NULL, \
     .wakenet_mode = DET_MODE_90, \
@@ -144,7 +144,7 @@ typedef struct {
     .voice_communication_init = false, \
     .voice_communication_agc_init = false, \
     .voice_communication_agc_gain = 15, \
-    .vad_mode = VAD_MODE_3, \
+    .vad_mode = VAD_MODE_0, \
     .wakenet_model_name = NULL, \
     .wakenet_model_name_2 = NULL, \
     .wakenet_mode = DET_MODE_90, \
@@ -180,7 +180,7 @@ typedef struct {
     .voice_communication_init = false, \
     .voice_communication_agc_init = false, \
     .voice_communication_agc_gain = 15, \
-    .vad_mode = VAD_MODE_3, \
+    .vad_mode = VAD_MODE_0, \
     .wakenet_model_name = NULL, \
     .wakenet_model_name_2 = NULL, \
     .wakenet_mode = DET_MODE_2CH_90, \
