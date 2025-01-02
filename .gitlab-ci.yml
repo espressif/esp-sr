@@ -100,8 +100,6 @@ before_script:
   artifacts:
     when: always
     paths:
-      - "**/build*/size.json"
-      - "**/build*/build_log.txt"
       - "**/build*/*.bin"
       # upload to s3 server to save the artifacts size
       - "**/build*/*.map"
@@ -232,7 +230,7 @@ build_esp_sr_html:
   parallel:
     matrix:
       - DOCLANG: ["en", "zh_CN"]
-        DOCTGT: ["esp32", "esp32s3"]
+        DOCTGT: ["esp32", "esp32s3", "esp32p4"]
 
 build_esp_sr_pdf:
   extends:
@@ -254,7 +252,7 @@ build_esp_sr_pdf:
   parallel:
     matrix:
       - DOCLANG: ["en", "zh_CN"]
-        DOCTGT: ["esp32", "esp32s3"]
+        DOCTGT: ["esp32", "esp32s3", "esp32p4"]
 
 
 .deploy_docs_template:
