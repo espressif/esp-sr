@@ -225,12 +225,13 @@ build_esp_sr_html:
   script:
     - cd $DOCS_DIR
     - ./check_lang_folder_sync.sh
+    - pip install -r requirements.txt
     - build-docs --skip-reqs-check -l $DOCLANG -t $DOCTGT
     - echo "ESP-SR documentation preview available at $CI_JOB_URL/artifacts/file/docs/_build/$DOCLANG/$DOCTGT/html/index.html"
   parallel:
     matrix:
       - DOCLANG: ["en", "zh_CN"]
-        DOCTGT: ["esp32", "esp32s3"]
+        DOCTGT: ["esp32", "esp32s3", "esp32p4"]
 
 build_esp_sr_pdf:
   extends:
@@ -252,7 +253,7 @@ build_esp_sr_pdf:
   parallel:
     matrix:
       - DOCLANG: ["en", "zh_CN"]
-        DOCTGT: ["esp32", "esp32s3"]
+        DOCTGT: ["esp32", "esp32s3", "esp32p4"]
 
 
 .deploy_docs_template:
@@ -281,7 +282,7 @@ deploy_docs_preview:
     DOCS_DEPLOY_SERVER: "$DOCS_PREVIEW_SERVER"
     DOCS_DEPLOY_SERVER_USER: "$DOCS_PREVIEW_SERVER_USER"
     DOCS_DEPLOY_PATH: "$DOCS_PREVIEW_PATH"
-    DOCS_DEPLOY_URL_BASE: "https://$DOCS_PREVIEW_SERVER_URL/docs/esp-sr"
+    DOCS_DEPLOY_URL_BASE: "$DOCS_PREVIEW_URL_BASE"
 
 deploy_docs_production:
   extends:
