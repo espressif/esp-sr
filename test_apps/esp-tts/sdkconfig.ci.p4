@@ -1,13 +1,10 @@
 # This file was generated using idf.py save-defconfig. It can be edited manually.
-# Espressif IoT Development Framework (ESP-IDF) 5.3.0 Project Minimal Configuration
+# Espressif IoT Development Framework (ESP-IDF) 5.3.1 Project Minimal Configuration
 #
 CONFIG_IDF_TARGET="esp32p4"
 CONFIG_ESPTOOLPY_FLASHMODE_QIO=y
 CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y
 CONFIG_PARTITION_TABLE_CUSTOM=y
-CONFIG_USE_AFE=n
-CONFIG_USE_WAKENET=n
-CONFIG_USE_MULTINET=n
 CONFIG_COMPILER_OPTIMIZATION_PERF=y
 CONFIG_ESP32P4_REV_MIN_0=y
 CONFIG_SPIRAM=y

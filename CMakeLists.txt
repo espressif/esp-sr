@@ -74,6 +74,7 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
 
     add_prebuilt_library(flite_g2p "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32s3/libflite_g2p.a" PRIV_REQUIRES ${COMPONENT_NAME})
     add_prebuilt_library(esp_audio_processor "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32s3/libesp_audio_processor.a" PRIV_REQUIRES ${COMPONENT_NAME})
+    add_prebuilt_library(vadnet "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32s3/libvadnet.a" PRIV_REQUIRES ${COMPONENT_NAME})
     add_prebuilt_library(wakenet "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32s3/libwakenet.a" PRIV_REQUIRES ${COMPONENT_NAME})
     add_prebuilt_library(multinet "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32s3/libmultinet.a" PRIV_REQUIRES ${COMPONENT_NAME})
     add_prebuilt_library(esp_audio_front_end "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32s3/libesp_audio_front_end.a" PRIV_REQUIRES ${COMPONENT_NAME})
@@ -95,6 +96,7 @@ elseif(${IDF_TARGET} STREQUAL "esp32s3")
         esp_tts_chinese
         voice_set_xiaole
         nsnet
+        vadnet
         wakenet
         "-Wl,--end-group")
 
@@ -153,6 +155,7 @@ elseif(${IDF_TARGET} STREQUAL "esp32p4")
     add_prebuilt_library(flite_g2p "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32p4/libflite_g2p.a" PRIV_REQUIRES ${COMPONENT_NAME})
     add_prebuilt_library(esp_audio_processor "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32p4/libesp_audio_processor.a" PRIV_REQUIRES ${COMPONENT_NAME})
     add_prebuilt_library(wakenet "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32p4/libwakenet.a" PRIV_REQUIRES ${COMPONENT_NAME})
+    add_prebuilt_library(vadnet "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32p4/libvadnet.a" PRIV_REQUIRES ${COMPONENT_NAME})
     add_prebuilt_library(multinet "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32p4/libmultinet.a" PRIV_REQUIRES ${COMPONENT_NAME})
     add_prebuilt_library(esp_audio_front_end "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32p4/libesp_audio_front_end.a" PRIV_REQUIRES ${COMPONENT_NAME})
     add_prebuilt_library(hufzip "${CMAKE_CURRENT_SOURCE_DIR}/lib/esp32p4/libhufzip.a" PRIV_REQUIRES ${COMPONENT_NAME})
@@ -173,6 +176,7 @@ elseif(${IDF_TARGET} STREQUAL "esp32p4")
         esp_tts_chinese
         voice_set_xiaole
         wakenet
+        vadnet
         nsnet
         "-Wl,--end-group")
 

@@ -25,10 +25,6 @@
 extern "C" {
 #endif
 
-// #ifdef CONFIG_IDF_TARGET_ESP32S3
-// #include "dl_tie728_bzero.h"
-// #endif
-
 typedef float fptp_t;
 
 #if CONFIG_BT_SHARE_MEM_REUSE

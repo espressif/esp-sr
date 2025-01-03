@@ -28,6 +28,8 @@ def copy_wakenet_from_sdkconfig(model_path, sdkconfig_path, target_path):
         for label in f:
             label = label.strip("\n")
             if 'CONFIG_SR_WN' in label and  '#' not in label[0]:
+                if '_NONE' in label:
+                    continue
                 if '=' in label:
                     label = label.split("=")[0]
                 if '_MULTI' in label:
@@ -113,13 +115,13 @@ def copy_vadnet_from_sdkconfig(model_path, sdkconfig_path, target_path):
         models_string = ''
         for label in f:
             label = label.strip("\n")
-            if 'CONFIG_SR_VADNET' in label and label[0] != '#':
+            if 'CONFIG_SR_VADN' in label and label[0] != '#':
                 models_string += label
 
     models = []
-    if "CONFIG_SR_VADNET_MODLE_SMALL" in models_string:
+    if "CONFIG_SR_VADN_VADNET1_SMALL" in models_string:
         models.append('vadnet1_small')
-    elif "CONFIG_SR_VADNET_MODLE_MEDIUM" in models_string:
+    elif "CONFIG_SR_VADN_VADNET1_MEDIUM" in models_string:
         models.append('vadnet1_medium')
     
     for item in models:

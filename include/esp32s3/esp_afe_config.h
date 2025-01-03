@@ -92,6 +92,10 @@ typedef struct {
     char *afe_ns_model_name;
     bool fixed_first_channel;                // If true, the channel after first wake-up is fixed to raw data of microphone
                                              // otherwise, select channel number by wakenet
+    char *vad_model_name;                    // The model name of vad, support vadnet1 and vadnet1_small
+    int vad_min_speech_ms;                   // The minimum duration of speech in ms. It should be bigger than 32 ms
+    int vad_min_noise_ms;                    // The minimum duration of noise/silence in ms. It should be bigger than 64 ms
+    bool vad_mute_playback;                  // If true, the playback will be muted for vad detection
 } afe_config_t;
 
 
@@ -104,7 +108,7 @@ typedef struct {
     .voice_communication_init = false, \
     .voice_communication_agc_init = false, \
     .voice_communication_agc_gain = 15, \
-    .vad_mode = VAD_MODE_3, \
+    .vad_mode = VAD_MODE_0, \
     .wakenet_model_name = NULL, \
     .wakenet_model_name_2 = NULL, \
     .wakenet_mode = DET_MODE_90, \
@@ -126,6 +130,10 @@ typedef struct {
     .afe_ns_mode = NS_MODE_SSP, \
     .afe_ns_model_name = NULL, \
     .fixed_first_channel = true, \
+    .vad_model_name = NULL, \
+    .vad_min_speech_ms = 64, \
+    .vad_min_noise_ms = 256, \
+    .vad_mute_playback = false, \
 }
 #elif CONFIG_IDF_TARGET_ESP32P4
 #define AFE_CONFIG_DEFAULT() { \
@@ -136,7 +144,7 @@ typedef struct {
     .voice_communication_init = false, \
     .voice_communication_agc_init = false, \
     .voice_communication_agc_gain = 15, \
-    .vad_mode = VAD_MODE_3, \
+    .vad_mode = VAD_MODE_0, \
     .wakenet_model_name = NULL, \
     .wakenet_model_name_2 = NULL, \
     .wakenet_mode = DET_MODE_90, \
@@ -158,6 +166,10 @@ typedef struct {
     .afe_ns_mode = NS_MODE_SSP, \
     .afe_ns_model_name = NULL, \
     .fixed_first_channel = true, \
+    .vad_model_name = NULL, \
+    .vad_min_speech_ms = 64, \
+    .vad_min_noise_ms = 256, \
+    .vad_mute_playback = false, \
 }
 #elif CONFIG_IDF_TARGET_ESP32S3
 #define AFE_CONFIG_DEFAULT() { \
@@ -168,7 +180,7 @@ typedef struct {
     .voice_communication_init = false, \
     .voice_communication_agc_init = false, \
     .voice_communication_agc_gain = 15, \
-    .vad_mode = VAD_MODE_3, \
+    .vad_mode = VAD_MODE_0, \
     .wakenet_model_name = NULL, \
     .wakenet_model_name_2 = NULL, \
     .wakenet_mode = DET_MODE_2CH_90, \
@@ -190,6 +202,10 @@ typedef struct {
     .afe_ns_mode = NS_MODE_SSP, \
     .afe_ns_model_name = NULL, \
     .fixed_first_channel = true, \
+    .vad_model_name = NULL, \
+    .vad_min_speech_ms = 64, \
+    .vad_min_noise_ms = 256, \
+    .vad_mute_playback = false, \
 }
 #endif
 

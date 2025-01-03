@@ -23,6 +23,8 @@
 #if (CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32P4)
 #include "esp_nsn_models.h"
 #include "esp_nsn_iface.h"
+#include "esp_vadn_models.h"
+#include "esp_vadn_iface.h"
 #endif
 
 #define ARRAY_SIZE_OFFSET                   8       // Increase this if audio_sys_get_real_time_stats returns ESP_ERR_INVALID_SIZE
@@ -69,6 +71,10 @@ TEST_CASE(">>>>>>>> audio_front_end SR create/destroy API & memory leak <<<<<<<<
                     int start_internal_size = heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
                     srmodel_list_t *models = esp_srmodel_init("model");
                     char *model_name = esp_srmodel_filter(models, ESP_WN_PREFIX, NULL);
+                    char *vad_model_name = NULL;
+#if (CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32P4)
+                    vad_model_name = esp_srmodel_filter(models, ESP_VADN_PREFIX, NULL);
+#endif
 
                     esp_afe_sr_iface_t *afe_handle = (esp_afe_sr_iface_t *)&ESP_AFE_SR_HANDLE;
                     afe_config_t afe_config = AFE_CONFIG_DEFAULT();
@@ -79,7 +85,10 @@ TEST_CASE(">>>>>>>> audio_front_end SR create/destroy API & memory leak <<<<<<<<
                     afe_config.memory_alloc_mode = AFE_MEMORY_ALLOC_MORE_PSRAM;
                     afe_config.wakenet_model_name = model_name;
                     afe_config.voice_communication_init = false;
-
+                    afe_config.vad_model_name = vad_model_name;
+                    if (vad_model_name) {
+                        printf("vad_model_name:%s\n", vad_model_name);
+                    }
 
                     // test model loading time
                     struct timeval tv_start, tv_end;
@@ -106,7 +115,11 @@ TEST_CASE(">>>>>>>> audio_front_end SR create/destroy API & memory leak <<<<<<<<
                         printf("init partition ...\n");
                         models = esp_srmodel_init("model");
                         model_name = esp_srmodel_filter(models, ESP_WN_PREFIX, NULL);
+#if (CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32P4)
+                        vad_model_name = esp_srmodel_filter(models, ESP_VADN_PREFIX, NULL);
+#endif
                         afe_config.wakenet_model_name = model_name;
+                        afe_config.vad_model_name = vad_model_name;
 
                         printf("create ...\n");
                         afe_data = afe_handle->create_from_config(&afe_config);

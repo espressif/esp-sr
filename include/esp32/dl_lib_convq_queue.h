@@ -279,9 +279,9 @@ dl_matrix2dq_t *dl_convq_lstm_layer(const dl_convq_queue_t *in, dl_convq_queue_t
 dl_matrix2dq_t *dl_basic_lstm_layer1_q(const dl_convq_queue_t *in, dl_matrix2dq_t *state_c, dl_matrix2dq_t *state_h,
                                        const dl_matrix2dq_t *weight, const dl_matrix2dq_t *bias, int step, int shift);
 
-dl_matrix2dq_t *dl_convq16_lstm_layer(const dl_convq_queue_t *in, dl_convq_queue_t *out, dl_matrix2dq_t *state_c,
-                                       dl_matrix2dq_t *state_h, const dl_matrix2dq_t *in_weight, const dl_matrix2dq_t *h_weight,
-                                       const dl_matrix2dq_t *bias, int prenum);
+dl_matrix2dq_t *dl_convq16_lstm_layer(dl_convq_queue_t *in, dl_convq_queue_t *out, dl_matrix2dq_t *state_c,
+                                       dl_matrix2dq_t *state_h, dl_matrix2dq_t *in_weight, dl_matrix2dq_t *h_weight,
+                                       dl_matrix2dq_t *bias, int prenum);
 
 /**
  * @brief Allocate a fixed-point multi channel convolution queue 
