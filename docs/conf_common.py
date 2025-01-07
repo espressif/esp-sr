@@ -1,7 +1,7 @@
 from esp_docs.conf_docs import *  # noqa: F403,F401
 
 languages = ['en', 'zh_CN']
-idf_targets = ['esp32', 'esp32s3']
+idf_targets = ['esp32', 'esp32s3', 'esp32p4']
 
 extensions += ['sphinx_copybutton',
                'sphinxcontrib.wavedrom',

@@ -172,7 +172,7 @@ Resource Consumption
     | MultiNet 7  | 18 KB       | 2920 KB     | 11 ms       | 32 ms       |
     +-------------+-------------+-------------+-------------+-------------+
 
-.. only:: esp32s3
+.. only:: esp32p4
 
     +-------------+-------------+-------------+-------------+-------------+
     | Model Type  | Internal    | PSRAM       | Average     | Frame       |
