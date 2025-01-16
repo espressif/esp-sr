@@ -103,9 +103,9 @@ vad_handle_t vad_create(vad_mode_t vad_mode);
  *
  * @param vad_mode          Sets the VAD operating mode.
  * @param sample_rate       Sample rate in Hz
- * @param one_frame_ms      Length of the audio processing can be 10ms, 20ms, 30ms, default: 30.
- * @param min_speech_len    Minimum frame number of speech duration
- * @param min_noise_len     Minimum frame number of noise duration
+ * @param one_frame_ms      Length of the audio chunksize, can be 10ms, 20ms, 30ms, default: 30.
+ * @param min_speech_ms     Minimum speech duration, unit is ms
+ * @param min_noise_ms      Minimum noise duration, unit is ms
  * @return
  *         - NULL: Create failed
  *         - Others: The instance of VAD
