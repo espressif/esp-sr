@@ -18,6 +18,19 @@ typedef struct model_iface_data_t model_iface_data_t;
 //     VAD_SPEECH = 1   // Speech
 // } vad_state_t;
 
+typedef struct vadn_trigger_tag {
+    float *probs;
+    float prob_sum;
+    float prob_max;
+    float prob_mean;
+    vad_state_t state;
+    unsigned int win_len;
+    unsigned int min_speech_len;
+    unsigned int noise_len;
+    unsigned int min_noise_len;
+    unsigned int speech_len;
+} vadn_trigger_t;
+
 /**
  * @brief Easy function type to initialze a model instance with a detection mode
  * and specified model name
@@ -99,6 +112,16 @@ typedef float (*esp_vadn_iface_op_get_det_threshold_t)(model_iface_data_t *model
 typedef vad_state_t (*esp_vadn_iface_op_detect_t)(model_iface_data_t *model, int16_t *samples);
 
 /**
+ * @brief Feed samples of an audio stream to the vad model and return multi-channel trigger info
+ *
+ * @param model The model object to query
+ * @param samples An array of 16-bit signed audio samples. The array size used
+ * can be queried by the get_samp_chunksize function.
+ * @return The trigger pointer array
+ */
+typedef vadn_trigger_t** (*esp_vadn_iface_op_multi_channel_detect_t)(model_iface_data_t *model, int16_t *samples);
+
+/**
  * @brief Get the triggered channel index. Channel index starts from zero
  *
  * @param model The model object to query
@@ -133,6 +156,7 @@ typedef struct {
     esp_vadn_iface_op_get_det_threshold_t get_det_threshold;
     esp_vadn_iface_op_get_triggered_channel_t get_triggered_channel;
     esp_vadn_iface_op_detect_t detect;
+    esp_vadn_iface_op_multi_channel_detect_t multi_channel_detect;
     esp_vadn_iface_op_clean_t clean;
     esp_vadn_iface_op_destroy_t destroy;
 } esp_vadn_iface_t;

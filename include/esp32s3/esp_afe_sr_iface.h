@@ -1,7 +1,10 @@
 #pragma once
 #include "stdint.h"
+#include "stdlib.h"
+#include "stdbool.h"
 #include "esp_afe_config.h"
-
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -12,6 +15,8 @@ extern "C" {
 
 //Opaque AFE_SR data container
 typedef struct esp_afe_sr_data_t esp_afe_sr_data_t;
+
+
 
 /**
  * @brief The state of vad
@@ -27,7 +32,7 @@ typedef enum
  */
 typedef struct afe_fetch_result_t
 {
-    int16_t *data;                          // the data of audio.
+    int16_t *data;                          // the target channel data of audio.
     int data_size;                          // the size of data. The unit is byte.
     int16_t *vad_cache;                     // the cache data of vad. It's only valid when vad_cache_size > 0. It is used to complete the audio that was truncated.
     int vad_cache_size;                     // the size of vad_cache. The unit is byte.
@@ -40,6 +45,8 @@ typedef struct afe_fetch_result_t
     int trigger_channel_id;                 // the channel index of output
     int wake_word_length;                   // the length of wake word. The unit is the number of samples.
     int ret_value;                          // the return state of fetch function
+    int16_t *raw_data;                      // the multi-channel output data of audio.
+    int channel_num;                        // Channel number of raw data 
     void* reserved;                         // reserved for future use
 } afe_fetch_result_t;
 
@@ -68,7 +75,7 @@ typedef int (*esp_afe_sr_iface_op_get_samp_chunksize_t)(esp_afe_sr_data_t *afe);
  * @param afe   The AFE_SR object to query
  * @return      The amount of total channels
  */
-typedef int (*esp_afe_sr_iface_op_get_total_channel_num_t)(esp_afe_sr_data_t *afe);
+typedef int (*esp_afe_sr_iface_op_get_feed_channel_num_t)(esp_afe_sr_data_t *afe);
 
 /**
  * @brief Get the mic channel number which be config
@@ -76,7 +83,7 @@ typedef int (*esp_afe_sr_iface_op_get_total_channel_num_t)(esp_afe_sr_data_t *af
  * @param afe   The AFE_SR object to query
  * @return      The amount of mic channels
  */
-typedef int (*esp_afe_sr_iface_op_get_channel_num_t)(esp_afe_sr_data_t *afe);
+typedef int (*esp_afe_sr_iface_op_get_fetch_channel_num_t)(esp_afe_sr_data_t *afe);
 
 /**
  * @brief Get the sample rate of the samples to feed to the function
@@ -104,11 +111,23 @@ typedef int (*esp_afe_sr_iface_op_feed_t)(esp_afe_sr_data_t *afe, const int16_t*
  * @brief fetch enhanced samples of an audio stream from the AFE_SR
  *
  * @Warning  The output is single channel data, no matter how many channels the input is.
+ *           Timeout is 2000 ms. If you want to adjust timeout, please refer to the definition of `fetch_with_delay`.
  *
  * @param afe   The AFE_SR object to query
  * @return      The result of output, please refer to the definition of `afe_fetch_result_t`. (The frame size of output audio can be queried by the `get_fetch_chunksize`.)
  */
 typedef afe_fetch_result_t* (*esp_afe_sr_iface_op_fetch_t)(esp_afe_sr_data_t *afe);
+
+/**
+ * @brief fetch enhanced samples of an audio stream from the AFE_SR, same with the function `fetch`
+ *
+ * @Warning  The output is single channel data, no matter how many channels the input is.
+ *
+ * @param afe            The AFE_SR object to query
+ * @param ticks_to_wait  The timeout value, in ticks, to wait for the fetch result.
+ * @return      The result of output, please refer to the definition of `afe_fetch_result_t`. (The frame size of output audio can be queried by the `get_fetch_chunksize`.)
+ */
+typedef afe_fetch_result_t* (*esp_afe_sr_iface_op_fetch_with_delay_t)(esp_afe_sr_data_t *afe, TickType_t ticks_to_wait);
 
 /**
  * @brief reset ringbuf of AFE.
@@ -177,6 +196,38 @@ typedef int (*esp_afe_sr_iface_op_disable_se_t)(esp_afe_sr_data_t *afe);
 typedef int (*esp_afe_sr_iface_op_enable_se_t)(esp_afe_sr_data_t *afe);
 
 /**
+ * @brief Disable VAD algorithm.
+ *
+ * @param afe          The AFE_SR object to query
+ * @return             -1: fail, 0: disabled, 1: enabled
+ */
+typedef int (*esp_afe_sr_iface_op_disable_vad_t)(esp_afe_sr_data_t *afe);
+
+/**
+ * @brief Enable VAD algorithm.
+ *
+ * @param afe          The AFE_SR object to query
+ * @return             -1: fail, 0: disabled, 1: enabled
+ */
+typedef int (*esp_afe_sr_iface_op_enable_vad_t)(esp_afe_sr_data_t *afe);
+
+/**
+ * @brief Disable one function/module/algorithm.
+ *
+ * @param afe          The AFE_SR object to query
+ * @return             -1: fail, 0: disabled, 1: enabled
+ */
+typedef int (*esp_afe_sr_iface_op_disable_func_t)(esp_afe_sr_data_t *afe);
+
+/**
+ * @brief Enable one function/module/algorithm.
+ *
+ * @param afe          The AFE_SR object to query
+ * @return             -1: fail, 0: disabled, 1: enabled
+ */
+typedef int (*esp_afe_sr_iface_op_enable_func_t)(esp_afe_sr_data_t *afe);
+
+/**
  * @brief Destroy a AFE_SR instance
  *
  * @param afe         AFE_SR object to destroy
@@ -191,21 +242,36 @@ typedef struct {
     esp_afe_sr_iface_op_create_from_config_t create_from_config;
     esp_afe_sr_iface_op_feed_t feed;
     esp_afe_sr_iface_op_fetch_t fetch;
+    esp_afe_sr_iface_op_fetch_with_delay_t fetch_with_delay;
     esp_afe_sr_iface_op_reset_buffer_t reset_buffer;
     esp_afe_sr_iface_op_get_samp_chunksize_t get_feed_chunksize;
     esp_afe_sr_iface_op_get_samp_chunksize_t get_fetch_chunksize;
-    esp_afe_sr_iface_op_get_total_channel_num_t get_total_channel_num;
-    esp_afe_sr_iface_op_get_channel_num_t get_channel_num;
+    esp_afe_sr_iface_op_get_feed_channel_num_t get_feed_channel_num;
+    esp_afe_sr_iface_op_get_fetch_channel_num_t get_fetch_channel_num;
     esp_afe_sr_iface_op_get_samp_rate_t get_samp_rate;
     esp_afe_sr_iface_op_set_wakenet_t  set_wakenet; 
-    esp_afe_sr_iface_op_disable_wakenet_t disable_wakenet;
-    esp_afe_sr_iface_op_enable_wakenet_t enable_wakenet;
-    esp_afe_sr_iface_op_disable_aec_t disable_aec;
-    esp_afe_sr_iface_op_enable_aec_t enable_aec;
-    esp_afe_sr_iface_op_disable_se_t disable_se;
-    esp_afe_sr_iface_op_enable_se_t enable_se;
+    esp_afe_sr_iface_op_disable_func_t disable_wakenet;
+    esp_afe_sr_iface_op_enable_func_t enable_wakenet;
+    esp_afe_sr_iface_op_disable_func_t disable_aec;
+    esp_afe_sr_iface_op_enable_func_t enable_aec;
+    esp_afe_sr_iface_op_disable_func_t disable_se;
+    esp_afe_sr_iface_op_enable_func_t enable_se;
+    esp_afe_sr_iface_op_disable_func_t disable_vad;
+    esp_afe_sr_iface_op_enable_func_t enable_vad;
+    esp_afe_sr_iface_op_disable_func_t disable_ns;
+    esp_afe_sr_iface_op_enable_func_t enable_ns;
     esp_afe_sr_iface_op_destroy_t destroy;
 } esp_afe_sr_iface_t;
+
+
+// struct is used to store the AFE handle and data for the AFE task
+typedef struct 
+{
+    esp_afe_sr_data_t *afe_data;
+    esp_afe_sr_iface_t *afe_handle;
+    TaskHandle_t feed_task; 
+    TaskHandle_t fetch_task; 
+}afe_task_into_t;
 
 #ifdef __cplusplus
 }
