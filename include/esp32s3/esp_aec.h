@@ -80,6 +80,15 @@ void aec_process(const aec_handle_t *handel, int16_t *indata, int16_t *refdata, 
 int aec_get_chunksize(const aec_handle_t *handle);
 
 /**
+ * @brief Get AEC mode string 
+ * 
+ * @param aec_mode  The mode of AEC.
+ * 
+ * @return AEC mode string
+ */
+char * aec_get_mode_string(aec_mode_t aec_mode);
+
+/**
  * @brief Free the AEC instance
  *
  * @param inst The instance of AEC.

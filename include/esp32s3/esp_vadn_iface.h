@@ -1,6 +1,7 @@
 #pragma once
 #include "esp_vad.h"
 #include "stdint.h"
+#include "dl_lib_convq_queue.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -17,19 +18,6 @@ typedef struct model_iface_data_t model_iface_data_t;
 //     VADNET_STATE_SILENCE = 0, // Silence
 //     VAD_SPEECH = 1   // Speech
 // } vad_state_t;
-
-typedef struct vadn_trigger_tag {
-    float *probs;
-    float prob_sum;
-    float prob_max;
-    float prob_mean;
-    vad_state_t state;
-    unsigned int win_len;
-    unsigned int min_speech_len;
-    unsigned int noise_len;
-    unsigned int min_noise_len;
-    unsigned int speech_len;
-} vadn_trigger_t;
 
 /**
  * @brief Easy function type to initialze a model instance with a detection mode
@@ -112,14 +100,23 @@ typedef float (*esp_vadn_iface_op_get_det_threshold_t)(model_iface_data_t *model
 typedef vad_state_t (*esp_vadn_iface_op_detect_t)(model_iface_data_t *model, int16_t *samples);
 
 /**
- * @brief Feed samples of an audio stream to the vad model and return multi-channel trigger info
+ * @brief Feed MFCC of an audio stream to the vad model and detect whether is
+ * voice.
  *
  * @param model The model object to query
- * @param samples An array of 16-bit signed audio samples. The array size used
- * can be queried by the get_samp_chunksize function.
- * @return The trigger pointer array
+ * @param cq An array of 16-bit MFCC.
+ * @return The index of wake words, return 0 if no wake word is detected, else
+ * the index of the wake words.
  */
-typedef vadn_trigger_t** (*esp_vadn_iface_op_multi_channel_detect_t)(model_iface_data_t *model, int16_t *samples);
+typedef vad_state_t (*esp_vadn_iface_op_detect_mfcc_t)(model_iface_data_t *model, dl_convq_queue_t *cq);
+
+/**
+ * @brief Get MFCC of an audio stream
+ *
+ * @param model The model object to query
+ * @return MFCC data
+ */
+typedef dl_convq_queue_t* (*esp_vadn_iface_op_get_mfcc_data_t)(model_iface_data_t *model);
 
 /**
  * @brief Get the triggered channel index. Channel index starts from zero
@@ -156,7 +153,8 @@ typedef struct {
     esp_vadn_iface_op_get_det_threshold_t get_det_threshold;
     esp_vadn_iface_op_get_triggered_channel_t get_triggered_channel;
     esp_vadn_iface_op_detect_t detect;
-    esp_vadn_iface_op_multi_channel_detect_t multi_channel_detect;
+    esp_vadn_iface_op_detect_mfcc_t detect_mfcc;
+    esp_vadn_iface_op_get_mfcc_data_t get_mfcc_data;
     esp_vadn_iface_op_clean_t clean;
     esp_vadn_iface_op_destroy_t destroy;
 } esp_vadn_iface_t;

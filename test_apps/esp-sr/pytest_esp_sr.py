@@ -51,5 +51,5 @@ def test_wakenet(dut: Dut)-> None:
     ],
 )
 def test_sr_afe(dut: Dut)-> None:
-    dut.run_all_single_board_cases(group="afe", timeout=100000)
+    dut.run_all_single_board_cases(group="afe", timeout=3600)
 

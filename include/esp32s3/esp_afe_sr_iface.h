@@ -23,8 +23,8 @@ typedef struct esp_afe_sr_data_t esp_afe_sr_data_t;
  */
 typedef enum
 {
-    AFE_VAD_SILENCE = 0,                    // noise or silence
-    AFE_VAD_SPEECH                          // speech
+    AFE_VAD_SILENCE = 0,                    // Deprecated, please use vad_state_t, noise or silence
+    AFE_VAD_SPEECH = 1                      // Deprecated, please use vad_state_t, speech
 } afe_vad_state_t;
 
 /**
@@ -41,12 +41,12 @@ typedef struct afe_fetch_result_t
     wakenet_state_t wakeup_state;           // the value is wakenet_state_t
     int wake_word_index;                    // if the wake word is detected. It will store the wake word index which start from 1.
     int wakenet_model_index;                // if there are multiple wakenets, this value identifies which model be wakes up. Index start from 1.
-    afe_vad_state_t vad_state;              // the value is afe_vad_state_t
+    vad_state_t vad_state;              // the value is afe_vad_state_t
     int trigger_channel_id;                 // the channel index of output
     int wake_word_length;                   // the length of wake word. The unit is the number of samples.
     int ret_value;                          // the return state of fetch function
     int16_t *raw_data;                      // the multi-channel output data of audio.
-    int channel_num;                        // Channel number of raw data 
+    int raw_data_channels;                  // the channel number of raw data
     void* reserved;                         // reserved for future use
 } afe_fetch_result_t;
 
@@ -172,6 +172,15 @@ typedef int (*esp_afe_sr_iface_op_disable_func_t)(esp_afe_sr_data_t *afe);
 typedef int (*esp_afe_sr_iface_op_enable_func_t)(esp_afe_sr_data_t *afe);
 
 /**
+ * @brief Print all functions/modules/algorithms pipeline.
+ *       The pipeline is the order of the functions/modules/algorithms.
+ *       The format like this: [input] -> |AEC(VOIP_HIGH_PERF)| -> |WakeNet(wn9_hilexin)| -> [output]
+ *
+ * @param afe          The AFE_SR object to query
+ */
+typedef void (*esp_afe_sr_iface_op_print_pipeline_t)(esp_afe_sr_data_t *afe);
+
+/**
  * @brief Destroy a AFE_SR instance
  *
  * @param afe         AFE_SR object to destroy
@@ -204,6 +213,9 @@ typedef struct {
     esp_afe_sr_iface_op_enable_func_t enable_vad;
     esp_afe_sr_iface_op_disable_func_t disable_ns;
     esp_afe_sr_iface_op_enable_func_t enable_ns;
+    esp_afe_sr_iface_op_disable_func_t disable_agc;
+    esp_afe_sr_iface_op_enable_func_t enable_agc;
+    esp_afe_sr_iface_op_print_pipeline_t print_pipeline;
     esp_afe_sr_iface_op_destroy_t destroy;
 } esp_afe_sr_iface_t;
 

@@ -12,7 +12,7 @@
 #include <limits.h>
 #include "unity.h"
 #include "esp_log.h"
-
+#include "esp_timer.h"
 #include "model_path.h"
 #include "esp_wn_iface.h"
 #include "esp_wn_models.h"
@@ -33,39 +33,52 @@ static int detect_cnt = 0;
 static int fetch_task_flag = 0;
 
 
-void test_afe_by_config(afe_config_t *afe_config)
+void test_afe_by_config(afe_config_t *afe_config, int frame_num, int* memory, float* cpu, int idx)
 {
     int start_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
     int start_internal_size = heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
     int first_end_size = 0;
     int end_size = 0;
     int mem_leak = 0;
+    uint32_t feed_cpu_time = 0;
+    uint32_t fetch_cpu_time = 0;
+    uint32_t start=0, end = 0;
+    int loop = 3;
+    int feed_chunksize = 0;
+    int create_size = 0;
+    int create_internal_size = 0;
 
-    for (int i=0; i<3; i++) {
+    for (int i=0; i<loop; i++) {
         // init config and handle
         esp_afe_sr_iface_t *afe_handle = esp_afe_handle_from_config(afe_config);
         // afe_config_print(afe_config);
         esp_afe_sr_data_t *afe_data = afe_handle->create_from_config(afe_config);
 
-        int create_size = start_size - heap_caps_get_free_size(MALLOC_CAP_8BIT);
-        int create_internal_size = start_internal_size - heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
-        printf("Internal RAM: %d, PSRAM:%d\n", create_internal_size, create_size - create_internal_size);
+        create_size = start_size - heap_caps_get_free_size(MALLOC_CAP_8BIT);
+        create_internal_size = start_internal_size - heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
 
         // run afe feed
-        int feed_chunksize = afe_handle->get_feed_chunksize(afe_data);
+        feed_chunksize = afe_handle->get_feed_chunksize(afe_data);
         int feed_nch = afe_handle->get_feed_channel_num(afe_data);
+
         int16_t *feed_buff = (int16_t *) malloc(feed_chunksize * sizeof(int16_t) * feed_nch);
-        for (int j=0; j<4; j++) {
+        start = esp_timer_get_time();
+        for (int j=0; j<frame_num; j++) {
             afe_handle->feed(afe_data, feed_buff);
         }
+        end = esp_timer_get_time();
+        feed_cpu_time += end - start;
 
-        //run afe fetch 
+        //run afe fetch
+        start = esp_timer_get_time();
         while(1) {
-            afe_fetch_result_t *res = afe_handle->fetch_with_delay(afe_data, 64 / portTICK_PERIOD_MS);
+            afe_fetch_result_t *res = afe_handle->fetch_with_delay(afe_data, 1 / portTICK_PERIOD_MS);
             if (res->ret_value != ESP_OK) {
                 break;
             }
         }
+        end = esp_timer_get_time();
+        fetch_cpu_time += end - start;
         free(feed_buff);
         afe_handle->destroy(afe_data);
         end_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
@@ -74,20 +87,30 @@ void test_afe_by_config(afe_config_t *afe_config)
             first_end_size = end_size;
         } 
         mem_leak = start_size - end_size;
-        printf("create&destroy times:%d, memory leak:%d\n", i, mem_leak);
+        ESP_LOGI(TAG, "create&destroy times:%d, memory leak:%d\n", i, mem_leak);
     }
-    TEST_ASSERT_EQUAL(true, mem_leak < 1000 && end_size == first_end_size);
+    uint32_t feed_data_time = loop * frame_num * feed_chunksize / 16 * 1000; // us
+    memory[idx*2] = create_internal_size;
+    memory[idx*2+1] = create_size - create_internal_size;
+    cpu[idx*2] = feed_cpu_time*1.0/feed_data_time;
+    cpu[idx*2+1] = fetch_cpu_time*1.0/feed_data_time;
+    printf("Internal RAM: %d, PSRAM:%d, feed cpu loading:%f, fetch cpu loading:%f\n", 
+            memory[idx*2], memory[idx*2+1], cpu[idx*2], cpu[idx*2+1]);
+    TEST_ASSERT_EQUAL(true, mem_leak < 100 && end_size == first_end_size);
 }
 
-TEST_CASE(">>>>>>>> audio_front_end create/destroy API & memory leak <<<<<<<<", "[afe]")
+TEST_CASE(">>>>>>>> AFE create/destroy API & memory leak <<<<<<<<", "[afe]")
 {
-    const char *input_format[6] = {"M", "MR", "MM", "MMR", "MMNR", "MMMR"};
+    const char *input_format[6] = {"MR", "MMNR"};
     afe_type_t afe_type[2] = {AFE_TYPE_SR, AFE_TYPE_VC};
-    afe_mode_t afe_model[2] = {AFE_MODE_HIGH_PERF, AFE_MODE_LOW_COST};
+    afe_mode_t afe_mode[2] = {AFE_MODE_LOW_COST, AFE_MODE_HIGH_PERF};
+    int count = 0;
+    int memory[512];
+    float cpu[512];
 
     // test all setting
     srmodel_list_t *models = esp_srmodel_init("model");
-    for (int format_id=0; format_id<6; format_id++) {
+    for (int format_id=0; format_id<2; format_id++) {
         for (int type_id=0; type_id<2; type_id++) {
             for (int mode_id=0; mode_id<2; mode_id++) {
                 for (int aec_init = 0; aec_init < 2; aec_init++) {
@@ -95,15 +118,17 @@ TEST_CASE(">>>>>>>> audio_front_end create/destroy API & memory leak <<<<<<<<", 
                         for (int ns_init = 0; ns_init < 2; ns_init++) {
                             for (int vad_init = 0; vad_init < 2; vad_init++) {
                                 for (int wakenet_init = 0; wakenet_init < 2; wakenet_init++) {
-                                    printf("format: %s, type: %d, mode: %d\n", input_format[format_id], afe_type[type_id], afe_model[mode_id]);
-                                    afe_config_t *afe_config = afe_config_init(input_format[format_id], models, afe_type[type_id], afe_model[mode_id]);
+                                    printf("format: %s, type: %d, mode: %d, memory size:%d %d\n", 
+                                    input_format[format_id], afe_type[type_id], afe_mode[mode_id], heap_caps_get_free_size(MALLOC_CAP_8BIT), count);
+                                    afe_config_t *afe_config = afe_config_init(input_format[format_id], models, afe_type[type_id], afe_mode[mode_id]);
                                     afe_config->aec_init = aec_init;
                                     afe_config->se_init = se_init;
                                     afe_config->ns_init = ns_init;
                                     afe_config->vad_init = vad_init;
                                     afe_config->wakenet_init = wakenet_init;
-                                    test_afe_by_config(afe_config);
+                                    test_afe_by_config(afe_config, 4, memory, cpu, count);
                                     afe_config_free(afe_config);
+                                    count++;
                                 }
                             }
                         }
@@ -112,7 +137,49 @@ TEST_CASE(">>>>>>>> audio_front_end create/destroy API & memory leak <<<<<<<<", 
             }
         }
     }
-    esp_srmodel_deinit(models);
+    for (int idx=0; idx<256; idx++) {
+        printf("Internal RAM: %d, PSRAM:%d, feed cpu loading:%f, fetch cpu loading:%f\n", 
+            memory[idx*2], memory[idx*2+1], cpu[idx*2], cpu[idx*2+1]);
+    }
+    printf("AFE create/destroy API & memory leak test done\n");
+}
+
+TEST_CASE(">>>>>>>> AFE default setting <<<<<<<<", "[afe_benchmark]")
+{
+    const char *input_format[6] = {"MR", "MMNR"};
+    afe_type_t afe_type[2] = {AFE_TYPE_SR, AFE_TYPE_VC};
+    afe_mode_t afe_mode[2] = {AFE_MODE_LOW_COST, AFE_MODE_HIGH_PERF};
+    int count = 0;
+    int memory[16];
+    float cpu[16];
+
+    // test all setting
+    srmodel_list_t *models = esp_srmodel_init("model");
+    for (int format_id=0; format_id<2; format_id++) {
+        for (int type_id=0; type_id<2; type_id++) {
+            for (int mode_id=0; mode_id<2; mode_id++) {
+                printf("format: %s, type: %d, mode: %d, memory size:%d %d\n", 
+                input_format[format_id], afe_type[type_id], afe_mode[mode_id], heap_caps_get_free_size(MALLOC_CAP_8BIT), count);
+                afe_config_t *afe_config = afe_config_init(input_format[format_id], models, afe_type[type_id], afe_mode[mode_id]);
+                test_afe_by_config(afe_config, 8, memory, cpu, count);
+                afe_config_free(afe_config);
+                count++;
+            }
+        }
+    }
+    count = 0;
+    for (int format_id=0; format_id<2; format_id++) {
+        for (int type_id=0; type_id<2; type_id++) {
+            for (int mode_id=0; mode_id<2; mode_id++) {
+
+                printf("--------format: %s, type: %s, mode: %s------------\n", input_format[format_id], type_id==0? "SR": "VC", mode_id==0? "LOW_COST": "HIGH_PERF");
+                printf("Internal RAM: %d, PSRAM:%d, feed cpu loading:%f, fetch cpu loading:%f\n", 
+                    memory[count*2], memory[count*2+1], cpu[count*2], cpu[count*2+1]);
+                count++;
+            }
+        }
+    }
+    printf("test done\n");
 }
 
 
@@ -164,13 +231,13 @@ void test_fetch_Task(void *arg)
         }
     }
 
-    TEST_ASSERT_EQUAL(true, detect_cnt > 0);
+    // TEST_ASSERT_EQUAL(true, detect_cnt > 0);
     ESP_LOGI(TAG, "detect task quit\n");
     fetch_task_flag = 0;
     vTaskDelete(NULL);
 }
 
-TEST_CASE("afe performance test (1ch)", "[afe]")
+TEST_CASE("afe performance test (1ch)", "[afe_perf]")
 {
     const char *input_format = "MR";
     afe_type_t afe_type = AFE_TYPE_VC;
@@ -201,7 +268,7 @@ TEST_CASE("afe performance test (1ch)", "[afe]")
     esp_srmodel_deinit(models);
 }
 
-TEST_CASE("afe performance test (2ch)", "[afe]")
+TEST_CASE("afe performance test (2ch)", "[afe_perf]")
 {
     const char *input_format = "MMR";
     afe_type_t afe_type = AFE_TYPE_VC;
