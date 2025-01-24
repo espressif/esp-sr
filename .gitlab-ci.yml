@@ -114,9 +114,8 @@ before_script:
     expire_in: 1 week
   variables:
     EXAMPLES_PATH: "test_apps"
-    TARGET: "esp32s3"
   script:
-    - python ./test_apps/build_apps.py $EXAMPLES_PATH -t $TARGET
+    - python ./test_apps/build_apps.py $EXAMPLES_PATH -t all
 
 build_esp_sr:
   extends: 
@@ -125,7 +124,6 @@ build_esp_sr:
   parallel:
     matrix:
       - IMAGE: [espressif/idf:release-v5.3, espressif/idf:latest]
-        TARGET: ["esp32s3", "esp32p4"]
         EXAMPLES_PATH: "test_apps/esp-sr"
 
 
@@ -136,7 +134,6 @@ build_esp_tts:
   parallel:
     matrix:
       - IMAGE: [espressif/idf:release-v5.3, espressif/idf:latest]
-        TARGET: ["esp32s3", "esp32p4"]
         EXAMPLES_PATH: "test_apps/esp-tts"
 
 .test_template: &test_template
@@ -183,8 +180,6 @@ test_esp_sr:
     matrix:
       - TEST_TARGET: esp32s3
         TEST_ENV: esp32s3
-      - TEST_TARGET: esp32p4
-        TEST_ENV: esp32p4
   tags: 
     - ${TEST_ENV}
   image: $DOCKER_TARGET_TEST_v5_3_ENV_IMAGE
