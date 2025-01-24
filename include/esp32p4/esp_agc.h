@@ -26,8 +26,15 @@ typedef enum {
     ESP_AGC_FRAME_SIZE_ERROR = -3,   ////the input frame size should be only 10ms, so should together with sample-rate to get the frame size
 } ESP_AGE_ERR;
 
+typedef enum {
+    AGC_MODE_SR = -1,      // Bypass WEBRTC AGC
+    AGC_MODE_0 = 0,        // Only saturation protection
+    AGC_MODE_1 = 1,        // Analog Automatic Gain Control [-targetLevelDbfs (default -3 dBOv)]
+    AGC_MODE_2 = 2,        // Digital Automatic Gain Control [-targetLevelDbfs (default -3 dBOv)]
+    AGC_MODE_3 = 3,        // Fixed Digital Gain [compressionGaindB (default 8 dB)]
+} agc_mode_t;
 
-void *esp_agc_open(int agc_mode, int sample_rate);
+void *esp_agc_open(agc_mode_t agc_mode, int sample_rate);
 void set_agc_config(void *agc_handle, int gain_dB, int limiter_enable, int target_level_dbfs);
 int esp_agc_process(void *agc_handle, short *in_pcm, short *out_pcm, int frame_size, int sample_rate);
 void esp_agc_close(void *agc_handle);

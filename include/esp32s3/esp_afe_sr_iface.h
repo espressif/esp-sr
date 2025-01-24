@@ -70,20 +70,12 @@ typedef esp_afe_sr_data_t* (*esp_afe_sr_iface_op_create_from_config_t)(afe_confi
 typedef int (*esp_afe_sr_iface_op_get_samp_chunksize_t)(esp_afe_sr_data_t *afe);
 
 /**
- * @brief Get the total channel number which be config
+ * @brief Get the channel number
  * 
  * @param afe   The AFE_SR object to query
  * @return      The amount of total channels
  */
-typedef int (*esp_afe_sr_iface_op_get_feed_channel_num_t)(esp_afe_sr_data_t *afe);
-
-/**
- * @brief Get the mic channel number which be config
- * 
- * @param afe   The AFE_SR object to query
- * @return      The amount of mic channels
- */
-typedef int (*esp_afe_sr_iface_op_get_fetch_channel_num_t)(esp_afe_sr_data_t *afe);
+typedef int (*esp_afe_sr_iface_op_get_channel_num_t)(esp_afe_sr_data_t *afe);
 
 /**
  * @brief Get the sample rate of the samples to feed to the function
@@ -199,8 +191,9 @@ typedef struct {
     esp_afe_sr_iface_op_reset_buffer_t reset_buffer;
     esp_afe_sr_iface_op_get_samp_chunksize_t get_feed_chunksize;
     esp_afe_sr_iface_op_get_samp_chunksize_t get_fetch_chunksize;
-    esp_afe_sr_iface_op_get_feed_channel_num_t get_feed_channel_num;
-    esp_afe_sr_iface_op_get_fetch_channel_num_t get_fetch_channel_num;
+    esp_afe_sr_iface_op_get_channel_num_t get_channel_num;        // same with get_feed_channel_num
+    esp_afe_sr_iface_op_get_channel_num_t get_feed_channel_num;
+    esp_afe_sr_iface_op_get_channel_num_t get_fetch_channel_num;
     esp_afe_sr_iface_op_get_samp_rate_t get_samp_rate;
     esp_afe_sr_iface_op_set_wakenet_t  set_wakenet; 
     esp_afe_sr_iface_op_disable_func_t disable_wakenet;

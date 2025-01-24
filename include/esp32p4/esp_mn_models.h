@@ -1,4 +1,7 @@
 #pragma once
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wincompatible-pointer-types"
+#pragma GCC diagnostic ignored "-Wimplicit-function-declaration"
 #include "esp_mn_iface.h"
 
 //Contains declarations of all available speech recognion models. Pair this up with the right coefficients and you have a model that can recognize
@@ -64,3 +67,4 @@ model->destroy(model_data)
 #ifdef __cplusplus
 }
 #endif
+#pragma GCC diagnostic pop
