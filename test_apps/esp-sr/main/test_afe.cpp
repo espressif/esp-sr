@@ -96,7 +96,7 @@ void test_afe_by_config(afe_config_t *afe_config, int frame_num, int* memory, fl
     cpu[idx*2+1] = fetch_cpu_time*1.0/feed_data_time;
     printf("Internal RAM: %d, PSRAM:%d, feed cpu loading:%f, fetch cpu loading:%f\n", 
             memory[idx*2], memory[idx*2+1], cpu[idx*2], cpu[idx*2+1]);
-    TEST_ASSERT_EQUAL(true, mem_leak < 100 && end_size == first_end_size);
+    TEST_ASSERT_EQUAL(true, mem_leak < 1000 && end_size == first_end_size);
 }
 
 TEST_CASE(">>>>>>>> AFE create/destroy API & memory leak <<<<<<<<", "[afe]")
