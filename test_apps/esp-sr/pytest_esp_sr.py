@@ -35,7 +35,6 @@ def test_multinet_p4(dut: Dut)-> None:
 @pytest.mark.parametrize(
     'config',
     [
-        'mn5q8_en',
         'wn9_hilexin',
     ],
 )
@@ -47,8 +46,7 @@ def test_wakenet(dut: Dut)-> None:
 @pytest.mark.parametrize(
     'config',
     [
-        'p4_mn7_en',
-        'p4_nsnet2',
+        'p4_wn9_hilexin',
     ],
 )
 def test_wakenet_p4(dut: Dut)-> None:
@@ -59,44 +57,21 @@ def test_wakenet_p4(dut: Dut)-> None:
 @pytest.mark.parametrize(
     'config',
     [
+        'afe',
         'wn9_hilexin',
-        'vadnet',
     ],
 )
 def test_sr_afe(dut: Dut)-> None:
-    dut.run_all_single_board_cases(group="afe_sr", timeout=100000)
+    dut.run_all_single_board_cases(group="afe", timeout=3600)
 
 @pytest.mark.target('esp32p4')
 @pytest.mark.env('esp32p4')
 @pytest.mark.parametrize(
     'config',
     [
-        'p4_mn7_cn',
+        'p4_afe',
+        'p4_wn9_hilexin',
     ],
 )
 def test_sr_afe_p4(dut: Dut)-> None:
-    dut.run_all_single_board_cases(group="afe_sr", timeout=100000)
-
-
-@pytest.mark.target('esp32s3')
-@pytest.mark.env('esp32s3')
-@pytest.mark.parametrize(
-    'config',
-    [
-        'nsnet2',
-    ],
-)
-def test_vc_afe(dut: Dut)-> None:
-    dut.run_all_single_board_cases(group="afe_vc", timeout=100000)
-
-
-@pytest.mark.target('esp32p4')
-@pytest.mark.env('esp32p4')
-@pytest.mark.parametrize(
-    'config',
-    [
-        'p4_nsnet2',
-    ],
-)
-def test_vc_afe_p4(dut: Dut)-> None:
-    dut.run_all_single_board_cases(group="afe_vc", timeout=100000)
+    dut.run_all_single_board_cases(group="afe", timeout=3600)

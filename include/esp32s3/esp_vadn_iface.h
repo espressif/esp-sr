@@ -1,6 +1,7 @@
 #pragma once
 #include "esp_vad.h"
 #include "stdint.h"
+#include "dl_lib_convq_queue.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -99,6 +100,25 @@ typedef float (*esp_vadn_iface_op_get_det_threshold_t)(model_iface_data_t *model
 typedef vad_state_t (*esp_vadn_iface_op_detect_t)(model_iface_data_t *model, int16_t *samples);
 
 /**
+ * @brief Feed MFCC of an audio stream to the vad model and detect whether is
+ * voice.
+ *
+ * @param model The model object to query
+ * @param cq An array of 16-bit MFCC.
+ * @return The index of wake words, return 0 if no wake word is detected, else
+ * the index of the wake words.
+ */
+typedef vad_state_t (*esp_vadn_iface_op_detect_mfcc_t)(model_iface_data_t *model, dl_convq_queue_t *cq);
+
+/**
+ * @brief Get MFCC of an audio stream
+ *
+ * @param model The model object to query
+ * @return MFCC data
+ */
+typedef dl_convq_queue_t* (*esp_vadn_iface_op_get_mfcc_data_t)(model_iface_data_t *model);
+
+/**
  * @brief Get the triggered channel index. Channel index starts from zero
  *
  * @param model The model object to query
@@ -133,6 +153,8 @@ typedef struct {
     esp_vadn_iface_op_get_det_threshold_t get_det_threshold;
     esp_vadn_iface_op_get_triggered_channel_t get_triggered_channel;
     esp_vadn_iface_op_detect_t detect;
+    esp_vadn_iface_op_detect_mfcc_t detect_mfcc;
+    esp_vadn_iface_op_get_mfcc_data_t get_mfcc_data;
     esp_vadn_iface_op_clean_t clean;
     esp_vadn_iface_op_destroy_t destroy;
 } esp_vadn_iface_t;

@@ -21,80 +21,72 @@ extern "C" {
 #endif
 
 #define USE_AEC_FFT                      // Not kiss_fft
-#define AEC_USE_SPIRAM      0
 #define AEC_SAMPLE_RATE     16000        // Only Support 16000Hz
-//#define AEC_FRAME_LENGTH_MS 16
 #define AEC_FRAME_LENGTH_MS 32
-#define AEC_FILTER_LENGTH   1200         // Number of samples of echo to cancel
 
-typedef void* aec_handle_t;
+typedef struct aec_handle_t aec_handle_t;
+typedef enum {
+    AEC_MODE_SR_LOW_COST = 0,     // Low Cost AEC fro speech recognition
+    AEC_MODE_SR_HIGH_PERF = 1,    // High Perforamce AEC for speech recognition
+    AEC_MODE_VOIP_LOW_COST = 3,   // Low Cost AEC for voice communication
+    AEC_MODE_VOIP_HIGH_PERF = 4,  // High Perforamce AEC for voice communication
+} aec_mode_t;
 
 /**
  * @brief Creates an instance to the AEC structure.
+ * Please get frame size by aec_get_chunksize() function
  * 
- * @deprecated This API will be deprecated after version 1.0, please use aec_pro_create
- *
  * @param sample_rate       The Sampling frequency (Hz) must be 16000.
- *
- * @param frame_length      The length of the audio processing must be 16ms.
- *
- * @param filter_length     Number of samples of echo to cancel.
- *
+ * @param filter_length     Number of filter, recommend to set 4. The larger the filter_length, the more resource consumption.
+ * @param channel_num       The input microphone channel number
+ * @param mode              The mode of AEC, recommend to set AEC_MODE_SR_LOW_COST
  * @return
  *         - NULL: Create failed
  *         - Others: The instance of AEC
  */
-aec_handle_t aec_create(int sample_rate, int frame_length, int filter_length);
+aec_handle_t *aec_create(int sample_rate, int filter_length, int channel_num, aec_mode_t mode);
 
 /**
- * @brief Creates an instance to the AEC structure.
+ * @brief Creates an instance to the AEC structure, same with aec_create().
  * 
- * @deprecated This API will be deprecated after version 1.0, please use aec_pro_create
- *
- * @param sample_rate       The Sampling frequency (Hz) must be 16000.
- *
- * @param frame_length      The length of the audio processing must be 16ms.
- *
- * @param filter_length     Number of samples of echo to cancel.
- * 
- * @param nch               Number of input signal channel.
- *
+ * @param filter_length     Number of filter, recommend to set 4. The larger the filter_length, the more resource consumption.
+ * @param channel_num       The input microphone channel number
+ * @param mode              The mode of AEC, recommend to set AEC_MODE_SR_LOW_COST
  * @return
  *         - NULL: Create failed
  *         - Others: The instance of AEC
  */
-aec_handle_t aec_create_multimic(int sample_rate, int frame_length, int filter_length, int nch);
-
-/**
- * @brief Creates an instance of more powerful AEC.
- *
- * @param frame_length      Length of input signal. Must be 16ms if mode is 0; otherwise could be 16ms or 32ms. Length of input signal to aec_process must be modified accordingly.
- *
- * @param nch               Number of microphones.
- *
- * @param mode              Mode of AEC (0 to 5), indicating aggressiveness and RAM allocation. 0: mild; 1 or 2: medium (1: internal RAM, 2: SPIRAM); 3 and 4: aggressive (3: internal RAM, 4: SPIRAM); 5: agressive, accelerated for ESP32-S3.
- *
- * @return
- *         - NULL: Create failed
- *         - Others: An Instance of AEC
- */
-aec_handle_t aec_pro_create(int frame_length, int nch, int mode);
+aec_handle_t *aec_pro_create(int filter_length, int channel_num, aec_mode_t mode);
 
 /**
  * @brief Performs echo cancellation a frame, based on the audio sent to the speaker and frame from mic.
  *
- * @param inst        The instance of AEC.
- *
+ * @warning The indata, refdata and outdata must be 16-bit signed. please allocate memory by heap_caps_aligned_alloc().
+ * 
+ * @param inst        The instance of AEC. Format for multi-channel data is "ch0 ch0 ch0 ..., ch1 ch1 ch1 ..."
  * @param indata      An array of 16-bit signed audio samples from mic.
- *
  * @param refdata     An array of 16-bit signed audio samples sent to the speaker.
- *
- * @param outdata     Returns near-end signal with echo removed.
- *
+ * @param outdata     Returns near-end signal with echo removed. Format for multi-channel data is "ch0 ch0 ch0..., ch1 ch1 ch1 ..."
  * @return None
  *
  */
-void aec_process(const aec_handle_t inst, int16_t *indata, int16_t *refdata, int16_t *outdata);
+void aec_process(const aec_handle_t *handel, int16_t *indata, int16_t *refdata, int16_t *outdata);
+
+/**
+ * @brief Get frame size of AEC (the samples of one frame)
+ * @param handle The instance of AEC.
+ * @return Frame size
+ */
+int aec_get_chunksize(const aec_handle_t *handle);
+
+/**
+ * @brief Get AEC mode string 
+ * 
+ * @param aec_mode  The mode of AEC.
+ * 
+ * @return AEC mode string
+ */
+char * aec_get_mode_string(aec_mode_t aec_mode);
 
 /**
  * @brief Free the AEC instance
@@ -104,7 +96,7 @@ void aec_process(const aec_handle_t inst, int16_t *indata, int16_t *refdata, int
  * @return None
  *
  */
-void aec_destroy(aec_handle_t inst);
+void aec_destroy(aec_handle_t *handel);
 
 #ifdef __cplusplus
 }

@@ -78,6 +78,8 @@ vad_state_t vad_trigger_detect(vad_trigger_t *trigger, vad_state_t state);
 typedef struct {
     vad_trigger_t *trigger;
     void *vad_inst;
+    int sample_rate;
+    int frame_size;
 }vad_handle_with_trigger_t;
 
 typedef vad_handle_with_trigger_t* vad_handle_t;
@@ -100,31 +102,41 @@ vad_handle_t vad_create(vad_mode_t vad_mode);
  * @brief Creates an instance to the VAD structure.
  *
  * @param vad_mode          Sets the VAD operating mode.
- * @param min_speech_len    Minimum frame number of speech duration
- * @param min_noise_len     Minimum frame number of noise duration
+ * @param sample_rate       Sample rate in Hz
+ * @param one_frame_ms      Length of the audio chunksize, can be 10ms, 20ms, 30ms, default: 30.
+ * @param min_speech_ms     Minimum speech duration, unit is ms
+ * @param min_noise_ms      Minimum noise duration, unit is ms
  * @return
  *         - NULL: Create failed
  *         - Others: The instance of VAD
  */
-vad_handle_t vad_create_with_param(vad_mode_t vad_mode, int min_speech_len, int min_noise_len);
+vad_handle_t vad_create_with_param(vad_mode_t vad_mode, int sample_rate, int one_frame_ms, int min_speech_len, int min_noise_len);
 
 /**
  * @brief Feed samples of an audio stream to the VAD and check if there is someone speaking.
  *
- * @param inst      The instance of VAD.
- *
- * @param data      An array of 16-bit signed audio samples.
- *
+ * @param handle            The instance of VAD.
+ * @param data              An array of 16-bit signed audio samples.
  * @param sample_rate_hz    The Sampling frequency (Hz) can be 32000, 16000, 8000, default: 16000.
- *
  * @param one_frame_ms      The length of the audio processing can be 10ms, 20ms, 30ms, default: 30.
- *
  * @return
  *         - VAD_SILENCE if no voice
  *         - VAD_SPEECH  if voice is detected
  *
  */
-vad_state_t vad_process(vad_handle_t inst, int16_t *data, int sample_rate_hz, int one_frame_ms);
+vad_state_t vad_process(vad_handle_t handle, int16_t *data, int sample_rate_hz, int one_frame_ms);
+
+/**
+ * @brief Feed samples of an audio stream to the VAD and check if there is someone speaking.
+ *
+ * @param handle            The instance of VAD.
+ * @param data              An array of 16-bit signed audio samples.
+ * @return
+ *         - VAD_SILENCE if no voice
+ *         - VAD_SPEECH  if voice is detected
+ *
+ */
+vad_state_t vad_process_with_trigger(vad_handle_t handle, int16_t *data);
 
 /**
  * @brief Free the VAD instance
