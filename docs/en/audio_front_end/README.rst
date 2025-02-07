@@ -54,15 +54,17 @@ Input Format Definition
 
 The ``input_format`` parameter specifies the arrangement of audio channels in the input data. Each character in the string represents a channel type:
 
-+-----------+-------------+
-| Character | Description |
-+===========+=============+
-| ``M``     | Microphone channel |
-+-----------+-------------+
-| ``R``     | Playback reference channel |
-+-----------+-------------+
-| ``N``     | Unused or unknown channel |
-+-----------+-------------+
++-----------+---------------------+
+| Character | Description         |
++===========+=====================+
+| ``M``     | Microphone channel  |
++-----------+---------------------+
+| ``R``     | Playback reference  |
+|           | channel             |
++-----------+---------------------+
+| ``N``     | Unused or unknown   |
+|           | channel             |
++-----------+---------------------+
 
 **Example:**
 - ``"MMNR"``: Indicates four channels: two microphone channels, one unused channel, and one playback reference channel.
@@ -73,6 +75,9 @@ The ``input_format`` parameter specifies the arrangement of audio channels in th
 Using the AFE Framework
 ----------------------------
 
+Based on the ``menuconfig`` -> ``ESP Speech Recognition``, select the required AFE (Analog Front End) models, such as the WakeNet model, VAD (Voice Activity Detection) model, NS (Noise Suppression) model, etc., and then call the AFE framework in the code using the following steps.
+For reference, you can check the code in :project_file:`test_apps/esp-sr/main/test_afe.cpp`.
+
 Step 1: Initialize AFE Configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -80,6 +85,7 @@ Get the default configuration using ``afe_config_init()`` and customize paramete
 
 .. code-block:: c
 
+    srmodel_list_t *models = esp_srmodel_init("model");
     afe_config_t *afe_config = afe_config_init("MMNR", models, AFE_TYPE_SR, AFE_MODE_HIGH_PERF);
 
 - **``input_format``**: Define the channel arrangement (e.g., ``"MMNR"``).
