@@ -26,51 +26,139 @@ Resource Consumption
 
 .. only:: esp32s3
 
-    +--------------+------+-----------+---------------+------------+----------------+-----------------+
-    | Input Format | Type | Mode      | Internal RAM  | PSRAM      | Feed Task CPU  | Fetch Task CPU  |
-    +==============+======+===========+===============+============+================+=================+
-    | MR           | SR   | LOW_COST  | 72348         | 732932     | 8.4%           | 14.9%           |
-    +--------------+------+-----------+---------------+------------+----------------+-----------------+
-    | MR           | SR   | HIGH_PERF | 78016         | 734980     | 9.4%           | 14.9%           |
-    +--------------+------+-----------+---------------+------------+----------------+-----------------+
-    | MR           | VC   | LOW_COST  | 50316         | 821564     | 60.0%          | 8.1%            |
-    +--------------+------+-----------+---------------+------------+----------------+-----------------+
-    | MR           | VC   | HIGH_PERF | 93668         | 824144     | 64.0%          | 8.2%            |
-    +--------------+------+-----------+---------------+------------+----------------+-----------------+
-    | MMR          | SR   | LOW_COST  | 76684         | 1175148    | 36.6%          | 30.2%           |
-    +--------------+------+-----------+---------------+------------+----------------+-----------------+
-    | MMR          | SR   | HIGH_PERF | 99064         | 1174960    | 38.8%          | 30.0%           |
-    +--------------+------+-----------+---------------+------------+----------------+-----------------+
+    .. list-table:: AFE configuration and pipeline
+       :widths: 25 75
+       :header-rows: 1
+
+       * - Config
+         - Pipeline
+       * - MR, SR, LOW_COST
+         - ``|AEC(SR_LOW_COST)| -> |VAD(vadnet1_medium)| -> |WakeNet(wn9_hilexin,)|``
+       * - MR, SR, HIGH_PERF
+         - ``|AEC(SR_HIGH_PERF)| -> |VAD(vadnet1_medium)| -> |WakeNet(wn9_hilexin,)|``
+       * - MR, VC, LOW_COST
+         - ``|AEC(VOIP_LOW_COST)| -> |NS(nsnet2)| -> |VAD(vadnet1_medium)|``
+       * - MR, VC, HIGH_PERF
+         - ``|AEC(VOIP_HIGH_PERF)| -> |NS(nsnet2)| -> |VAD(vadnet1_medium)|``
+       * - MMNR, SR, LOW_COST
+         - ``|AEC(SR_LOW_COST)| -> |SE(BSS)| -> |VAD(vadnet1_medium)| -> |WakeNet(wn9_hilexin,)|``
+       * - MMNR, SR, HIGH_PERF
+         - ``|AEC(SR_HIGH_PERF)| -> |SE(BSS)| -> |VAD(vadnet1_medium)| -> |WakeNet(wn9_hilexin,)|``
 
     .. note::
 
-    Input Format:
-    - MR: one microphone channel and one playback channel
-    - MMR: two microphone channels and two playback channels
+        -  **MR:** one microphone channel and one playback channel    
+        -  **MMNR:** two microphone channels and one playback channels    
+        -  **Models:** nsnet2, vadnet1_medium, wn9_hilexin     
+
+    .. list-table:: ESP32-S3 AFE configuration and Performance
+       :widths: 25 15 15 20 20
+       :header-rows: 1
+    
+       * - Config
+         - Internal RAM (KB)
+         - PSRAM (KB)
+         - Feed CPU usage (1 core,%)
+         - Fetch CPU usage (1 core,%)
+       * - MR, SR, LOW_COST
+         - 72.3
+         - 732.7
+         - 8.4
+         - 15.0
+       * - MR, SR, HIGH_PERF
+         - 78.0
+         - 734.7
+         - 9.4
+         - 14.9
+       * - MR, VC, LOW_COST
+         - 50.3
+         - 821.4
+         - 60.0
+         - 8.2
+       * - MR, VC, HIGH_PERF
+         - 93.7
+         - 824.0
+         - 64.0
+         - 8.2
+       * - MMNR, SR, LOW_COST
+         - 76.6
+         - 1173.9
+         - 36.6
+         - 30.0
+       * - MMNR, SR, HIGH_PERF
+         - 99.0
+         - 1173.7
+         - 38.8
+         - 30.0
+
 
 .. only:: esp32p4
 
-    +--------------+------+-----------+---------------+------------+-----------------+-----------------+
-    | Input Format | Type | Mode      | Internal RAM  | PSRAM      | Feed Task CPU   | Fetch Task CPU  |
-    +==============+======+===========+===============+============+=================+=================+
-    | MR           | SR   | LOW_COST  | 75404         | 751292     | 10.6%           | 11.3%           |
-    +--------------+------+-----------+---------------+------------+-----------------+-----------------+
-    | MR           | SR   | HIGH_PERF | 75128         | 751292     | 10.6%           | 11.3%           |
-    +--------------+------+-----------+---------------+------------+-----------------+-----------------+
-    | MR           | VC   | LOW_COST  | 76192         | 841300     | 40.3%           | 5.7%            |
-    +--------------+------+-----------+---------------+------------+-----------------+-----------------+
-    | MR           | VC   | HIGH_PERF | 119536        | 843880     | 42.6%           | 5.7%            |
-    +--------------+------+-----------+---------------+------------+-----------------+-----------------+
-    | MMR          | SR   | LOW_COST  | 79940         | 1202692    | 28.4%           | 24.9%           |
-    +--------------+------+-----------+---------------+------------+-----------------+-----------------+
-    | MMR          | SR   | HIGH_PERF | 79940         | 1202692    | 28.4%           | 24.9%           |
-    +--------------+------+-----------+---------------+------------+-----------------+-----------------+
+    .. list-table:: AFE configuration and pipeline
+       :widths: 25 75
+       :header-rows: 1
+    
+       * - Config
+         - Pipeline
+       * - MR, SR, LOW_COST
+         - ``|AEC(SR_LOW_COST)| -> |VAD(vadnet1_medium)| -> |WakeNet(wn9_hilexin,)|``
+       * - MR, SR, HIGH_PERF
+         - ``|AEC(SR_HIGH_PERF)| -> |VAD(vadnet1_medium)| -> |WakeNet(wn9_hilexin,)|``
+       * - MR, VC, LOW_COST
+         - ``|AEC(VOIP_LOW_COST)| -> |NS(nsnet2)| -> |VAD(vadnet1_medium)|``
+       * - MR, VC, HIGH_PERF
+         - ``|AEC(VOIP_HIGH_PERF)| -> |NS(nsnet2)| -> |VAD(vadnet1_medium)|``
+       * - MMNR, SR, LOW_COST
+         - ``|AEC(SR_LOW_COST)| -> |SE(BSS)| -> |VAD(vadnet1_medium)| -> |WakeNet(wn9_hilexin,)|``
+       * - MMNR, SR, HIGH_PERF
+         - ``|AEC(SR_HIGH_PERF)| -> |SE(BSS)| -> |VAD(vadnet1_medium)| -> |WakeNet(wn9_hilexin,)|``
+
 
     .. note::
-
-    Input Format:
-    - MR one microphone channel and one playback channel
-    - MMR: two microphone channels and one playback channels
+    
+        -  **MR:** one microphone channel and one playback channel    
+        -  **MMNR:** two microphone channels and one playback channels    
+        -  **Models:** nsnet2, vadnet1_medium, wn9_hilexin  
+    
+    .. list-table:: AFE configuration and Performance
+       :widths: 25 15 15 20 20
+       :header-rows: 1
+    
+       * - Config
+         - Internal RAM (KB)
+         - PSRAM (KB)
+         - Feed CPU usage (1 core,%)
+         - Fetch CPU usage (1 core,%)
+       * - MR, SR, LOW_COST
+         - 73.6
+         - 733.2
+         - 10.6
+         - 11.2
+       * - MR, SR, HIGH_PERF
+         - 73.3
+         - 733.2
+         - 10.6
+         - 11.2
+       * - MR, VC, LOW_COST
+         - 74.4
+         - 821.3
+         - 40.2
+         - 5.7
+       * - MR, VC, HIGH_PERF
+         - 116.7
+         - 823.9
+         - 42.4
+         - 5.7
+       * - MMNR, SR, LOW_COST
+         - 78.0
+         - 1173.0
+         - 28.2
+         - 24.8
+       * - MMNR, SR, HIGH_PERF
+         - 78.0
+         - 1173.0
+         - 28.2
+         - 24.8
 
 WakeNet
 -------
