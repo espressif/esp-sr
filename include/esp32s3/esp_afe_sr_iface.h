@@ -141,12 +141,12 @@ typedef int (*esp_afe_sr_iface_op_reset_buffer_t)(esp_afe_sr_data_t *afe);
 typedef int (*esp_afe_sr_iface_op_set_wakenet_t)(esp_afe_sr_data_t *afe, char *model_name);
 
 /**
- * @brief Enable VAD algorithm.
+ * @brief Reset one function/module/algorithm.
  *
  * @param afe          The AFE_SR object to query
- * @return             -1: fail, 0: disabled, 1: enabled
+ * @return             -1: fail, 1: success
  */
-typedef int (*esp_afe_sr_iface_op_enable_vad_t)(esp_afe_sr_data_t *afe);
+typedef int (*esp_afe_sr_iface_op_reset_op_t)(esp_afe_sr_data_t *afe);
 
 /**
  * @brief Disable one function/module/algorithm.
@@ -204,6 +204,7 @@ typedef struct {
     esp_afe_sr_iface_op_enable_func_t enable_se;
     esp_afe_sr_iface_op_disable_func_t disable_vad;
     esp_afe_sr_iface_op_enable_func_t enable_vad;
+    esp_afe_sr_iface_op_reset_op_t reset_vad;
     esp_afe_sr_iface_op_disable_func_t disable_ns;
     esp_afe_sr_iface_op_enable_func_t enable_ns;
     esp_afe_sr_iface_op_disable_func_t disable_agc;

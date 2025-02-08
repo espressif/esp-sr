@@ -110,7 +110,7 @@ vad_handle_t vad_create(vad_mode_t vad_mode);
  *         - NULL: Create failed
  *         - Others: The instance of VAD
  */
-vad_handle_t vad_create_with_param(vad_mode_t vad_mode, int sample_rate, int one_frame_ms, int min_speech_len, int min_noise_len);
+vad_handle_t vad_create_with_param(vad_mode_t vad_mode, int sample_rate, int one_frame_ms, int min_speech_ms, int min_noise_ms);
 
 /**
  * @brief Feed samples of an audio stream to the VAD and check if there is someone speaking.
@@ -137,6 +137,13 @@ vad_state_t vad_process(vad_handle_t handle, int16_t *data, int sample_rate_hz, 
  *
  */
 vad_state_t vad_process_with_trigger(vad_handle_t handle, int16_t *data);
+
+/**
+ * @brief Reset trigger state as Silence
+ *
+ * @param handle            The instance of VAD.
+ */
+void vad_reset_trigger(vad_handle_t handle);
 
 /**
  * @brief Free the VAD instance
