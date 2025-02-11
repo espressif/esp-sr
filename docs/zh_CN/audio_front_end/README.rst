@@ -64,10 +64,11 @@ AFE 声学前端算法框架
 +-----------+---------------------+
 
 **示例：**
-- ``"MMNR"``：表示四通道排列，包含两个麦克风通道、一个未使用通道和一个播放参考通道。
+``"MMNR"``：表示四通道排列，包含两个麦克风通道、一个未使用通道和一个播放参考通道。
 
-**关键点：**
-- 输入数据必须采用 **通道交错排列格式**。
+.. note::
+
+   输入数据必须采用 **通道交错排列格式**。
 
 使用AFE框架
 ----------------------------
@@ -84,10 +85,10 @@ AFE 声学前端算法框架
     srmodel_list_t *models = esp_srmodel_init("model");
     afe_config_t *afe_config = afe_config_init("MMNR", models, AFE_TYPE_SR, AFE_MODE_HIGH_PERF);
 
-- **``input_format``**：定义通道排列（如 ``"MMNR"``）。
-- **``models``**：模型列表（如NS、VAD或WakeNet模型）。
-- **``afe_type``**：AFE类型（如 ``AFE_TYPE_SR`` 表示语音识别场景）。
-- **``afe_mode``**：性能模式（如 ``AFE_MODE_HIGH_PERF`` 表示高性能模式）。
+- ``input_format``：定义通道排列（如 ``MMNR``）。
+- ``models``：模型列表（如NS、VAD或WakeNet模型）。
+- ``afe_type``：AFE类型（如 ``AFE_TYPE_SR`` 表示语音识别场景）。
+- ``afe_mode``：性能模式（如 ``AFE_MODE_HIGH_PERF`` 表示高性能模式）。
 
 步骤2：创建AFE实例
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -113,9 +114,9 @@ AFE 声学前端算法框架
         int16_t *feed_buff = (int16_t *) malloc(feed_chunksize * feed_nch * sizeof(int16_t));
         afe_handle->feed(afe_data, feed_buff);
 
-- **``feed_chunksize``**：每帧输入的样本数。
-- **``feed_nch``**：输入数据的通道数。
-- **``feed_buff``**：通道交错的音频数据（16位有符号，16 kHz）。
+- ``feed_chunksize``：每帧输入的样本数。
+- ``feed_nch``：输入数据的通道数。
+- ``feed_buff``：通道交错的音频数据（16位有符号，16 kHz）。
 
 步骤4：获取处理结果
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

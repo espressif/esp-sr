@@ -1,8 +1,10 @@
 # Change log for esp-sr
 
-## Known issues: 
-- Available storage is less than the remaining flash space on IDF v5.0.   
-If you can not map model partition successfully, please check the left free storage by `spi_flash_mmap_get_free_pages(ESP_PARTITION_MMAP_DATA)` or update IDF to v5.1 or later.
+## 2.0.0
+- Add vadnet1_medium model
+- Refactor AFE interface. Note AFE v2.0 is not compatible with previous versions
+- Add esp32c5 AEC support
+- Add some new wake words
 
 ## 1.9.5
 - Add Hi,Jason; 小鸭小鸭; 璃奈板 wake word models
