@@ -67,15 +67,17 @@ The ``input_format`` parameter specifies the arrangement of audio channels in th
 +-----------+---------------------+
 
 **Example:**
-- ``"MMNR"``: Indicates four channels: two microphone channels, one unused channel, and one playback reference channel.
+``"MMNR"`` Indicates four channels: two microphone channels, one unused channel, and one playback reference channel.
 
-**Key Points:**
-- The input data must be arranged in **channel-interleaved format**.
+.. note::
+
+   The input data must be arranged in **channel-interleaved format**.
 
 Using the AFE Framework
 ----------------------------
 
 Based on the ``menuconfig`` -> ``ESP Speech Recognition``, select the required AFE (Analog Front End) models, such as the WakeNet model, VAD (Voice Activity Detection) model, NS (Noise Suppression) model, etc., and then call the AFE framework in the code using the following steps.
+
 For reference, you can check the code in :project_file:`test_apps/esp-sr/main/test_afe.cpp`.
 
 Step 1: Initialize AFE Configuration
@@ -88,10 +90,10 @@ Get the default configuration using ``afe_config_init()`` and customize paramete
     srmodel_list_t *models = esp_srmodel_init("model");
     afe_config_t *afe_config = afe_config_init("MMNR", models, AFE_TYPE_SR, AFE_MODE_HIGH_PERF);
 
-- **``input_format``**: Define the channel arrangement (e.g., ``"MMNR"``).
-- **``models``**: List of models (e.g., for NS, VAD, or WakeNet).
-- **``afe_type``**: Type of AFE (e.g., ``AFE_TYPE_SR`` for speech recognition).
-- **``afe_mode``**: Performance mode (e.g., ``AFE_MODE_HIGH_PERF``).
+- ``input_format``: Define the channel arrangement (e.g., ``MMNR``).
+- ``models``: List of models (e.g., for NS, VAD, or WakeNet).
+- ``afe_type``: Type of AFE (e.g., ``AFE_TYPE_SR`` for speech recognition).
+- ``afe_mode``: Performance mode (e.g., ``AFE_MODE_HIGH_PERF``).
 
 Step 2: Create AFE Instance
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -117,9 +119,9 @@ Input audio data to the AFE for processing. The input data must match the ``inpu
         int16_t *feed_buff = (int16_t *) malloc(feed_chunksize * feed_nch * sizeof(int16_t));
         afe_handle->feed(afe_data, feed_buff);
 
-- **``feed_chunksize``**: Number of samples to feed per frame.
-- **``feed_nch``**: Number of channel of input data.
-- **``feed_buff``**: Channel-interleaved audio data (16-bit signed, 16 kHz).
+- ``feed_chunksize``: Number of samples to feed per frame.
+- ``feed_nch``: Number of channel of input data.
+- ``feed_buff``: Channel-interleaved audio data (16-bit signed, 16 kHz).
 
 Step 4: Fetch Processed Audio
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

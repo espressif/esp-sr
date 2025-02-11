@@ -51,7 +51,7 @@ Resource Consumption
         -  **MMNR:** two microphone channels and one playback channels    
         -  **Models:** nsnet2, vadnet1_medium, wn9_hilexin     
 
-    .. list-table:: ESP32-S3 AFE configuration and Performance
+    .. list-table:: AFE configuration and Performance
        :widths: 25 15 15 20 20
        :header-rows: 1
     
