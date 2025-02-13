@@ -17,6 +17,7 @@ ESP-SR 用户指南
     入门指南 <getting_started/readme>
     AFE 声学前端算法 <audio_front_end/index>
     语音唤醒 WakeNet <wake_word_engine/index>
+    VAD vadnet <vadnet/readme>
     语音指令 MultiNet <speech_command_recognition/README>
     语音合成（仅支持中文）<speech_synthesis/readme>
     模型加载 <flash_model/README>

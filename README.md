@@ -12,6 +12,7 @@ ESP-SR framework includes the following modules:
 
 * [Audio Front-end AFE](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/audio_front_end/README.html)
 * [Wake Word Engine WakeNet](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/wake_word_engine/README.html)
+* [VAD model vadnet](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/vadnet/README.html)
 * [Speech Command Word Recognition MultiNet](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/speech_command_recognition/README.html)
 * [Speech Synthesis](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/speech_synthesis/readme.html)
 

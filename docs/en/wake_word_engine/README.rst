@@ -46,32 +46,6 @@ Please see the flow diagram of WakeNet below:
 -  Keyword Triggering Method:
     For continuous audio stream, we calculate the average recognition results (M) for several frames and generate a smoothing prediction result, to improve the accuracy of keyword triggering. Only when the M value is larger than the set threshold, a triggering command is sent.
 
-The wake words supported by Espressif chips are listed below:
-
-.. _esp-open-wake-word:
-
-+-----------------+-----------+-------------+-------------+-----------+-----------+-----------+-----------+
-| Chip            | ESP32                                 | ESP32S3                                       |
-+=================+===========+=============+=============+===========+===========+===========+===========+
-| model           | WakeNet 5                             | WakeNet 8             | WakeNet 9             |
-|                 +-----------+-------------+-------------+-----------+-----------+-----------+-----------+
-|                 | WakeNet 5 | WakeNet 5X2 | WakeNet 5X3 | Q16       | Q8        | Q16       | Q8        |
-+-----------------+-----------+-------------+-------------+-----------+-----------+-----------+-----------+
-| Hi,Lexin        | √         | √           | √           |           |           |           | √         |
-+-----------------+-----------+-------------+-------------+-----------+-----------+-----------+-----------+
-| nihaoxiaozhi    | √         |             | √           |           |           |           | √         |
-+-----------------+-----------+-------------+-------------+-----------+-----------+-----------+-----------+
-| nihaoxiaoxin    |           |             | √           |           |           |           |           |
-+-----------------+-----------+-------------+-------------+-----------+-----------+-----------+-----------+
-| xiaoaitongxue   |           |             |             |           |           |           | √         |
-+-----------------+-----------+-------------+-------------+-----------+-----------+-----------+-----------+
-| Alexa           |           |             |             | √         |           |           | √         |
-+-----------------+-----------+-------------+-------------+-----------+-----------+-----------+-----------+
-| Hi,ESP          |           |             |             |           |           |           | √         |
-+-----------------+-----------+-------------+-------------+-----------+-----------+-----------+-----------+
-| Customized word |           |             |             |           |           |           | √         |
-+-----------------+-----------+-------------+-------------+-----------+-----------+-----------+-----------+
-
 Use WakeNet
 -----------
 
@@ -89,7 +63,7 @@ Use WakeNet
 
     ::
 
-        afe_config.wakeNet_init = False.
+        afe_config->wakeNet_init = False.
 
     If users want to enable/disable WakeNet temporarily, please use:
 
