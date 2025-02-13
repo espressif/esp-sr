@@ -12,6 +12,7 @@ ESP-SR framework includes the following modules:
 
 * [Audio Front-end AFE](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/audio_front_end/README.html)
 * [Wake Word Engine WakeNet](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/wake_word_engine/README.html)
+* [VAD VADNet](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/vadnet/README.html)
 * [Speech Command Word Recognition MultiNet](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/speech_command_recognition/README.html)
 * [Speech Synthesis](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/speech_synthesis/readme.html)
 
@@ -61,6 +62,7 @@ The following wake words are supported in esp-sr:
 |小鸭小鸭         |                                        | wn9_xiaoyaxiaoya_tts2  |
 |璃奈板           |                                        | wn9_linaiban_tts2      |
 |小酥肉           |                                        | wn9_xiaosurou_tts2      |
+|小宇同学         |                                        | wn9_小宇同学_tts2        |
 
 *NOTE:* `_tts` suffix means this WakeNet model is trained by TTS samples. `_tts2` suffix means this WakeNet model is trained by TTS Pipeline V2.
 
@@ -83,6 +85,7 @@ Espressif Audio Front-End **AFE** integrates AEC (Acoustic Echo Cancellation), V
 
 Our two-mic Audio Front-End (AFE) have been qualified as a “Software Audio Front-End Solution” for [Amazon Alexa Built-in devices](https://developer.amazon.com/en-US/alexa/solution-providers/dev-kits#software-audio-front-end-dev-kits).
 
+Now AFE V2.0 has been released, which is more efficient than AFE V1.0. and supports more models.
 
 **In order to achieve optimal performance:**
 
