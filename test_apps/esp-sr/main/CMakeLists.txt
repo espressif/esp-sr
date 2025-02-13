@@ -5,6 +5,7 @@ set(srcs
     "test_multinet.cpp"
     "test_afe.cpp"
     "test_mfcc.cpp"
+    "test_vadnet.cpp"
 )
 
 idf_component_register(SRCS ${srcs}
