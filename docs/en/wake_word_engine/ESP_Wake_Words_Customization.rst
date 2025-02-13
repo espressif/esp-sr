@@ -10,7 +10,6 @@ Espressif provides users with the **wake word customization** :
 
 #. Espressif has already opened some wake words for customers' commercial use, such as "HI Leixi", or "Nihao Xiaoxin".
 
-    -  For a complete list, see Table :ref:`Publicly Available Wake Words Provided by Espressif <esp-open-wake-word>` .
     -  Espressif also plans to provide more wake words that are free for commercial use soon.
 
 #. Offline wake word customization can also be provided by Espressif:

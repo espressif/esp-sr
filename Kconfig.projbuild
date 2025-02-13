@@ -188,6 +188,10 @@ menu "Load Multiple Wake Words"
     config SR_WN_WN9_XIAOSUROU_TTS2
     bool "小酥肉 (wn9_xiaosurou_tts2)"
     default False
+
+    config SR_WN_WN9_XIAOYUTONGXUE_TTS2
+    bool "小宇同学 (wn9_xiaoyutongxue_tts2)"
+    default False
 endmenu
 
 
