@@ -78,7 +78,7 @@ Using the AFE Framework
 
 Based on the ``menuconfig`` -> ``ESP Speech Recognition``, select the required AFE (Analog Front End) models, such as the WakeNet model, VAD (Voice Activity Detection) model, NS (Noise Suppression) model, etc., and then call the AFE framework in the code using the following steps.
 
-For reference, you can check the code in :project_file:`test_apps/esp-sr/main/test_afe.cpp`.
+For reference, you can check the code in :project_file:`test_apps/esp-sr/main/test_afe.cpp` or `esp-skainet/examples <https://github.com/espressif/esp-skainet/tree/master/examples>`__.
 
 Step 1: Initialize AFE Configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

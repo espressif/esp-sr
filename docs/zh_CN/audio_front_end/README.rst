@@ -73,7 +73,7 @@ AFE 声学前端算法框架
 使用AFE框架
 ----------------------------
 根据 ``menuconfig`` -> ``ESP Speech Recognition`` 选择需要的AFE的模型，比如WakeNet模型，VAD模型， NS模型等，然后在代码中使用以下步骤调用AFE框架。
-代码可以参考 :project_file:`test_apps/esp-sr/main/test_afe.cpp`。
+代码可以参考 :project_file:`test_apps/esp-sr/main/test_afe.cpp` 或是 or `esp-skainet/examples <https://github.com/espressif/esp-skainet/tree/master/examples>`__.。
 
 步骤1：初始化AFE配置
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
