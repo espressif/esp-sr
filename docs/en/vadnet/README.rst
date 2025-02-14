@@ -8,7 +8,7 @@ VADNet is a Voice Activaty Detection model built upon neural network for low-pow
 Overview
 --------
 
-VADNet uses a model structure and data processing flow similar to WakeNet, for more details, you can refer to :doc:`AFE <../wake_word_engine/README>`
+VADNet uses a model structure and data processing flow similar to WakeNet, for more details, you can refer to :doc:`WakeNet <../wake_word_engine/README>`
 
 VADNet is trained by about 5,000 hours of Chinese data, 5,000 hours of English data, and 5,000 hours of multilingual data.
 
@@ -18,7 +18,9 @@ Use VADNet
 
 -  Select VADNet model
 
-    To select VADNet model, please refer to Section :doc:`Flashing Models <../flash_model/README>` .
+    ::
+        idf.py menuconfig
+        ESP Speech Recognition -> Select voice activity detection -> voice activity detection (vadnet1 medium).
 
 -  Run VADNet
 

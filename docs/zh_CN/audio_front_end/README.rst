@@ -64,7 +64,7 @@ AFE 声学前端算法框架
 +-----------+---------------------+
 
 **示例：**
-``"MMNR"``：表示四通道排列，包含两个麦克风通道、一个未使用通道和一个播放参考通道。
+``"MMNR"``：表示四通道排列，依次为麦克风通道、麦克风通道、未使用通道和播放参考通道。
 
 .. note::
 
@@ -121,11 +121,11 @@ AFE 声学前端算法框架
 步骤4：获取处理结果
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-获取处理后的单通道音频输出：
+获取处理后的单通道音频输出和检测状态：
 
 .. code-block:: c
 
-    afe_fetch_result_t *result = fetch(afe_data);
+    afe_fetch_result_t *result = afe_handle->fetch(afe_data);
     int16_t *processed_audio = result->data;
     vad_state_t vad_state = result->vad_state;
     wakenet_state_t wakeup_state = result->wakeup_state;
@@ -134,6 +134,11 @@ AFE 声学前端算法框架
     if (result->vad_cache_size > 0) {
         int16_t *vad_cache = result->vad_cache;
     }
+
+.. code-block:: c
+
+    // get the processed audio with specified delay, default delay is 2000 ms
+    afe_fetch_result_t *result = afe_handle->fetch_with_delay(afe_data, 100 / portTICK_PERIOD_MS);
 
 资源占用
 ------------------
