@@ -18,6 +18,7 @@ VADNet 训练数据包括了大约5000小时中文数据， 5000 小时英文数
 -  选择VADNet模型
 
     ::
+        
         idf.py menuconfig
         ESP Speech Recognition -> Select voice activity detection -> voice activity detection (vadnet1 medium).
 
