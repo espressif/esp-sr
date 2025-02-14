@@ -6,11 +6,12 @@ Migration from V1.* to V2.*
 Configuration and Initialization
 --------------------------------
 
-- 1. The legacy configuration initialization method AFE_CONFIG_DEFAULT() has been removed. Please use ``afe_config_init`` to initialize configurations. Modifications can still be made after initialization:
+- 1. The legacy configuration initialization method AFE_CONFIG_DEFAULT() has been removed. Please use ``afe_config_init`` to initialize configurations:
    
    .. code-block:: c
 
       afe_config_t *afe_config = afe_config_init("MMNR", models, AFE_TYPE_SR, AFE_MODE_HIGH_PERF);
+      afe_config_print(afe_config); // print all configurations
 
 - 2. ESP_AFE_SR_HANDLE and ESP_AFE_VC_HANDLE have been removed. Use ``esp_afe_handle_from_config`` to create instances:
 

@@ -110,6 +110,8 @@ typedef struct {
     int vad_min_speech_ms;  // The minimum duration of speech in ms. It should be bigger than 32 ms, default: 128 ms
     int vad_min_noise_ms;   // The minimum duration of noise or silence in ms. It should be bigger than 64 ms, default:
                             // 1000 ms
+    int vad_delay_ms;       // The delay of the first speech frame in ms, default: 128 ms
+                            // If you find vad cache can not cover all speech, please increase this value.
     bool vad_mute_playback; // If true, the playback will be muted for vad detection. default: false
     bool vad_enable_channel_trigger; // If true, the vad will be used to choose the channel id. default: false
 

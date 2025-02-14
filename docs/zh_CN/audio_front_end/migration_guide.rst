@@ -7,11 +7,12 @@ rstCopy
 配置和初始化
 --------------------------------
 
-- 1. 旧的配置初始化方法 AFE_CONFIG_DEFAULT() 已被移除。请使用 ``afe_config_init`` 来初始化配置。初始化后仍可进行修改：
+- 1. 旧的配置初始化方法 AFE_CONFIG_DEFAULT() 已被移除。请使用 ``afe_config_init`` 来初始化配置：
 
    .. code-block:: c
 
       afe_config_t *afe_config = afe_config_init("MMNR", models, AFE_TYPE_SR, AFE_MODE_HIGH_PERF);
+      afe_config_print(afe_config); // print all configurations
 
 - 2. ESP_AFE_SR_HANDLE 和 ESP_AFE_VC_HANDLE 已被移除。使用 ``esp_afe_handle_from_config`` 来创建实例：
 
