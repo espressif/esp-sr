@@ -67,7 +67,7 @@ The ``input_format`` parameter specifies the arrangement of audio channels in th
 +-----------+---------------------+
 
 **Example:**
-``"MMNR"`` Indicates four channels: two microphone channels, one unused channel, and one playback reference channel.
+``"MMNR"`` Indicates four channels inorder : microphone channel, microphone channel, unused channel, and playback reference channel.
 
 .. note::
 
@@ -126,11 +126,11 @@ Input audio data to the AFE for processing. The input data must match the ``inpu
 Step 4: Fetch Processed Audio
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Retrieve the processed single-channel audio output:
+Retrieve the processed single-channel audio data and detection states:
 
 .. code-block:: c
 
-    afe_fetch_result_t *result = fetch(afe_data);
+    afe_fetch_result_t *result = afe_handle->fetch(afe_data);
     int16_t *processed_audio = result->data;
     vad_state_t vad_state = result->vad_state;
     wakenet_state_t wakeup_state = result->wakeup_state;
@@ -139,6 +139,11 @@ Retrieve the processed single-channel audio output:
     if (result->vad_cache_size > 0) {
         int16_t *vad_cache = result->vad_cache;
     }
+
+.. code-block:: c
+
+    // get the processed audio with specified delay, default delay is 2000 ms
+    afe_fetch_result_t *result = afe_handle->fetch_with_delay(afe_data, 100 / portTICK_PERIOD_MS);
 
 Resource Occupancy
 ------------------
