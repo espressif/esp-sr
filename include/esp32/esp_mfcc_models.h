@@ -1,9 +1,7 @@
 #pragma once
 #include "esp_mfcc_iface.h"
 
-
 extern const esp_mfcc_iface_t esp_fbank_f32; // float32-fbank handle
-
 
 /**
  * @brief Return basic opts used in wakenet9 & multinet5
@@ -11,8 +9,8 @@ extern const esp_mfcc_iface_t esp_fbank_f32; // float32-fbank handle
 esp_mfcc_opts_t *get_mfcc_opts_wn9();
 
 /**
- * @brief Return basic opts for default kaldifeat 
- * 
+ * @brief Return basic opts for default kaldifeat
+ *
     opts->psram_first = true;
     opts->use_power = true;
     opts->use_log_fbank = 2;  // log(max(x, log_epsilon))

@@ -18,6 +18,7 @@
 #include "esp_wn_models.h"
 #include "esp_afe_sr_models.h"
 #include "dl_lib_convq_queue.h"
+#include "esp_afe_aec.h"
 #include <sys/time.h>
 
 #if (CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32P4)
@@ -297,4 +298,25 @@ TEST_CASE("afe performance test (2ch)", "[afe_perf]")
         afe_config_free(afe_config);
     }
     esp_srmodel_deinit(models);
+}
+
+
+TEST_CASE("test afe aec interface", "[afe]")
+{
+    int start_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
+
+    afe_aec_handle_t *handle = afe_aec_create("MNR", 4, AFE_TYPE_SR, AFE_MODE_HIGH_PERF);
+    int frame_bytes = handle->frame_size * sizeof(int16_t);
+    int16_t *indata = (int16_t *) malloc(frame_bytes*handle->pcm_config.total_ch_num);
+    int16_t *outdata = (int16_t *) malloc(frame_bytes);
+
+    afe_aec_process(handle, indata, outdata);
+    afe_aec_process(handle, indata, outdata);
+    afe_aec_process(handle, indata, outdata);
+
+    afe_aec_destroy(handle);
+    free(indata);
+    free(outdata);
+    int end_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
+    TEST_ASSERT_EQUAL(true, end_size == start_size);
 }

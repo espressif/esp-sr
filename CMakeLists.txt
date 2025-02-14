@@ -111,7 +111,9 @@ elseif(${IDF_TARGET} STREQUAL "esp32c5")
     
     component_compile_options(-ffast-math -O3 -Wno-error=format=-Wno-format)
     add_prebuilt_library(esp_audio_processor "${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}/libesp_audio_processor.a")
+    add_prebuilt_library(esp_audio_front_end "${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}/libesp_audio_front_end.a")
     target_link_libraries(${COMPONENT_LIB} PRIVATE esp_audio_processor)
+    target_link_libraries(${COMPONENT_LIB} PRIVATE esp_audio_front_end)
 
 elseif((${IDF_TARGET} STREQUAL "esp32s2") OR (${IDF_TARGET} STREQUAL "esp32c3") OR (${IDF_TARGET} STREQUAL "esp32c6"))
 #Only support TTS on esp32s2, esp32c3 and esp32c6

@@ -19,6 +19,7 @@ Use VADNet
 -  Select VADNet model
 
     ::
+        
         idf.py menuconfig
         ESP Speech Recognition -> Select voice activity detection -> voice activity detection (vadnet1 medium).
 
@@ -44,7 +45,7 @@ Use VADNet
         afe_handle->enable_vad(afe_data);   // enable VADNet
         afe_handle->reset_vad(afe_data);    // reset VADNet status
 
-- VAD Cache and Detection
+- VAD Cache
 
     There are two issues in the VAD settings that can cause a delay in the first frame trigger of speech.
 

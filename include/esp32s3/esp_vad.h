@@ -20,19 +20,19 @@
 extern "C" {
 #endif
 
-#define SAMPLE_RATE_HZ 16000      //Supports 32000, 16000, 8000
-#define VAD_FRAME_LENGTH_MS 30    //Supports 10ms, 20ms, 30ms
+#define SAMPLE_RATE_HZ 16000   // Supports 32000, 16000, 8000
+#define VAD_FRAME_LENGTH_MS 30 // Supports 10ms, 20ms, 30ms
 
 /**
  * @brief Sets the VAD operating mode. A more aggressive (higher mode) VAD is more
  * restrictive in reporting speech. So If you want trigger more speech, please select lower mode.
  */
 typedef enum {
-    VAD_MODE_0 = 0,  // Normal
-    VAD_MODE_1,      // Aggressive
-    VAD_MODE_2,      // Very Aggressive
-    VAD_MODE_3,      // Very Very Aggressive
-    VAD_MODE_4       // Very Very Very Aggressive
+    VAD_MODE_0 = 0, // Normal
+    VAD_MODE_1,     // Aggressive
+    VAD_MODE_2,     // Very Aggressive
+    VAD_MODE_3,     // Very Very Aggressive
+    VAD_MODE_4      // Very Very Very Aggressive
 } vad_mode_t;
 
 typedef enum {
@@ -51,10 +51,10 @@ typedef struct vad_trigger_tag {
 #define vad_MAX_LEN INT32_MAX - 1
 /**
  * @brief Allocate wakenet trigger
- * 
+ *
  * @param min_speech_len  Minimum frame number of speech duration
  * @param min_noise_len   Minimum frame number of noise duration
- * 
+ *
  * @return Trigger pointer
  **/
 vad_trigger_t *vad_trigger_alloc(int min_speech_len, int min_noise_len);
@@ -74,18 +74,16 @@ void vad_trigger_reset(vad_trigger_t *trigger);
  **/
 vad_state_t vad_trigger_detect(vad_trigger_t *trigger, vad_state_t state);
 
-
 typedef struct {
     vad_trigger_t *trigger;
     void *vad_inst;
     int sample_rate;
     int frame_size;
-}vad_handle_with_trigger_t;
+} vad_handle_with_trigger_t;
 
-typedef vad_handle_with_trigger_t* vad_handle_t;
+typedef vad_handle_with_trigger_t *vad_handle_t;
 
 // typedef vad_handle_tag * vad_handle_t;
-
 
 /**
  * @brief Creates an instance to the VAD structure.
@@ -110,7 +108,8 @@ vad_handle_t vad_create(vad_mode_t vad_mode);
  *         - NULL: Create failed
  *         - Others: The instance of VAD
  */
-vad_handle_t vad_create_with_param(vad_mode_t vad_mode, int sample_rate, int one_frame_ms, int min_speech_ms, int min_noise_ms);
+vad_handle_t vad_create_with_param(
+    vad_mode_t vad_mode, int sample_rate, int one_frame_ms, int min_speech_ms, int min_noise_ms);
 
 /**
  * @brief Feed samples of an audio stream to the VAD and check if there is someone speaking.
@@ -156,20 +155,21 @@ void vad_reset_trigger(vad_handle_t handle);
 void vad_destroy(vad_handle_t inst);
 
 /*
-* Programming Guide:
-*
-* @code{c}
-* vad_handle_t vad_inst = vad_create(VAD_MODE_3, SAMPLE_RATE_HZ, VAD_FRAME_LENGTH_MS);     // Creates an instance to the VAD structure.
-*
-* while (1) {
-*    //Use buffer to receive the audio data from MIC.
-*    vad_state_t vad_state = vad_process(vad_inst, buffer);      // Feed samples to the VAD process and get the result.
-* }
-*
-* vad_destroy(vad_inst);   // Free the VAD instance at the end of whole VAD process
-*
-* @endcode
-*/
+ * Programming Guide:
+ *
+ * @code{c}
+ * vad_handle_t vad_inst = vad_create(VAD_MODE_3, SAMPLE_RATE_HZ, VAD_FRAME_LENGTH_MS);     // Creates an instance to
+ * the VAD structure.
+ *
+ * while (1) {
+ *    //Use buffer to receive the audio data from MIC.
+ *    vad_state_t vad_state = vad_process(vad_inst, buffer);      // Feed samples to the VAD process and get the result.
+ * }
+ *
+ * vad_destroy(vad_inst);   // Free the VAD instance at the end of whole VAD process
+ *
+ * @endcode
+ */
 
 #ifdef __cplusplus
 }
