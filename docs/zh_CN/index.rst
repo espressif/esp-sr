@@ -20,7 +20,7 @@ ESP-SR 用户指南
     VAD vadnet <vadnet/README>
     语音指令 MultiNet <speech_command_recognition/README>
     语音合成（仅支持中文）<speech_synthesis/readme>
-    模型加载 <flash_model/README>
+    模型选择和加载 <flash_model/README>
     性能测试结果 <benchmark/README>
     性能测试方法 <test_report/README>
     术语表 <glossary/glossary>

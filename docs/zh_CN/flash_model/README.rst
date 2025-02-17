@@ -1,215 +1,78 @@
-模型加载
-========
+模型选择和加载
+===========================
 
 :link_to_translation:`en:[English]`
 
-在人工智能行业中，模型是指一个系统或过程的数学表示。它用于基于输入数据做出预测或决策，有许多不同类型的模型，如决策树、神经网络和支持向量机，每种模型都有其优缺点。乐鑫也提供经过训练的 WakeNet 和 MultiNet 模型（数据模型见 :project:`model`） 。
+本文档解释了如何为ESP-SR选择和加载模型。
 
-使用模型前需先将其加载至你的项目，目前 ESP-SR 支持以下模型加载方式：
+模型选择
+---------------
 
-.. only:: esp32
+ESP-SR允许您通过 ``menuconfig`` 界面选择所需的模型。要配置模型：
 
-    ESP32：从 Flash 中直接加载
+1. 运行 ``idf.py menuconfig``
+2. 导航到 **ESP Speech Recognition**
+3. 配置以下选项：
+   - **噪声抑制模型**
+   - **VAD模型**
+   - **WakeNet模型**
+   - **MultiNet模型**
 
-.. only:: esp32s3
+.. figure:: ../../_static/kconfig.png
+    :alt: kconfig
 
-    ESP32-S3：
 
-    -  从 SPI 闪存(flash)文件系统分区加载
-    -  从外部 SD 卡加载
+更新分区表
+------------------------
+您必须添加一个 `partition.csv` 文件，并确保有足够的空间来存储所选的模型。
+在项目的 ``partitions.csv`` 文件中添加以下行，以分配模型所需的空间：
 
-    因此具有以下优势：
+.. code-block::
 
-    -  大大减小用户应用 APP BIN 的大小
-    -  支持选择最多两个唤醒词
-    -  支持中文和英文命令词识别在线切换
-    -  方便用户进行 OTA
-    -  支持从 SD 卡读取和更换模型，更加便捷且可以缩减项目使用的模组 Flash 大小
-    -  当用户进行开发时，当修改不涉及模型时，可以避免每次烧录模型数据，大大缩减烧录时间，提高开发效率
+    model,  data,        ,         ,    6000K
 
-配置方法
---------
+- 将 ``6000K`` 替换为您根据所选模型自定义的分区大小。
+- ``model`` 是分区标签（固定值）。
 
-运行 ``idf.py menuconfig`` 进入 ``ESP Speech Recognition``:
+模型加载
+-------------
 
-.. figure:: ../../_static/model-1.png
-    :alt: overview
+ESP-IDF框架
+~~~~~~~~~~~~~~~~~
 
-    overview
+ESP-SR通过其CMake脚本自动处理模型加载：
 
-.. only:: esp32s3
+1. 烧写设备并包含所有组件：
+   ``idf.py flash``
+   *此命令会自动加载所选模型。*
 
-    Model Data Path
-    ~~~~~~~~~~~~~~~
+2. 在代码调试时（不重新烧写模型）：
+   ``idf.py app-flash``
 
-    该选项表示模型数据的存储位置，支持选择 ``Read model data from flash`` 或 ``Read model data from SD Card`` 。
+.. note::  
+   模型加载脚本在 ``esp-sr/CMakeLists.txt`` 中定义。模型在初始烧写时会被写入标签为 ``model`` 的分区。
 
-    -  ``Read model data from flash`` 表示模型数据存储在 flash 分区中，模型数据将会从 flash 分区中加载
-    -  ``SD Card`` 表示模型数据存储在 SD 卡中，模型数据将会从 SD 卡中加载
+Arduino框架
+~~~~~~~~~~~~~~~~~
 
-使用 AFE
-~~~~~~~~
+手动生成和加载模型：
 
-此选项需要打开，用户无须修改，请保持默认配置。
+1. 使用提供的Python脚本生成 ``srmodels.bin``：
 
-使用 WakeNet
-~~~~~~~~~~~~~
+   .. code-block:: bash
 
-此选项默认打开。当用户只使用 AEC 或者 BSS 等，而无须运行 WakeNet 或 MultiNet 时，请关闭次选项，这将会减小工程固件的大小。
+      python {esp-sr_path}/movemodel.py -d1 {sdkconfig_path} -d2 {esp-sr_path} -d3 {build_path}
 
-根据 ``menuconfig`` 列表选择唤醒词模型， ``ESP Speech Recognition`` > ``Select wake words``。括号中为唤醒词模型的名字，在代码中初始化 WakeNet 时需写入对应的名字。
+   **参数：**
 
-    |select wake wake|
+   - ``esp-sr_path``：您的ESP-SR组件目录路径
+   - ``sdkconfig_path``：项目的 ``sdkconfig`` 文件路径
+   - ``build_path``：项目的构建目录（通常是 ``your_project_path/build``）
 
-如果想加载多个唤醒词，以便在代码中进行唤醒词的切换，首选选择 ``Load Multiple Wake Words``
+2. 生成的 ``srmodels.bin`` 将位于：
+   ``{build_path}/srmodels/srmodels.bin``
 
-    |multi wake wake|
+3. 将生成的二进制文件烧写到设备上。
 
-然后按照列表选择多个唤醒词：
-
-    |image1|
-
-.. only:: esp32
-
-    .. note::
-        ESP32 不支持多唤醒词选项。
-
-.. only:: esp32s3
-
-    .. note::
-        ESP32-S3 支持多唤醒词选项。用户可根据具体硬件 flash 容量，选择合适数量的唤醒词。
-
-更多细节请参考 :doc:`WakeNet <../wake_word_engine/README>` 。
-
-使用 MultiNet
-~~~~~~~~~~~~~~
-
-此选项默认打开。当用户只使用 WakeNet 或者其他算法模块时，请关闭此选项，将会在一些情况下减小工程固件的大小。
-
-中文命令词识别模型 (Chinese Speech Commands Model)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. only:: esp32
-
-    ESP32 芯片只支持中文命令词识别：
-
-    -  None
-    -  Chinese single recognition (MultiNet2)
-
-.. only:: esp32s3
-
-    ESP32-S3 支持中文和英文命令词识别，且支持中英文识别模型切换。
-
-    -  None
-    -  Chinese single recognition (MultiNet4.5)
-    -  Chinese single recognition (MultiNet4.5 quantized with 8-bit)
-    -  English Speech Commands Model
-
-    当用户在 ``Chinese Speech Commands Model`` 中选择非 ``None`` 时，需要在该项处添加中文命令词。
-
-.. only:: esp32s3
-
-    英文命令词识别模型 (English Speech Commands Model)
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-    ESP32-S3 支持中文和英文命令词识别，且支持中英文识别模型切换。
-
-    -  None
-    -  English recognition (MultiNet5 quantized with 8-bit, depends on WakeNet8)
-    -  Add Chinese speech commands
-
-    当用户在 ``English Speech Commands Model`` 中选择非 ``None`` 时，需要在该项处添加英文命令词。
-
-用户按照需求自定义添加命令词，具体请参考 :doc:`MultiNet <../speech_command_recognition/README>` 。
-
-模型使用
----------
-
-当用户完成以上的配置选择后，可参考 `ESP-Skainet <https://github.com/espressif/esp-skainet>`_ 应用层仓库中的介绍，进行初始化和使用。
-
-这里主要介绍模型加载在用户工程中的代码实现，用户也可直接参考代码 :project_file:`src/model_path.c`。
-
-.. only:: esp32
-
-    ESP32 仅支持从 Flash 中直接加载模型数据，因此代码中模型数据会自动按照地址从 Flash 中读取所需数据。为了和 ESP32-S3 进行兼容，ESP32 代码中模型的初始化方法与 ESP32-S3 相同。
-
-.. only:: esp32s3
-
-    ESP32-S3 支持从 Flash 或 SD 卡中直接加载模型数据，下方将分别介绍。
-
-模型数据存储在 Flash
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-#.  编写分区表：
-
-    ::
-
-        model,  data, data,         , SIZE,
-
-    其中 SIZE 可以参考在用户使用 ``idf.py build`` 编译时的推荐大小，例如： ``Recommended model partition size: 500K`` 。
-
-#.  初始化 partition 分区：用户可以直接调用提供的 ``esp_srmodel_init(partition_label)`` API 来获取 partition 中的模型。
-
-    -  partition_label：为partition table 中定义的模型的分区，需要和上述函数的入参保持一致
-
-完成上述配置后，模型会在工程编译完成后自动生成 ``srmodels.bin`` ，并在用户调用 ``idf.py flash`` 时烧写到指定 分区。
-
-.. only:: esp32s3
-
-    模型数据存储在 SD 卡
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    当用户配置模型数据存储位置是 ``SD Card`` 时，用户需要：
-
-    -  手动移动模型数据至 SD 卡中
-        用户完成以上配置后，可以先进行编译，编译完成后将 ``model/target`` 目录下的文件拷贝至 SD 卡的根目录。
-
-    -  初始化 SD 卡
-        用户需要初始化 SD 卡，来使系统能够记载 SD 卡。如果用户使用 `ESP-Skainet <https://github.com/espressif/esp-skainet>`_ ，可以直接调用 ``esp_sdcard_init("/sdcard", num);`` 来初始化其支持开发板的 SD 卡。否则，需要自己编写初始化程序。
-        完成以上操作后，便可以进行工程的烧录。
-
-    -  自定义路径
-        使用``esp_srmodel_init(model_path)``来获取sdcard指定路径``esp_srmodel_init(partition_label)``中的所有model name。
-
-
-.. |select wake wake| image:: ../../_static/wn_menu1.png
-.. |multi wake wake| image:: ../../_static/wn_menu2.png
-.. |image1| image:: ../../_static/wn_menu3.png
-
-
-.. only:: html
-
-    代码中模型初始化与使用
-    ~~~~~~~~~~~~~~~~~~~~~~
-
-    ::
-
-            //
-            // step1: return models in flash
-            //
-            char *model_path = your_model_path: // partition_label or model_path in sdcard;
-            models = esp_srmodel_init(model_path);
-
-            //
-            // step2: select the specific model by keywords
-            //
-            char *wn_name = esp_srmodel_filter(models, ESP_WN_PREFIX, NULL); // select WakeNet model
-            char *nm_name = esp_srmodel_filter(models, ESP_MN_PREFIX, NULL); // select MultiNet model
-            char *alexa_wn_name = esp_srmodel_filter(models, ESP_WN_PREFIX, "alexa"); // select WakeNet with "alexa" wake word.
-            char *en_mn_name = esp_srmodel_filter(models, ESP_MN_PREFIX, ESP_MN_ENGLISH); // select english MultiNet model
-            char *cn_mn_name = esp_srmodel_filter(models, ESP_MN_PREFIX, ESP_MN_CHINESE); // select english MultiNet model
-
-            // It also works if you use the model name directly in your code.
-            char *my_wn_name = "wn9_hilexin"
-            // we recommend you to check that it is loaded correctly
-            if (!esp_srmodel_exists(models, my_wn_name))
-                printf("%s can not be loaded correctly\n")
-
-            //
-            // step3: initialize model
-            //
-            esp_wn_iface_t *wakenet = esp_wn_handle_from_name(wn_name);
-            model_iface_data_t *wn_model_data = wakenet->create(wn_name, DET_MODE_2CH_90);
-
-            esp_mn_iface_t *multinet = esp_mn_handle_from_name(mn_name);
-            model_iface_data_t *mn_model_data = multinet->create(mn_name, 6000);
+.. important::  
+   仅在 ``menuconfig`` 中更改模型配置后，请重新生成 ``srmodels.bin``。
