@@ -19,7 +19,7 @@ ESP-SR User Guide
     VAD Model vadnet <vadnet/README>
     Speech Command Word MultiNet <speech_command_recognition/README>
     Speech Synthesis (Only Supports Chinese Language) <speech_synthesis/readme>
-    Flashing Models <flash_model/README>
+    Model Selection and Loading <flash_model/README>
     Benchmark <benchmark/README>
     Test Methods <test_report/README>
     Glossary <glossary/glossary>

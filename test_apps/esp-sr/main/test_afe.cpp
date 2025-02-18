@@ -6,35 +6,33 @@
    software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
    CONDITIONS OF ANY KIND, either express or implied.
 */
-#include <stdio.h>
-#include <stdlib.h>
-#include "string.h"
-#include <limits.h>
-#include "unity.h"
-#include "esp_log.h"
-#include "esp_timer.h"
-#include "model_path.h"
-#include "esp_wn_iface.h"
-#include "esp_wn_models.h"
-#include "esp_afe_sr_models.h"
+#include "audio_test_file.h"
 #include "dl_lib_convq_queue.h"
 #include "esp_afe_aec.h"
+#include "esp_afe_sr_models.h"
+#include "esp_heap_caps.h"
+#include "esp_log.h"
+#include "esp_nsn_iface.h"
+#include "esp_nsn_models.h"
+#include "esp_timer.h"
+#include "esp_wn_iface.h"
+#include "esp_wn_models.h"
+#include "model_path.h"
+#include "string.h"
+#include "unity.h"
+#include <limits.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <sys/time.h>
 
-#if (CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32P4)
-#include "esp_nsn_models.h"
-#include "esp_nsn_iface.h"
-#endif
-
-#define ARRAY_SIZE_OFFSET                   8       // Increase this if audio_sys_get_real_time_stats returns ESP_ERR_INVALID_SIZE
-#define AUDIO_SYS_TASKS_ELAPSED_TIME_MS     1000    // Period of stats measurement
+#define ARRAY_SIZE_OFFSET 8 // Increase this if audio_sys_get_real_time_stats returns ESP_ERR_INVALID_SIZE
+#define AUDIO_SYS_TASKS_ELAPSED_TIME_MS 1000 // Period of stats measurement
 
 static const char *TAG = "AFE_TEST";
 static int detect_cnt = 0;
 static int fetch_task_flag = 0;
 
-
-void test_afe_by_config(afe_config_t *afe_config, int frame_num, int* memory, float* cpu, int idx)
+void test_afe_by_config(afe_config_t *afe_config, int frame_num, int *memory, float *cpu, int idx)
 {
     int start_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
     int start_internal_size = heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
@@ -43,13 +41,13 @@ void test_afe_by_config(afe_config_t *afe_config, int frame_num, int* memory, fl
     int mem_leak = 0;
     uint32_t feed_cpu_time = 0;
     uint32_t fetch_cpu_time = 0;
-    uint32_t start=0, end = 0;
+    uint32_t start = 0, end = 0;
     int loop = 3;
     int feed_chunksize = 0;
     int create_size = 0;
     int create_internal_size = 0;
 
-    for (int i=0; i<loop; i++) {
+    for (int i = 0; i < loop; i++) {
         // init config and handle
         esp_afe_sr_iface_t *afe_handle = esp_afe_handle_from_config(afe_config);
         // afe_config_print(afe_config);
@@ -62,17 +60,17 @@ void test_afe_by_config(afe_config_t *afe_config, int frame_num, int* memory, fl
         feed_chunksize = afe_handle->get_feed_chunksize(afe_data);
         int feed_nch = afe_handle->get_feed_channel_num(afe_data);
 
-        int16_t *feed_buff = (int16_t *) malloc(feed_chunksize * sizeof(int16_t) * feed_nch);
+        int16_t *feed_buff = (int16_t *)malloc(feed_chunksize * sizeof(int16_t) * feed_nch);
         start = esp_timer_get_time();
-        for (int j=0; j<frame_num; j++) {
+        for (int j = 0; j < frame_num; j++) {
             afe_handle->feed(afe_data, feed_buff);
         }
         end = esp_timer_get_time();
         feed_cpu_time += end - start;
 
-        //run afe fetch
+        // run afe fetch
         start = esp_timer_get_time();
-        while(1) {
+        while (1) {
             afe_fetch_result_t *res = afe_handle->fetch_with_delay(afe_data, 1 / portTICK_PERIOD_MS);
             if (res->ret_value != ESP_OK) {
                 break;
@@ -84,19 +82,22 @@ void test_afe_by_config(afe_config_t *afe_config, int frame_num, int* memory, fl
         afe_handle->destroy(afe_data);
         end_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
 
-        if (i==0) {
+        if (i == 0) {
             first_end_size = end_size;
-        } 
+        }
         mem_leak = start_size - end_size;
         ESP_LOGI(TAG, "create&destroy times:%d, memory leak:%d\n", i, mem_leak);
     }
     uint32_t feed_data_time = loop * frame_num * feed_chunksize / 16 * 1000; // us
-    memory[idx*2] = create_internal_size;
-    memory[idx*2+1] = create_size - create_internal_size;
-    cpu[idx*2] = feed_cpu_time*1.0/feed_data_time;
-    cpu[idx*2+1] = fetch_cpu_time*1.0/feed_data_time;
-    printf("Internal RAM: %d, PSRAM:%d, feed cpu loading:%f, fetch cpu loading:%f\n", 
-            memory[idx*2], memory[idx*2+1], cpu[idx*2], cpu[idx*2+1]);
+    memory[idx * 2] = create_internal_size;
+    memory[idx * 2 + 1] = create_size - create_internal_size;
+    cpu[idx * 2] = feed_cpu_time * 1.0 / feed_data_time;
+    cpu[idx * 2 + 1] = fetch_cpu_time * 1.0 / feed_data_time;
+    printf("Internal RAM: %d, PSRAM:%d, feed cpu loading:%f, fetch cpu loading:%f\n",
+           memory[idx * 2],
+           memory[idx * 2 + 1],
+           cpu[idx * 2],
+           cpu[idx * 2 + 1]);
     TEST_ASSERT_EQUAL(true, mem_leak < 1000 && end_size == first_end_size);
 }
 
@@ -111,17 +112,22 @@ TEST_CASE(">>>>>>>> AFE create/destroy API & memory leak <<<<<<<<", "[afe]")
 
     // test all setting
     srmodel_list_t *models = esp_srmodel_init("model");
-    for (int format_id=0; format_id<2; format_id++) {
-        for (int type_id=0; type_id<2; type_id++) {
-            for (int mode_id=0; mode_id<2; mode_id++) {
+    for (int format_id = 0; format_id < 2; format_id++) {
+        for (int type_id = 0; type_id < 2; type_id++) {
+            for (int mode_id = 0; mode_id < 2; mode_id++) {
                 for (int aec_init = 0; aec_init < 2; aec_init++) {
                     for (int se_init = 0; se_init < 2; se_init++) {
                         for (int ns_init = 0; ns_init < 2; ns_init++) {
                             for (int vad_init = 0; vad_init < 2; vad_init++) {
                                 for (int wakenet_init = 0; wakenet_init < 2; wakenet_init++) {
-                                    printf("format: %s, type: %d, mode: %d, memory size:%d %d\n", 
-                                    input_format[format_id], afe_type[type_id], afe_mode[mode_id], heap_caps_get_free_size(MALLOC_CAP_8BIT), count);
-                                    afe_config_t *afe_config = afe_config_init(input_format[format_id], models, afe_type[type_id], afe_mode[mode_id]);
+                                    printf("format: %s, type: %d, mode: %d, memory size:%d %d\n",
+                                           input_format[format_id],
+                                           afe_type[type_id],
+                                           afe_mode[mode_id],
+                                           heap_caps_get_free_size(MALLOC_CAP_8BIT),
+                                           count);
+                                    afe_config_t *afe_config = afe_config_init(
+                                        input_format[format_id], models, afe_type[type_id], afe_mode[mode_id]);
                                     afe_config->aec_init = aec_init;
                                     afe_config->se_init = se_init;
                                     afe_config->ns_init = ns_init;
@@ -138,9 +144,12 @@ TEST_CASE(">>>>>>>> AFE create/destroy API & memory leak <<<<<<<<", "[afe]")
             }
         }
     }
-    for (int idx=0; idx<256; idx++) {
-        printf("Internal RAM: %d, PSRAM:%d, feed cpu loading:%f, fetch cpu loading:%f\n", 
-            memory[idx*2], memory[idx*2+1], cpu[idx*2], cpu[idx*2+1]);
+    for (int idx = 0; idx < 256; idx++) {
+        printf("Internal RAM: %d, PSRAM:%d, feed cpu loading:%f, fetch cpu loading:%f\n",
+               memory[idx * 2],
+               memory[idx * 2 + 1],
+               cpu[idx * 2],
+               cpu[idx * 2 + 1]);
     }
     printf("AFE create/destroy API & memory leak test done\n");
 }
@@ -156,12 +165,17 @@ TEST_CASE(">>>>>>>> AFE default setting <<<<<<<<", "[afe_benchmark]")
 
     // test all setting
     srmodel_list_t *models = esp_srmodel_init("model");
-    for (int format_id=0; format_id<2; format_id++) {
-        for (int type_id=0; type_id<2; type_id++) {
-            for (int mode_id=0; mode_id<2; mode_id++) {
-                printf("format: %s, type: %d, mode: %d, memory size:%d %d\n", 
-                input_format[format_id], afe_type[type_id], afe_mode[mode_id], heap_caps_get_free_size(MALLOC_CAP_8BIT), count);
-                afe_config_t *afe_config = afe_config_init(input_format[format_id], models, afe_type[type_id], afe_mode[mode_id]);
+    for (int format_id = 0; format_id < 2; format_id++) {
+        for (int type_id = 0; type_id < 2; type_id++) {
+            for (int mode_id = 0; mode_id < 2; mode_id++) {
+                printf("format: %s, type: %d, mode: %d, memory size:%d %d\n",
+                       input_format[format_id],
+                       afe_type[type_id],
+                       afe_mode[mode_id],
+                       heap_caps_get_free_size(MALLOC_CAP_8BIT),
+                       count);
+                afe_config_t *afe_config =
+                    afe_config_init(input_format[format_id], models, afe_type[type_id], afe_mode[mode_id]);
                 test_afe_by_config(afe_config, 8, memory, cpu, count);
                 afe_config_free(afe_config);
                 count++;
@@ -169,20 +183,24 @@ TEST_CASE(">>>>>>>> AFE default setting <<<<<<<<", "[afe_benchmark]")
         }
     }
     count = 0;
-    for (int format_id=0; format_id<2; format_id++) {
-        for (int type_id=0; type_id<2; type_id++) {
-            for (int mode_id=0; mode_id<2; mode_id++) {
-
-                printf("--------format: %s, type: %s, mode: %s------------\n", input_format[format_id], type_id==0? "SR": "VC", mode_id==0? "LOW_COST": "HIGH_PERF");
-                printf("Internal RAM: %d, PSRAM:%d, feed cpu loading:%f, fetch cpu loading:%f\n", 
-                    memory[count*2], memory[count*2+1], cpu[count*2], cpu[count*2+1]);
+    for (int format_id = 0; format_id < 2; format_id++) {
+        for (int type_id = 0; type_id < 2; type_id++) {
+            for (int mode_id = 0; mode_id < 2; mode_id++) {
+                printf("--------format: %s, type: %s, mode: %s------------\n",
+                       input_format[format_id],
+                       type_id == 0 ? "SR" : "VC",
+                       mode_id == 0 ? "LOW_COST" : "HIGH_PERF");
+                printf("Internal RAM: %d, PSRAM:%d, feed cpu loading:%f, fetch cpu loading:%f\n",
+                       memory[count * 2],
+                       memory[count * 2 + 1],
+                       cpu[count * 2],
+                       cpu[count * 2 + 1]);
                 count++;
             }
         }
     }
     printf("test done\n");
 }
-
 
 void test_feed_Task(void *arg)
 {
@@ -193,13 +211,13 @@ void test_feed_Task(void *arg)
     int feed_chunksize = afe_handle->get_feed_chunksize(afe_data);
     int feed_nch = afe_handle->get_feed_channel_num(afe_data);
     int sample_per_ms = afe_handle->get_samp_rate(afe_data) / 1000;
-    int16_t *i2s_buff = (int16_t *) malloc(feed_chunksize * sizeof(int16_t) * feed_nch);
+    int16_t *i2s_buff = (int16_t *)malloc(feed_chunksize * sizeof(int16_t) * feed_nch);
     assert(i2s_buff);
     ESP_LOGI(TAG, "feed task start\n");
     int count = 0;
 
     while (1) {
-        count ++;
+        count++;
         afe_handle->feed(afe_data, i2s_buff);
         vTaskDelay((feed_chunksize / sample_per_ms) / portTICK_PERIOD_MS);
         if (count > 100) {
@@ -222,7 +240,7 @@ void test_fetch_Task(void *arg)
     detect_cnt = 0;
     fetch_task_flag = 1;
     while (1) {
-        afe_fetch_result_t* res = afe_handle->fetch(afe_data); 
+        afe_fetch_result_t *res = afe_handle->fetch(afe_data);
         if (!res || res->ret_value == ESP_FAIL) {
             break;
         }
@@ -247,7 +265,7 @@ TEST_CASE("afe performance test (1ch)", "[afe_perf]")
     // test all setting
     srmodel_list_t *models = esp_srmodel_init("model");
 
-    for (int mode_id=0; mode_id<2; mode_id++) {
+    for (int mode_id = 0; mode_id < 2; mode_id++) {
         afe_config_t *afe_config = afe_config_init(input_format, models, afe_type, afe_model[mode_id]);
         if (afe_config->wakenet_init && afe_config->wakenet_model_name) {
             esp_afe_sr_iface_t *afe_handle = esp_afe_handle_from_config(afe_config);
@@ -258,8 +276,10 @@ TEST_CASE("afe performance test (1ch)", "[afe_perf]")
             task_info.feed_task = NULL;
             task_info.fetch_task = NULL;
             fetch_task_flag = 1;
-            xTaskCreatePinnedToCore(test_feed_Task, "feed_task", 8 * 1024, (void *)(&task_info), 5, &task_info.feed_task, 0);
-            xTaskCreatePinnedToCore(test_fetch_Task, "fetch_task", 8 * 1024, (void *)(&task_info), 5, &task_info.fetch_task, 0);
+            xTaskCreatePinnedToCore(
+                test_feed_Task, "feed_task", 8 * 1024, (void *)(&task_info), 5, &task_info.feed_task, 0);
+            xTaskCreatePinnedToCore(
+                test_fetch_Task, "fetch_task", 8 * 1024, (void *)(&task_info), 5, &task_info.fetch_task, 0);
             while (fetch_task_flag) {
                 vTaskDelay(32 / portTICK_PERIOD_MS);
             }
@@ -278,7 +298,7 @@ TEST_CASE("afe performance test (2ch)", "[afe_perf]")
     // test all setting
     srmodel_list_t *models = esp_srmodel_init("model");
 
-    for (int mode_id=0; mode_id<2; mode_id++) {
+    for (int mode_id = 0; mode_id < 2; mode_id++) {
         afe_config_t *afe_config = afe_config_init(input_format, models, afe_type, afe_model[mode_id]);
         if (afe_config->wakenet_init && afe_config->wakenet_model_name) {
             esp_afe_sr_iface_t *afe_handle = esp_afe_handle_from_config(afe_config);
@@ -289,8 +309,10 @@ TEST_CASE("afe performance test (2ch)", "[afe_perf]")
             task_info.feed_task = NULL;
             task_info.fetch_task = NULL;
             fetch_task_flag = 1;
-            xTaskCreatePinnedToCore(&test_feed_Task, "feed_task", 8 * 1024, (void *)(&task_info), 5, &task_info.feed_task, 0);
-            xTaskCreatePinnedToCore(&test_fetch_Task, "fetch_task", 8 * 1024, (void *)(&task_info), 5, &task_info.fetch_task, 0);
+            xTaskCreatePinnedToCore(
+                &test_feed_Task, "feed_task", 8 * 1024, (void *)(&task_info), 5, &task_info.feed_task, 0);
+            xTaskCreatePinnedToCore(
+                &test_fetch_Task, "fetch_task", 8 * 1024, (void *)(&task_info), 5, &task_info.fetch_task, 0);
             while (fetch_task_flag) {
                 vTaskDelay(32 / portTICK_PERIOD_MS);
             }
@@ -300,23 +322,62 @@ TEST_CASE("afe performance test (2ch)", "[afe_perf]")
     esp_srmodel_deinit(models);
 }
 
-
 TEST_CASE("test afe aec interface", "[afe]")
 {
     int start_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
 
-    afe_aec_handle_t *handle = afe_aec_create("MNR", 4, AFE_TYPE_SR, AFE_MODE_HIGH_PERF);
-    int frame_bytes = handle->frame_size * sizeof(int16_t);
-    int16_t *indata = (int16_t *) malloc(frame_bytes*handle->pcm_config.total_ch_num);
-    int16_t *outdata = (int16_t *) malloc(frame_bytes);
+    afe_aec_handle_t *afe_aec_handle = afe_aec_create("MNR", 4, AFE_TYPE_SR, AFE_MODE_LOW_COST);
+    aec_handle_t *aec_handle = aec_create(16000, 4, 1, AEC_MODE_SR_LOW_COST);
+    int frame_size = afe_aec_handle->frame_size;
+    int nch = afe_aec_handle->pcm_config.total_ch_num;
+    int mic_idx = afe_aec_handle->pcm_config.mic_ids[0];
+    int ref_idx = afe_aec_handle->pcm_config.ref_ids[0];
+    int frame_bytes = frame_size * sizeof(int16_t);
+    int16_t *afe_indata = (int16_t *)heap_caps_calloc(1, frame_bytes * nch, MALLOC_CAP_SPIRAM);
+    int16_t *indata = (int16_t *)heap_caps_aligned_calloc(16, 1, frame_bytes, MALLOC_CAP_SPIRAM);
+    int16_t *refdata = (int16_t *)heap_caps_aligned_calloc(16, 1, frame_bytes, MALLOC_CAP_SPIRAM);
+    int16_t *outdata1 = (int16_t *)heap_caps_aligned_calloc(16, 1, frame_bytes, MALLOC_CAP_SPIRAM);
+    int16_t *outdata2 = (int16_t *)heap_caps_aligned_calloc(16, 1, frame_bytes, MALLOC_CAP_SPIRAM);
+    int chunks = 0;
+    uint32_t c0, c1, t_aec = 0, t_afe_aec = 0;
 
-    afe_aec_process(handle, indata, outdata);
-    afe_aec_process(handle, indata, outdata);
-    afe_aec_process(handle, indata, outdata);
+    while (1) {
+        if ((chunks + 1) * frame_bytes <= sizeof(audio_mic_file)) {
+            memcpy(indata, audio_mic_file + chunks * frame_size, frame_bytes);
+            memcpy(refdata, audio_ref_file + chunks * frame_size, frame_bytes);
 
-    afe_aec_destroy(handle);
+            for (int i = 0; i < frame_size; i++) {
+                afe_indata[i * nch + mic_idx] = indata[i];
+                afe_indata[i * nch + ref_idx] = refdata[i];
+            }
+        } else {
+            break;
+        }
+
+        c0 = esp_timer_get_time();
+        afe_aec_process(afe_aec_handle, afe_indata, outdata1);
+        c1 = esp_timer_get_time();
+        t_afe_aec += c1 - c0;
+
+        c0 = esp_timer_get_time();
+        aec_process(aec_handle, indata, refdata, outdata2);
+        c1 = esp_timer_get_time();
+
+        t_aec += c1 - c0;
+        chunks++;
+    }
+
+    for (int i = 0; i < frame_size; i++) {
+        assert(outdata1[i] == outdata2[i]);
+    }
+    printf("afe aec interface:%d\n, aec interface:%d\n", t_afe_aec, t_aec);
+    afe_aec_destroy(afe_aec_handle);
+    aec_destroy(aec_handle);
+    free(afe_indata);
     free(indata);
-    free(outdata);
+    free(refdata);
+    free(outdata1);
+    free(outdata2);
     int end_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
     TEST_ASSERT_EQUAL(true, end_size == start_size);
 }
