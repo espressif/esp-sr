@@ -192,6 +192,10 @@ menu "Load Multiple Wake Words"
     config SR_WN_WN9_XIAOYUTONGXUE_TTS2
     bool "小宇同学 (wn9_xiaoyutongxue_tts2)"
     default False
+
+    config SR_WN_WN9_XIAOMINGTONGXUE_TTS2
+    bool "小明同学 (wn9_xiaomingtongxue_tts2)"
+    default False
 endmenu
 
 
