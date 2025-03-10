@@ -196,6 +196,11 @@ menu "Load Multiple Wake Words"
     config SR_WN_WN9_XIAOMINGTONGXUE_TTS2
     bool "小明同学 (wn9_xiaomingtongxue_tts2)"
     default False
+
+
+    config SR_WN_WN9_HIWALLE_TTS2
+    bool "Hi Wall E or Hi 瓦力(wn9_hiwalle_tts2)"
+    default False
 endmenu
 
 
