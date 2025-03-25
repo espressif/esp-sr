@@ -246,75 +246,6 @@ void srmodel_spiffs_deinit(srmodel_list_t *models)
 
 }
 
-#ifdef CONFIG_IDF_TARGET_ESP32
-srmodel_list_t *srmodel_config_init()
-{
-    if (static_srmodels == NULL) {
-        static_srmodels = srmodel_list_alloc();
-    } else {
-        return static_srmodels;
-    }
-
-    srmodel_list_t *models = static_srmodels;
-    models->num = 2;
-    models->model_name = malloc(models->num * sizeof(char *));
-    models->model_info = malloc(models->num * sizeof(char *));
-    for (int i = 0; i < models->num; i++) {
-        models->model_name[i] = (char *) calloc(MODEL_NAME_MAX_LENGTH, sizeof(char));
-        models->model_info[i] = NULL;
-    }
-
-    // If wakenet is selected in menuconfig, load the wakenet model
-    if (strcmp(WAKENET_MODEL_NAME, "NULL") == 0) {
-        models->num --;
-        free(models->model_name[models->num]);
-    } else {
-        strcpy(models->model_name[0], WAKENET_MODEL_NAME);
-    }
-
-    // If multinet is selected in menuconfig, load the multinet model
-    if (strcmp(MULTINET_MODEL_NAME, "NULL") == 0) {
-        models->num --;
-        free(models->model_name[models->num]);
-    } else {
-        strcpy(models->model_name[models->num - 1], MULTINET_MODEL_NAME);
-    }
-
-    // could not find any avaliable models, return NULL
-    if (models->num == 0) {
-        free(models->model_name);
-        free(models);
-        models = NULL;
-    }
-
-    return models;
-}
-
-void srmodel_config_deinit(srmodel_list_t *models)
-{
-    if (models != NULL) {
-        if (models->num > 0) {
-            for (int i = 0; i < models->num; i++) {
-                free(models->model_name[i]);
-                if (models->model_info[i] != NULL) {
-                    free(models->model_info[i]);
-                }
-            }
-            free(models->model_name);
-            free(models->model_info);
-        }
-        free(models);
-    }
-    // models is static_srmodels
-    static_srmodels = NULL;
-}
-#endif
-
-model_coeff_getter_t *srmodel_get_model_coeff(char *model_name)
-{
-    model_coeff_getter_t *gettercb = (model_coeff_getter_t *)&WAKENET_COEFF;
-    return gettercb;
-}
 
 static uint32_t read_int32(char *data)
 {
@@ -596,9 +527,6 @@ srmodel_list_t *esp_srmodel_init(const char *partition_label)
 {
 #ifdef ESP_PLATFORM
 
-#ifdef CONFIG_IDF_TARGET_ESP32
-    return srmodel_config_init();
-#else
 
 #ifdef CONFIG_MODEL_IN_SDCARD
     // Read model data from SD card 
@@ -620,7 +548,6 @@ srmodel_list_t *esp_srmodel_init(const char *partition_label)
     return NULL;
 #endif
 
-#endif
 #else
     return srmodel_sdcard_init(partition_label);
 #endif
@@ -629,13 +556,7 @@ srmodel_list_t *esp_srmodel_init(const char *partition_label)
 void esp_srmodel_deinit(srmodel_list_t *models)
 {
 #ifdef ESP_PLATFORM
-
-#ifdef CONFIG_IDF_TARGET_ESP32
-    return srmodel_config_deinit(models);
-#else
     return srmodel_mmap_deinit(models);
-#endif
-
 #else
     return srmodel_sdcard_deinit(models);
 #endif
