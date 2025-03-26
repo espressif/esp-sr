@@ -52,32 +52,8 @@ choice SR_VADN_MODEL_LOAD
 	    depends on IDF_TARGET_ESP32S3 ||  IDF_TARGET_ESP32P4
 endchoice
 
-choice SR_WN_MODEL_LOAD
-    prompt "Select wake words"
-    default SR_WN_WN5_HILEXIN
-    depends on IDF_TARGET_ESP32
-    help
-        Select the Wake Words to be loaded.
-
-    config SR_WN_WN5_HILEXIN
-        bool "Hi,Lexin (wn5_hilexin)"
-
-    config SR_WN_WN5X3_HILEXIN
-        bool "Hi,Lexin (wn5_hilexinX3)"
-
-    config SR_WN_WN5_NIHAOXIAOZHI
-        bool "nihaoxiaozhi (wn5_nihaoxiaozhi)"
-
-    config SR_WN_WN5X3_NIHAOXIAOZHI
-        bool "nihaoxiaozhi (wn5_nihaoxiaozhiX3)"
-
-    config SR_WN_WN5X3_NIHAOXIAOXIN
-        bool "nihaoxiaoxin (wn5_nihaoxiaoxinX3)"
-
-endchoice
-
 menu "Load Multiple Wake Words"
-    depends on IDF_TARGET_ESP32S3 ||  IDF_TARGET_ESP32P4
+    depends on IDF_TARGET_ESP32S3 ||  IDF_TARGET_ESP32P4 || IDF_TARGET_ESP32
 
     config SR_WN_WN9_HILEXIN
     bool "Hi,乐鑫 (wn9_hilexin)"

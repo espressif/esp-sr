@@ -69,7 +69,7 @@ if((${IDF_TARGET} STREQUAL "esp32s3") OR (${IDF_TARGET} STREQUAL "esp32p4") OR (
         "-Wl,--end-group")
 
 
-    if(CONFIG_IDF_TARGET_ESP32S3 OR CONFIG_IDF_TARGET_ESP32P4)
+    if(CONFIG_PARTITION_TABLE_CUSTOM)
         set(MVMODEL_EXE ${COMPONENT_PATH}/model/movemodel.py)
         idf_build_get_property(build_dir BUILD_DIR)
         set(image_file ${build_dir}/srmodels/srmodels.bin)
