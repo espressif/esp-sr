@@ -46,7 +46,7 @@ choice SR_VADN_MODEL_LOAD
 
     config SR_VADN_WEBRTC
         bool "voice activity detection (WebRTC)"
-    
+
     config SR_VADN_VADNET1_MEDIUM
         bool "voice activity detection (vadnet1 medium)"
 	    depends on IDF_TARGET_ESP32S3 ||  IDF_TARGET_ESP32P4
@@ -78,7 +78,7 @@ menu "Load Multiple Wake Words"
     config SR_WN_WN9_JARVIS_TTS
     bool "Jarvis (wn9_jarvis_tts)"
     default False
-    
+
     config SR_WN_WN9_COMPUTER_TTS
     bool "computer (wn9_computer_tts)"
     default False

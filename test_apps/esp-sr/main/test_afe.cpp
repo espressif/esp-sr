@@ -9,6 +9,7 @@
 #include "audio_test_file.h"
 #include "dl_lib_convq_queue.h"
 #include "esp_afe_aec.h"
+#include "esp_doa.h"
 #include "esp_afe_sr_models.h"
 #include "esp_heap_caps.h"
 #include "esp_log.h"
@@ -25,7 +26,7 @@
 #include <stdlib.h>
 #include <sys/time.h>
 
-#define ARRAY_SIZE_OFFSET 8 // Increase this if audio_sys_get_real_time_stats returns ESP_ERR_INVALID_SIZE
+#define ARRAY_SIZE_OFsample_rateET 8 // Increase this if audio_sys_get_real_time_stats returns ESP_ERR_INVALID_SIZE
 #define AUDIO_SYS_TASKS_ELAPSED_TIME_MS 1000 // Period of stats measurement
 
 static const char *TAG = "AFE_TEST";
@@ -380,4 +381,71 @@ TEST_CASE("test afe aec interface", "[afe]")
     free(outdata2);
     int end_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
     TEST_ASSERT_EQUAL(true, end_size == start_size);
+}
+
+void generate_test_frame(int16_t *left, int16_t *right, int frame_size, float angle_deg, int sample_rate)
+{
+    int TEST_FREQ = 1000;
+    static float phase = 0.0f;
+    const float d = 0.06f;
+    const float c = 343.0f;
+
+    float theta = angle_deg * M_PI / 180.0f;
+    float tau = d * cosf(theta) / c;
+
+    int delay_samples = (int)roundf(tau * sample_rate);
+    printf("Angle: %f, Delay: %d samples\n", angle_deg, delay_samples);
+
+    for (int i = 0; i < frame_size; i++) {
+        float t = (float)(i + phase) / sample_rate;
+        left[i] = (int16_t)(sinf(2 * M_PI * TEST_FREQ * t) * 32767);
+
+        int delayed_index = i - delay_samples;
+        right[i] = (int16_t)(sinf(2 * M_PI * TEST_FREQ * (delayed_index + phase) / sample_rate) * 32767);
+    }
+    phase += frame_size;
+}
+
+TEST_CASE("test doa interface", "[afe]")
+{
+   // 初始化DOA估计器
+    int frame_samples = 1024;
+    int sample_rate = 16000;
+    int16_t *left = (int16_t *)malloc(frame_samples * sizeof(int16_t));
+    int16_t *right = (int16_t *)malloc(frame_samples * sizeof(int16_t));
+    int start_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
+    doa_handle_t *doa = esp_doa_create(sample_rate, 20.0f, 0.06f, frame_samples);
+
+    uint32_t c0, c1, t_doa = 0;
+    int angle = 180;
+    for (int f = 0; f < angle; f++) { // 1秒多帧
+        generate_test_frame(left, right, frame_samples, f*1.0, sample_rate);
+        c0 = esp_timer_get_time();
+        float est_angle = esp_doa_process(doa, left, right);
+        c1 = esp_timer_get_time();
+        t_doa += c1 - c0;
+
+        printf("%.1f\t\t%.1f\n", f*1.0, est_angle); // memory leak
+    }
+    int doa_mem_size = start_size - heap_caps_get_free_size(MALLOC_CAP_8BIT);
+    printf("doa memory size:%d, cpu loading:%f\n", doa_mem_size, (t_doa * 1.0 / 1000000 * sample_rate) / (angle * frame_samples));
+ 
+    esp_doa_destroy(doa);
+    int end_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
+
+    // create & destroy 5 times
+    for (int i = 0; i < 5; i++) {
+        doa = esp_doa_create(sample_rate, 20.0f, 0.06f, frame_samples);
+        esp_doa_process(doa, left, right);
+        esp_doa_destroy(doa);
+    }
+
+    int last_end_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
+    printf("memory leak:%d\n", start_size - end_size);
+    free(left);
+    free(right);
+    // return 0;
+    printf("TEST DONE\n\n");
+    TEST_ASSERT_EQUAL(true, (start_size - end_size) < 300);
+    TEST_ASSERT_EQUAL(true, last_end_size == end_size);
 }
