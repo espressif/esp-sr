@@ -26,7 +26,6 @@ News
 
 [14/2/2025]: We release **ESP-SR V2.0**. [Migration from ESP-SR V1.* to ESP-SR V2.*](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/audio_front_end/migration_guide.html)   
 [13/2/2025]: We release **VADNet**, a voice activaty detection model. You can use it to replace the WebRTC VAD and improve the performance.
-[27/3/2025]: We release **Sound Souce Localization**, an algorithm to locate the sound source.
 
 ## Wake Word Engine
 
@@ -90,7 +89,7 @@ The following MultiNet models are supported in esp-sr:
 
 ## Audio Front End
 
-Espressif Audio Front-End **AFE** integrates AEC (Acoustic Echo Cancellation), VAD (Voice Activity Detection), BSS (Blind Source Separation) , NS (Noise Suppression), NSNET(Deep noise suppression), SSL(Sound Souce Localization) and other functions. It is designed to be used with the ESP-SR library.
+Espressif Audio Front-End **AFE** integrates AEC (Acoustic Echo Cancellation), VAD (Voice Activity Detection), BSS (Blind Source Separation) and NS (Noise Suppression).
 
 Our two-mic Audio Front-End (AFE) have been qualified as a “Software Audio Front-End Solution” for [Amazon Alexa Built-in devices](https://developer.amazon.com/en-US/alexa/solution-providers/dev-kits#software-audio-front-end-dev-kits).
 
