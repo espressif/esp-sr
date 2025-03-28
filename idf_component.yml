@@ -3,7 +3,7 @@ description: esp_sr provides basic algorithms for Speech Recognition application
 url: https://github.com/espressif/esp-sr
 dependencies:
   idf: ">=5.0"
-  espressif/esp-dsp: "<=1.5.0"
+  espressif/esp-dsp: ">1.5.1"
 files:
   exclude:
     - ".github"
