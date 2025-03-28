@@ -1,5 +1,8 @@
 # Change log for esp-sr
 
+## 2.0.3
+-Add wakenet9 support for ESP32
+
 ## 2.0.2
 - Accelerate the AEC of ESP32C5, reducing the CPU loading from 39% to 30%.
 
