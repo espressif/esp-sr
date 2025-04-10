@@ -23,7 +23,6 @@ The new algorithms will no longer support ESP32 chips.
 
 News
 ----
-
 [14/2/2025]: We release **ESP-SR V2.0**. [Migration from ESP-SR V1.* to ESP-SR V2.*](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/audio_front_end/migration_guide.html)   
 [13/2/2025]: We release **VADNet**, a voice activaty detection model. You can use it to replace the WebRTC VAD and improve the performance.
 
@@ -89,11 +88,15 @@ The following MultiNet models are supported in esp-sr:
 
 ## Audio Front End
 
-Espressif Audio Front-End **AFE** integrates AEC (Acoustic Echo Cancellation), VAD (Voice Activity Detection), BSS (Blind Source Separation) and NS (Noise Suppression).
+Espressif Audio Front-End **AFE** integrates AEC (Acoustic Echo Cancellation), VAD (Voice Activity Detection), BSS (Blind Source Separation) and NS (Noise Suppression), NSNET(Deep noise suppression) and other functions. It is designed to be used with the ESP-SR library.
 
 Our two-mic Audio Front-End (AFE) have been qualified as a “Software Audio Front-End Solution” for [Amazon Alexa Built-in devices](https://developer.amazon.com/en-US/alexa/solution-providers/alexa-connect-kit).
 
 
-**In order to achieve optimal performance:**
+## Documentation and Resources
 
-* Please refer to software design [esp-skainet](https://github.com/espressif/esp-skainet).
+ESP-SR Documentation: [ESP-SR Documentation](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/index.html)
+Migration Guide: [Migration from V1.* to V2.*](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/audio_front_end/migration_guide.html)
+Wake Word Training: [Wake Word Training by TTS Pipeline V2.0](https://github.com/espressif/esp-sr/issues/88)
+Examples: [esp-skainet/examples](https://github.com/espressif/esp-skainet)
+
