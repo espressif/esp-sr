@@ -235,6 +235,7 @@ TEST_CASE("multinet set commands from sdkconfig and detect", "[mn]")
     esp_mn_error_t *error_phrases = NULL;
     esp_mn_commands_update_from_sdkconfig(multinet, model_data);
     multinet->print_active_speech_commands(model_data);
+    multinet->set_det_threshold(model_data, 0.1);
 
     while (1) {
         if ((chunks + 1)*audio_chunksize <= data_size) {
