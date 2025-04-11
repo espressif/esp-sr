@@ -95,8 +95,8 @@ Our two-mic Audio Front-End (AFE) have been qualified as a “Software Audio Fro
 
 ## Documentation and Resources
 
-ESP-SR Documentation: [ESP-SR Documentation](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/index.html)
-Migration Guide: [Migration from V1.* to V2.*](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/audio_front_end/migration_guide.html)
-Wake Word Training: [Wake Word Training by TTS Pipeline V2.0](https://github.com/espressif/esp-sr/issues/88)
-Examples: [esp-skainet/examples](https://github.com/espressif/esp-skainet)
+ESP-SR Documentation: [ESP-SR Documentation](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/index.html)   
+Migration Guide: [Migration from V1.* to V2.*](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/audio_front_end/migration_guide.html)  
+Wake Word Training: [Wake Word Training by TTS Pipeline V2.0](https://github.com/espressif/esp-sr/issues/88)  
+Examples: [esp-skainet/examples](https://github.com/espressif/esp-skainet)  
 
