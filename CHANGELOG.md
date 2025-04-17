@@ -1,5 +1,8 @@
 # Change log for esp-sr
 
+## 2.0.5
+- Fix fftr bug
+
 ## 2.0.4
 - Add DOA(Direction of Arrival) algorithm
 
