@@ -23,6 +23,7 @@ The new algorithms will no longer support ESP32 chips.
 
 News
 ----
+[17/4/2025]: We add a new DOA(Direction of Arrival) algorithm.
 [14/2/2025]: We release **ESP-SR V2.0**. [Migration from ESP-SR V1.* to ESP-SR V2.*](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/audio_front_end/migration_guide.html)   
 [13/2/2025]: We release **VADNet**, a voice activaty detection model. You can use it to replace the WebRTC VAD and improve the performance.
 
