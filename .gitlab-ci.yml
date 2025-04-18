@@ -49,6 +49,9 @@ before_script:
 
 .patterns-test_esp_sr: &patterns-test_esp32c5
   - "lib/esp32c5/*"
+  - "lib/esp32c3/*"
+  - "lib/esp32c6/*"
+  - "lib/esp32s2/*"
   - "include/esp32c5/*"
   - "src/**/*"
   - "model/**/*"
