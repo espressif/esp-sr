@@ -4,9 +4,9 @@
 #include "string.h"
 #include <dirent.h>
 #include <sys/stat.h>
-#ifndef CONFIG_IDF_TARGET_ESP32P4
-#include "esp_mn_models.h"
-#endif
+// #ifndef CONFIG_IDF_TARGET_ESP32P4
+// #include "esp_mn_models.h"
+// #endif
 
 #ifdef ESP_PLATFORM
 #include "esp_idf_version.h"

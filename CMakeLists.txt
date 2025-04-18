@@ -69,51 +69,43 @@ if((${IDF_TARGET} STREQUAL "esp32s3") OR (${IDF_TARGET} STREQUAL "esp32p4") OR (
         "-Wl,--end-group")
 
 
-    if(CONFIG_PARTITION_TABLE_CUSTOM)
-        set(MVMODEL_EXE ${COMPONENT_PATH}/model/movemodel.py)
-        idf_build_get_property(build_dir BUILD_DIR)
-        set(image_file ${build_dir}/srmodels/srmodels.bin)
-
-        add_custom_command(
-            OUTPUT ${image_file}
-            COMMENT "Move and Pack models..."
-            COMMAND python ${MVMODEL_EXE} -d1 ${SDKCONFIG} -d2 ${COMPONENT_PATH} -d3 ${build_dir}
-            DEPENDS ${SDKCONFIG}
-            VERBATIM)
-
-        add_custom_target(srmodels_bin ALL DEPENDS ${image_file})
-        add_dependencies(flash srmodels_bin)
-
-        partition_table_get_partition_info(size "--partition-name model" "size")
-        partition_table_get_partition_info(offset "--partition-name model" "offset")
-
-        if("${size}" AND "${offset}")
-            esptool_py_flash_to_partition(flash "model" "${image_file}")
-        else()
-            set(message "Failed to find model in partition table file"
-                        "Please add a line(Name=model, Size>recommended size in log) to the partition file.")
-        endif()
-    endif()
-
 elseif(${IDF_TARGET} STREQUAL "esp32c5")
 
     set(srcs
-        "lib/${IDF_TARGET}/dummy.c"
+        "src/model_path.c"
     )
 
     set(include_dirs
         "include/${IDF_TARGET}"
+        "src/include"
+    )
+
+    set(requires
+        json
+        spiffs
+        esp_partition
     )
 
     idf_component_register(SRCS ${srcs}
                         INCLUDE_DIRS ${include_dirs}
+                        REQUIRES ${requires}
+                        PRIV_REQUIRES spi_flash
                         )
     
     component_compile_options(-ffast-math -O3 -Wno-error=format=-Wno-format)
     add_prebuilt_library(esp_audio_processor "${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}/libesp_audio_processor.a")
     add_prebuilt_library(esp_audio_front_end "${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}/libesp_audio_front_end.a")
+    add_prebuilt_library(dl_lib "${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}/libdl_lib.a" PRIV_REQUIRES ${COMPONENT_NAME})
+    add_prebuilt_library(c_speech_features "${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}/libc_speech_features.a" PRIV_REQUIRES ${COMPONENT_NAME})
+    add_prebuilt_library(hufzip "${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}/libhufzip.a" PRIV_REQUIRES ${COMPONENT_NAME})
+    add_prebuilt_library(wakenet "${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}/libwakenet.a" PRIV_REQUIRES ${COMPONENT_NAME})
+
     target_link_libraries(${COMPONENT_LIB} PRIVATE esp_audio_processor)
     target_link_libraries(${COMPONENT_LIB} PRIVATE esp_audio_front_end)
+    target_link_libraries(${COMPONENT_LIB} PRIVATE dl_lib)
+    target_link_libraries(${COMPONENT_LIB} PRIVATE c_speech_features)
+    target_link_libraries(${COMPONENT_LIB} PRIVATE hufzip)
+    target_link_libraries(${COMPONENT_LIB} PRIVATE wakenet)
 
 elseif((${IDF_TARGET} STREQUAL "esp32s2") OR (${IDF_TARGET} STREQUAL "esp32c3") OR (${IDF_TARGET} STREQUAL "esp32c6"))
 #Only support TTS on esp32s2, esp32c3 and esp32c6
@@ -139,4 +131,30 @@ target_link_libraries(${COMPONENT_TARGET} INTERFACE "-Wl,--start-group"
     voice_set_xiaole
     "-Wl,--end-group")
 
+endif()
+
+# Add model partition and flash srmodels.bin
+if(CONFIG_PARTITION_TABLE_CUSTOM)
+    partition_table_get_partition_info(size "--partition-name model" "size")
+    partition_table_get_partition_info(offset "--partition-name model" "offset")
+
+    if("${size}" AND "${offset}")
+        set(MVMODEL_EXE ${COMPONENT_PATH}/model/movemodel.py)
+        idf_build_get_property(build_dir BUILD_DIR)
+        set(image_file ${build_dir}/srmodels/srmodels.bin)
+
+        add_custom_command(
+            OUTPUT ${image_file}
+            COMMENT "Move and Pack models..."
+            COMMAND python ${MVMODEL_EXE} -d1 ${SDKCONFIG} -d2 ${COMPONENT_PATH} -d3 ${build_dir}
+            DEPENDS ${SDKCONFIG}
+            VERBATIM)
+
+        add_custom_target(srmodels_bin ALL DEPENDS ${image_file})
+        add_dependencies(flash srmodels_bin)
+        esptool_py_flash_to_partition(flash "model" "${image_file}")
+    else()
+        set(message "Failed to find model in partition table file"
+                    "Please add a line(Name=model) to the partition file if you want to use esp-sr models.")
+    endif()
 endif()
