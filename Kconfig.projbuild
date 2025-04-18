@@ -54,7 +54,7 @@ endchoice
 
 
 menu "Load Multiple Wake Words"
-    depends on IDF_TARGET_ESP32C5 ||  IDF_TARGET_ESP32C3
+    depends on IDF_TARGET_ESP32C5 ||  IDF_TARGET_ESP32C3 || IDF_TARGET_ESP32C6 || IDF_TARGET_ESP32S2
 
     config SR_WN_WN9S_HILEXIN
     bool "Hi,乐鑫 (wn9s_hilexin)"
