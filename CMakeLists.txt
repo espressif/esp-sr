@@ -69,7 +69,7 @@ if((${IDF_TARGET} STREQUAL "esp32s3") OR (${IDF_TARGET} STREQUAL "esp32p4") OR (
         "-Wl,--end-group")
 
 
-elseif((${IDF_TARGET} STREQUAL "esp32c5") OR (${IDF_TARGET} STREQUAL "esp32c3") OR (${IDF_TARGET} STREQUAL "esp32c6"))
+elseif((${IDF_TARGET} STREQUAL "esp32c5") OR (${IDF_TARGET} STREQUAL "esp32c3") OR (${IDF_TARGET} STREQUAL "esp32c6") OR  (${IDF_TARGET} STREQUAL "esp32s2"))
     set(srcs
         "src/model_path.c"
     )
@@ -77,6 +77,7 @@ elseif((${IDF_TARGET} STREQUAL "esp32c5") OR (${IDF_TARGET} STREQUAL "esp32c3") 
     set(include_dirs
         "include/${IDF_TARGET}"
         "src/include"
+        "esp-tts/esp_tts_chinese/include"
     )
 
     set(requires
@@ -98,6 +99,8 @@ elseif((${IDF_TARGET} STREQUAL "esp32c5") OR (${IDF_TARGET} STREQUAL "esp32c3") 
     add_prebuilt_library(c_speech_features "${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}/libc_speech_features.a" PRIV_REQUIRES ${COMPONENT_NAME})
     add_prebuilt_library(hufzip "${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}/libhufzip.a" PRIV_REQUIRES ${COMPONENT_NAME})
     add_prebuilt_library(wakenet "${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}/libwakenet.a" PRIV_REQUIRES ${COMPONENT_NAME})
+    add_prebuilt_library(esp_tts_chinese "${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese/${IDF_TARGET}/libesp_tts_chinese.a" PRIV_REQUIRES ${COMPONENT_NAME})
+    add_prebuilt_library(voice_set_xiaole "${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese/${IDF_TARGET}/libvoice_set_xiaole.a" PRIV_REQUIRES ${COMPONENT_NAME})
 
     target_link_libraries(${COMPONENT_LIB} PRIVATE esp_audio_processor)
     target_link_libraries(${COMPONENT_LIB} PRIVATE esp_audio_front_end)
@@ -105,30 +108,8 @@ elseif((${IDF_TARGET} STREQUAL "esp32c5") OR (${IDF_TARGET} STREQUAL "esp32c3") 
     target_link_libraries(${COMPONENT_LIB} PRIVATE c_speech_features)
     target_link_libraries(${COMPONENT_LIB} PRIVATE hufzip)
     target_link_libraries(${COMPONENT_LIB} PRIVATE wakenet)
-
-elseif((${IDF_TARGET} STREQUAL "esp32s2") OR (${IDF_TARGET} STREQUAL "esp32c3") OR (${IDF_TARGET} STREQUAL "esp32c6"))
-#Only support TTS on esp32s2, esp32c3 and esp32c6
-
-set(requires
-    spiffs
-    )
-
-IF (IDF_VERSION_MAJOR GREATER 4)
-    list(APPEND requires esp_partition)
-ENDIF (IDF_VERSION_MAJOR GREATER 4)
-
-idf_component_register(SRCS .
-                INCLUDE_DIRS  esp-tts/esp_tts_chinese/include
-                REQUIRES ${requires}
-                PRIV_REQUIRES spi_flash)
-
-target_link_libraries(${COMPONENT_TARGET} INTERFACE "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese/${IDF_TARGET}")
-add_prebuilt_library(esp_tts_chinese "${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese/${IDF_TARGET}/libesp_tts_chinese.a" PRIV_REQUIRES ${COMPONENT_NAME})
-add_prebuilt_library(voice_set_xiaole "${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese/${IDF_TARGET}/libvoice_set_xiaole.a" PRIV_REQUIRES ${COMPONENT_NAME})
-target_link_libraries(${COMPONENT_TARGET} INTERFACE "-Wl,--start-group"
-    esp_tts_chinese
-    voice_set_xiaole
-    "-Wl,--end-group")
+    target_link_libraries(${COMPONENT_LIB} PRIVATE esp_tts_chinese)
+    target_link_libraries(${COMPONENT_LIB} PRIVATE voice_set_xiaole)
 
 endif()
 
