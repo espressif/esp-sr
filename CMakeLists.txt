@@ -69,8 +69,7 @@ if((${IDF_TARGET} STREQUAL "esp32s3") OR (${IDF_TARGET} STREQUAL "esp32p4") OR (
         "-Wl,--end-group")
 
 
-elseif(${IDF_TARGET} STREQUAL "esp32c5")
-
+elseif((${IDF_TARGET} STREQUAL "esp32c5") OR (${IDF_TARGET} STREQUAL "esp32c3") OR (${IDF_TARGET} STREQUAL "esp32c6"))
     set(srcs
         "src/model_path.c"
     )
