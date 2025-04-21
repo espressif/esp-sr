@@ -5,6 +5,7 @@
 - esp32c5 support wakenet9s and aec
 - esp32c6 support wakenet9s and aec
 - esp32s2 support wakenet9s and aec
+- Add "hi,lexin","hi,esp","nihaoxiaozhi" wakenet9s models
 
 ## 2.0.5
 - Fix fftr bug

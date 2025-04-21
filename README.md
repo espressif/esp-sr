@@ -23,54 +23,55 @@ The new algorithms will no longer support ESP32 chips.
 
 News
 ----
-[17/4/2025]: We add a new DOA(Direction of Arrival) algorithm.
+[21/4/2025]: We add a new model WakeNet9s, which can run on chips that do not have PSRAM and do not support SIMD, such as ESP32C3 and ESP32C5.     
+[17/4/2025]: We add a new DOA(Direction of Arrival) algorithm.  
 [14/2/2025]: We release **ESP-SR V2.0**. [Migration from ESP-SR V1.* to ESP-SR V2.*](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/audio_front_end/migration_guide.html)   
 [13/2/2025]: We release **VADNet**, a voice activaty detection model. You can use it to replace the WebRTC VAD and improve the performance.
 
 ## Wake Word Engine
 
-Espressif wake word engine **WakeNet** is specially designed to provide a high performance and low memory footprint wake word detection algorithm for users, which enables devices always listen to wake words, such as “Alexa”, “Hi,lexin” and “Hi,ESP”.
+Espressif wake word engine **WakeNet** is specially designed to provide a high performance and low memory footprint wake word detection algorithm for users, which enables devices always listen to wake words, such as “Alexa”, “Hi,lexin” and “Hi,ESP”. WakeNet9 and WakeNet9s models are supported. WakeNet9s is a cost-down version of WakeNet9, with fewer parameters and lower computational requirements. 
 
 Espressif offers two ways to customize the wake word, please refer to the following document to choose the one that meets your needs:   
 [Espressif Speech Wake Words Customization Process](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/wake_word_engine/ESP_Wake_Words_Customization.html) or [Training Wake Words by TTS sample](https://github.com/espressif/esp-sr/issues/88).
 
 The following wake words are supported in esp-sr:
 
-|wake words       |                 ESP32                 |  ESP32-S3/ESP32-P4     | 
-|:--------------- | :------------------------------------:| :---------------------:| 
-|Hi,乐鑫           |  wn5_hilexin, wn5_hilexinX3           | wn9_hilexin            | 
-|你好小智          |  wn5_nihaoxiaozhi,wn5_nihaoxiaozhiX3   | wn9_nihaoxiaozhi_tts   |
-|小爱同学          |                                        | wn9_xiaoaitongxue      | 
-|Hi,ESP           |                                        | wn9_hiesp              | 
-|Hi,M Five        |                                        | wn9_himfive            | 
-|Alexa            |                                        | wn9_alexa              | 
-|Jarvis           |                                        | wn9_jarvis_tts         | 
-|Computer         |                                        | wn9_computer_tts       |
-|Hey,Willow       |                                        | wn9_heywillow_tts      | 
-|Sophia           |                                        | wn9_sophia_tts         |
-|Mycroft          |                                        | wn9_mycroft_tts        |
-|Hey,Printer      |                                        | wn9_heyprinter_tts     |
-|Hi,Joy           |                                        | wn9_hijoy_tts          |
-|Hey,Wand         |                                        | wn9_heywanda_tts       |
-|Astrolabe        |                                        | wn9_astrolabe_tts      |
-|Hi,Jason         |                                        | wn9_hijason_tts2       |
-|Hi,Wall E/Hi,瓦力|                                        | wn9_hiwalle_tts2       |
-|你好小鑫         |                                        | wn9_nihaoxiaoxin_tts   |
-|小美同学         |                                        | wn9_xiaomeitongxue_tts |
-|Hi,小星          |                                        | wn9_hixiaoxing_tts     |
-|小龙小龙         |                                        | wn9_xiaolongxiaolong_tts    |
-|喵喵同学         |                                        | wn9_miaomiaotongxue_tts|
-|Hi,喵喵          |                                        | wn9_himiaomiao_tts     |
-|Hi,Lily/Hi,莉莉  |                                        | wn9_hilili_tts         |
-|Hi,Telly/Hi,泰力 |                                        | wn9_hitelly_tts        |
-|小滨小滨/小冰小冰|                                        | wn9_xiaobinxiaobin_tts |
-|Hi,小巫          |                                        | wn9_haixiaowu_tts      |
-|小鸭小鸭         |                                        | wn9_xiaoyaxiaoya_tts2  |
-|璃奈板           |                                        | wn9_linaiban_tts2      |
-|小酥肉           |                                        | wn9_xiaosurou_tts2      |
-|小宇同学         |                                        | wn9_xiaoyutongxue_tts2  |
-|小明同学         |                                        | wn9_xiaomingtongxue_tts2|
-|小康同学         |                                        | wn9_xiaokangtongxue_tts2|
+|wake words       |             WakeNet9s           |  WakeNet9              | 
+|:--------------- | :------------------------------:| :---------------------:| 
+|Hi,乐鑫           |  wn9s_hilexin                   | wn9_hilexin            | 
+|Hi,ESP           |  wn9s_hiesp                     | wn9_hiesp              | 
+|你好小智          |  wn9s_nihaoxiaozhi               | wn9_nihaoxiaozhi_tts   |
+|小爱同学          |                                  | wn9_xiaoaitongxue      | 
+|Hi,M Five        |                                  | wn9_himfive            | 
+|Alexa            |                                  | wn9_alexa              | 
+|Jarvis           |                                  | wn9_jarvis_tts         | 
+|Computer         |                                  | wn9_computer_tts       |
+|Hey,Willow       |                                  | wn9_heywillow_tts      | 
+|Sophia           |                                  | wn9_sophia_tts         |
+|Mycroft          |                                  | wn9_mycroft_tts        |
+|Hey,Printer      |                                  | wn9_heyprinter_tts     |
+|Hi,Joy           |                                  | wn9_hijoy_tts          |
+|Hey,Wand         |                                  | wn9_heywanda_tts       |
+|Astrolabe        |                                  | wn9_astrolabe_tts      |
+|Hi,Jason         |                                  | wn9_hijason_tts2       |
+|Hi,Wall E/Hi,瓦力|                                  | wn9_hiwalle_tts2       |
+|你好小鑫         |                                  | wn9_nihaoxiaoxin_tts   |
+|小美同学         |                                  | wn9_xiaomeitongxue_tts |
+|Hi,小星          |                                  | wn9_hixiaoxing_tts     |
+|小龙小龙         |                                  | wn9_xiaolongxiaolong_tts    |
+|喵喵同学         |                                  | wn9_miaomiaotongxue_tts|
+|Hi,喵喵          |                                  | wn9_himiaomiao_tts     |
+|Hi,Lily/Hi,莉莉  |                                  | wn9_hilili_tts         |
+|Hi,Telly/Hi,泰力 |                                  | wn9_hitelly_tts        |
+|小滨小滨/小冰小冰|                                  | wn9_xiaobinxiaobin_tts |
+|Hi,小巫          |                                  | wn9_haixiaowu_tts      |
+|小鸭小鸭         |                                  | wn9_xiaoyaxiaoya_tts2  |
+|璃奈板           |                                  | wn9_linaiban_tts2      |
+|小酥肉           |                                  | wn9_xiaosurou_tts2      |
+|小宇同学         |                                  | wn9_xiaoyutongxue_tts2  |
+|小明同学         |                                  | wn9_xiaomingtongxue_tts2|
+|小康同学         |                                  | wn9_xiaokangtongxue_tts2|
 
 *NOTE:* `_tts` suffix means this WakeNet model is trained by TTS samples. `_tts2` suffix means this WakeNet model is trained by TTS Pipeline V2.
 
