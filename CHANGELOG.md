@@ -1,11 +1,11 @@
 # Change log for esp-sr
 
-## unreleased
+## 2.1.0
 - esp32c3 support wakenet9s and aec
 - esp32c5 support wakenet9s and aec
 - esp32c6 support wakenet9s and aec
 - esp32s2 support wakenet9s and aec
-- Add "hi,lexin","hi,esp","nihaoxiaozhi" wakenet9s models
+- Add four wakenet9s model: hilexin,hiesp,nihaoxiaozhi,hijason
 
 ## 2.0.5
 - Fix fftr bug
