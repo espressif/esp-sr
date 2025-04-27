@@ -203,6 +203,10 @@ menu "Load Multiple Wake Words (WakeNet9)"
     bool "小箭小箭 (wn9_xiaojianxiaojian_tts2)"
     default False
 
+    config SR_WN_WN9_XIAOTEXIAOTE_TTS2
+    bool "小特小特 (wn9_xiaotexiaote_tts2)"
+    default False
+
     config SR_WN_WN9_HIWALLE_TTS2
     bool "Hi Wall E or Hi 瓦力(wn9_hiwalle_tts2)"
     default False
