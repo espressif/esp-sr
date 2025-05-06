@@ -72,7 +72,9 @@ The following wake words are supported in esp-sr:
 |小宇同学         |                                  | wn9_xiaoyutongxue_tts2  |
 |小明同学         |                                  | wn9_xiaomingtongxue_tts2|
 |小康同学         |                                  | wn9_xiaokangtongxue_tts2|
-|你好小益         |                                  | wn9_nihaoxiaoyi_tts2    |
+|小箭小箭         |                                  | wn9_xiaojianxiaojian_tts2|
+|小特小特         |                                  | wn9_xiaotexiaote_tts2|
+|你好小益         |                                  | wn9_nihaoxiaoyi_tts2|
 
 *NOTE:* `_tts` suffix means this WakeNet model is trained by TTS samples. `_tts2` suffix means this WakeNet model is trained by TTS Pipeline V2.
 
