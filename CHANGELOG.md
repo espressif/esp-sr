@@ -1,5 +1,9 @@
 # Change log for esp-sr
 
+## 2.1.1
+- Add 8KHz AEC for VoIP
+- Add more wakenet9 models
+
 ## 2.1.0
 - esp32c3 support wakenet9s and aec
 - esp32c5 support wakenet9s and aec
