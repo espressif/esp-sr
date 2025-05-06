@@ -40,10 +40,11 @@ typedef struct {
  * esp32c5.
  * @param type             The type of afe, AFE_TYPE_SR or AFE_TYPE_VC
  * @param mode             The mode of afe, AFE_MODE_LOW_COST or AFE_MODE_HIGH_PERF
+ * @param sample_rate      The sample rate of input data
  *
  * @return afe_config_t*  The default config of afe
  */
-afe_aec_handle_t *afe_aec_create(const char *input_format, int filter_length, afe_type_t type, afe_mode_t mode);
+afe_aec_handle_t *afe_aec_create(const char *input_format, int filter_length, afe_type_t type, afe_mode_t mode, int sample_rate);
 
 /**
  * @brief Performs echo cancellation a frame, based on the audio sent to the speaker and frame from mic.

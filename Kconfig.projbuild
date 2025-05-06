@@ -52,28 +52,6 @@ choice SR_VADN_MODEL_LOAD
 	    depends on IDF_TARGET_ESP32S3 ||  IDF_TARGET_ESP32P4
 endchoice
 
-
-menu "Load Multiple Wake Words"
-    depends on IDF_TARGET_ESP32C5 ||  IDF_TARGET_ESP32C3 || IDF_TARGET_ESP32C6 || IDF_TARGET_ESP32S2
-
-    config SR_WN_WN9S_HILEXIN
-    bool "Hi,乐鑫 (wn9s_hilexin)"
-    default False
-
-    config SR_WN_WN9S_HIESP
-    bool "Hi,ESP (wn9s_hiesp)"
-    default False
-
-    config SR_WN_WN9S_NIHAOXIAOZHI
-    bool "你好小智 (wn9s_nihaoxiaozhi)"
-    default False
-
-    config SR_WN_WN9S_HIJASON
-    bool "Hi,Jason (wn9s_hijason_tts2)"
-    default False
-
-endmenu
-
 menu "Load Multiple Wake Words"
     depends on IDF_TARGET_ESP32S3 ||  IDF_TARGET_ESP32P4 || IDF_TARGET_ESP32
 
