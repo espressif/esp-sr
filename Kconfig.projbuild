@@ -177,6 +177,10 @@ menu "Load Multiple Wake Words"
     bool "小康同学 (wn9_xiaokangtongxue_tts2)"
     default False
 
+    config SR_WN_WN9_NIHAOXIAOYI_TTS2
+    bool "你好小益 (wn9_nihaoxiaoyi_tts2)"
+    default False
+
     config SR_WN_WN9_HIWALLE_TTS2
     bool "Hi Wall E or Hi 瓦力(wn9_hiwalle_tts2)"
     default False
