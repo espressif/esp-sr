@@ -33,7 +33,8 @@ typedef enum {
 // Set AFE type
 typedef enum {
     AFE_TYPE_SR = 0, // Speech recognition scenarios, excluding nonlinear noise suppression
-    AFE_TYPE_VC = 1, // Voice communication scenarios, including nonlinear noise suppression
+    AFE_TYPE_VC = 1, // Voice communication scenarios, 16KHz input, including nonlinear noise suppression
+    AFE_TYPE_VC_8K = 2, // Voice communication scenarios, 8KHz input, note that the input data must be 8KHz
 } afe_type_t;
 
 typedef enum {
