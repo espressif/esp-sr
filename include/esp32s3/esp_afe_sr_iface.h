@@ -131,14 +131,23 @@ typedef afe_fetch_result_t *(*esp_afe_sr_iface_op_fetch_with_delay_t)(esp_afe_sr
 typedef int (*esp_afe_sr_iface_op_reset_buffer_t)(esp_afe_sr_data_t *afe);
 
 /**
- * @brief Initial wakenet and wake words coefficient, or reset wakenet and wake words coefficient
- *        when wakenet has been initialized. It's only support wakenet 1 now.
- *
- * @param afe                The AFE_SR object to query
- * @param wakenet_word       The wakenet word, should be DEFAULT_WAKE_WORD or EXTRA_WAKE_WORD
+ * @brief Set wakenet detection threshold 
+ * 
+ * @param afe           The AFE_SR object to query
+ * @param index         The wakenet index, just support 1: wakenet1 or  2: wakenet2
+ * @param threshold     The wakenet detection threshold, the value is between 0.4 and 0.9999.
  * @return             -1: fail, 1: success
  */
-typedef int (*esp_afe_sr_iface_op_set_wakenet_t)(esp_afe_sr_data_t *afe, char *model_name);
+typedef int (*esp_afe_sr_iface_op_set_wakenet_threshold_t)(esp_afe_sr_data_t *afe, int index, float threshold);
+
+/**
+ * @brief Reset wakenet detection threshold to inital state
+ * 
+ * @param afe           The AFE_SR object to query
+ * @param index         The wakenet index, just support 1: wakenet1 or  2: wakenet2
+ * @return             -1: fail, 1: success
+ */
+typedef int (*esp_afe_sr_iface_op_reset_wakenet_threshold_t)(esp_afe_sr_data_t *afe, int index);
 
 /**
  * @brief Reset one function/module/algorithm.
@@ -195,7 +204,8 @@ typedef struct {
     esp_afe_sr_iface_op_get_channel_num_t get_feed_channel_num;
     esp_afe_sr_iface_op_get_channel_num_t get_fetch_channel_num;
     esp_afe_sr_iface_op_get_samp_rate_t get_samp_rate;
-    esp_afe_sr_iface_op_set_wakenet_t set_wakenet;
+    esp_afe_sr_iface_op_set_wakenet_threshold_t set_wakenet_threshold;
+    esp_afe_sr_iface_op_reset_wakenet_threshold_t reset_wakenet_threshold;
     esp_afe_sr_iface_op_disable_func_t disable_wakenet;
     esp_afe_sr_iface_op_enable_func_t enable_wakenet;
     esp_afe_sr_iface_op_disable_func_t disable_aec;

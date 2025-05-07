@@ -60,6 +60,8 @@ void test_afe_by_config(afe_config_t *afe_config, int frame_num, int *memory, fl
         // run afe feed
         feed_chunksize = afe_handle->get_feed_chunksize(afe_data);
         int feed_nch = afe_handle->get_feed_channel_num(afe_data);
+        afe_handle->set_wakenet_threshold(afe_data, 1, 0.8);
+        afe_handle->reset_wakenet_threshold(afe_data, 1);
 
         int16_t *feed_buff = (int16_t *)malloc(feed_chunksize * sizeof(int16_t) * feed_nch);
         start = esp_timer_get_time();

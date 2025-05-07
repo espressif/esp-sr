@@ -92,6 +92,8 @@ TEST_CASE("wakenet detect API & cpu loading", "[wn]")
     int16_t *buffer = (int16_t *) malloc(audio_chunksize);
     int chunks = 0;
     int detected = 0;
+    wakenet->set_det_threshold(model_data, 0.8, 1);
+    wakenet->reset_det_threshold(model_data);
     struct timeval tv_start, tv_end;
     gettimeofday(&tv_start, NULL);
     unsigned char* data = NULL;

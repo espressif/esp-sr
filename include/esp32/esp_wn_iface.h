@@ -110,11 +110,20 @@ typedef char* (*esp_wn_iface_op_get_word_name_t)(model_iface_data_t *model, int 
  * @brief Set the detection threshold to manually abjust the probability 
  *
  * @param model The model object to query
- * @param det_treshold The threshold to trigger wake words, the range of det_threshold is 0.5~0.9999
+ * @param det_treshold The threshold to trigger wake words, the range of det_threshold is 0.4~0.9999
  * @param word_index The index of wake word
  * @return 0: setting failed, 1: setting success
  */
 typedef int (*esp_wn_iface_op_set_det_threshold_t)(model_iface_data_t *model, float det_threshold, int word_index);
+
+/**
+ * @brief Reset the threshold to its initial state  
+ *
+ * @param model The model object to query
+ * @return 0: setting failed, 1: setting success
+ */
+typedef int (*esp_wn_iface_op_reset_det_threshold_t)(model_iface_data_t *model);
+
 
 /**
  * @brief Get the wake word detection threshold of different modes
@@ -200,6 +209,7 @@ typedef struct {
     esp_wn_iface_op_get_word_num_t get_word_num;
     esp_wn_iface_op_get_word_name_t get_word_name;
     esp_wn_iface_op_set_det_threshold_t set_det_threshold;
+    esp_wn_iface_op_reset_det_threshold_t reset_det_threshold;
     esp_wn_iface_op_get_det_threshold_t get_det_threshold;
     esp_wn_iface_op_get_triggered_channel_t  get_triggered_channel;
     esp_wn_iface_op_get_vol_gain_t get_vol_gain;
