@@ -1,5 +1,9 @@
 # Change log for esp-sr
 
+## 2.1.2
+- Add debug mode
+- Update wakenet trigget to v4
+
 ## 2.1.1
 - Add 8KHz AEC for VoIP
 - Add more wakenet9 models

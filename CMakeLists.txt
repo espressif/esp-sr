@@ -7,6 +7,7 @@ if((${IDF_TARGET} STREQUAL "esp32s3") OR (${IDF_TARGET} STREQUAL "esp32p4") OR (
         
     set(srcs
         "src/model_path.c"
+        "src/esp_sr_debug.c"
         "src/esp_mn_speech_commands.c"
         "src/esp_process_sdkconfig.c"
         )
