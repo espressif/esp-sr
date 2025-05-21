@@ -1,5 +1,10 @@
 # Change log for esp-sr
 
+## 2.1.3
+- Replace kissfft with dl_fft for wakenet9s
+- Replace esp-dsp fft with dl_fft for wakenet9
+- Add more wakenet9 model
+
 ## 2.1.2
 - Add debug mode
 - Update wakenet trigget to v4

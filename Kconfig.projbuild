@@ -171,6 +171,10 @@ menu "Load Multiple Wake Words (WakeNet9)"
     bool "Astrolabe (wn9_astrolabe_tts)"
     default False
 
+    config SR_WN_WN9_HEYILY_TTS2
+    bool "Hey,Ily (wn9_heyily_tts2)"
+    default False
+
     config SR_WN_WN9_XIAOYAXIAOYA_TTS2
     bool "小鸭小鸭 (wn9_xiaoyaxiaoya_tts2)"
     default False

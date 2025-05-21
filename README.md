@@ -56,6 +56,7 @@ The following wake words are supported in esp-sr:
 |Hi,Joy           |                                  | wn9_hijoy_tts          |
 |Hey,Wand         |                                  | wn9_heywanda_tts       |
 |Astrolabe        |                                  | wn9_astrolabe_tts      |
+|Hey,Ily          |                                  | wn9_heyily_tts2        |
 |Hi,Wall E/Hi,瓦力|                                  | wn9_hiwalle_tts2       |
 |你好小鑫         |                                  | wn9_nihaoxiaoxin_tts   |
 |小美同学         |                                  | wn9_xiaomeitongxue_tts |
