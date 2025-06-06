@@ -47,14 +47,14 @@ Resource Consumption
 
     .. note::
 
-        -  **MR:** one microphone channel and one playback channel    
-        -  **MMNR:** two microphone channels and one playback channels    
-        -  **Models:** nsnet2, vadnet1_medium, wn9_hilexin     
+        -  **MR:** one microphone channel and one playback channel
+        -  **MMNR:** two microphone channels and one playback channels
+        -  **Models:** nsnet2, vadnet1_medium, wn9_hilexin
 
     .. list-table:: AFE configuration and Performance
        :widths: 25 15 15 20 20
        :header-rows: 1
-    
+
        * - Config
          - Internal RAM (KB)
          - PSRAM (KB)
@@ -97,7 +97,7 @@ Resource Consumption
     .. list-table:: AFE configuration and pipeline
        :widths: 25 75
        :header-rows: 1
-    
+
        * - Config
          - Pipeline
        * - MR, SR, LOW_COST
@@ -115,15 +115,15 @@ Resource Consumption
 
 
     .. note::
-    
-        -  **MR:** one microphone channel and one playback channel    
-        -  **MMNR:** two microphone channels and one playback channels    
-        -  **Models:** nsnet2, vadnet1_medium, wn9_hilexin  
-    
+
+        -  **MR:** one microphone channel and one playback channel
+        -  **MMNR:** two microphone channels and one playback channels
+        -  **Models:** nsnet2, vadnet1_medium, wn9_hilexin
+
     .. list-table:: AFE configuration and Performance
        :widths: 25 15 15 20 20
        :header-rows: 1
-    
+
        * - Config
          - Internal RAM (KB)
          - PSRAM (KB)
@@ -242,7 +242,7 @@ False triggering rate: once in 12 hours
 
 .. note::
 
-    In this test, we used ESP32-S3-Korvo V4.0 development board and WakeNet9(Alexa) model.
+    The above test results are based on the ESP32-S3-Korvo V4.0 development board and the WakeNet9 (Alexa) model.
 
 MultiNet
 --------
