@@ -47,14 +47,14 @@ AFE
 
     .. note::
 
-        -  **MR:** 一个麦克风通道和一个播放通道    
-        -  **MMNR:** 两个麦克风通道和一个播放通道    
-        -  **Models:** nsnet2, vadnet1_medium, wn9_hilexin     
+        -  **MR:** 一个麦克风通道和一个播放通道
+        -  **MMNR:** 两个麦克风通道和一个播放通道
+        -  **Models:** nsnet2, vadnet1_medium, wn9_hilexin
 
     .. list-table:: AFE 配置和性能
        :widths: 25 15 15 20 20
        :header-rows: 1
-    
+
        * - Config
          - Internal RAM (KB)
          - PSRAM (KB)
@@ -90,14 +90,14 @@ AFE
          - 1173.7
          - 38.8
          - 30.0
-    
+
 
 .. only:: esp32p4
 
     .. list-table:: AFE 配置和算法流程
        :widths: 25 75
        :header-rows: 1
-    
+
        * - Config
          - Pipeline
        * - MR, SR, LOW_COST
@@ -112,18 +112,18 @@ AFE
          - ``|AEC(SR_LOW_COST)| -> |SE(BSS)| -> |VAD(vadnet1_medium)| -> |WakeNet(wn9_hilexin,)|``
        * - MMNR, SR, HIGH_PERF
          - ``|AEC(SR_HIGH_PERF)| -> |SE(BSS)| -> |VAD(vadnet1_medium)| -> |WakeNet(wn9_hilexin,)|``
-    
-    
+
+
     .. note::
-    
-        -  **MR:** 一个麦克风通道和一个播放通道    
-        -  **MMNR:** 两个麦克风通道和一个播放通道    
-        -  **Models:** nsnet2, vadnet1_medium, wn9_hilexin   
-    
+
+        -  **MR:** 一个麦克风通道和一个播放通道
+        -  **MMNR:** 两个麦克风通道和一个播放通道
+        -  **Models:** nsnet2, vadnet1_medium, wn9_hilexin
+
     .. list-table:: AFE 配置和性能
        :widths: 25 15 15 20 20
        :header-rows: 1
-    
+
        * - Config
          - Internal RAM (KB)
          - PSRAM (KB)
@@ -159,7 +159,7 @@ AFE
          - 1173.0
          - 28.2
          - 24.8
-    
+
 WakeNet
 -------
 
@@ -242,7 +242,7 @@ WakeNet
 
 .. note::
 
-    我们在测试中使用了 ESP32-S3-Korvo V4.0 开发板和 WakeNet9(Alexa) 模型。
+    以上测试结果基于 ESP32-S3-Korvo V4.0 开发板和 WakeNet9(Alexa) 模型。
 
 MultiNet
 --------
@@ -311,9 +311,9 @@ Word Error Rate 性能测试
 
 .. note::
 
-    中文使用没有声调的拼音单元去计算WER。
+    中文使用没有声调的拼音单元去计算 WER。
 
-Speech Commands 性能测试(空调控制场景)
+Speech Commands 性能测试（空调控制场景）
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 +-----------+-----------+----------+------------+-------------+
@@ -372,6 +372,6 @@ NSNET
 |                  | dnsmos |
 +==================+========+
 | nsnet1           | 2.4    |
-+------------------+--------+ 
++------------------+--------+
 | nsnet2           | 2.71   |
 +------------------+--------+
