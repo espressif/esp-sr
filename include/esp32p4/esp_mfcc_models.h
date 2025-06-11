@@ -2,11 +2,17 @@
 #include "esp_mfcc_iface.h"
 
 extern const esp_mfcc_iface_t esp_fbank_f32; // float32-fbank handle
+extern const esp_mfcc_iface_t esp_fbank_s16; // int16-fbank handle
 
 /**
  * @brief Return basic opts used in wakenet9 & multinet5
  **/
 esp_mfcc_opts_t *get_mfcc_opts_wn9();
+
+/**
+ * @brief Return basic opts used in wakenet9s
+ **/
+esp_mfcc_opts_t *get_mfcc_opts_wn9s16();
 
 /**
  * @brief Return basic opts for default kaldifeat

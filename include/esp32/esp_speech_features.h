@@ -48,7 +48,7 @@ float *esp_win_func_init(char *win_type, float *window_data, int frame_length);
 
 float *esp_fftr(float *x, int nfft, void *fft_table);
 
-float *esp_spectrum_step(float *x, int nfft, bool use_power, void *fft_table);
+float *esp_spectrum_step(float *x, int nfft, bool use_power, void *fft_handle);
 
 void esp_audio_short_to_float(short *samples, float *x, int len, int remove_dc);
 

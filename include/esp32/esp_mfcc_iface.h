@@ -68,6 +68,8 @@ typedef esp_mfcc_data_t *(*esp_mfcc_op_create_t)(const esp_mfcc_opts_t *opt);
  */
 typedef float *(*esp_mfcc_op_run_step_t)(esp_mfcc_data_t *r, int16_t *samp, int16_t nch);
 
+typedef void (*esp_mfcc_op_run_step_s16_t)(esp_mfcc_data_t *r, int16_t *samp, int16_t *fbank);
+
 /**
  * @brief Clean all state of mfcc handle
  *
@@ -82,5 +84,6 @@ typedef struct {
     esp_mfcc_op_destroy_t destroy;
     esp_mfcc_op_create_t create;
     esp_mfcc_op_run_step_t run_step;
+    esp_mfcc_op_run_step_s16_t run_step_s16;
     esp_mfcc_op_clean_t clean;
 } esp_mfcc_iface_t;
