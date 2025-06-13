@@ -29,6 +29,7 @@ typedef enum {
     DET_MODE_2CH_95 = 3,
     DET_MODE_3CH_90 = 4,
     DET_MODE_3CH_95 = 5,
+	DET_MODE_90_COPY_PARAMS = 6,       // Aggressive
 } det_mode_t;
 
 typedef struct {
