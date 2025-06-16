@@ -1,5 +1,9 @@
 # Change log for esp-sr
 
+## 2.1.4
+- Fix the bug of multinet duration overflow
+- Fix the memory leak bug in multinet7 and multinet6
+
 ## 2.1.3
 - Replace kissfft with dl_fft for wakenet9s
 - Replace esp-dsp fft with dl_fft for wakenet9
