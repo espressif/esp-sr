@@ -71,7 +71,7 @@ TEST_CASE("multinet cpu loading", "[mn]")
     char *model_name = esp_srmodel_filter(models, ESP_MN_PREFIX, NULL);
     esp_mn_iface_t *multinet = esp_mn_handle_from_name(model_name);
 
-    model_iface_data_t *model_data = multinet->create(model_name, 6000);
+    model_iface_data_t *model_data = multinet->create(model_name, 500000);
     int frequency = multinet->get_samp_rate(model_data);
     int audio_chunksize = multinet->get_samp_chunksize(model_data) * sizeof(int16_t);
     char *lang = multinet->get_language(model_data);
