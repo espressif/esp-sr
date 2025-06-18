@@ -222,6 +222,10 @@ menu "Load Multiple Wake Words (WakeNet9)"
     config SR_WN_WN9_HIWALLE_TTS2
     bool "Hi Wall E or Hi 瓦力(wn9_hiwalle_tts2)"
     default False
+
+    config SR_WN_WN9_HIMFIVE
+    bool "Hi,M Five (wn9_himfive)"
+    default False
 endmenu
 
 
