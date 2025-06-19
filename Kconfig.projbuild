@@ -226,6 +226,11 @@ menu "Load Multiple Wake Words (WakeNet9)"
     config SR_WN_WN9_HIMFIVE
     bool "Hi,M Five (wn9_himfive)"
     default False
+
+
+    config SR_WN_WN9_XIAOLUXIAOLU_TTS2
+    bool "小鹿小鹿 (wn9_xiaoluxiaolu_tts2)"
+    default False
 endmenu
 
 
