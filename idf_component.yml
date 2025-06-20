@@ -4,7 +4,7 @@ url: https://github.com/espressif/esp-sr
 dependencies:
   idf: ">=5.0"
   espressif/esp-dsp: "1.6.0"
-  espressif/dl_fft: ">=0.1.0"
+  espressif/dl_fft: ">=0.2.0"
 files:
   exclude:
     - ".github"
