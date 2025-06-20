@@ -11,7 +11,7 @@ extern "C" {
 /**
  * @brief Get the wakenet handle from model name
  *
- * @param model_name   The name of model 
+ * @param model_name   The name of model
  * @returns The handle of wakenet
  */
 const esp_wn_iface_t *esp_wn_handle_from_name(const char *model_name);
@@ -19,10 +19,10 @@ const esp_wn_iface_t *esp_wn_handle_from_name(const char *model_name);
 /**
  * @brief Get the wake word name from model name
  *
- * @param model_name   The name of model 
+ * @param model_name   The name of model
  * @returns The wake word name, like "alexa","hilexin","xiaoaitongxue"
  */
-char* esp_wn_wakeword_from_name(const char *model_name);
+char *esp_wn_wakeword_from_name(const char *model_name);
 
 #ifdef __cplusplus
 }

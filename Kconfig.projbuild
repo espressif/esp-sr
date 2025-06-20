@@ -68,7 +68,7 @@ menu "Load Multiple Wake Words (WakeNet9s)"
     default False
 
     config SR_WN_WN9S_HIJASON
-    bool "Hi,Jason (wn9s_hijason_tts2)"
+    bool "Hi,Jason (wn9s_hijason)"
     default False
 
 endmenu
