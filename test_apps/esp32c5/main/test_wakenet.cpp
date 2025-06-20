@@ -31,7 +31,7 @@ TEST_CASE("wakenet create/destroy API & memory leak", "[wn]")
     // test model loading time
     struct timeval tv_start, tv_end;
     gettimeofday(&tv_start, NULL);
-    model_iface_data_t *model_data = wakenet->create(model_name, DET_MODE_3CH_95);
+    model_iface_data_t *model_data = wakenet->create(model_name, DET_MODE_95);
     gettimeofday(&tv_end, NULL);
     int tv_ms = (tv_end.tv_sec - tv_start.tv_sec) * 1000 + (tv_end.tv_usec - tv_start.tv_usec) / 1000;
     printf("create latency:%d ms\n", tv_ms);
@@ -41,7 +41,6 @@ TEST_CASE("wakenet create/destroy API & memory leak", "[wn]")
     int create_internal_size = start_internal_size - heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
     printf("Internal RAM: %d, PSRAM:%d\n", create_internal_size, create_size - create_internal_size);
     wakenet->destroy(model_data);
-    esp_srmodel_deinit(models);
 
     // test memory leak
     int first_end_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
@@ -51,31 +50,23 @@ TEST_CASE("wakenet create/destroy API & memory leak", "[wn]")
 
     for (int i = 0; i < 6; i++) {
         printf("init partition ...\n");
-        models = esp_srmodel_init("model");
         model_name = esp_srmodel_filter(models, ESP_WN_PREFIX, NULL);
         wakenet = (esp_wn_iface_t*)esp_wn_handle_from_name(model_name);
         // char *wake_words = esp_srmodel_get_wake_words(models, model_name);
 
         printf("create ...\n");
-        // typedef enum {
-        //     DET_MODE_90 = 0,       // Normal
-        //     DET_MODE_95 = 1,       // Aggressive
-        //     DET_MODE_2CH_90 = 2,
-        //     DET_MODE_2CH_95 = 3,
-        //     DET_MODE_3CH_90 = 4,
-        //     DET_MODE_3CH_95 = 5,
-        // } det_mode_t;
-        model_data = wakenet->create(model_name, (det_mode_t)i);
+        model_data = wakenet->create(model_name, DET_MODE_95);
 
         printf("destroy ...\n");
         wakenet->destroy(model_data);
         // free(wake_words);
-        esp_srmodel_deinit(models);
+        // esp_srmodel_deinit(models);
 
         last_end_size = heap_caps_get_free_size(MALLOC_CAP_8BIT);
         mem_leak = start_size - last_end_size;
         printf("create&destroy times:%d, memory leak:%d\n", i + 2, mem_leak);
     }
+     esp_srmodel_deinit(models);
 
     TEST_ASSERT_EQUAL(true, (mem_leak) < 1000 && last_end_size == first_end_size);
 }
