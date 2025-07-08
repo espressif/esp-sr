@@ -219,6 +219,10 @@ menu "Load Multiple Wake Words (WakeNet9)"
     bool "你好百应 (wn9_nihaobaiying_tts2)"
     default False
 
+    config SR_WN_WN9_NIHAODONGDONG_TTS2
+    bool "你好东东 (wn9_nihaodongdong_tts2)"
+    default False
+
     config SR_WN_WN9_HIWALLE_TTS2
     bool "Hi Wall E or Hi 瓦力(wn9_hiwalle_tts2)"
     default False
