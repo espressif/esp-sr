@@ -41,10 +41,11 @@ The following wake words are supported in esp-sr:
 |wake words       |             WakeNet9s           |  WakeNet9              | 
 |:--------------- | :------------------------------:| :---------------------:| 
 |Hi,乐鑫           |  wn9s_hilexin                   | wn9_hilexin            | 
-|Hi,ESP           |  wn9s_hiesp                     | wn9_hiesp              | 
-|你好小智          |  wn9s_nihaoxiaozhi               | wn9_nihaoxiaozhi_tts   |
-|Hi,Jason         |   wn9s_hijason_tts2               | wn9_hijason_tts2       |
-|小爱同学          |                                  | wn9_xiaoaitongxue      | 
+|Hi,ESP           |  wn9s_hiesp                      | wn9_hiesp              | 
+|你好小智          |  wn9s_nihaoxiaozhi              | wn9_nihaoxiaozhi_tts   |
+|Hi,Jason         |   wn9s_hijason_tts2              | wn9_hijason_tts2       |
+|你好喵伴          |                                 | wn9_nihaomiaoban_tts2   |
+|小爱同学          |                                 | wn9_xiaoaitongxue      | 
 |Hi,M Five        |                                  | wn9_himfive            | 
 |Alexa            |                                  | wn9_alexa              | 
 |Jarvis           |                                  | wn9_jarvis_tts         | 

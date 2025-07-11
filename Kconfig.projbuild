@@ -80,6 +80,10 @@ menu "Load Multiple Wake Words (WakeNet9)"
     bool "Hi,乐鑫 (wn9_hilexin)"
     default False
 
+    config SR_WN_WN9_NIHAOMIAOBAN_TTS2
+    bool "你好喵伴 (wn9_nihaomiaoban_tts2)"
+    default False
+
     config SR_WN_WN9_XIAOAITONGXUE
     bool "小爱同学 (wn9_xiaoaitongxue)"
     default False
