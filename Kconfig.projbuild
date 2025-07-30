@@ -116,6 +116,14 @@ menu "Load Multiple Wake Words (WakeNet9)"
     bool "Sophia (wn9_sophia_tts)"
     default False
 
+    config SR_WN_WN9_HIJOLLY_TTS2
+    bool "Hi,Jolly (wn9_hijolly_tts2)"
+    default False
+
+    config SR_WN_WN9_HIFAIRY_TTS2
+    bool "Hi,Fairy (wn9_hifairy_tts2)"
+    default False
+
     config SR_WN_WN9_NIHAOXIAOXIN_TTS
     bool "你好小鑫 (wn9_nihaoxiaoxin_tts)"
     default False
