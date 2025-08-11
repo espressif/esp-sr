@@ -47,7 +47,8 @@ typedef struct{
     int command_id[ESP_MN_RESULT_MAX_NUM];     // The list of command id.
     int phrase_id[ESP_MN_RESULT_MAX_NUM];      // The list of phrase id.
     float prob[ESP_MN_RESULT_MAX_NUM];         // The list of probability.
-    char string[256];
+    char string[256];                          // recognized string with commands graph
+    char raw_string[256];                      // recognized string without commands graph
 } esp_mn_results_t;
 
 typedef struct {
