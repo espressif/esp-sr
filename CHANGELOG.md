@@ -1,5 +1,9 @@
 # Change log for esp-sr
 
+## 2.1.5
+- Fix ringbuf bug
+- Add more wakenet9 models
+
 ## 2.1.4
 - Fix the bug of multinet duration overflow
 - Fix the memory leak bug in multinet7 and multinet6
