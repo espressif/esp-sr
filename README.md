@@ -31,7 +31,7 @@ News
 | Supported Targets | ESP32    | ESP32-S2 | ESP32-S3 | ESP32-P4 | ESP32-C3 | ESP32-C5 | ESP32-C6 | 
 | ----------------- | -------- | -------- | -------- | -------- | -------- | -------- | -------- |
 
-Espressif wake word engine **WakeNet** is specially designed to provide a high performance and low memory footprint wake word detection algorithm for users, which enables devices always listen to wake words, such as “Alexa”, “Hi,lexin” and “Hi,ESP”. WakeNet9 and WakeNet9s models are supported. WakeNet9s is a cost-down version of WakeNet9, with fewer parameters and lower computational requirements. 
+Espressif wake word engine **WakeNet** is specially designed to provide a high performance and low memory footprint wake word detection algorithm for users, which enables devices always listen to wake words, such as “Alexa”, “Hi,lexin” and “Hi,ESP”. WakeNet9 and WakeNet9s models are supported. WakeNet9s is a cost-down version of WakeNet9, with fewer parameters and lower computational requirements. `_tts` suffix means this WakeNet model is trained by TTS samples. `_tts2` suffix means this WakeNet model is trained by TTS Pipeline V2.
 
 Espressif offers two ways to customize the wake word, please refer to the following document to choose the one that meets your needs:   
 [Espressif Speech Wake Words Customization Process](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/wake_word_engine/ESP_Wake_Words_Customization.html) or [Training Wake Words by TTS sample](https://github.com/espressif/esp-sr/issues/88).
@@ -86,7 +86,11 @@ The following wake words are supported in esp-sr:
 |你好东东         |                                  | wn9_nihaodongdong_tts2|
 |你好小安         |                                  | wn9_nihaoxiaoan_tts2|
 
-*NOTE:* `_tts` suffix means this WakeNet model is trained by TTS samples. `_tts2` suffix means this WakeNet model is trained by TTS Pipeline V2.
+**NOTE**:
+
+The product names, logos, and brands associated with the wake words listed in this software are the property of their respective owners. They are shown here solely to provide examples of wake words for users to understand and test Espressif’s Speech Recognition Framework, and do not imply any affiliation with or endorsement by their owners. This software is not affiliated with, endorsed by, or in any way officially connected to any trademark owner. Before any commercial use, you must ensure that you are the lawful rights holder of the relevant wake words or have obtained proper authorization from the lawful rights holder.
+
+本软件所列唤醒词相关的产品名称、标识及品牌均归其各自所有权人所有。展示这些内容仅为了提供唤醒词示例，供用户了解和测试乐鑫提供的语音识别框架，并不表示与权利人存在任何关联或获得认可。本软件与任何商标权人无官方关系。在任何商业使用前，请确保您拥有相关唤醒词的合法权利或已获得合法授权。
 
 ## Speech Command Recognition
 
