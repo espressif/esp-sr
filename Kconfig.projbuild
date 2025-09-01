@@ -251,6 +251,14 @@ menu "Load Multiple Wake Words (WakeNet9)"
     config SR_WN_WN9_NIHAOXIAOAN_TTS2
     bool "你好小安 (wn9_nihaoxiaoan_tts2)"
     default False
+
+    config SR_WN_WN9_HIANDY_TTS2
+    bool "Hi,Andy (wn9_hiandy_tts2)"
+    default False
+
+    config SR_WN_WN9_NI3HAO3XIAO3MAI4_TTS2
+    bool "你好小脉 (wn9_ni3hao3xiao3mai4_tts2)"
+    default False
 endmenu
 
 
