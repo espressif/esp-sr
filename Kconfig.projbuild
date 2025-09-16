@@ -160,6 +160,14 @@ menu "Load Multiple Wake Words (WakeNet9)"
     bool "Blue Chip (wn9_bluechip_tts2)"
     default False
 
+    config SR_WN_WN9_HIANDY_TTS2
+    bool "Hi,Andy (wn9_hiandy_tts2)"
+    default False
+
+    config SR_WN_WN9_HEYIVY_TTS2
+    bool "Hey,Ivy (wn9_heyivy_tts2)"
+    default False
+
     config SR_WN_WN9_XIAOLONGXIAOLONG_TTS
     bool "小龙小龙 (wn9_xiaolongxiaolong_tts)"
     default False
@@ -250,10 +258,6 @@ menu "Load Multiple Wake Words (WakeNet9)"
 
     config SR_WN_WN9_NIHAOXIAOAN_TTS2
     bool "你好小安 (wn9_nihaoxiaoan_tts2)"
-    default False
-
-    config SR_WN_WN9_HIANDY_TTS2
-    bool "Hi,Andy (wn9_hiandy_tts2)"
     default False
 
     config SR_WN_WN9_NI3HAO3XIAO3MAI4_TTS2

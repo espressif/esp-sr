@@ -58,11 +58,12 @@ The following wake words are supported in esp-sr:
 |Hey,Wand         |                                  | wn9_heywanda_tts       |
 |Astrolabe        |                                  | wn9_astrolabe_tts      |
 |Hey,Ily          |                                  | wn9_heyily_tts2        |
-|Hi,Jolly         |                                  | wn9_hijolly_tts2        |
-|Hi,Fairy         |                                  | wn9_hifairy_tts2        |
-|Blue Chip        |                                  | wn9_bluechip_tts2        |
+|Hi,Jolly         |                                  | wn9_hijolly_tts2       |
+|Hi,Fairy         |                                  | wn9_hifairy_tts2       |
+|Blue Chip        |                                  | wn9_bluechip_tts2      |
 |Hi,Andy          |                                  | wn9_hiandy_tts2        |
-|Hi,Wall E/Hi,瓦力|                                  | wn9_hiwalle_tts2       |
+|Hey,Ivy          |                                  | wn9_heyivy_tts2        |
+|Hi,Wall E/Hi,瓦力|                                   | wn9_hiwalle_tts2      |
 |你好小鑫         |                                  | wn9_nihaoxiaoxin_tts   |
 |小美同学         |                                  | wn9_xiaomeitongxue_tts |
 |Hi,小星          |                                  | wn9_hixiaoxing_tts     |
