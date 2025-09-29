@@ -27,8 +27,8 @@ if((${IDF_TARGET} STREQUAL "esp32s3") OR (${IDF_TARGET} STREQUAL "esp32p4") OR (
                         PRIV_REQUIRES spi_flash)
 
 
-    target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}")
-    target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese/${IDF_TARGET}")
+    target_link_libraries(${COMPONENT_TARGET} "-L \"${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}\"")
+    target_link_libraries(${COMPONENT_TARGET} "-L \"${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese/${IDF_TARGET}\"")
     add_prebuilt_library(dl_lib "${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}/libdl_lib.a" PRIV_REQUIRES ${COMPONENT_NAME})
     add_prebuilt_library(c_speech_features "${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}/libc_speech_features.a" PRIV_REQUIRES ${COMPONENT_NAME})
     add_prebuilt_library(esp_audio_processor "${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}/libesp_audio_processor.a" PRIV_REQUIRES ${COMPONENT_NAME})
