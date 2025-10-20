@@ -1,5 +1,9 @@
 # Change log for esp-sr
 
+# 2.2.0
+- Support WakeNet9l models
+- Update TTS pipeline v3.0 
+
 ## 2.1.5
 - Fix ringbuf bug
 - Add more wakenet9 models
