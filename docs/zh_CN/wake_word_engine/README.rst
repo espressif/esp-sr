@@ -32,9 +32,9 @@ WakeNet 的流程图如下：
 -  神经网络 (Neural Network)
     神经网络结构已经更新到第 9 版，其中：
 
-    -  WakeNet1、WakeNet2、WakeNet3、WakeNet4、WakeNet6 and WakeNet7 已经停止使用。
-    -  WakeNet5 应用于 ESP32 芯片。
-    -  WakeNet8 和 WakeNet9 应用于 ESP32-S3 芯片，模型基于 `Dilated Convolution <https://arxiv.org/pdf/1609.03499.pdf>`__ 结构。
+    -  WakeNet1, WakeNet2, WakeNet3, WakeNet4, WakeNet5, WakeNet6, WakeNet7 and WakeNet8 已经停止使用。
+    -  WakeNet9 和 WakeNet9l 应用于 ESP32, ESP32S3, ESP32P4 芯片，模型基于 `Dilated Convolution <https://arxiv.org/pdf/1609.03499.pdf>`__ 结构。
+    -  WakeNet9s 应用于 ESP32C3, ESP32C5 and ESP32C6 芯片，模型基于 `Dilated Convolution <https://arxiv.org/pdf/1609.03499.pdf>`__ 结构。
 
 .. only:: latex
 

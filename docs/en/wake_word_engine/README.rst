@@ -32,9 +32,9 @@ Please see the flow diagram of WakeNet below:
 -  Neural Network
     Now, the neural network structure has been updated to the ninth edition, among which:
 
-    -  WakeNet1, WakeNet2, WakeNet3, WakeNet4, WakeNet6, and WakeNet7 had been out of use.
-    -  WakeNet5 only supports ESP32 chip.
-    -  WakeNet8 and WakeNet9 only support ESP32-S3 chip, which are built upon the `Dilated Convolution <https://arxiv.org/pdf/1609.03499.pdf>`__ structure.
+    -  WakeNet1, WakeNet2, WakeNet3, WakeNet4, WakeNet5, WakeNet6, and WakeNet7, WakeNet8 had been out of use.
+    -  WakeNet9 and WakeNet9l support ESP32, ESP32S3, and ESP32P4 chips, which are built upon the `Dilated Convolution <https://arxiv.org/pdf/1609.03499.pdf>`__ structure. WakeNet9l further improves the recognition rate of wake words spoken at very fast speeds based on WakeNet9.
+    -  WakeNet9s supports ESP32C3, ESP32C5 and ESP32C6 chip, which is built upon the `Depthwise Separable Convolution <https://arxiv.org/abs/1704.04861>`__ structure. 
 
 .. only:: latex
 

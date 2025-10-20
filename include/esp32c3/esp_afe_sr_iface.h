@@ -46,7 +46,7 @@ typedef struct afe_fetch_result_t {
     int ret_value;           // the return state of fetch function
     int16_t *raw_data;       // the multi-channel output data of audio.
     int raw_data_channels;   // the channel number of raw data
-    float ringbuff_free_pct; // the percent of ringbuff free size. if the value is larger than 0.5, it means the ringbuff is buzy. 
+    float ringbuff_free_pct; // the percent of ringbuff free size. if the value is larger than 0.5, it means the ringbuff is busy. 
     void *reserved;          // reserved for future use
 } afe_fetch_result_t;
 
