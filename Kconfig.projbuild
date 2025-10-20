@@ -88,6 +88,10 @@ menu "Load Multiple Wake Words (WakeNet9)"
     bool "小爱同学 (wn9_xiaoaitongxue)"
     default False
 
+    config SR_WN_WN9L_XIAOAITONGXUE
+    bool "小爱同学 (wn9l_xiaoaitongxue)"
+    default False
+
     config SR_WN_WN9_NIHAOXIAOZHI_TTS
     bool "你好小智 (wn9_nihaoxiaozhi_tts)"
     default False
