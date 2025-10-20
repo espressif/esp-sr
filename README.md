@@ -89,6 +89,7 @@ The following wake words are supported in esp-sr:
 |你好东东         |                                  | wn9_nihaodongdong_tts2|
 |你好小安         |                                  | wn9_nihaoxiaoan_tts2|
 |你好小脉         |                                  | wn9_ni3hao3xiao3mai4_tts2|
+|你好小瑞         |                                  | wn9_ni3hao3xiao3rui4_tts3|
 
 **NOTE**:
 

@@ -96,6 +96,10 @@ menu "Load Multiple Wake Words (WakeNet9)"
     bool "你好小智 (wn9_nihaoxiaozhi_tts)"
     default False
 
+    config SR_WN_WN9L_NIHAOXIAOZHI_TTS3
+    bool "你好小智 (wn9l_nihaoxiaozhi_tts3)"
+    default False
+
     config SR_WN_WN9_ALEXA
     bool "Alexa (wn9_alexa)"
     default False
@@ -266,6 +270,10 @@ menu "Load Multiple Wake Words (WakeNet9)"
 
     config SR_WN_WN9_NI3HAO3XIAO3MAI4_TTS2
     bool "你好小脉 (wn9_ni3hao3xiao3mai4_tts2)"
+    default False
+
+    config SR_WN_WN9_NI3HAO3XIAO3RUI4_TTS3
+    bool "你好小瑞 (wn9_ni3hao3xiao3rui4_tts3)"
     default False
 endmenu
 
