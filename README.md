@@ -21,6 +21,7 @@ These algorithms are provided in the form of a component, so they can be integra
 
 News
 ----
+[20/10/2025]: We add a new model, WakeNet9l, which further improves the response rate of wake words spoken at extremely fast speeds based on WakeNet9. The usage of WakeNet9l is the same as WakeNet9, but its CPU and memory requirements are approximately 1.3 times higher than those of WakeNet9.
 [21/4/2025]: We add a new model WakeNet9s, which can run on chips that do not have PSRAM and do not support SIMD, such as ESP32C3 and ESP32C5. [examples](https://github.com/espressif/esp-skainet/tree/master/examples/wake_word_detection)  
 [17/4/2025]: We add a new DOA(Direction of Arrival) algorithm.  
 [14/2/2025]: We release **ESP-SR V2.0**. [Migration from ESP-SR V1.* to ESP-SR V2.*](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/audio_front_end/migration_guide.html)   
