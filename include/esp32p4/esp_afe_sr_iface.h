@@ -227,7 +227,7 @@ typedef struct {
 // struct is used to store the AFE handle and data for the AFE task
 typedef struct {
     esp_afe_sr_data_t *afe_data;
-    esp_afe_sr_iface_t *afe_handle;
+    const esp_afe_sr_iface_t *afe_handle;
     TaskHandle_t feed_task;
     TaskHandle_t fetch_task;
 } afe_task_into_t;
