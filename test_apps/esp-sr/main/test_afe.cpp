@@ -50,7 +50,7 @@ void test_afe_by_config(afe_config_t *afe_config, int frame_num, int *memory, fl
 
     for (int i = 0; i < loop; i++) {
         // init config and handle
-        esp_afe_sr_iface_t *afe_handle = esp_afe_handle_from_config(afe_config);
+        const esp_afe_sr_iface_t *afe_handle = esp_afe_handle_from_config(afe_config);
         // afe_config_print(afe_config);
         esp_afe_sr_data_t *afe_data = afe_handle->create_from_config(afe_config);
 
@@ -208,7 +208,7 @@ TEST_CASE(">>>>>>>> AFE default setting <<<<<<<<", "[afe_benchmark]")
 void test_feed_Task(void *arg)
 {
     afe_task_into_t *afe_task_info = (afe_task_into_t *)arg;
-    esp_afe_sr_iface_t *afe_handle = afe_task_info->afe_handle;
+    const esp_afe_sr_iface_t *afe_handle = afe_task_info->afe_handle;
     esp_afe_sr_data_t *afe_data = afe_task_info->afe_data;
 
     int feed_chunksize = afe_handle->get_feed_chunksize(afe_data);
@@ -238,7 +238,7 @@ void test_fetch_Task(void *arg)
 {
     // esp_afe_sr_iface_t *afe_handle = &ESP_AFE_SR_HANDLE;
     afe_task_into_t *afe_task_info = (afe_task_into_t *)arg;
-    esp_afe_sr_iface_t *afe_handle = afe_task_info->afe_handle;
+    const esp_afe_sr_iface_t *afe_handle = afe_task_info->afe_handle;
     esp_afe_sr_data_t *afe_data = afe_task_info->afe_data;
     detect_cnt = 0;
     fetch_task_flag = 1;
@@ -271,7 +271,7 @@ TEST_CASE("afe performance test (1ch)", "[afe_perf]")
     for (int mode_id = 0; mode_id < 2; mode_id++) {
         afe_config_t *afe_config = afe_config_init(input_format, models, afe_type, afe_model[mode_id]);
         if (afe_config->wakenet_init && afe_config->wakenet_model_name) {
-            esp_afe_sr_iface_t *afe_handle = esp_afe_handle_from_config(afe_config);
+            const esp_afe_sr_iface_t *afe_handle = esp_afe_handle_from_config(afe_config);
             esp_afe_sr_data_t *afe_data = afe_handle->create_from_config(afe_config);
             afe_task_into_t task_info;
             task_info.afe_data = afe_data;
@@ -304,7 +304,7 @@ TEST_CASE("afe performance test (2ch)", "[afe_perf]")
     for (int mode_id = 0; mode_id < 2; mode_id++) {
         afe_config_t *afe_config = afe_config_init(input_format, models, afe_type, afe_model[mode_id]);
         if (afe_config->wakenet_init && afe_config->wakenet_model_name) {
-            esp_afe_sr_iface_t *afe_handle = esp_afe_handle_from_config(afe_config);
+            const esp_afe_sr_iface_t *afe_handle = esp_afe_handle_from_config(afe_config);
             esp_afe_sr_data_t *afe_data = afe_handle->create_from_config(afe_config);
             afe_task_into_t task_info;
             task_info.afe_data = afe_data;
