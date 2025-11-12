@@ -1,5 +1,9 @@
 # Change log for esp-sr
 
+# 2.2.1
+- Fix AFE error log
+- Add new wakenet9 models
+
 # 2.2.0
 - Support WakeNet9l models
 - Update TTS pipeline v3.0 

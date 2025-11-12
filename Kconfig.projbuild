@@ -279,6 +279,10 @@ menu "Load Multiple Wake Words (WakeNet9)"
     config SR_WN_WN9_HAI1XIAO3OU1_TTS3
     bool "嗨小欧 (wn9_hai1xiao3ou1_tts3)"
     default False
+
+    config SR_WN_WN9_XIAO3JIA1XIAO3JIA1_TTS3
+    bool "小珈小珈 (wn9_xiao3jia1xiao3jia1_tts3)"
+    default False
 endmenu
 
 
