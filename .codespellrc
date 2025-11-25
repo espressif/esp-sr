@@ -1,0 +1,4 @@
+[codespell]
+skip = build,*.drawio,*.svg,*.pdf
+ignore-words-list = AFE
+write-changes = true
