@@ -1,4 +1,5 @@
 stages:
+  - check
   - build
   - target_test
   - build_docs
@@ -138,7 +139,7 @@ before_script:
     - python ./test_apps/build_apps.py $EXAMPLES_PATH -t all
 
 build_esp_sr:
-  extends: 
+  extends:
     - .build_test_template
     - .rules:build:test_esp_sr
   parallel:
@@ -148,7 +149,7 @@ build_esp_sr:
 
 
 build_esp_tts:
-  extends: 
+  extends:
     - .build_test_template
     - .rules:build:test_esp_tts
   parallel:
@@ -157,7 +158,7 @@ build_esp_tts:
         EXAMPLES_PATH: "test_apps/esp-tts"
 
 build_esp32c5:
-  extends: 
+  extends:
     - .build_test_template
     - .rules:build:test_esp32c5
   parallel:
@@ -209,7 +210,7 @@ test_esp_sr:
     matrix:
       - TEST_TARGET: esp32s3
         TEST_ENV: esp32s3
-  tags: 
+  tags:
     - ${TEST_ENV}
   image: $DOCKER_TARGET_TEST_v5_3_ENV_IMAGE
   variables:
@@ -228,7 +229,7 @@ test_esp_tts:
     matrix:
       - TEST_TARGET: esp32s3
         TEST_ENV: esp32s3
-  tags: 
+  tags:
     - ${TEST_ENV}
   image: $DOCKER_TARGET_TEST_v5_3_ENV_IMAGE
   variables:
@@ -345,3 +346,6 @@ push_to_github:
     - git remote remove github &>/dev/null || true
     - git remote add github git@github.com:espressif/esp-sr.git
     - git push github "${CI_COMMIT_SHA}:refs/heads/${CI_COMMIT_REF_NAME}"
+
+include:
+  - local: ci/pre_commit.yml
