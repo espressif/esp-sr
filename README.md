@@ -21,11 +21,11 @@ These algorithms are provided in the form of a component, so they can be integra
 
 News
 ----
-[20/10/2025]: We add a new model, WakeNet9l, which further improves the response rate of wake words spoken at extremely fast speeds based on WakeNet9. The usage of WakeNet9l is the same as WakeNet9, but its CPU and memory requirements are approximately 1.3 times higher than those of WakeNet9.
-[21/4/2025]: We add a new model WakeNet9s, which can run on chips that do not have PSRAM and do not support SIMD, such as ESP32C3 and ESP32C5. [examples](https://github.com/espressif/esp-skainet/tree/master/examples/wake_word_detection)
-[17/4/2025]: We add a new DOA(Direction of Arrival) algorithm.
-[14/2/2025]: We release **ESP-SR V2.0**. [Migration from ESP-SR V1.* to ESP-SR V2.*](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/audio_front_end/migration_guide.html)
-[13/2/2025]: We release **VADNet**, a voice activaty detection model. You can use it to replace the WebRTC VAD and improve the performance.
+- [20/10/2025]: We add a new model, WakeNet9l, which further improves the response rate of wake words spoken at extremely fast speeds based on WakeNet9. The usage of WakeNet9l is the same as WakeNet9, but its CPU and memory requirements are approximately 1.3 times higher than those of WakeNet9.
+- [21/4/2025]: We add a new model WakeNet9s, which can run on chips that do not have PSRAM and do not support SIMD, such as ESP32C3 and ESP32C5. [examples](https://github.com/espressif/esp-skainet/tree/master/examples/wake_word_detection)
+- [17/4/2025]: We add a new DOA(Direction of Arrival) algorithm.
+- [14/2/2025]: We release **ESP-SR V2.0**. [Migration from ESP-SR V1.* to ESP-SR V2.*](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/audio_front_end/migration_guide.html)
+- [13/2/2025]: We release **VADNet**, a voice activaty detection model. You can use it to replace the WebRTC VAD and improve the performance.
 
 ## Wake Word Engine
 
@@ -127,7 +127,9 @@ Our two-mic Audio Front-End (AFE) have been qualified as a “Software Audio Fro
 
 ## Documentation and Resources
 
-ESP-SR Documentation: [ESP-SR Documentation](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/index.html)
-Migration Guide: [Migration from V1.* to V2.*](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/audio_front_end/migration_guide.html)
-Wake Word Training: [Wake Word Training by TTS Pipeline V2.0](https://github.com/espressif/esp-sr/issues/88)
-Examples: [esp-skainet/examples](https://github.com/espressif/esp-skainet)
+- ESP-SR Documentation: [ESP-SR Documentation](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/index.html)
+- Migration Guide: [Migration from V1.* to V2.*](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/audio_front_end/migration_guide.html)
+- Wake Word Training: [Wake Word Training by TTS Pipeline V2.0](https://github.com/espressif/esp-sr/issues/88)
+- Examples: [esp-skainet/examples](https://github.com/espressif/esp-skainet)
+- Fbank/MFCC: [esp-dl/audio](https://github.com/espressif/esp-dl/tree/master/esp-dl/audio)
+- FFT: [dl_fft](https://components.espressif.com/components/espressif/dl_fft/versions/0.3.1/readme)
