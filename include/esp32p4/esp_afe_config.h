@@ -90,6 +90,7 @@ typedef struct {
     afe_debug_hook_callback_t hook_callback; // callback function which transfer debug audio data
 } afe_debug_hook_t;
 
+#define AFE_MAX_WAKEWORD_NUM 3
 typedef struct {
     /********** AEC(Acoustic Echo Cancellation) **********/
     bool aec_init;         // Whether to init aec
@@ -120,6 +121,7 @@ typedef struct {
     bool wakenet_init;
     char *wakenet_model_name;   // The model name of wakenet 1
     char *wakenet_model_name_2; // The model name of wakenet 2 if has wakenet 2
+    char *wakenet_model_name_3; // The model name of wakenet 3 if has wakenet 3
     det_mode_t wakenet_mode;    // The mode of wakenet
 
     /********** AGC(Automatic Gain Control) **********/
