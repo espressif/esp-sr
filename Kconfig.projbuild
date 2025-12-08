@@ -176,6 +176,11 @@ menu "Load Multiple Wake Words (WakeNet9)"
     bool "Hey,Ivy (wn9_heyivy_tts2)"
     default False
 
+
+    config SR_WN_WN9_HISTACKCHAN_TTS3
+    bool "Hi,Stack Chan (wn9_histackchan_tts3)"
+    default False
+
     config SR_WN_WN9_XIAOLONGXIAOLONG_TTS
     bool "小龙小龙 (wn9_xiaolongxiaolong_tts)"
     default False
@@ -282,6 +287,10 @@ menu "Load Multiple Wake Words (WakeNet9)"
 
     config SR_WN_WN9_XIAO3JIA1XIAO3JIA1_TTS3
     bool "小珈小珈 (wn9_xiao3jia1xiao3jia1_tts3)"
+    default False
+
+    config SR_WN_WN9_XIAO3FENG1XIAO3FENG1_TTS3
+    bool "小峰小峰 (wn9_xiao3feng1xiao3feng1_tts3)"
     default False
 endmenu
 
