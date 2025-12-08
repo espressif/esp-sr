@@ -26,7 +26,7 @@ extern "C" {
 
 typedef struct aec_handle_t aec_handle_t;
 typedef enum {
-    AEC_MODE_SR_LOW_COST = 0,     // Low Cost AEC fro speech recognition
+    AEC_MODE_SR_LOW_COST = 0,     // Low Cost AEC for speech recognition
     AEC_MODE_SR_HIGH_PERF = 1,    // High Perforamce AEC for speech recognition
     AEC_MODE_VOIP_LOW_COST = 3,   // Low Cost AEC for voice communication
     AEC_MODE_VOIP_HIGH_PERF = 4,  // High Perforamce AEC for voice communication
@@ -70,7 +70,7 @@ aec_handle_t *aec_pro_create(int filter_length, int channel_num, aec_mode_t mode
  * @return None
  *
  */
-void aec_process(const aec_handle_t *handel, int16_t *indata, int16_t *refdata, int16_t *outdata);
+void aec_process(const aec_handle_t *handle, int16_t *indata, int16_t *refdata, int16_t *outdata);
 
 /**
  * @brief Get frame size of AEC (the samples of one frame)
@@ -96,7 +96,7 @@ char * aec_get_mode_string(aec_mode_t aec_mode);
  * @return None
  *
  */
-void aec_destroy(aec_handle_t *handel);
+void aec_destroy(aec_handle_t *handle);
 
 #ifdef __cplusplus
 }

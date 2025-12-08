@@ -101,7 +101,7 @@ MultiNet5 定义方法：
         *
         * @param model_data          The model object to query
         *
-        * @param langugae            The language of MultiNet
+        * @param language            The language of MultiNet
         *
         * @return
         *     - ESP_OK                  Success

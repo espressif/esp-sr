@@ -22,7 +22,7 @@ typedef struct {
 /**
  * @brief Creates an instance to the AEC structure.
  *
- * @warning Currently only support 1 microphone channel and 1 playback channe.
+ * @warning Currently only support 1 microphone channel and 1 playback channel.
  * If input has multiple microphone channels and playback channels, just the first microphone channel and playback
  * channel will be selected.
  *
@@ -55,7 +55,7 @@ afe_aec_handle_t *afe_aec_create(const char *input_format, int filter_length, af
 
  * @return The bytes of outdata.
  */
-size_t afe_aec_process(afe_aec_handle_t *handel, const int16_t *indata, int16_t *outdata);
+size_t afe_aec_process(afe_aec_handle_t *handle, const int16_t *indata, int16_t *outdata);
 
 /**
  * @brief Get frame size of AEC (the samples of one frame)
@@ -72,7 +72,7 @@ int afe_aec_get_chunksize(afe_aec_handle_t *handle);
  * @return None
  *
  */
-void afe_aec_destroy(afe_aec_handle_t *handel);
+void afe_aec_destroy(afe_aec_handle_t *handle);
 
 #ifdef __cplusplus
 }

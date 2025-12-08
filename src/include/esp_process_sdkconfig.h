@@ -18,7 +18,7 @@ void check_chip_config(void);
  *
  * @param model_data          The model object to query
  *
- * @param langugae            The language of MultiNet
+ * @param language            The language of MultiNet
  *
  * @return
  *     - ESP_OK                  Success

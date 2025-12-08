@@ -67,7 +67,7 @@ dl_matrix2dq8_t *dl_matrixq8_copy_to_psram(const dl_matrix2dq8_t *m);
  * @brief Convert a floating-point matrix to a quantized matrix
  *
  * @param m     Floating-point matrix to convert
- * @param out   Quantized matrix to re-use. If NULL, allocate a new one.
+ * @param out   Quantized matrix to reuse. If NULL, allocate a new one.
  * @Return The quantized version of the floating-point matrix
  */
 dl_matrix2dq8_t *dl_matrixq8_from_matrix2d(const dl_matrix2d_t *m, dl_matrix2dq8_t *out);

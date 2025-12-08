@@ -54,7 +54,7 @@ typedef void* mase_handle_t;
  *
  * @param operating_mode	'0' for normal mode and '1' for wake-up enhanced mode.
  *
- * @param filter_strength	Strengh of the mic-array speech enhancement, must be 0, 1, 2 or 3.
+ * @param filter_strength	Strength of the mic-array speech enhancement, must be 0, 1, 2 or 3.
  * 
  * @return
  *         - NULL: Create failed

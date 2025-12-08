@@ -84,7 +84,7 @@ dl_matrix2d_t *dl_matrix_copy_to_psram(const dl_matrix2d_t *m);
 
 /**
  * @brief Generate a new matrix using a range of items from an existing matrix.
- * When using this, the data of the new matrix is not allocated/copied but it re-uses a pointer
+ * When using this, the data of the new matrix is not allocated/copied but it reuses a pointer
  * to the existing data. Changing the data in the resulting matrix, as a result, will also change
  * the data in the existing matrix that has been sliced.
  *
@@ -92,7 +92,7 @@ dl_matrix2d_t *dl_matrix_copy_to_psram(const dl_matrix2d_t *m);
  * @param y     Y-offset of the origin of the returned matrix within the sliced matrix
  * @param w     Width of the resulting matrix
  * @param h     Height of the resulting matrix
- * @param in    Old matrix (with foreign data) to re-use. Passing NULL will allocate a new matrix.
+ * @param in    Old matrix (with foreign data) to reuse. Passing NULL will allocate a new matrix.
  * @return The resulting slice matrix, or NULL if out of memory
  */
 dl_matrix2d_t *dl_matrix_slice(const dl_matrix2d_t *src, int x, int y, int w, int h, dl_matrix2d_t *in);
@@ -106,7 +106,7 @@ dl_matrix2d_t *dl_matrix_slice(const dl_matrix2d_t *src, int x, int y, int w, in
  * @param y     Y-offset of the origin of the returned matrix within the sliced matrix
  * @param w     Width of the resulting matrix
  * @param h     Height of the resulting matrix
- * @param in    Old matrix to re-use. Passing NULL will allocate a new matrix.
+ * @param in    Old matrix to reuse. Passing NULL will allocate a new matrix.
  * @return  The resulting flatten matrix, or NULL if out of memory
  */
 dl_matrix2d_t *dl_matrix_flatten(const dl_matrix2d_t *src, int x, int y, int w, int h, dl_matrix2d_t *in);

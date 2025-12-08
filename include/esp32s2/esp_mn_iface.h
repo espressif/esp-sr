@@ -21,11 +21,11 @@ typedef enum {
 } esp_mn_state_t;
 
 //Set multinet loading mode
-//The memory comsumption is decreased with increasing mode,
+//The memory consumption is decreased with increasing mode,
 //As a consequence also the CPU loading rate goes up
 typedef enum {
     ESP_MN_LOAD_FROM_PSRAM = 0,          // Load all weights from PSRAM. Fastest computation with Maximum memory consumption
-    ESP_MN_LOAD_FROM_PSRAM_FLASH = 1,    // Load some weights from PSRAM and laod the rest from FLASH (default)
+    ESP_MN_LOAD_FROM_PSRAM_FLASH = 1,    // Load some weights from PSRAM and load the rest from FLASH (default)
     ESP_MN_LOAD_FROM_FLASH = 2,          // Load more weights from FLASH. Minimum memory consumption with slowest computation
 } esp_mn_loader_mode_t;
 
@@ -70,7 +70,7 @@ typedef struct{
 } esp_mn_error_t;
 
 /**
- * @brief Initialze a model instance with specified model name.
+ * @brief Initialize a model instance with specified model name.
  *
  * @param model_name  The wakenet model name.
  * @param duration    The duration (ms) to trigger the timeout
