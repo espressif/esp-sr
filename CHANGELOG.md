@@ -1,5 +1,8 @@
 # Change log for esp-sr
 
+# 2.2.2
+- Add more wakenet9 models
+
 # 2.2.1
 - Fix AFE error log
 - Add new wakenet9 models
