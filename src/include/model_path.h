@@ -32,11 +32,11 @@ typedef struct {
 #define MODEL_NAME_MAX_LENGTH 64
 
 /**
- * @brief Return all avaliable models in flash.
+ * @brief Return all available models in flash.
  *
  * @param partition_label    The spiffs label defined in your partition file used to save models.
  *
- * @return all avaliable models,save as srmodel_list_t.
+ * @return all available models,save as srmodel_list_t.
  */
 srmodel_list_t *esp_srmodel_init(const char *partition_label);
 
@@ -45,7 +45,7 @@ srmodel_list_t *esp_srmodel_init(const char *partition_label);
  *
  * @param models    The srmodel_list_t point allocated by esp_srmodel_init function.
  *
- * @return all avaliable models in spiffs,save as srmodel_list_t.
+ * @return all available models in spiffs,save as srmodel_list_t.
  */
 void esp_srmodel_deinit(srmodel_list_t *models);
 
@@ -85,11 +85,11 @@ int esp_srmodel_exists(srmodel_list_t *models, char *model_name);
 char *esp_srmodel_get_wake_words(srmodel_list_t *models, char *model_name);
 
 /**
- * @brief Initialize and mount SPIFFS filesystem, return all avaliable models in spiffs.
+ * @brief Initialize and mount SPIFFS filesystem, return all available models in spiffs.
  *
  * @param part    The spiffs partition.
  *
- * @return all avaliable models in spiffs,save as srmodel_list_t.
+ * @return all available models in spiffs,save as srmodel_list_t.
  */
 #ifdef ESP_PLATFORM
 srmodel_list_t *srmodel_spiffs_init(const esp_partition_t *part);
@@ -100,7 +100,7 @@ srmodel_list_t *srmodel_spiffs_init(const esp_partition_t *part);
  *
  * @param models    The srmodel_list_t point allocated by srmodel_spiffs_init function.
  *
- * @return all avaliable models in spiffs,save as srmodel_list_t.
+ * @return all available models in spiffs,save as srmodel_list_t.
  */
 void srmodel_spiffs_deinit(srmodel_list_t *models);
 
@@ -125,7 +125,7 @@ srmodel_list_t *get_static_srmodels(void);
  *
  * @param root   The binary model data.
  *
- * @return all avaliable models,save as srmodel_list_t.
+ * @return all available models,save as srmodel_list_t.
  */
 srmodel_list_t *srmodel_load(const void *root);
 

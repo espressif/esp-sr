@@ -64,6 +64,7 @@ The following wake words are supported in esp-sr:
 |Blue Chip        |                                  | wn9_bluechip_tts2      |
 |Hi,Andy          |                                  | wn9_hiandy_tts2        |
 |Hey,Ivy          |                                  | wn9_heyivy_tts2        |
+|Hi,Stack Chan    |                                  | wn9_histackchan_tts3   |
 |Hi,Wall E/Hi,瓦力|                                   | wn9_hiwalle_tts2      |
 |你好小鑫         |                                  | wn9_nihaoxiaoxin_tts   |
 |小美同学         |                                  | wn9_xiaomeitongxue_tts |
@@ -92,6 +93,7 @@ The following wake words are supported in esp-sr:
 |你好小瑞         |                                  | wn9_ni3hao3xiao3rui4_tts3|
 |嗨小欧           |                                  | wn9_hai1xiao3ou1_tts3|
 |小珈小珈         |                                  | wn9_xiao3jia1xiao3jia1_tts3|
+|小峰小峰         |                                  | wn9_xiao3feng1xiao3feng1_tts3|
 
 **NOTE**:
 

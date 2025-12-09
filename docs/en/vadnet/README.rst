@@ -50,7 +50,7 @@ Use VADNet
     There are two issues in the VAD settings that can cause a delay in the first frame trigger of speech.
 
     1. The inherent delay of the VAD algorithm itself. VAD cannot accurately trigger speech on the first frame and may delay by 1 to 3 frames.
-    2. To avoid false triggers, the VAD is triggered when the continuous trigger duration reaches the `vad_min_speech_ms` parameter in AFE configuation.
+    2. To avoid false triggers, the VAD is triggered when the continuous trigger duration reaches the `vad_min_speech_ms` parameter in AFE configuration.
 
     Due to the above two reasons, directly using the first frame trigger of VAD may cause the first word to be truncated. 
     To avoid this case, AFE V2.0 has added a VAD cache. You can determine whether a VAD cache needs to be saved by checking the vad_cache_size

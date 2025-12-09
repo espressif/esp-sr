@@ -51,7 +51,7 @@ typedef struct afe_fetch_result_t {
 } afe_fetch_result_t;
 
 /**
- * @brief Function to initialze a AFE_SR instance
+ * @brief Function to initialize a AFE_SR instance
  *
  * @param afe_config        The config of AFE_SR
  * @returns Handle to the AFE_SR data
@@ -142,7 +142,7 @@ typedef int (*esp_afe_sr_iface_op_reset_buffer_t)(esp_afe_sr_data_t *afe);
 typedef int (*esp_afe_sr_iface_op_set_wakenet_threshold_t)(esp_afe_sr_data_t *afe, int index, float threshold);
 
 /**
- * @brief Reset wakenet detection threshold to inital state
+ * @brief Reset wakenet detection threshold to initial state
  * 
  * @param afe           The AFE_SR object to query
  * @param index         The wakenet index, just support 1: wakenet1 or  2: wakenet2

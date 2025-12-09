@@ -45,7 +45,7 @@ typedef struct {
 
 /*
 Alphabet struct describes the basic grapheme or phoneme.
-item_num: the number of baisc item(grapheme or phonemr)
+item_num: the number of basic item(grapheme or phonemr)
 items: the list of basic item
 */
 typedef struct {
