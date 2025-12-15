@@ -64,26 +64,26 @@ typedef esp_afe_sr_data_t *(*esp_afe_sr_iface_op_create_from_config_t)(afe_confi
  * Every speech enhancement AFE_SR processes a certain number of samples at the same time. This function
  * can be used to query that amount. Note that the returned amount is in 16-bit samples, not in bytes.
  *
- * @paramafe The AFE_SR object to query
+ * @param afe The AFE_SR object to query
  * @return The amount of samples to feed the fetch function
  */
-typedef int (*esp_afe_sr_iface_op_get_samp_chunksize_t)(esp_afe_sr_data_t *safe);
+typedef int (*esp_afe_sr_iface_op_get_samp_chunksize_t)(esp_afe_sr_data_t *afe);
 
 /**
  * @brief Get the channel number
  *
- * @paramafe   The AFE_SR object to query
+ * @param afe   The AFE_SR object to query
  * @return      The amount of total channels
  */
-typedef int (*esp_afe_sr_iface_op_get_channel_num_t)(esp_afe_sr_data_t *safe);
+typedef int (*esp_afe_sr_iface_op_get_channel_num_t)(esp_afe_sr_data_t *afe);
 
 /**
  * @brief Get the sample rate of the samples to feed to the function
  *
- * @paramafe   The AFE_SR object to query
+ * @param afe   The AFE_SR object to query
  * @return      The sample rate, in hz
  */
-typedef int (*esp_afe_sr_iface_op_get_samp_rate_t)(esp_afe_sr_data_t *safe);
+typedef int (*esp_afe_sr_iface_op_get_samp_rate_t)(esp_afe_sr_data_t *afe);
 
 /**
  * @brief Feed samples of an audio stream to the AFE_SR
@@ -91,13 +91,13 @@ typedef int (*esp_afe_sr_iface_op_get_samp_rate_t)(esp_afe_sr_data_t *safe);
  * @Warning  The input data should be arranged in the format of channel interleaving.
  *           The last channel is reference signal if it has reference data.
  *
- * @paramafe   The AFE_SR object to query
+ * @param afe   The AFE_SR object to query
  *
  * @param in    The input microphone signal, only support signed 16-bit @ 16 KHZ. The frame size can be queried by the
  *              `get_feed_chunksize`.
  * @return      The size of input
  */
-typedef int (*esp_afe_sr_iface_op_feed_t)(esp_afe_sr_data_t *safe, const int16_t *in);
+typedef int (*esp_afe_sr_iface_op_feed_t)(esp_afe_sr_data_t *afe, const int16_t *in);
 
 /**
  * @brief fetch enhanced samples of an audio stream from the AFE_SR
@@ -105,99 +105,99 @@ typedef int (*esp_afe_sr_iface_op_feed_t)(esp_afe_sr_data_t *safe, const int16_t
  * @Warning  The output is single channel data, no matter how many channels the input is.
  *           Timeout is 2000 ms. If you want to adjust timeout, please refer to the definition of `fetch_with_delay`.
  *
- * @paramafe   The AFE_SR object to query
+ * @param afe   The AFE_SR object to query
  * @return      The result of output, please refer to the definition of `afe_fetch_result_t`. (The frame size of output
  * audio can be queried by the `get_fetch_chunksize`.)
  */
-typedef afe_fetch_result_t *(*esp_afe_sr_iface_op_fetch_t)(esp_afe_sr_data_t *safe);
+typedef afe_fetch_result_t *(*esp_afe_sr_iface_op_fetch_t)(esp_afe_sr_data_t *afe);
 
 /**
  * @brief fetch enhanced samples of an audio stream from the AFE_SR, same with the function `fetch`
  *
  * @Warning  The output is single channel data, no matter how many channels the input is.
  *
- * @paramafe            The AFE_SR object to query
+ * @param afe            The AFE_SR object to query
  * @param ticks_to_wait  The timeout value, in ticks, to wait for the fetch result.
  * @return      The result of output, please refer to the definition of `afe_fetch_result_t`. (The frame size of output
  * audio can be queried by the `get_fetch_chunksize`.)
  */
-typedef afe_fetch_result_t *(*esp_afe_sr_iface_op_fetch_with_delay_t)(esp_afe_sr_data_t *safe, TickType_t ticks_to_wait);
+typedef afe_fetch_result_t *(*esp_afe_sr_iface_op_fetch_with_delay_t)(esp_afe_sr_data_t *afe, TickType_t ticks_to_wait);
 
 /**
  * @brief reset ringbuf of AFE.
  *
- * @paramafe          The AFE_SR object to query
+ * @param afe          The AFE_SR object to query
  * @return             -1: fail, 1: success
  */
-typedef int (*esp_afe_sr_iface_op_reset_buffer_t)(esp_afe_sr_data_t *safe);
+typedef int (*esp_afe_sr_iface_op_reset_buffer_t)(esp_afe_sr_data_t *afe);
 
 /**
  * @brief Set wakenet detection threshold 
  * 
- * @paramafe           The AFE_SR object to query
+ * @param afe           The AFE_SR object to query
  * @param index         The wakenet index, just support 1: wakenet1 or  2: wakenet2
  * @param threshold     The wakenet detection threshold, the value is between 0.4 and 0.9999.
  * @return             -1: fail, 1: success
  */
-typedef int (*esp_afe_sr_iface_op_set_wakenet_threshold_t)(esp_afe_sr_data_t *safe, int index, float threshold);
+typedef int (*esp_afe_sr_iface_op_set_wakenet_threshold_t)(esp_afe_sr_data_t *afe, int index, float threshold);
 
 /**
  * @brief Reset wakenet detection threshold to initial state
  * 
- * @paramafe           The AFE_SR object to query
+ * @param afe           The AFE_SR object to query
  * @param index         The wakenet index, just support 1: wakenet1 or  2: wakenet2
  * @return             -1: fail, 1: success
  */
-typedef int (*esp_afe_sr_iface_op_reset_wakenet_threshold_t)(esp_afe_sr_data_t *safe, int index);
+typedef int (*esp_afe_sr_iface_op_reset_wakenet_threshold_t)(esp_afe_sr_data_t *afe, int index);
 
 /**
  * @brief Reset one function/module/algorithm.
  *
- * @paramafe          The AFE_SR object to query
+ * @param afe          The AFE_SR object to query
  * @return             -1: fail, 1: success
  */
-typedef int (*esp_afe_sr_iface_op_reset_op_t)(esp_afe_sr_data_t *safe);
+typedef int (*esp_afe_sr_iface_op_reset_op_t)(esp_afe_sr_data_t *afe);
 
 /**
  * @brief Disable one function/module/algorithm.
  *
- * @paramafe          The AFE_SR object to query
+ * @param afe          The AFE_SR object to query
  * @return             -1: fail, 0: disabled, 1: enabled
  */
-typedef int (*esp_afe_sr_iface_op_disable_func_t)(esp_afe_sr_data_t *safe);
+typedef int (*esp_afe_sr_iface_op_disable_func_t)(esp_afe_sr_data_t *afe);
 
 /**
  * @brief Enable one function/module/algorithm.
  *
- * @paramafe          The AFE_SR object to query
+ * @param afe          The AFE_SR object to query
  * @return             -1: fail, 0: disabled, 1: enabled
  */
-typedef int (*esp_afe_sr_iface_op_enable_func_t)(esp_afe_sr_data_t *safe);
+typedef int (*esp_afe_sr_iface_op_enable_func_t)(esp_afe_sr_data_t *afe);
 
 /**
  * @brief Add a WakeNet model to the AFE_SR instance
  *
- * @paramafe          The AFE_SR object to query
+ * @param afe          The AFE_SR object to query
  * @param model_name   The name of the WakeNet model to add
  * @return             The number of WakeNet models after addition, or -1 on failure
  */
-typedef int (*esp_afe_sr_iface_op_add_wakenet_func_t)(esp_afe_sr_data_t *safe, const char *model_name);
+typedef int (*esp_afe_sr_iface_op_add_wakenet_func_t)(esp_afe_sr_data_t *afe, const char *model_name);
 
 /**
  * @brief Print all functions/modules/algorithms pipeline.
  *       The pipeline is the order of the functions/modules/algorithms.
  *       The format like this: [input] -> |AEC(VOIP_HIGH_PERF)| -> |WakeNet(wn9_hilexin)| -> [output]
  *
- * @paramafe          The AFE_SR object to query
+ * @param afe          The AFE_SR object to query
  */
-typedef void (*esp_afe_sr_iface_op_print_pipeline_t)(esp_afe_sr_data_t *safe);
+typedef void (*esp_afe_sr_iface_op_print_pipeline_t)(esp_afe_sr_data_t *afe);
 
 /**
  * @brief Destroy a AFE_SR instance
  *
- * @paramafe         AFE_SR object to destroy
+ * @param afe         AFE_SR object to destroy
  */
-typedef void (*esp_afe_sr_iface_op_destroy_t)(esp_afe_sr_data_t *safe);
+typedef void (*esp_afe_sr_iface_op_destroy_t)(esp_afe_sr_data_t *afe);
 
 /**
  * This structure contains the functions used to do operations on a AFE_SR.

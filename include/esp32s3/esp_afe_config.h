@@ -131,14 +131,14 @@ typedef struct {
     int agc_target_level_dbfs;   // Target level in -dBfs of envelope (default 3, means target level is -3 dBFS)
 
     /********** General AFE(Audio Front End) parameter **********/
-    afe_pcm_config_t pcm_config; // Config the channel num of original data which is fed to theafe feed function.
-    afe_mode_t afe_mode;         // The mode ofafe， AFE_MODE_LOW_COST or AFE_MODE_HIGH_PERF
-    afe_type_t afe_type;         // The mode ofafe， AFE_MODE_LOW_COST or AFE_MODE_HIGH_PERF
-    int afe_perferred_core;      // The preferred core ofafe se task, which is created in afe_create function.
-    int afe_perferred_priority;  // The preferred priority ofafe se task, which is created in afe_create function.
+    afe_pcm_config_t pcm_config; // Config the channel num of original data which is fed to the afe feed function.
+    afe_mode_t afe_mode;         // The mode of afe， AFE_MODE_LOW_COST or AFE_MODE_HIGH_PERF
+    afe_type_t afe_type;         // The mode of afe， AFE_MODE_LOW_COST or AFE_MODE_HIGH_PERF
+    int afe_perferred_core;      // The preferred core of afe se task, which is created in afe_create function.
+    int afe_perferred_priority;  // The preferred priority of afe se task, which is created in afe_create function.
     int afe_ringbuf_size;        // The ring buffer size: the number of frame data in ring buffer.
-    afe_memory_alloc_mode_t memory_alloc_mode; // The memory alloc mode forafe. From Internal RAM or PSRAM
-    float afe_linear_gain; // The linear gain forafe output the value should be in [0.1, 10.0]. This value acts
+    afe_memory_alloc_mode_t memory_alloc_mode; // The memory alloc mode for afe. From Internal RAM or PSRAM
+    float afe_linear_gain; // The linear gain for afe output the value should be in [0.1, 10.0]. This value acts
                            // directly on the output amplitude: out_linear_gain * amplitude.
     bool debug_init;
     bool fixed_first_channel; // If true, the channel after first wake-up is fixed to raw data of microphone
@@ -159,10 +159,10 @@ typedef struct {
  *
  * @param input_format     The input format
  * @param models           Models from partition, which is configured by Kconfig
- * @param type             The type ofafe, AFE_TYPE_SR or AFE_TYPE_VC
- * @param mode             The mode ofafe, AFE_MODE_LOW_COST or AFE_MODE_HIGH_PERF
+ * @param type             The type of afe, AFE_TYPE_SR or AFE_TYPE_VC
+ * @param mode             The mode of afe, AFE_MODE_LOW_COST or AFE_MODE_HIGH_PERF
  *
- * @return afe_config_t*  The default config ofafe
+ * @return afe_config_t*  The default config of afe
  */
 afe_config_t *afe_config_init(const char *input_format, srmodel_list_t *models, afe_type_t type, afe_mode_t mode);
 
@@ -254,33 +254,33 @@ int16_t *afe_adjust_gain(int16_t *data, int frame_size, float factor);
 void afe_concat_data(int16_t *in_data, int in_frame_size, int channel_num, int16_t *out_data, int out_frame_size);
 
 /**
- * @brief Copy theafe config
+ * @brief Copy the afe config
  *
- * @param dst_config    The destinationafe config
- * @param src_config    The sourceafe config
+ * @param dst_config    The destination afe config
+ * @param src_config    The source afe config
  *
- * @return   The destinationafe config
+ * @return   The destination afe config
  */
 afe_config_t *afe_config_copy(afe_config_t *dst_config, const afe_config_t *src_config);
 
 /**
- * @brief Print theafe config
+ * @brief Print the afe config
  *
- * @param afe_config    Theafe config
+ * @param afe_config    The afe config
  */
 void afe_config_print(const afe_config_t *afe_config);
 
 /**
- * @brief Allocateafe config
+ * @brief Allocate afe config
  *
- * @return Theafe config pointer
+ * @return The afe config pointer
  */
 afe_config_t *afe_config_alloc();
 
 /**
- * @brief Freeafe config
+ * @brief Free afe config
  *
- * @param afe_config  Theafe config pointer
+ * @param afe_config  The afe config pointer
  */
 void afe_config_free(afe_config_t *afe_config);
 

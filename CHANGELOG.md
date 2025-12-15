@@ -1,5 +1,10 @@
 # Change log for esp-sr
 
+# 2.3.0
+- Upgrade esp-dsp to v1.7.0
+- Fix mn5q8 crash
+- Support add more wakenet model in AFE
+
 # 2.2.2
 - Add more wakenet9 models
 
@@ -155,7 +160,7 @@
 
 ## 1.3.0 
 - Update the partition APIs to keep compatible with both IDF v4.4 and IDF v5.0
-- Add a new Chinese MultiNet6 mdoel for air conditioner controller 
+- Add a new Chinese MultiNet6 model for air conditioner controller 
 
 ## 1.2.1
 - Fix bugs in model loader

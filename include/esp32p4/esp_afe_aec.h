@@ -26,7 +26,7 @@ typedef struct {
  * If input has multiple microphone channels and playback channels, just the first microphone channel and playback
  * channel will be selected.
  *
- * The input format, same asafe config:
+ * The input format, same as afe config:
  * M to represent the microphone channel
  * R to represent the playback reference channel
  * N to represent an unknown or unused channel
@@ -38,10 +38,10 @@ typedef struct {
  * @param filter_length    The length of filter. The larger the filter, the higher the CPU loading.
  *                         Recommended filter_length = 4 for esp32s3 and esp32p4. Recommended filter_length = 2 for
  * esp32c5.
- * @param type             The type ofafe, AFE_TYPE_SR or AFE_TYPE_VC
- * @param mode             The mode ofafe, AFE_MODE_LOW_COST or AFE_MODE_HIGH_PERF
+ * @param type             The type of afe, AFE_TYPE_SR or AFE_TYPE_VC
+ * @param mode             The mode of afe, AFE_MODE_LOW_COST or AFE_MODE_HIGH_PERF
  *
- * @return afe_config_t*  The default config ofafe
+ * @return afe_config_t*  The default config of afe
  */
 afe_aec_handle_t *afe_aec_create(const char *input_format, int filter_length, afe_type_t type, afe_mode_t mode);
 
