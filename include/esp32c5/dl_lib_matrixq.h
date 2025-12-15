@@ -48,7 +48,7 @@ typedef struct {
  * time. Quantized matrices can speed up your operations, but come with some quirks, and
  * it's good to understand how they work before using them.
  *
- * The data in the quantized matrix type is stored similarily to floating-point types:
+ * The data in the quantized matrix type is stored similarly to floating-point types:
  * when storing a real value, the value is stored as a mantissa (base number) and an
  * exponent. The 'real' value that can be re-derived from those two numbers is something
  * similar to mantissa*2^exponent. Up to this point, there's not that much difference from 
@@ -107,7 +107,7 @@ dl_matrix2dq_t *dl_matrixq_alloc_psram(int w, int h);
  * @brief Convert a floating-point matrix to a quantized matrix
  *
  * @param m     Floating-point matrix to convert
- * @param out   Quantized matrix to re-use. If NULL, allocate a new one.
+ * @param out   Quantized matrix to reuse. If NULL, allocate a new one.
  * @Return The quantized version of the floating-point matrix
  */
 dl_matrix2dq_t *dl_matrixq_from_matrix2d(const dl_matrix2d_t *m, dl_matrix2dq_t *out);
@@ -122,7 +122,7 @@ dl_matrix2dq_t *dl_matrixq_from_matrix2d_by_qmf(const dl_matrix2d_t *m, dl_matri
  * @brief Convert a quantized matrix to a floating-point one.
  *
  * @param m     Floating-point matrix to convert
- * @param out   Quantized matrix to re-use. If NULL, allocate a new one.
+ * @param out   Quantized matrix to reuse. If NULL, allocate a new one.
  * @Return The quantized version of the floating-point matrix
  **/
 dl_matrix2d_t *dl_matrix2d_from_matrixq(const dl_matrix2dq_t *m, dl_matrix2d_t *out);
@@ -230,7 +230,7 @@ void dl_matrixq_add(const dl_matrix2dq_t *a, const dl_matrix2dq_t *b, dl_matrix2
 
 /**
  * @brief Generate a new matrix using a range of items from an existing matrix.
- * When using this, the data of the new matrix is not allocated/copied but it re-uses a pointer
+ * When using this, the data of the new matrix is not allocated/copied but it reuses a pointer
  * to the existing data. Changing the data in the resulting matrix, as a result, will also change
  * the data in the existing matrix that has been sliced.
  *
@@ -244,7 +244,7 @@ void dl_matrixq_add(const dl_matrix2dq_t *a, const dl_matrix2dq_t *b, dl_matrix2
  * @param y     Y-offset of the origin of the returned matrix within the sliced matrix
  * @param w     Width of the resulting matrix
  * @param h     Height of the resulting matrix
- * @param in    Old matrix (with foreign data) to re-use. Passing NULL will allocate a new matrix.
+ * @param in    Old matrix (with foreign data) to reuse. Passing NULL will allocate a new matrix.
  * @return The resulting slice matrix, or NULL if out of memory
  */
 dl_matrix2dq_t *dl_matrixq_slice(const dl_matrix2dq_t *src, int x, int y, int w, int h, dl_matrix2dq_t *in);
@@ -258,7 +258,7 @@ dl_matrix2dq_t *dl_matrixq_slice(const dl_matrix2dq_t *src, int x, int y, int w,
  * @param y     Y-offset of the origin of the returned matrix within the sliced matrix
  * @param w     Width of the resulting matrix
  * @param h     Height of the resulting matrix
- * @param in    Old matrix to re-use. Passing NULL will allocate a new matrix.
+ * @param in    Old matrix to reuse. Passing NULL will allocate a new matrix.
  * @return The resulting flatten matrix, or NULL if out of memory
  */
 dl_matrix2dq_t *dl_matrixq_flatten(const dl_matrix2dq_t *src, int x, int y, int w, int h, dl_matrix2dq_t *in);
@@ -342,10 +342,10 @@ int dl_matrixq_check_sanity(dl_matrix2dq_t *m, const char *name);
  * most-significant bits that are unused in all mantissas. It will also adjust
  * the exponent to keep the actua values in the matrix the same.
  *
- * Some operations done on a matrix, especially operations that re-use the
+ * Some operations done on a matrix, especially operations that reuse the
  * result of earlier operations done in the same way, can lead to the loss of
  * data because the exponent of the quantized matrix is never re-adjusted. You
- * can do that implicitely by calling this function.
+ * can do that implicitly by calling this function.
  *
  * @param m     The matrix to re-adjust
 **/

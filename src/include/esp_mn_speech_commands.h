@@ -26,7 +26,7 @@ It is easy to add one speech command into linked list and remove one speech comm
 
 
 /**
- * @brief Initialze the speech commands singly linked list.
+ * @brief Initialize the speech commands singly linked list.
  * 
  * @param multinet      The handle of multinet
  * @param model_data    The model data
@@ -153,7 +153,7 @@ esp_mn_phrase_t *esp_mn_commands_get_from_string(const char *string);
 esp_mn_error_t *esp_mn_commands_update();
 
 /**
- * @brief Initialze the esp_mn_phrase_t struct by command id and command string .
+ * @brief Initialize the esp_mn_phrase_t struct by command id and command string .
  *
  * @return the pointer of esp_mn_phrase_t
  */
@@ -167,7 +167,7 @@ esp_mn_phrase_t *esp_mn_phrase_alloc(int command_id, const char *string);
 void esp_mn_phrase_free(esp_mn_phrase_t *phrase);
 
 /**
- * @brief Initialze the esp_mn_node_t struct by esp_mn_phrase_t pointer.
+ * @brief Initialize the esp_mn_node_t struct by esp_mn_phrase_t pointer.
  *
  * @return the pointer of esp_mn_node_t
  */

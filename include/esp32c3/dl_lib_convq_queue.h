@@ -156,7 +156,7 @@ void dl_tanh_convq(dl_convq_queue_t *cq, int offset);
  *          Gets the pointer of element in the convolution queue by offset, and does a 
  *          tanh operation by this pointer, then return the pointer 
  *
- * @param cq      Input fixed-point multi channnel convolution queue
+ * @param cq      Input fixed-point multi channel convolution queue
  * @param offset  Offset from the front of the queue
  * @param nch     The channel number of cqm
  * @return        Pointer of the element
@@ -181,7 +181,7 @@ void dl_relu_convq(dl_convq_queue_t *cq, fptp_t clip, int last_num);
  *
  * @param cq      Input fixed-point convolution queue
  * @param offset  Offset from the front of the queue
- * @param out     Old array to re-use. Passing NULL will allocate a new matrix.
+ * @param out     Old array to reuse. Passing NULL will allocate a new matrix.
  * @return        softmax results
  */
 fptp_t * dl_softmax_step_q(dl_convq_queue_t *cq, int offset, fptp_t *out);
@@ -250,7 +250,7 @@ qtp_t *dl_atrous_conv1dq_steps(dl_convq_queue_t *in, dl_convq_queue_t *out, int 
  * @brief Add a pair of fixed-point convolution queue item-by-item, and return float-point convolution queue
  *
  * @param cq1      First fixed-point convolution queue
- * @param cq2      Seconf fixed-point convolution queue
+ * @param cq2      Second fixed-point convolution queue
  * @return         The result of float-point convolution queue
  */
 dl_conv_queue_t *dl_convq_queue_add(dl_convq_queue_t *cq1, dl_convq_queue_t *cq2);
@@ -288,7 +288,7 @@ dl_matrix2dq_t *dl_convq16_lstm_layer(dl_convq_queue_t *in, dl_convq_queue_t *ou
  *
  * @param n     The length of queue
  * @param c     The channel number of elements in the queue
- * @param nch   the channel numbet of convolution queue 
+ * @param nch   the channel number of convolution queue 
  * @return      The convolution queue, or NULL if out of memory
  */
 dl_convq_queue_t **dl_convq_queue_mc_alloc(int n, int c, int nch);

@@ -64,7 +64,7 @@ def pack_models(model_path, out_file="srmodels.bin"):
     }model_info_t
 
     model_path: the path of models
-    out_file: the ouput binary filename
+    out_file: the output binary filename
     """
 
     models = {}

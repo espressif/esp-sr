@@ -6,7 +6,7 @@ typedef struct esp_nsn_data_t esp_nsn_data_t;
 
 
 /**
- * @brief Easy function type to initialze a model instance
+ * @brief Easy function type to initialize a model instance
  *
  * @param model_name The name of the model instance
  * @returns Handle to the model data

@@ -20,7 +20,7 @@ typedef struct model_iface_data_t model_iface_data_t;
 // } vad_state_t;
 
 /**
- * @brief Easy function type to initialze a model instance with a detection mode
+ * @brief Easy function type to initialize a model instance with a detection mode
  * and specified model name
  *
  * @param model_name  The specified model name

@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-// The prefix of vadnet model name is used to filter all wakenet from availabel models.
+// The prefix of vadnet model name is used to filter all wakenet from available models.
 #define ESP_VADN_PREFIX "vadnet"
 
 /**
