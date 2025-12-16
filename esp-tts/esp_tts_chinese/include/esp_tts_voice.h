@@ -10,7 +10,7 @@ typedef struct {
 	char *format;           // the format of voice data, currently support pcm and amrwb
 	int sample_rate;        // the sample rate of voice data, just for pcm format
 	int bit_width;          // the bit width of voice data, just for pcm format
-	int syll_num;           // the syllable mumber 
+	int syll_num;           // the syllable number 
 	char **sylls;           // the syllable names
 	int *syll_pos;          // the position of syllable in syllable audio data array
 	short *pinyin_idx;      // the index of pinyin

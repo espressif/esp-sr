@@ -30,7 +30,7 @@ int stretch_samples (StretchHandle handle, short *samples, int num_samples, shor
 int stretch_flush (StretchHandle handle, short *output);
 void stretch_deinit (StretchHandle handle);
 
-/* internel function */
+/* internal function */
 StretchHandle stretcher_init_internal(int shortest_period, int longest_period, int buff_len);
 void stretcher_deinit (StretchHandle handle);
 int stretcher_is_empty(StretchHandle handle);

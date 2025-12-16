@@ -113,7 +113,7 @@ MultiNet5 use phonemes for English speech commands. For simplicity, we use chara
             *
             * @param model_data          The model object to query
             *
-            * @param langugae            The language of MultiNet
+            * @param language            The language of MultiNet
             *
             * @return
             *     - ESP_OK                  Success
@@ -269,7 +269,7 @@ MultiNet Output
 
 Speech command recognition must be used with WakeNet. After wake-up, MultiNet detection can start.
 
-Afer running, MultiNet returns the recognition output of the current frame in real time ``mn_state``, which is currently divided into the following identification states:
+After running, MultiNet returns the recognition output of the current frame in real time ``mn_state``, which is currently divided into the following identification states:
 
 -  ESP_MN_STATE_DETECTING
 
