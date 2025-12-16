@@ -1,5 +1,10 @@
 # Change log for esp-sr
 
+# 2.3.0
+- Upgrade esp-dsp to v1.7.0
+- Fix mn5q8 crash
+- Support add more wakenet model in AFE
+
 # 2.2.2
 - Add more wakenet9 models
 

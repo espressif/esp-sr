@@ -90,6 +90,7 @@ typedef struct {
     afe_debug_hook_callback_t hook_callback; // callback function which transfer debug audio data
 } afe_debug_hook_t;
 
+#define AFE_MAX_WAKEWORD_NUM 3
 typedef struct {
     /********** AEC(Acoustic Echo Cancellation) **********/
     bool aec_init;         // Whether to init aec

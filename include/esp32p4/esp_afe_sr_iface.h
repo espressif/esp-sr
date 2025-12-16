@@ -175,6 +175,15 @@ typedef int (*esp_afe_sr_iface_op_disable_func_t)(esp_afe_sr_data_t *afe);
 typedef int (*esp_afe_sr_iface_op_enable_func_t)(esp_afe_sr_data_t *afe);
 
 /**
+ * @brief Add a WakeNet model to the AFE_SR instance
+ *
+ * @param afe          The AFE_SR object to query
+ * @param model_name   The name of the WakeNet model to add
+ * @return             The number of WakeNet models after addition, or -1 on failure
+ */
+typedef int (*esp_afe_sr_iface_op_add_wakenet_func_t)(esp_afe_sr_data_t *afe, const char *model_name);
+
+/**
  * @brief Print all functions/modules/algorithms pipeline.
  *       The pipeline is the order of the functions/modules/algorithms.
  *       The format like this: [input] -> |AEC(VOIP_HIGH_PERF)| -> |WakeNet(wn9_hilexin)| -> [output]
@@ -220,6 +229,7 @@ typedef struct {
     esp_afe_sr_iface_op_enable_func_t enable_ns;
     esp_afe_sr_iface_op_disable_func_t disable_agc;
     esp_afe_sr_iface_op_enable_func_t enable_agc;
+    esp_afe_sr_iface_op_add_wakenet_func_t add_wakenet_model;
     esp_afe_sr_iface_op_print_pipeline_t print_pipeline;
     esp_afe_sr_iface_op_destroy_t destroy;
 } esp_afe_sr_iface_t;
