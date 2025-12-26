@@ -1,7 +1,15 @@
 if((${IDF_TARGET} STREQUAL "esp32s3") OR (${IDF_TARGET} STREQUAL "esp32p4") OR (${IDF_TARGET} STREQUAL "esp32") OR (${IDF_TARGET} STREQUAL "esp32c3") OR (${IDF_TARGET} STREQUAL "esp32c5") OR (${IDF_TARGET} STREQUAL "esp32c6") OR  (${IDF_TARGET} STREQUAL "esp32s2"))
+    set(TARGET_LIB_PATH "${IDF_TARGET}")
+    
+    if (${IDF_TARGET} STREQUAL "esp32p4" AND (IDF_VERSION_MAJOR GREATER_EQUAL 5) AND (IDF_VERSION_MINOR GREATER_EQUAL 5))
+        if (NOT CONFIG_ESP32P4_SELECTS_REV_LESS_V3)
+            set(TARGET_LIB_PATH "esp32p4_eco5")
+        endif()
+    endif()
+
     set(include_dirs
         "esp-tts/esp_tts_chinese/include"
-        "include/${IDF_TARGET}"
+        "include/${TARGET_LIB_PATH}"
         "src/include"
         )
         
@@ -25,23 +33,22 @@ if((${IDF_TARGET} STREQUAL "esp32s3") OR (${IDF_TARGET} STREQUAL "esp32p4") OR (
                         INCLUDE_DIRS ${include_dirs}
                         REQUIRES ${requires}
                         PRIV_REQUIRES spi_flash)
-
-
-    target_link_libraries(${COMPONENT_TARGET} "-L \"${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}\"")
+    
+    target_link_libraries(${COMPONENT_TARGET} "-L \"${CMAKE_CURRENT_SOURCE_DIR}/lib/${TARGET_LIB_PATH}\"")
     target_link_libraries(${COMPONENT_TARGET} "-L \"${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese/${IDF_TARGET}\"")
-    add_prebuilt_library(dl_lib "${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}/libdl_lib.a" PRIV_REQUIRES ${COMPONENT_NAME})
-    add_prebuilt_library(c_speech_features "${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}/libc_speech_features.a" PRIV_REQUIRES ${COMPONENT_NAME})
-    add_prebuilt_library(esp_audio_processor "${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}/libesp_audio_processor.a" PRIV_REQUIRES ${COMPONENT_NAME})
-    add_prebuilt_library(esp_audio_front_end "${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}/libesp_audio_front_end.a" PRIV_REQUIRES ${COMPONENT_NAME})
+    add_prebuilt_library(dl_lib "${CMAKE_CURRENT_SOURCE_DIR}/lib/${TARGET_LIB_PATH}/libdl_lib.a" PRIV_REQUIRES ${COMPONENT_NAME})
+    add_prebuilt_library(c_speech_features "${CMAKE_CURRENT_SOURCE_DIR}/lib/${TARGET_LIB_PATH}/libc_speech_features.a" PRIV_REQUIRES ${COMPONENT_NAME})
+    add_prebuilt_library(esp_audio_processor "${CMAKE_CURRENT_SOURCE_DIR}/lib/${TARGET_LIB_PATH}/libesp_audio_processor.a" PRIV_REQUIRES ${COMPONENT_NAME})
+    add_prebuilt_library(esp_audio_front_end "${CMAKE_CURRENT_SOURCE_DIR}/lib/${TARGET_LIB_PATH}/libesp_audio_front_end.a" PRIV_REQUIRES ${COMPONENT_NAME})
     add_prebuilt_library(esp_tts_chinese "${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese/${IDF_TARGET}/libesp_tts_chinese.a" PRIV_REQUIRES ${COMPONENT_NAME})
     add_prebuilt_library(voice_set_xiaole "${CMAKE_CURRENT_SOURCE_DIR}/esp-tts/esp_tts_chinese/${IDF_TARGET}/libvoice_set_xiaole.a" PRIV_REQUIRES ${COMPONENT_NAME})
-    add_prebuilt_library(fst "${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}/libfst.a" PRIV_REQUIRES ${COMPONENT_NAME})
-    add_prebuilt_library(flite_g2p "${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}/libflite_g2p.a" PRIV_REQUIRES ${COMPONENT_NAME})
-    add_prebuilt_library(multinet "${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}/libmultinet.a" PRIV_REQUIRES ${COMPONENT_NAME})
-    add_prebuilt_library(hufzip "${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}/libhufzip.a" PRIV_REQUIRES ${COMPONENT_NAME})
-    add_prebuilt_library(vadnet "${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}/libvadnet.a" PRIV_REQUIRES ${COMPONENT_NAME})
-    add_prebuilt_library(wakenet "${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}/libwakenet.a" PRIV_REQUIRES ${COMPONENT_NAME})
-    add_prebuilt_library(nsnet "${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}/libnsnet.a" PRIV_REQUIRES ${COMPONENT_NAME})
+    add_prebuilt_library(fst "${CMAKE_CURRENT_SOURCE_DIR}/lib/${TARGET_LIB_PATH}/libfst.a" PRIV_REQUIRES ${COMPONENT_NAME})
+    add_prebuilt_library(flite_g2p "${CMAKE_CURRENT_SOURCE_DIR}/lib/${TARGET_LIB_PATH}/libflite_g2p.a" PRIV_REQUIRES ${COMPONENT_NAME})
+    add_prebuilt_library(multinet "${CMAKE_CURRENT_SOURCE_DIR}/lib/${TARGET_LIB_PATH}/libmultinet.a" PRIV_REQUIRES ${COMPONENT_NAME})
+    add_prebuilt_library(hufzip "${CMAKE_CURRENT_SOURCE_DIR}/lib/${TARGET_LIB_PATH}/libhufzip.a" PRIV_REQUIRES ${COMPONENT_NAME})
+    add_prebuilt_library(vadnet "${CMAKE_CURRENT_SOURCE_DIR}/lib/${TARGET_LIB_PATH}/libvadnet.a" PRIV_REQUIRES ${COMPONENT_NAME})
+    add_prebuilt_library(wakenet "${CMAKE_CURRENT_SOURCE_DIR}/lib/${TARGET_LIB_PATH}/libwakenet.a" PRIV_REQUIRES ${COMPONENT_NAME})
+    add_prebuilt_library(nsnet "${CMAKE_CURRENT_SOURCE_DIR}/lib/${TARGET_LIB_PATH}/libnsnet.a" PRIV_REQUIRES ${COMPONENT_NAME})
     idf_component_get_property(esp_dsp_lib espressif__esp-dsp COMPONENT_LIB)
     idf_component_get_property(dl_fft_lib espressif__dl_fft COMPONENT_LIB)
 
@@ -63,7 +70,7 @@ if((${IDF_TARGET} STREQUAL "esp32s3") OR (${IDF_TARGET} STREQUAL "esp32p4") OR (
         wakenet)
 
     if(${IDF_TARGET} STREQUAL "esp32")
-        add_prebuilt_library(multinet2_ch "${CMAKE_CURRENT_SOURCE_DIR}/lib/${IDF_TARGET}/libmultinet2_ch.a" PRIV_REQUIRES ${COMPONENT_NAME})
+        add_prebuilt_library(multinet2_ch "${CMAKE_CURRENT_SOURCE_DIR}/lib/${TARGET_LIB_PATH}/libmultinet2_ch.a" PRIV_REQUIRES ${COMPONENT_NAME})
         list(APPEND sr_libs multinet2_ch)
     endif()
 
