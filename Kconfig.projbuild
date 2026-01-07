@@ -181,6 +181,10 @@ menu "Load Multiple Wake Words (WakeNet9)"
     bool "Hi,Stack Chan (wn9_histackchan_tts3)"
     default False
 
+    config SR_WN_WN9_HEYKIRA_TTS3
+    bool "Hey,Kira (wn9_heykira_tts3)"
+    default False
+
     config SR_WN_WN9_XIAOLONGXIAOLONG_TTS
     bool "小龙小龙 (wn9_xiaolongxiaolong_tts)"
     default False
