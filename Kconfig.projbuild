@@ -176,13 +176,16 @@ menu "Load Multiple Wake Words (WakeNet9)"
     bool "Hey,Ivy (wn9_heyivy_tts2)"
     default False
 
-
-    config SR_WN_WN9_HISTACKCHAN_TTS3
-    bool "Hi,Stack Chan (wn9_histackchan_tts3)"
+    config SR_WN_WN9L_HISTACKCHAN_TTS3
+    bool "Hi,Stack Chan (wn9l_histackchan_tts3)"
     default False
 
     config SR_WN_WN9_HEYKIRA_TTS3
     bool "Hey,Kira (wn9_heykira_tts3)"
+    default False
+
+    config SR_WN_WN9L_HEYGIGI_TTS3
+    bool "Hey,GiGi (wn9l_heygigi_tts3)"
     default False
 
     config SR_WN_WN9_XIAOLONGXIAOLONG_TTS
