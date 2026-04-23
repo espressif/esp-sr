@@ -80,6 +80,18 @@ menu "Load Multiple Wake Words (WakeNet9)"
     bool "Hi,乐鑫 (wn9_hilexin)"
     default False
 
+    config SR_WN_WN9_HIESP
+    bool "Hi,ESP (wn9_hiesp)"
+    default False
+
+    config SR_WN_WN9L_JA_KONNICHIHAESP_TTS3
+    bool "こんにちは ESP (wn9l_ja_konnichihaesp_tts3)"
+    default False
+
+    config SR_WN_WN9L_FR_BONJOURESP_TTS3
+    bool "Bonjour ESP (wn9l_fr_bonjouresp_tts3)"
+    default False
+
     config SR_WN_WN9_NIHAOMIAOBAN_TTS2
     bool "你好喵伴 (wn9_nihaomiaoban_tts2)"
     default False
@@ -102,10 +114,6 @@ menu "Load Multiple Wake Words (WakeNet9)"
 
     config SR_WN_WN9_ALEXA
     bool "Alexa (wn9_alexa)"
-    default False
-
-    config SR_WN_WN9_HIESP
-    bool "Hi,ESP (wn9_hiesp)"
     default False
 
     config SR_WN_WN9_JARVIS_TTS
@@ -302,6 +310,10 @@ menu "Load Multiple Wake Words (WakeNet9)"
 
     config SR_WN_WN9_HAI1XIAO3XIANG4_TTS3
     bool "嗨小象 (wn9_hai1xiao3xiang4_tts3)"
+    default False
+
+    config SR_WN_WN9L_NI3HAO3XING1BAO3_TTS3
+    bool "你好星宝 (wn9l_ni3hao3xing1bao3_tts3)"
     default False
 endmenu
 

@@ -21,6 +21,7 @@ These algorithms are provided in the form of a component, so they can be integra
 
 News
 ----
+- [23/4/2026]: TTS Pipeline V3 now supports wake word training for Chinese, English, Japanese, and French. Planned support includes Korean, Spanish, Portuguese, German, Russian, and Arabic.
 - [20/10/2025]: We add a new model, WakeNet9l, which further improves the response rate of wake words spoken at extremely fast speeds based on WakeNet9. The usage of WakeNet9l is the same as WakeNet9, but its CPU and memory requirements are approximately 1.3 times higher than those of WakeNet9.
 - [21/4/2025]: We add a new model WakeNet9s, which can run on chips that do not have PSRAM and do not support SIMD, such as ESP32C3 and ESP32C5. [examples](https://github.com/espressif/esp-skainet/tree/master/examples/wake_word_detection)
 - [17/4/2025]: We add a new DOA(Direction of Arrival) algorithm.
@@ -32,7 +33,7 @@ News
 | Supported Targets | ESP32    | ESP32-S2 | ESP32-S3 | ESP32-P4 | ESP32-C3 | ESP32-C5 | ESP32-C6 |
 | ----------------- | -------- | -------- | -------- | -------- | -------- | -------- | -------- |
 
-Espressif wake word engine **WakeNet** is specially designed to provide a high performance and low memory footprint wake word detection algorithm for users, which enables devices always listen to wake words, such as “Alexa”, “Hi,lexin” and “Hi,ESP”. WakeNet9 and WakeNet9s models are supported. WakeNet9s is a cost-down version of WakeNet9, with fewer parameters and lower computational requirements. `_tts` suffix means this WakeNet model is trained by TTS samples. `_tts2` suffix means this WakeNet model is trained by TTS Pipeline V2.
+Espressif wake word engine **WakeNet** is specially designed to provide a high performance and low memory footprint wake word detection algorithm for users, which enables devices always listen to wake words, such as “Alexa”, “Hi,lexin” and “Hi,ESP”. WakeNet9 and WakeNet9s models are supported. WakeNet9s is a cost-down version of WakeNet9, with fewer parameters and lower computational requirements. `_tts` suffix means this WakeNet model is trained by TTS samples. `_tts2` suffix means this WakeNet model is trained by TTS Pipeline V2. TTS Pipeline V3 start to support more language.
 
 Espressif offers two ways to customize the wake word, please refer to the following document to choose the one that meets your needs:
 [Espressif Speech Wake Words Customization Process](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/wake_word_engine/ESP_Wake_Words_Customization.html) or [Training Wake Words by TTS sample](https://github.com/espressif/esp-sr/issues/88).
@@ -43,6 +44,8 @@ The following wake words are supported in esp-sr:
 |:--------------- | :------------------------------:| :---------------------:|
 |Hi,乐鑫           |  wn9s_hilexin                   | wn9_hilexin            |
 |Hi,ESP           |  wn9s_hiesp                      | wn9_hiesp              |
+|こんにちは ESP     |                                 |wn9l_ja_konnichihaesp_tts3|
+|Bonjour ESP      |                                 |wn9l_fr_bonjouresp_tts3 |
 |你好小智          |  wn9s_nihaoxiaozhi              | wn9_nihaoxiaozhi_tts   |
 |Hi,Jason         |   wn9s_hijason_tts2              | wn9_hijason_tts2       |
 |你好喵伴          |                                 | wn9_nihaomiaoban_tts2   |
@@ -96,6 +99,7 @@ The following wake words are supported in esp-sr:
 |小珈小珈         |                                  | wn9_xiao3jia1xiao3jia1_tts3|
 |小峰小峰         |                                  | wn9_xiao3feng1xiao3feng1_tts3|
 |嗨小象           |                                  | wn9_hai1xiao3xiang4_tts3|
+|你好星宝         |                                  | wn9l_ni3hao3xing1bao3_tts3|
 
 **NOTE**:
 
