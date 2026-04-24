@@ -159,17 +159,17 @@ TEST_CASE(">>>>>>>> AFE create/destroy API & memory leak <<<<<<<<", "[afe_all]")
 
 TEST_CASE(">>>>>>>> AFE default setting <<<<<<<<", "[afe]")
 {
-    const char *input_format[6] = {"MR", "MMNR"};
-    afe_type_t afe_type[2] = {AFE_TYPE_SR, AFE_TYPE_VC};
+    const char *input_format[2] = {"MR", "MMNR"};
+    afe_type_t afe_type[3] = {AFE_TYPE_SR, AFE_TYPE_FD, AFE_TYPE_VC};
     afe_mode_t afe_mode[2] = {AFE_MODE_LOW_COST, AFE_MODE_HIGH_PERF};
     int count = 0;
-    int memory[16];
-    float cpu[16];
+    int memory[36];
+    float cpu[36];
 
     // test all setting
     srmodel_list_t *models = esp_srmodel_init("model");
     for (int format_id = 0; format_id < 2; format_id++) {
-        for (int type_id = 0; type_id < 2; type_id++) {
+        for (int type_id = 0; type_id < 3; type_id++) {
             for (int mode_id = 0; mode_id < 2; mode_id++) {
                 printf("format: %s, type: %d, mode: %d, memory size:%d %d\n",
                        input_format[format_id],
@@ -187,15 +187,15 @@ TEST_CASE(">>>>>>>> AFE default setting <<<<<<<<", "[afe]")
     }
     count = 0;
     for (int format_id = 0; format_id < 2; format_id++) {
-        for (int type_id = 0; type_id < 2; type_id++) {
+        for (int type_id = 0; type_id < 3; type_id++) {
             for (int mode_id = 0; mode_id < 2; mode_id++) {
                 printf("--------format: %s, type: %s, mode: %s------------\n",
                        input_format[format_id],
-                       type_id == 0 ? "SR" : "VC",
+                       type_id == 0 ? "SR" : type_id == 1 ? "FD" : "VC",
                        mode_id == 0 ? "LOW_COST" : "HIGH_PERF");
-                printf("Internal RAM: %d, PSRAM:%d, feed cpu loading:%f, fetch cpu loading:%f\n",
-                       memory[count * 2],
-                       memory[count * 2 + 1],
+                printf("Internal RAM: %.1f KB, PSRAM:%.1f KB, feed cpu loading:%.3f, fetch cpu loading:%.3f\n",
+                       memory[count * 2]/1024.0,
+                       memory[count * 2 + 1]/1024.0,
                        cpu[count * 2],
                        cpu[count * 2 + 1]);
                 count++;

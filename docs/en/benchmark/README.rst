@@ -44,6 +44,14 @@ Resource Consumption
          - ``|AEC(SR_LOW_COST)| -> |SE(BSS)| -> |VAD(vadnet1_medium)| -> |WakeNet(wn9_hilexin,)|``
        * - MMNR, SR, HIGH_PERF
          - ``|AEC(SR_HIGH_PERF)| -> |SE(BSS)| -> |VAD(vadnet1_medium)| -> |WakeNet(wn9_hilexin,)|``
+       * - MR, FD, LOW_COST
+         - ``|AEC(FD_LOW_COST)| -> |VAD(vadnet1_medium)| -> |WakeNet(wn9_hilexin,)|``
+       * - MR, FD, HIGH_PERF
+         - ``|AEC(FD_HIGH_PERF)| -> |VAD(vadnet1_medium)| -> |WakeNet(wn9_hilexin,)|``
+       * - MMNR, FD, LOW_COST
+         - ``|AEC(FD_LOW_COST)| -> |SE(BSS)| -> |VAD(vadnet1_medium)| -> |WakeNet(wn9_hilexin,)|``
+       * - MMNR, FD, HIGH_PERF
+         - ``|AEC(FD_HIGH_PERF)| -> |SE(BSS)| -> |VAD(vadnet1_medium)| -> |WakeNet(wn9_hilexin,)|``
 
     .. note::
 
@@ -61,15 +69,15 @@ Resource Consumption
          - Feed CPU usage (1 core,%)
          - Fetch CPU usage (1 core,%)
        * - MR, SR, LOW_COST
-         - 72.3
-         - 732.7
-         - 8.4
-         - 15.0
+         - 60.0
+         - 739.7
+         - 9.0
+         - 15.8
        * - MR, SR, HIGH_PERF
-         - 78.0
-         - 734.7
-         - 9.4
-         - 14.9
+         - 49.1
+         - 775.8
+         - 15.9
+         - 15.7
        * - MR, VC, LOW_COST
          - 50.3
          - 821.4
@@ -81,15 +89,35 @@ Resource Consumption
          - 64.0
          - 8.2
        * - MMNR, SR, LOW_COST
-         - 76.6
-         - 1173.9
-         - 36.6
-         - 30.0
+         - 78.7
+         - 1153.7
+         - 35.4
+         - 32.4
        * - MMNR, SR, HIGH_PERF
-         - 99.0
-         - 1173.7
-         - 38.8
-         - 30.0
+         - 82.2
+         - 1198.2
+         - 46.2
+         - 32.4
+       * - MR, FD, LOW_COST
+         - 59.8
+         - 777.7
+         - 21.8
+         - 15.8
+       * - MR, FD, HIGH_PERF
+         - 49.2
+         - 813.8
+         - 27.6
+         - 15.7
+       * - MMNR, FD, LOW_COST
+         - 78.8
+         - 1191.7
+         - 48.3
+         - 32.3
+       * - MMNR, FD, HIGH_PERF
+         - 82.2
+         - 1236.3
+         - 60.9
+         - 32.3
 
 
 .. only:: esp32p4
