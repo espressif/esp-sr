@@ -19,13 +19,13 @@ AEC provides three different implementations covering three application scenario
      - Description
    * - Speech Recognition (SR)
      - ``AEC_MODE_SR_LOW_COST``, ``AEC_MODE_SR_HIGH_PERF``
-     - Low-cost mode with linear filtering only, small memory footprint and fast speed, suitable for resource-sensitive wake-word recognition scenarios
+     - Low-cost mode with linear filtering only, small memory footprint and fast speed
+   * - Full-Duplex Conversation (FD)
+     - ``AEC_MODE_FD_LOW_COST``, ``AEC_MODE_FD_HIGH_PERF``
+     - Low-cost full-duplex mode, includes linear filtering + nonlinear processing, suitable for Full-Duplex dialogue scenarios
    * - Voice over IP (VOIP)
      - ``AEC_MODE_VOIP_LOW_COST``, ``AEC_MODE_VOIP_HIGH_PERF``
      - Low-cost call mode, supports 8 kHz / 16 kHz, suitable for ordinary voice calls
-   * - Full-Duplex Conversation (FD)
-     - ``AEC_MODE_FD_LOW_COST``, ``AEC_MODE_FD_HIGH_PERF``
-     - Low-cost full-duplex mode, includes linear filtering + nonlinear processing, suitable for human-machine dialogue scenarios, supports 16 kHz only
 
 .. note::
 
@@ -171,50 +171,93 @@ The following table shows typical resource usage and performance data for each m
 
 .. only:: esp32s3
 
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15 20 20
+    .. list-table::
+      :header-rows: 1
+      :widths: 20 15 15 20 20
 
-   * - Mode
-     - Internal RAM (KB)
-     - PSRAM (KB)
-     - Time per Frame (ms)
-     - CPU Usage (%)
-   * - SR_LOW_COST
-     - 18.8
-     - 64.0
-     - 2.29 / 32
-     - 7.2
-   * - SR_HIGH_PERF
-     - 8.2
-     - 100.1
-     - 4.51 / 32
-     - 14.1
-   * - VOIP_LOW_COST
-     - 26.9
-     - 64.1
-     - 4.37 / 16
-     - 27.3
-   * - VOIP_HIGH_PERF
-     - 69.2
-     - 66.6
-     - 5.05 / 16
-     - 31.6
-   * - FD_LOW_COST
-     - 30.9
-     - 90.0
-     - 6.28 / 32
-     - 19.6
-   * - FD_HIGH_PERF
-     - 20.3
-     - 126.2
-     - 8.08 / 32
-     - 25.3
+      * - Mode
+        - Internal RAM (KB)
+        - PSRAM (KB)
+        - Time per Frame (ms)
+        - CPU Usage (%)
+      * - SR_LOW_COST
+        - 18.8
+        - 64.0
+        - 2.29 / 32
+        - 7.2
+      * - SR_HIGH_PERF
+        - 8.2
+        - 100.1
+        - 4.51 / 32
+        - 14.1
+      * - VOIP_LOW_COST
+        - 26.9
+        - 64.1
+        - 4.37 / 16
+        - 27.3
+      * - VOIP_HIGH_PERF
+        - 69.2
+        - 66.6
+        - 5.05 / 16
+        - 31.6
+      * - FD_LOW_COST
+        - 30.9
+        - 90.0
+        - 6.28 / 32
+        - 19.6
+      * - FD_HIGH_PERF
+        - 20.3
+        - 126.2
+        - 8.08 / 32
+        - 25.3
 
-.. note::
+.. only:: esp32p4
 
-   - SR/FD mode frame length is 32 ms, VOIP mode frame length is 16 ms.
-   - Actual resource consumption may vary slightly depending on the chip model, compiler optimization level, and specific configuration.
+    .. list-table::
+      :header-rows: 1
+      :widths: 20 15 15 20 20
+
+      * - Mode
+        - Internal RAM (KB)
+        - PSRAM (KB)
+        - Time per Frame (ms)
+        - CPU Usage (%)
+      * - SR_LOW_COST
+        - 18.8
+        - 64.0
+        - 2.66 / 32
+        - 8.3
+      * - SR_HIGH_PERF
+        - 8.2
+        - 100.1
+        - 2.72 / 32
+        - 8.5
+      * - VOIP_LOW_COST
+        - 26.9
+        - 64.1
+        - 2.34 / 16
+        - 14.6
+      * - VOIP_HIGH_PERF
+        - 69.4
+        - 66.6
+        - 2.60 / 16
+        - 16.3
+      * - FD_LOW_COST
+        - 18.9
+        - 102.1
+        - 3.69 / 32
+        - 11.5
+      * - FD_HIGH_PERF
+        - 8.3
+        - 138.2
+        - 3.73 / 32
+        - 11.7
+
+    .. note::
+
+      - SR/FD mode frame length is 32 ms, VOIP mode frame length is 16 ms.
+      - Test setting: ESP32-P4 @ 400 MHz, CONFIG_CACHE_L2_CACHE_256KB=y, CONFIG_CACHE_L2_CACHE_LINE_128B=y.
+      - Actual resource consumption may vary slightly depending on the chip model, compiler optimization level, and specific configuration.
 
 Test Audio Resources
 --------------------

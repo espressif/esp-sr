@@ -140,6 +140,14 @@ Resource Consumption
          - ``|AEC(SR_LOW_COST)| -> |SE(BSS)| -> |VAD(vadnet1_medium)| -> |WakeNet(wn9_hilexin,)|``
        * - MMNR, SR, HIGH_PERF
          - ``|AEC(SR_HIGH_PERF)| -> |SE(BSS)| -> |VAD(vadnet1_medium)| -> |WakeNet(wn9_hilexin,)|``
+       * - MR, FD, LOW_COST
+         - ``|AEC(FD_LOW_COST)| -> |VAD(vadnet1_medium)| -> |WakeNet(wn9_hilexin,)|``
+       * - MR, FD, HIGH_PERF
+         - ``|AEC(FD_HIGH_PERF)| -> |VAD(vadnet1_medium)| -> |WakeNet(wn9_hilexin,)|``
+       * - MMNR, FD, LOW_COST
+         - ``|AEC(FD_LOW_COST)| -> |SE(BSS)| -> |VAD(vadnet1_medium)| -> |WakeNet(wn9_hilexin,)|``
+       * - MMNR, FD, HIGH_PERF
+         - ``|AEC(FD_HIGH_PERF)| -> |SE(BSS)| -> |VAD(vadnet1_medium)| -> |WakeNet(wn9_hilexin,)|``
 
 
     .. note::
@@ -147,46 +155,67 @@ Resource Consumption
         -  **MR:** one microphone channel and one playback channel
         -  **MMNR:** two microphone channels and one playback channels
         -  **Models:** nsnet2, vadnet1_medium, wn9_hilexin
+        -  **Setting:** ESP32-P4 @ 400 MHz, CONFIG_CACHE_L2_CACHE_256KB=y, CONFIG_CACHE_L2_CACHE_LINE_128B=y.
 
     .. list-table:: AFE configuration and Performance
-       :widths: 25 15 15 20 20
-       :header-rows: 1
+      :header-rows: 1
+      :widths: 15 20 20 20 20
 
-       * - Config
-         - Internal RAM (KB)
-         - PSRAM (KB)
-         - Feed CPU usage (1 core,%)
-         - Fetch CPU usage (1 core,%)
-       * - MR, SR, LOW_COST
-         - 73.6
-         - 733.2
-         - 10.6
-         - 11.2
-       * - MR, SR, HIGH_PERF
-         - 73.3
-         - 733.2
-         - 10.6
-         - 11.2
-       * - MR, VC, LOW_COST
-         - 74.4
-         - 821.3
-         - 40.2
-         - 5.7
-       * - MR, VC, HIGH_PERF
-         - 116.7
-         - 823.9
-         - 42.4
-         - 5.7
-       * - MMNR, SR, LOW_COST
-         - 78.0
-         - 1173.0
-         - 28.2
-         - 24.8
-       * - MMNR, SR, HIGH_PERF
-         - 78.0
-         - 1173.0
-         - 28.2
-         - 24.8
+      * - Format
+        - Mode
+        - Internal RAM (KB)
+        - PSRAM (KB)
+        - CPU Usage (%)
+      * - MR
+        - SR_LOW_COST
+        - 60.4
+        - 739.7
+        - 19.1
+      * - MR
+        - SR_HIGH_PERF
+        - 49.1
+        - 775.8
+        - 19.3
+      * - MR
+        - FD_LOW_COST
+        - 60.2
+        - 777.7
+        - 22.4
+      * - MR
+        - FD_HIGH_PERF
+        - 49.2
+        - 813.8
+        - 22.6
+      * - MR
+        - VOIP_LOW_COST
+        - 48.7
+        - 819.7
+        - 36.1
+      * - MR
+        - VOIP_HIGH_PERF
+        - 91.1
+        - 822.2
+        - 37.7
+      * - MMNR
+        - SR_LOW_COST
+        - 79.1
+        - 1153.7
+        - 47.4
+      * - MMNR
+        - SR_HIGH_PERF
+        - 68.1
+        - 1200.4
+        - 48.4
+      * - MMNR
+        - FD_LOW_COST
+        - 79.2
+        - 1191.7
+        - 53.0
+      * - MMNR
+        - FD_HIGH_PERF
+        - 68.1
+        - 1238.5
+        - 53.9
 
 WakeNet
 -------

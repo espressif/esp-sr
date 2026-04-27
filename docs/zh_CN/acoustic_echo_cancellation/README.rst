@@ -211,10 +211,53 @@ NLP 级别说明
      - 8.08 / 32
      - 25.3
 
-.. note::
+.. only:: esp32p4
 
-   - SR/FD 模式帧长为 32 ms，VOIP 模式帧长为 16 ms。
-   - 实际资源消耗可能因芯片型号、编译优化等级和具体配置略有差异。
+    .. list-table::
+      :header-rows: 1
+      :widths: 20 15 15 20 20
+
+      * - 模式
+        - 内部 RAM (KB)
+        - PSRAM (KB)
+        - 每帧耗时 (ms)
+        - CPU 占用 (%)
+      * - SR_LOW_COST
+        - 18.8
+        - 64.0
+        - 2.66 / 32
+        - 8.3
+      * - SR_HIGH_PERF
+        - 8.2
+        - 100.1
+        - 2.72 / 32
+        - 8.5
+      * - VOIP_LOW_COST
+        - 26.9
+        - 64.1
+        - 2.34 / 16
+        - 14.6
+      * - VOIP_HIGH_PERF
+        - 69.4
+        - 66.6
+        - 2.60 / 16
+        - 16.3
+      * - FD_LOW_COST
+        - 18.9
+        - 102.1
+        - 3.69 / 32
+        - 11.5
+      * - FD_HIGH_PERF
+        - 8.3
+        - 138.2
+        - 3.73 / 32
+        - 11.7
+
+    .. note::
+
+      - SR/FD 模式帧长为 32 ms，VOIP 模式帧长为 16 ms。
+      - 测试条件：ESP32-P4 @ 400 MHz，CONFIG_CACHE_L2_CACHE_256KB=y，CONFIG_CACHE_L2_CACHE_LINE_128B=y。
+      - 实际资源消耗可能因芯片型号、编译优化等级和具体配置略有差异。
 
 
 测试音频资源
