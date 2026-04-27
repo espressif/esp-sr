@@ -98,13 +98,6 @@ Suitable for scenarios requiring fine-grained control over the AEC module. The h
 
       aec_process(aec, mic, ref, out);
 
-   Or step-by-step processing:
-
-   .. code-block:: c
-
-      aec_linear_process(aec, mic, ref, out);  // Linear filtering
-      aec_nlp_process(aec, out);                // Nonlinear post-processing (optional), only effective for AEC_MODE_FD_LOW_COST or AEC_MODE_FD_HIGH_PERF
-
 5. **Release resources**
 
    .. code-block:: c
@@ -115,36 +108,8 @@ Suitable for scenarios requiring fine-grained control over the AEC module. The h
 Method 2: Use via the AFE Module
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Suitable for scenarios requiring multiple audio front-end algorithms such as AEC, NS (noise suppression), VAD (voice activity detection), and WakeNet (wake word detection) simultaneously. The header files are :project_file:`include/esp32s3/esp_afe_sr_iface.h` and :project_file:`include/esp32s3/esp_afe_config.h`.
+Suitable for scenarios requiring multiple audio front-end algorithms such as AEC, NS (noise suppression), VAD (voice activity detection), and WakeNet (wake word detection) simultaneously. Please refer to the :doc:`Audio Front End <../audio_front_end/README>` for details.
 
-**Basic Flow:**
-
-.. code-block:: c
-
-   #include "esp_afe_sr_iface.h"
-   #include "esp_afe_config.h"
-
-   // 1. Initialize default configuration
-   afe_config_t *afe_config = afe_config_init("MNR", models, AFE_TYPE_SR, AFE_MODE_HIGH_PERF);
-
-   // 2. Create an AFE instance
-   const esp_afe_sr_iface_t *afe_handle = esp_afe_handle_from_config(afe_config);
-   esp_afe_sr_data_t *afe_data = afe_handle->create_from_config(afe_config);
-
-   // 3. Get feed frame length and allocate buffers
-   int feed_chunksize = afe_handle->get_feed_chunksize(afe_data);
-   int feed_nch = afe_handle->get_feed_channel_num(afe_data);
-   int16_t *feed_buff = malloc(feed_chunksize * sizeof(int16_t) * feed_nch);
-
-   // 4. Loop to feed data
-   afe_handle->feed(afe_data, feed_buff);
-
-   // 5. Loop to fetch results
-   afe_fetch_result_t *res = afe_handle->fetch(afe_data);
-
-   // 6. Destroy
-   afe_handle->destroy(afe_data);
-   afe_config_free(afe_config);
 
 NLP Level Description
 ---------------------
@@ -163,6 +128,7 @@ Nonlinear processing (NLP) is used to further suppress residual echo and can be 
      - Aggressive level (default), stronger echo suppression, may affect near-end speech quality to some extent
    * - ``AEC_NLP_LEVEL_VERYAGGR``
      - Very aggressive level, strongest echo suppression, may have a greater impact on near-end speech quality
+
 
 Resource Consumption
 --------------------
@@ -210,6 +176,12 @@ The following table shows typical resource usage and performance data for each m
         - 126.2
         - 8.08 / 32
         - 25.3
+
+    .. note::
+
+      - SR/FD mode frame length is 32 ms, VOIP mode frame length is 16 ms.
+      - Test setting: ESP32-P4 @ 240 MHz, CONFIG_ESP32S3_DATA_CACHE_64KB=y,CONFIG_ESP32S3_DATA_CACHE_LINE_64B=y.
+      - Actual resource consumption may vary slightly depending on the chip model, compiler optimization level, and specific configuration.
 
 .. only:: esp32p4
 
@@ -268,13 +240,13 @@ Test Audio Resources
 
    * - File Name
      - Description
-   * - :project_file:`docs/_static/aec_in_far.wav`
+   * - `aec_in_far.wav <docs/_static/aec_in_far.wav>`_
      - Far-end signal (speaker playback reference signal)
-   * - :project_file:`docs/_static/aec_in_near.wav`
+   * - `aec_in_near.wav <docs/_static/aec_in_near.wav>`_
      - Near-end signal (microphone signal containing echo)
-   * - :project_file:`docs/_static/aec_test_sr.wav`
+   * - `aec_test_sr.wav <docs/_static/aec_test_sr.wav>`_
      - SR mode test audio
-   * - :project_file:`docs/_static/aec_test_voip.wav`
+   * - `aec_test_voip.wav <docs/_static/aec_test_voip.wav>`_
      - VOIP mode test audio
-   * - :project_file:`docs/_static/aec_test_fd.wav`
+   * - `aec_test_fd.wav <docs/_static/aec_test_fd.wav>`_
      - FD mode test audio

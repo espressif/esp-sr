@@ -73,8 +73,8 @@ The ``input_format`` parameter specifies the arrangement of audio channels in th
 
    The input data must be arranged in **channel-interleaved format**.
 
-Using the AFE Framework
-----------------------------
+AFE API Usage
+-------------
 
 Based on the ``menuconfig`` -> ``ESP Speech Recognition``, select the required AFE (Analog Front End) models, such as the WakeNet model, VAD (Voice Activity Detection) model, NS (Noise Suppression) model, etc., and then call the AFE framework in the code using the following steps.
 
@@ -144,6 +144,76 @@ Retrieve the processed single-channel audio data and detection states:
 
     // get the processed audio with specified delay, default delay is 2000 ms
     afe_fetch_result_t *result = afe_handle->fetch_with_delay(afe_data, 100 / portTICK_PERIOD_MS);
+
+AFE Basic Example
+-------------------
+
+.. code-block:: c
+
+   #include "esp_afe_sr_iface.h"
+   #include "esp_afe_config.h"
+
+  static const esp_afe_sr_iface_t *afe_handle = NULL;
+
+  void feed_task(void *arg)
+  {
+      esp_afe_sr_data_t *afe_data = arg;
+      int audio_chunksize = afe_handle->get_feed_chunksize(afe_data);
+      int feed_channel = afe_handle->get_feed_channel_num(afe_data);
+      int16_t *buff = malloc(audio_chunksize * sizeof(int16_t) * feed_channel);
+
+      while (1) {
+          read_data_from_i2s_or_file(buff, ...); // read audio data from I2S or file
+          afe_handle->feed(afe_data, buff);
+      }
+
+      if (buff) {
+          free(buff);
+          buff = NULL;
+      }
+      vTaskDelete(NULL);
+  }
+
+  void fetch_task(void *arg)
+  {
+      esp_afe_sr_data_t *afe_data = arg;
+      int fetch_chunksize = afe_handle->get_fetch_chunksize(afe_data);
+      int16_t *buff = malloc(fetch_chunksize * sizeof(int16_t));
+
+      while (1) {
+          afe_fetch_result_t* res = afe_handle->fetch(afe_data); 
+          if (!res || res->ret_value == ESP_FAIL) {
+              printf("fetch error!\n");
+              break;
+          }
+          ... // process the results, e.g., res->data for AFE output, res->data_size for output data size, etc.
+      }
+      if (buff) {
+          free(buff);
+          buff = NULL;
+      }
+      if (afe_data) {
+          afe_handle->destroy(afe_data);
+          afe_data = NULL;
+      }
+      vTaskDelete(NULL);
+  }
+
+  void create_afe_task()
+  {
+
+   // 1. Initialize default configuration
+   afe_config_t *afe_config = afe_config_init("MNR", models, AFE_TYPE_SR, AFE_MODE_HIGH_PERF);
+
+   // 2. Create an AFE instance
+   afe_handle = esp_afe_handle_from_config(afe_config);
+   esp_afe_sr_data_t *afe_data = afe_handle->create_from_config(afe_config);
+   afe_config_free(afe_config);
+
+   // 3. Get feed frame length and allocate buffers
+    xTaskCreatePinnedToCore(&feed_task, "feed", 8 * 1024, (void*)afe_data, 5, NULL, 0);
+    xTaskCreatePinnedToCore(&fetch_task, "detect", 4 * 1024, (void*)afe_data, 5, NULL, 1);
+  }
 
 Resource Occupancy
 ------------------

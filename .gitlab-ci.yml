@@ -2,7 +2,6 @@ stages:
   - check
   - build
   - target_test
-  - build_docs
   - deploy
 
 variables:
@@ -238,7 +237,7 @@ test_esp_tts:
     TEST_FOLDER: './test_apps/esp-tts'
 
 .build_doc_template:
-  stage: build_docs
+  stage: build
   image: $ESP_DOCS_ENV_IMAGE
 
 build_esp_sr_html:

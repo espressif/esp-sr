@@ -115,36 +115,7 @@ AEC 模块提供两种集成方式：
 方式二：通过 AFE 模块使用
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-适用于需要同时使用 AEC、NS（降噪）、VAD（语音检测）、WakeNet（唤醒词）等多种音频前端算法的场景。头文件为 :project_file:`include/esp32s3/esp_afe_sr_iface.h` 和 :project_file:`include/esp32s3/esp_afe_config.h`。
-
-**基本流程：**
-
-.. code-block:: c
-
-   #include "esp_afe_sr_iface.h"
-   #include "esp_afe_config.h"
-
-   // 1. 初始化默认配置
-   afe_config_t *afe_config = afe_config_init("MNR", models, AFE_TYPE_SR, AFE_MODE_HIGH_PERF);
-
-   // 2. 创建 AFE 实例
-   const esp_afe_sr_iface_t *afe_handle = esp_afe_handle_from_config(afe_config);
-   esp_afe_sr_data_t *afe_data = afe_handle->create_from_config(afe_config);
-
-   // 3. 获取 feed 帧长度并分配缓冲区
-   int feed_chunksize = afe_handle->get_feed_chunksize(afe_data);
-   int feed_nch = afe_handle->get_feed_channel_num(afe_data);
-   int16_t *feed_buff = malloc(feed_chunksize * sizeof(int16_t) * feed_nch);
-
-   // 4. 循环 feed 数据
-   afe_handle->feed(afe_data, feed_buff);
-
-   // 5. 循环 fetch 结果
-   afe_fetch_result_t *res = afe_handle->fetch(afe_data);
-
-   // 6. 销毁
-   afe_handle->destroy(afe_data);
-   afe_config_free(afe_config);
+适用于需要同时使用 AEC、NS（降噪）、VAD（语音检测）、WakeNet（唤醒词）等多种音频前端算法的场景。具体使用方法请参考 :doc:`Audio Front End <../audio_front_end/README>` 模块文档。
 
 NLP 级别说明
 ------------
@@ -171,45 +142,51 @@ NLP 级别说明
 
 .. only:: esp32s3
 
-.. list-table::
-   :header-rows: 1
-   :widths: 20 15 15 20 20
+    .. list-table::
+      :header-rows: 1
+      :widths: 20 15 15 20 20
 
-   * - 模式
-     - 内部 RAM (KB)
-     - PSRAM (KB)
-     - 每帧耗时 (ms)
-     - CPU 占用 (%)
-   * - SR_LOW_COST
-     - 18.8
-     - 64.0
-     - 2.29 / 32
-     - 7.2
-   * - SR_HIGH_PERF
-     - 8.2
-     - 100.1
-     - 4.51 / 32
-     - 14.1
-   * - VOIP_LOW_COST
-     - 26.9
-     - 64.1
-     - 4.37 / 16
-     - 27.3
-   * - VOIP_HIGH_PERF
-     - 69.2
-     - 66.6
-     - 5.05 / 16
-     - 31.6
-   * - FD_LOW_COST
-     - 30.9
-     - 90.0
-     - 6.28 / 32
-     - 19.6
-   * - FD_HIGH_PERF
-     - 20.3
-     - 126.2
-     - 8.08 / 32
-     - 25.3
+      * - 模式
+        - 内部 RAM (KB)
+        - PSRAM (KB)
+        - 每帧耗时 (ms)
+        - CPU 占用 (%)
+      * - SR_LOW_COST
+        - 18.8
+        - 64.0
+        - 2.29 / 32
+        - 7.2
+      * - SR_HIGH_PERF
+        - 8.2
+        - 100.1
+        - 4.51 / 32
+        - 14.1
+      * - VOIP_LOW_COST
+        - 26.9
+        - 64.1
+        - 4.37 / 16
+        - 27.3
+      * - VOIP_HIGH_PERF
+        - 69.2
+        - 66.6
+        - 5.05 / 16
+        - 31.6
+      * - FD_LOW_COST
+        - 30.9
+        - 90.0
+        - 6.28 / 32
+        - 19.6
+      * - FD_HIGH_PERF
+        - 20.3
+        - 126.2
+        - 8.08 / 32
+        - 25.3
+
+    .. note::
+
+      - SR/FD 模式帧长为 32 ms，VOIP 模式帧长为 16 ms。
+      - 测试条件：ESP32-S3 @ 240 MHz，CONFIG_ESP32S3_DATA_CACHE_64KB=y,CONFIG_ESP32S3_DATA_CACHE_LINE_64B=y。
+      - 实际资源消耗可能因芯片型号、编译优化等级和具体配置略有差异。
 
 .. only:: esp32p4
 
@@ -269,14 +246,14 @@ NLP 级别说明
 
    * - 文件名
      - 说明
-   * - :project_file:`docs/_static/aec_in_far.wav`
+   * - `aec_in_far.wav <docs/_static/aec_in_far.wav>`_
      - 远端信号（扬声器播放参考信号）
-   * - :project_file:`docs/_static/aec_in_near.wav`
+   * - `aec_in_near.wav <docs/_static/aec_in_near.wav>`_
      - 近端信号（麦克风采集含回声的信号）
-   * - :project_file:`docs/_static/aec_test_sr.wav`
+   * - `aec_test_sr.wav <docs/_static/aec_test_sr.wav>`_
      - SR 模式测试音频
-   * - :project_file:`docs/_static/aec_test_voip.wav`
+   * - `aec_test_voip.wav <docs/_static/aec_test_voip.wav>`_
      - VOIP 模式测试音频
-   * - :project_file:`docs/_static/aec_test_fd.wav`
+   * - `aec_test_fd.wav <docs/_static/aec_test_fd.wav>`_
      - FD 模式测试音频
 
