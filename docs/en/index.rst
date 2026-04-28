@@ -17,6 +17,7 @@ ESP-SR User Guide
     Audio Front-end (AFE) <audio_front_end/index>
     Wake Word WakeNet <wake_word_engine/index>
     VAD Model vadnet <vadnet/README>
+    Acoustic Echo Cancellation (AEC) <acoustic_echo_cancellation/README>
     Speech Command Word MultiNet <speech_command_recognition/README>
     Speech Synthesis (Only Supports Chinese Language) <speech_synthesis/readme>
     Model Selection and Loading <flash_model/README>

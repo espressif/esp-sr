@@ -16,6 +16,7 @@ ESP-SR 用户指南
 
     入门指南 <getting_started/readme>
     AFE 声学前端算法 <audio_front_end/index>
+    声学回声消除 (AEC) <acoustic_echo_cancellation/README>
     语音唤醒 WakeNet <wake_word_engine/index>
     VAD vadnet <vadnet/README>
     语音指令 MultiNet <speech_command_recognition/README>

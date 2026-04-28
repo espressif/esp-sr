@@ -1,5 +1,11 @@
 # Change log for esp-sr
 
+# 2.4.3
+- Add Full-Duplex AEC and AFE for esp32s3 and esp32p4
+
+# 2.4.2
+- Add more wake word models
+
 # 2.4.1
 - Experimental support esp-idf v6.0
 - Supports both esp32p4 eco6 and old versions.
