@@ -21,18 +21,19 @@ These algorithms are provided in the form of a component, so they can be integra
 
 News
 ----
-- [28/4/2026]: We update a new AEC algorithm for full-duplex scenarios. For performance evaluation and usage instructions, please refer to the documentation.
-- [23/4/2026]: TTS Pipeline V3 now supports wake word training for Chinese, English, Japanese, and French. Planned support includes Korean, Spanish, Portuguese, German, Russian, and Arabic.
-- [20/10/2025]: We add a new model, WakeNet9l, which further improves the response rate of wake words spoken at extremely fast speeds based on WakeNet9. The usage of WakeNet9l is the same as WakeNet9, but its CPU and memory requirements are approximately 1.3 times higher than those of WakeNet9.
-- [21/4/2025]: We add a new model WakeNet9s, which can run on chips that do not have PSRAM and do not support SIMD, such as ESP32C3 and ESP32C5. [examples](https://github.com/espressif/esp-skainet/tree/master/examples/wake_word_detection)
-- [17/4/2025]: We add a new DOA(Direction of Arrival) algorithm.
-- [14/2/2025]: We release **ESP-SR V2.0**. [Migration from ESP-SR V1.* to ESP-SR V2.*](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/audio_front_end/migration_guide.html)
-- [13/2/2025]: We release **VADNet**, a voice activaty detection model. You can use it to replace the WebRTC VAD and improve the performance.
+- [2026/5/09]: Preliminary support for ESP32-S31 target.
+- [2026/4/28]: We update a new AEC algorithm for full-duplex scenarios. For performance evaluation and usage instructions, please refer to the documentation.
+- [2026/4/23]: TTS Pipeline V3 now supports wake word training for Chinese, English, Japanese, and French. Planned support includes Korean, Spanish, Portuguese, German, Russian, and Arabic.
+- [2025/10/20]: We add a new model, WakeNet9l, which further improves the response rate of wake words spoken at extremely fast speeds based on WakeNet9. The usage of WakeNet9l is the same as WakeNet9, but its CPU and memory requirements are approximately 1.3 times higher than those of WakeNet9.
+- [2025/4/21]: We add a new model WakeNet9s, which can run on chips that do not have PSRAM and do not support SIMD, such as ESP32C3 and ESP32C5. [examples](https://github.com/espressif/esp-skainet/tree/master/examples/wake_word_detection)
+- [2025/4/17]: We add a new DOA(Direction of Arrival) algorithm.
+- [2025/2/14]: We release **ESP-SR V2.0**. [Migration from ESP-SR V1.* to ESP-SR V2.*](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/audio_front_end/migration_guide.html)
+- [2025/2/13]: We release **VADNet**, a voice activity detection model. You can use it to replace the WebRTC VAD and improve the performance.
 
 ## Wake Word Engine
 
-| Supported Targets | ESP32    | ESP32-S2 | ESP32-S3 | ESP32-P4 | ESP32-C3 | ESP32-C5 | ESP32-C6 |
-| ----------------- | -------- | -------- | -------- | -------- | -------- | -------- | -------- |
+| Supported Targets | ESP32    | ESP32-S2 | ESP32-S3 | ESP32-S31 | ESP32-P4 | ESP32-C3 | ESP32-C5 | ESP32-C6 |
+| ----------------- | -------- | -------- | -------- | --------- | -------- | -------- | -------- | -------- |
 
 Espressif wake word engine **WakeNet** is specially designed to provide a high performance and low memory footprint wake word detection algorithm for users, which enables devices always listen to wake words, such as “Alexa”, “Hi,lexin” and “Hi,ESP”. WakeNet9 and WakeNet9s models are supported. WakeNet9s is a cost-down version of WakeNet9, with fewer parameters and lower computational requirements. `_tts` suffix means this WakeNet model is trained by TTS samples. `_tts2` suffix means this WakeNet model is trained by TTS Pipeline V2. TTS Pipeline V3 start to support more language.
 
@@ -110,8 +111,8 @@ The product names, logos, and brands associated with the wake words listed in th
 
 ## Speech Command Recognition
 
-| Supported Targets | ESP32    | ESP32-S3 | ESP32-P4 |
-| ----------------- | -------- | -------- | -------- |
+| Supported Targets | ESP32    | ESP32-S3 | ESP32-P4 | ESP32-S31 |
+| ----------------- | -------- | -------- | -------- | --------- |
 
 Espressif's speech command recognition model **MultiNet** is specially designed to provide a flexible off-line speech command recognition model. With this model, you can easily add your own speech commands, eliminating the need to train model again.
 
@@ -119,15 +120,15 @@ Currently, Espressif **MultiNet** supports up to 300 Chinese or English speech c
 
 The following MultiNet models are supported in esp-sr:
 
-|language         |           ESP32            |         ESP32-S3              |          ESP32-P4             |
+|language         |           ESP32            |         ESP32-S3              |     ESP32-P4/ESP32-S31        |
 |:--------------- | :-------------------------:| :----------------------------:| :----------------------------:|
 |Chinese          | mn2_cn                     | mn5q8_cn, mn6_cn, mn7_cn      |  mn7_cn                       |
 |English          |                            | mn5q8_en, mn6_en, mn7_en      |  mn7_en                       |
 
 ## Audio Front End
 
-| Supported Targets | ESP32    | ESP32-S3 | ESP32-P4 |
-| ----------------- | -------- | -------- | -------- |
+| Supported Targets | ESP32    | ESP32-S3 | ESP32-P4 | ESP32-S31 |
+| ----------------- | -------- | -------- | -------- | -------- |
 
 Espressif Audio Front-End **AFE** integrates AEC (Acoustic Echo Cancellation), VAD (Voice Activity Detection), BSS (Blind Source Separation) and NS (Noise Suppression), NSNET(Deep noise suppression) and other functions. It is designed to be used with the ESP-SR library.
 

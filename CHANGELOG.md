@@ -1,5 +1,9 @@
 # Change log for esp-sr
 
+# 2.4.4
+- Support ESP32-S31
+- Fix some document bugs
+
 # 2.4.3
 - Add Full-Duplex AEC and AFE for esp32s3 and esp32p4
 
