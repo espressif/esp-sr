@@ -150,6 +150,15 @@ int aec_get_chunksize(const aec_handle_t *handle);
 char * aec_get_mode_string(aec_mode_t aec_mode);
 
 /**
+ * @brief Get AEC NLP level string, which is used for debug and log.
+ *
+ * @param nlp_level  The NLP level of AEC.
+ *
+ * @return AEC NLP level string
+ */
+char * aec_get_nlp_string(aec_nlp_level_t nlp_level);
+
+/**
  * @brief Get AEC config string, which is used for debug and log.
  * 
  * @param handle The instance of AEC.

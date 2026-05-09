@@ -240,13 +240,13 @@ Test Audio Resources
 
    * - File Name
      - Description
-   * - `aec_in_far.wav <docs/_static/aec_in_far.wav>`_
+   * - :download:`aec_in_far.wav <../../_static/aec_in_far.wav>`
      - Far-end signal (speaker playback reference signal)
-   * - `aec_in_near.wav <docs/_static/aec_in_near.wav>`_
+   * - :download:`aec_in_near.wav <../../_static/aec_in_near.wav>`
      - Near-end signal (microphone signal containing echo)
-   * - `aec_test_sr.wav <docs/_static/aec_test_sr.wav>`_
+   * - :download:`aec_test_sr.wav <../../_static/aec_test_sr.wav>`
      - SR mode test audio
-   * - `aec_test_voip.wav <docs/_static/aec_test_voip.wav>`_
+   * - :download:`aec_test_voip.wav <../../_static/aec_test_voip.wav>`
      - VOIP mode test audio
-   * - `aec_test_fd.wav <docs/_static/aec_test_fd.wav>`_
+   * - :download:`aec_test_fd.wav <../../_static/aec_test_fd.wav>`
      - FD mode test audio

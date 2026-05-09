@@ -48,7 +48,7 @@ void check_chip_config(void)
     ESP_LOGW(TAG, "Flash mode should be QIO");
 #endif
 
-#elif CONFIG_IDF_TARGET_ESP32P4
+#elif CONFIG_IDF_TARGET_ESP32P4 || CONFIG_IDF_TARGET_ESP32S31
 #if (! defined CONFIG_ESPTOOLPY_FLASHFREQ_80M)
     ESP_LOGW(TAG, "Flash freq should be 80MHz");
 #endif

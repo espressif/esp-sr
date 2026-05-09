@@ -246,14 +246,14 @@ NLP 级别说明
 
    * - 文件名
      - 说明
-   * - `aec_in_far.wav <docs/_static/aec_in_far.wav>`_
+   * - :download:`aec_in_far.wav <../../_static/aec_in_far.wav>`
      - 远端信号（扬声器播放参考信号）
-   * - `aec_in_near.wav <docs/_static/aec_in_near.wav>`_
+   * - :download:`aec_in_near.wav <../../_static/aec_in_near.wav>`
      - 近端信号（麦克风采集含回声的信号）
-   * - `aec_test_sr.wav <docs/_static/aec_test_sr.wav>`_
+   * - :download:`aec_test_sr.wav <../../_static/aec_test_sr.wav>`
      - SR 模式测试音频
-   * - `aec_test_voip.wav <docs/_static/aec_test_voip.wav>`_
+   * - :download:`aec_test_voip.wav <../../_static/aec_test_voip.wav>`
      - VOIP 模式测试音频
-   * - `aec_test_fd.wav <docs/_static/aec_test_fd.wav>`_
+   * - :download:`aec_test_fd.wav <../../_static/aec_test_fd.wav>`
      - FD 模式测试音频
 

@@ -3,7 +3,7 @@ menu "ESP Speech Recognition"
 choice MODEL_DATA_PATH
     prompt "model data path"
     default MODEL_IN_FLASH
-    depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+    depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4 ||  IDF_TARGET_ESP32S31
 
     config MODEL_IN_FLASH
         bool "Read model data from flash"
@@ -35,7 +35,7 @@ choice SR_NSN_MODEL_LOAD
 
     config SR_NSN_NSNET2
         bool "Deep noise suppression v2 (nsnet2)"
-	    depends on IDF_TARGET_ESP32S3 ||  IDF_TARGET_ESP32P4
+	    depends on IDF_TARGET_ESP32S3 ||  IDF_TARGET_ESP32P4 ||  IDF_TARGET_ESP32S31
 endchoice
 
 choice SR_VADN_MODEL_LOAD
@@ -49,7 +49,7 @@ choice SR_VADN_MODEL_LOAD
 
     config SR_VADN_VADNET1_MEDIUM
         bool "voice activity detection (vadnet1 medium)"
-	    depends on IDF_TARGET_ESP32S3 ||  IDF_TARGET_ESP32P4
+	    depends on IDF_TARGET_ESP32S3 ||  IDF_TARGET_ESP32P4 ||  IDF_TARGET_ESP32S31
 endchoice
 
 
@@ -74,7 +74,7 @@ menu "Load Multiple Wake Words (WakeNet9s)"
 endmenu
 
 menu "Load Multiple Wake Words (WakeNet9)"
-    depends on IDF_TARGET_ESP32S3 ||  IDF_TARGET_ESP32P4 || IDF_TARGET_ESP32
+    depends on IDF_TARGET_ESP32S3 ||  IDF_TARGET_ESP32P4 ||  IDF_TARGET_ESP32S31 || IDF_TARGET_ESP32
 
     config SR_WN_WN9_HILEXIN
     bool "Hi,乐鑫 (wn9_hilexin)"
@@ -345,11 +345,11 @@ choice CHINESE_SR_MN_MODEL_SEL
 
     config SR_MN_CN_MULTINET7_QUANT
         bool "general chinese recognition (mn7_cn)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4 ||  IDF_TARGET_ESP32S31
 
     config SR_MN_CN_MULTINET7_AC_QUANT
         bool "chinese recognition for air conditioner controller (mn7_cn_ac)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4 ||  IDF_TARGET_ESP32S31
 
 endchoice
 
@@ -372,7 +372,7 @@ choice ENGLISH_SR_MN_MODEL_SEL
 
     config SR_MN_EN_MULTINET7_QUANT
         bool "general english recognition (mn7_en)"
-        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
+        depends on IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4 ||  IDF_TARGET_ESP32S31
 
 endchoice
 

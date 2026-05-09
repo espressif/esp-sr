@@ -60,7 +60,7 @@ Resource Consumption
         -  **Models:** nsnet2, vadnet1_medium, wn9_hilexin
 
     .. list-table:: AFE configuration and Performance
-       :widths: 25 15 15 20 20
+       :widths: 20 15 15 15 15
        :header-rows: 1
 
        * - Config
@@ -69,55 +69,55 @@ Resource Consumption
          - Feed CPU usage (1 core,%)
          - Fetch CPU usage (1 core,%)
        * - MR, SR, LOW_COST
-         - 60.0
+         - 60.1
          - 739.7
-         - 9.0
-         - 15.8
+         - 8.8
+         - 9.8
        * - MR, SR, HIGH_PERF
          - 49.1
          - 775.8
-         - 15.9
-         - 15.7
-       * - MR, VC, LOW_COST
-         - 50.3
-         - 821.4
-         - 60.0
-         - 8.2
-       * - MR, VC, HIGH_PERF
-         - 93.7
-         - 824.0
-         - 64.0
-         - 8.2
-       * - MMNR, SR, LOW_COST
-         - 78.7
-         - 1153.7
-         - 35.4
-         - 32.4
-       * - MMNR, SR, HIGH_PERF
-         - 82.2
-         - 1198.2
-         - 46.2
-         - 32.4
+         - 9.3
+         - 9.8
        * - MR, FD, LOW_COST
-         - 59.8
+         - 60.2
          - 777.7
-         - 21.8
-         - 15.8
+         - 12.1
+         - 9.8
        * - MR, FD, HIGH_PERF
          - 49.2
          - 813.8
-         - 27.6
-         - 15.7
+         - 12.5
+         - 9.8
+       * - MR, VC, LOW_COST
+         - 48.7
+         - 819.7
+         - 30.6
+         - 4.7
+       * - MR, VC, HIGH_PERF
+         - 91.1
+         - 822.2
+         - 32.2
+         - 4.7
+       * - MMNR, SR, LOW_COST
+         - 79.1
+         - 1153.7
+         - 23.7
+         - 22.9
+       * - MMNR, SR, HIGH_PERF
+         - 68.1
+         - 1200.4
+         - 24.9
+         - 22.9
        * - MMNR, FD, LOW_COST
-         - 78.8
+         - 79.2
          - 1191.7
-         - 48.3
-         - 32.3
+         - 29.4
+         - 22.9
        * - MMNR, FD, HIGH_PERF
-         - 82.2
-         - 1236.3
-         - 60.9
-         - 32.3
+         - 68.1
+         - 1238.5
+         - 30.4
+         - 22.9
 
 
 .. only:: esp32p4
@@ -158,64 +158,64 @@ Resource Consumption
         -  **Setting:** ESP32-P4 @ 400 MHz, CONFIG_CACHE_L2_CACHE_256KB=y, CONFIG_CACHE_L2_CACHE_LINE_128B=y.
 
     .. list-table:: AFE configuration and Performance
-      :header-rows: 1
-      :widths: 15 20 20 20 20
+       :widths: 20 15 15 15 15
+       :header-rows: 1
 
-      * - Format
-        - Mode
-        - Internal RAM (KB)
-        - PSRAM (KB)
-        - CPU Usage (%)
-      * - MR
-        - SR_LOW_COST
-        - 60.4
-        - 739.7
-        - 19.1
-      * - MR
-        - SR_HIGH_PERF
-        - 49.1
-        - 775.8
-        - 19.3
-      * - MR
-        - FD_LOW_COST
-        - 60.2
-        - 777.7
-        - 22.4
-      * - MR
-        - FD_HIGH_PERF
-        - 49.2
-        - 813.8
-        - 22.6
-      * - MR
-        - VOIP_LOW_COST
-        - 48.7
-        - 819.7
-        - 36.1
-      * - MR
-        - VOIP_HIGH_PERF
-        - 91.1
-        - 822.2
-        - 37.7
-      * - MMNR
-        - SR_LOW_COST
-        - 79.1
-        - 1153.7
-        - 47.4
-      * - MMNR
-        - SR_HIGH_PERF
-        - 68.1
-        - 1200.4
-        - 48.4
-      * - MMNR
-        - FD_LOW_COST
-        - 79.2
-        - 1191.7
-        - 53.0
-      * - MMNR
-        - FD_HIGH_PERF
-        - 68.1
-        - 1238.5
-        - 53.9
+       * - Config
+         - Internal RAM (KB)
+         - PSRAM (KB)
+         - Feed CPU usage (1 core,%)
+         - Fetch CPU usage (1 core,%)
+       * - MR, SR, LOW_COST
+         - 60.1
+         - 739.7
+         - 8.8
+         - 9.8
+       * - MR, SR, HIGH_PERF
+         - 49.1
+         - 775.8
+         - 9.3
+         - 9.8
+       * - MR, FD, LOW_COST
+         - 60.2
+         - 777.7
+         - 12.1
+         - 9.8
+       * - MR, FD, HIGH_PERF
+         - 49.2
+         - 813.8
+         - 12.5
+         - 9.8
+       * - MR, VC, LOW_COST
+         - 48.7
+         - 819.7
+         - 30.6
+         - 4.7
+       * - MR, VC, HIGH_PERF
+         - 91.1
+         - 822.2
+         - 32.2
+         - 4.7
+       * - MMNR, SR, LOW_COST
+         - 79.1
+         - 1153.7
+         - 23.7
+         - 22.9
+       * - MMNR, SR, HIGH_PERF
+         - 68.1
+         - 1200.4
+         - 24.9
+         - 22.9
+       * - MMNR, FD, LOW_COST
+         - 79.2
+         - 1191.7
+         - 29.4
+         - 22.9
+       * - MMNR, FD, HIGH_PERF
+         - 68.1
+         - 1238.5
+         - 30.4
+         - 22.9
 
 WakeNet
 -------
