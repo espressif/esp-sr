@@ -1,5 +1,8 @@
 # Change log for esp-sr
 
+# 2.4.6
+- Remove redundant heap check
+
 # 2.4.5
 - Fix the coexistence bug of esp-dl and esp-sr on ESP32-S3.
 - Fix the crash issue of ESP32-P4 in IDF v5.5.1 and IDF v5.5.2.

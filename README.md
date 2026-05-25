@@ -22,7 +22,7 @@ These algorithms are provided in the form of a component, so they can be integra
 News
 ----
 - [2026/5/09]: Preliminary support for ESP32-S31 target.
-- [2026/4/28]: We update a new AEC algorithm for full-duplex scenarios. For performance evaluation and usage instructions, please refer to the documentation.
+- [2026/4/28]: We update a new AEC algorithm for full-duplex scenarios. For performance evaluation and usage instructions, please refer to the [documentation](https://docs.espressif.com/projects/esp-sr/en/latest/esp32s3/acoustic_echo_cancellation/README.html).
 - [2026/4/23]: TTS Pipeline V3 now supports wake word training for Chinese, English, Japanese, and French. Planned support includes Korean, Spanish, Portuguese, German, Russian, and Arabic.
 - [2025/10/20]: We add a new model, WakeNet9l, which further improves the response rate of wake words spoken at extremely fast speeds based on WakeNet9. The usage of WakeNet9l is the same as WakeNet9, but its CPU and memory requirements are approximately 1.3 times higher than those of WakeNet9.
 - [2025/4/21]: We add a new model WakeNet9s, which can run on chips that do not have PSRAM and do not support SIMD, such as ESP32C3 and ESP32C5. [examples](https://github.com/espressif/esp-skainet/tree/master/examples/wake_word_detection)
