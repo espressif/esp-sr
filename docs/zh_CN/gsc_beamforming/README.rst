@@ -10,7 +10,7 @@ ESP-SR GSC（Generalized Sidelobe Canceller，广义旁瓣抵消器）模块是�
 
 .. note::
 
-   GSC 模块目前仅支持 ESP32-P4。
+   GSC 模块目前支持 ESP32-P4 和 ESP32-S31。
 
 GSC 模块具有以下特点：
 
@@ -149,4 +149,27 @@ GSC 模块具有以下特点：
       - 帧长为 8 ms（16 kHz 采样率下每通道 128 个采样点）。
       - 测试条件：ESP32-P4 @ 400 MHz，HEX PSRAM @ 250 MHz，4 麦均匀圆阵（半径 5 cm）。
       - 若将缓冲区全部放在内部 RAM（定义编译选项 ``GSC_P4_INTERNAL_RAM``），CPU 占用为 18.2%。
+      - 实际资源消耗可能因麦克风数量、编译器优化等级和具体配置略有差异。
+
+.. only:: esp32s31
+
+    .. list-table::
+      :header-rows: 1
+      :widths: 20 15 15 20 20
+
+      * - 麦克风数量
+        - 内部 RAM (KB)
+        - PSRAM (KB)
+        - 每帧耗时 (ms)
+        - CPU 占用 (%)
+      * - 4
+        - 2.1
+        - 84.6
+        - 2.28 / 8
+        - 28.5
+
+    .. note::
+
+      - 帧长为 8 ms（16 kHz 采样率下每通道 128 个采样点）。
+      - 测试条件：ESP32-S31 @ 320 MHz，OCT PSRAM @ 250 MHz，4 麦均匀圆阵（半径 5 cm）。
       - 实际资源消耗可能因麦克风数量、编译器优化等级和具体配置略有差异。

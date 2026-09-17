@@ -13,7 +13,7 @@ ESP-SR允许您通过 ``menuconfig`` 界面选择所需的模型。要配置模�
 1. 运行 ``idf.py menuconfig``
 2. 导航到 **ESP Speech Recognition**
 3. 配置以下选项：
-   - **噪声抑制模型**
+   - **噪声抑制模型**（可选 nsnet2 或 nsnet3：追求极致的人工智能语音降噪效果建议使用 nsnet2，降噪与语音失真达到平衡建议使用 nsnet3）
    - **VAD模型**
    - **WakeNet模型**
    - **MultiNet模型**
