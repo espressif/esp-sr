@@ -36,6 +36,10 @@ choice SR_NSN_MODEL_LOAD
     config SR_NSN_NSNET2
         bool "Deep noise suppression v2 (nsnet2)"
 	    depends on IDF_TARGET_ESP32S3 ||  IDF_TARGET_ESP32P4 ||  IDF_TARGET_ESP32S31
+
+    config SR_NSN_NSNET3
+        bool "Deep noise suppression v3 (nsnet3, float32 GTCRN)"
+	    depends on IDF_TARGET_ESP32S3 ||  IDF_TARGET_ESP32P4 ||  IDF_TARGET_ESP32S31
 endchoice
 
 choice SR_VADN_MODEL_LOAD
