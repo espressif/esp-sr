@@ -92,6 +92,15 @@ if(("${IDF_TARGET}" STREQUAL "esp32s3") OR ("${IDF_TARGET}" STREQUAL "esp32p4") 
         list(APPEND sr_libs multinet2_ch)
     endif()
 
+    # libnsnet3.a only exists on targets whose libnsnet.a references esp_nsnet3
+    # (esp32s3 / esp32p4* / esp32s31). All sr_libs are linked inside
+    # --start-group/--end-group, so archive order does not matter.
+    set(nsnet3_lib_path "${CMAKE_CURRENT_SOURCE_DIR}/lib/${TARGET_LIB_PATH}/libnsnet3.a")
+    if(EXISTS "${nsnet3_lib_path}")
+        add_prebuilt_library(nsnet3 "${nsnet3_lib_path}" PRIV_REQUIRES ${COMPONENT_NAME})
+        list(APPEND sr_libs nsnet3)
+    endif()
+
     target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
         ${sr_libs}
         "-Wl,--end-group")

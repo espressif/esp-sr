@@ -10,7 +10,7 @@ The ESP-SR GSC (Generalized Sidelobe Canceller) module is an adaptive beamformer
 
 .. note::
 
-   The GSC module is currently only supported on ESP32-P4.
+   The GSC module is supported on ESP32-P4 and ESP32-S31.
 
 The GSC module has the following features:
 
@@ -149,4 +149,27 @@ The following table shows typical resource usage and performance data (16 kHz sa
       - Frame length is 8 ms (128 samples per channel at 16 kHz).
       - Test setting: ESP32-P4 @ 400 MHz, HEX PSRAM @ 250 MHz, 4-mic uniform circular array (radius 5 cm).
       - If all buffers are placed in internal RAM (by defining the compile option ``GSC_P4_INTERNAL_RAM``), the CPU usage is 18.2%.
+      - Actual resource consumption may vary slightly depending on the number of microphones, compiler optimization level, and specific configuration.
+
+.. only:: esp32s31
+
+    .. list-table::
+      :header-rows: 1
+      :widths: 20 15 15 20 20
+
+      * - Microphones
+        - Internal RAM (KB)
+        - PSRAM (KB)
+        - Time per Frame (ms)
+        - CPU Usage (%)
+      * - 4
+        - 2.1
+        - 84.6
+        - 2.28 / 8
+        - 28.5
+
+    .. note::
+
+      - Frame length is 8 ms (128 samples per channel at 16 kHz).
+      - Test setting: ESP32-S31 @ 320 MHz, OCT PSRAM @ 250 MHz, 4-mic uniform circular array (radius 5 cm).
       - Actual resource consumption may vary slightly depending on the number of microphones, compiler optimization level, and specific configuration.

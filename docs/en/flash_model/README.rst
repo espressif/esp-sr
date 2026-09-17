@@ -13,7 +13,7 @@ ESP-SR allows you to choose required models through the ``menuconfig`` interface
 1. Run ``idf.py menuconfig``
 2. Navigate to **ESP Speech Recognition**
 3. Configure the following options:
-   - **Noise Suppression Model**
+   - **Noise Suppression Model** (nsnet2 or nsnet3: for maximum AI noise-suppression performance, use nsnet2; for a balance between noise reduction and speech distortion, use nsnet3)
    - **VAD Model**
    - **WakeNet Model**
    - **MultiNet Model**

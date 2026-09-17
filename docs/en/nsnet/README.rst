@@ -8,7 +8,9 @@ NSNet is a deep-learning-based noise suppression model for low-power embedded MC
 Overview
 --------
 
-The current NSNet model is ``nsnet2``, a quantized neural noise suppression model with the following features:
+NSNet currently offers two models: **for maximum AI noise-suppression performance, use nsnet2; for a balance between noise reduction and speech distortion, use nsnet3.**
+
+``nsnet2`` is a quantized neural noise suppression model with the following features:
 
 - Sample rate: 16 kHz, 16-bit PCM
 - Frame length: 1024 samples (64 ms), frame shift: 512 samples (32 ms)
@@ -16,14 +18,23 @@ The current NSNet model is ``nsnet2``, a quantized neural noise suppression mode
 - Single-channel processing, plus a multi-channel shared-mask mode (see **Multi-Channel Shared-Mask Processing** below)
 - Supported chips: ESP32-S3, ESP32-S31 and ESP32-P4
 
+``nsnet3`` is a float32 noise suppression model with the following features:
+
+- Sample rate: 16 kHz, 16-bit PCM
+- Frame length: 512 samples (32 ms), frame shift: 256 samples (16 ms), for lower end-to-end latency
+- ERB-based complex ratio mask (CRM): float32 inference with no quantization loss, and only 48.2K parameters (about 100 KB of weights)
+- Single-channel processing, plus the same multi-channel shared-mask mode as nsnet2 (identical ``create_mc()`` / ``process_mc()`` semantics)
+- Supported chips: ESP32-P4 and ESP32-S31 (both measured; the interface also builds for the ESP32-S3 target)
+- About 20% single-core CPU usage (measured on ESP32-P4 @ 400 MHz)
+
 .. note::
 
-   Select the model via ``idf.py menuconfig`` -> ``ESP Speech Recognition`` -> ``Select noise suppression model`` -> ``Deep noise suppression v2 (nsnet2)``.
+   Select the model via ``idf.py menuconfig`` -> ``ESP Speech Recognition`` -> ``Select noise suppression model`` -> ``Deep noise suppression v2 (nsnet2)`` or ``Deep noise suppression v3 (nsnet3)``.
 
 Use NSNet
 ---------
 
-The interface is defined in ``esp_nsn_iface.h``. All operations go through the ``esp_nsn_iface_t`` function table, which is obtained from the model name:
+The interface is defined in ``esp_nsn_iface.h``. All operations go through the ``esp_nsn_iface_t`` function table, which is obtained from the model name. nsnet2 and nsnet3 implement **exactly the same** interface, so the application layer does not need to distinguish between them.
 
 **Basic Flow (single channel):**
 
@@ -42,12 +53,12 @@ The interface is defined in ``esp_nsn_iface.h``. All operations go through the `
 
 2. **Process audio frames**
 
-   Each call to ``process()`` consumes and returns ``get_samp_chunksize()`` samples (512 samples, i.e. one 32 ms frame shift at 16 kHz):
+   Each call to ``process()`` consumes and returns ``get_samp_chunksize()`` samples — **the frame shift depends on the selected model** (512 samples = 32 ms for nsnet2, 256 samples = 16 ms for nsnet3); allocate buffers according to the returned value:
 
    .. code-block:: c
 
-      int chunk = nsnet->get_samp_chunksize(nsnet_data);  // 512 samples
-      int16_t in[512], out[512];
+      int chunk = nsnet->get_samp_chunksize(nsnet_data);  // nsnet2: 512, nsnet3: 256
+      int16_t in[chunk], out[chunk];
       nsnet->process(nsnet_data, in, out);
 
 3. **Release resources**
@@ -59,7 +70,7 @@ The interface is defined in ``esp_nsn_iface.h``. All operations go through the `
 Multi-Channel Shared-Mask Processing
 ------------------------------------
 
-For multi-channel inputs (e.g., a microphone array), ``esp_nsn_iface_t`` provides ``create_mc()`` / ``process_mc()``: the ERB mask is estimated **once** from the reference channel and applied to every channel, so each additional channel only costs windowing/FFT/mask-application/IFFT/overlap-add instead of a full network pass.
+For multi-channel inputs (e.g., a microphone array), ``esp_nsn_iface_t`` provides ``create_mc()`` / ``process_mc()``: the ERB mask is estimated **once** from the reference channel and applied to every channel, so each additional channel only costs windowing/FFT/mask-application/IFFT/overlap-add instead of a full network pass. Both nsnet2 and nsnet3 support this mode with identical semantics.
 
 .. code-block:: c
 
@@ -76,6 +87,11 @@ Constraints and compatibility notes:
 - ``create_mc()`` / ``process_mc()`` are appended at the end of ``esp_nsn_iface_t`` and are ``NULL`` for models that do not support multi-channel processing — check them before use (as done in the ``examples/nsnet`` application).
 - The single-channel ``create()`` is equivalent to ``create_mc(model_name, 1, 0)``; single-channel behavior is bit-exact with previous versions, and channel 0 of a multi-channel run is bit-identical to a single-channel run of the same input.
 
+nsnet3 Weight Loading
+---------------------
+
+nsnet3 ships its weights as a private binary in the ``model`` partition (``nsnet3_data`` / ``nsnet3_index``, packaged and flashed when the ``SR_NSN_NSNET3`` Kconfig option is selected). On ``create()``, the weights are copied tensor by tensor into **internal SRAM** (about 100 KB, with per-tensor name and length verification), so weight reads run at the same speed as on-chip rodata and never touch PSRAM bandwidth. Including streaming state and activation buffers, nsnet3 occupies about 270 KB of internal SRAM at runtime.
+
 Examples
 --------
 
@@ -88,28 +104,64 @@ The ``examples/nsnet`` application demonstrates both interfaces:
 
      python3 stream_host.py --port /dev/ttyACM1 --in test_4ch_in.wav --out out.wav
 
-  The host sends interleaved 16 kHz 16-bit frames (512 samples per channel per frame) and reads back the enhanced frames; the output WAV keeps the processed channel count.
+  The host sends interleaved 16 kHz 16-bit frames (``get_samp_chunksize()`` samples per channel per frame) and reads back the enhanced frames; the output WAV keeps the processed channel count.
 
 Resource Consumption
 --------------------
 
-Measured on ESP32-P4 @ 400 MHz, per 32 ms frame (512 samples):
+Measured on ESP32-P4 @ 400 MHz:
 
 .. list-table::
    :header-rows: 1
-   :widths: 30 25 25
+   :widths: 22 22 26 26
 
-   * - Channels
+   * - Model (frame shift)
+     - Channels
      - Time per Frame (us)
      - CPU Usage (%)
-   * - 1
+   * - nsnet2 (32 ms)
+     - 1
      - 4534
      - 14.2
-   * - 4 (shared mask)
+   * - nsnet2 (32 ms)
+     - 4 (shared mask)
      - 6476
      - 20.2
+   * - nsnet3 (16 ms)
+     - 1
+     - 3209
+     - 20.05
+   * - nsnet3 (16 ms)
+     - 4 (shared mask)
+     - 4017
+     - 25.11
 
 .. note::
 
-   - With the shared-mask mode, 4 channels cost only about 1.43x the single-channel processing time, far less than running 4 independent instances.
+   - With the shared-mask mode, each additional channel costs far less than an independent instance (about +1.7 CPU percentage points per channel for nsnet3).
+   - nsnet3 scores a sample-by-sample SNR of 44.55 dB against the official golden streaming output.
    - For general model resource occupancy, see :doc:`Resource Occupancy <../benchmark/README>`.
+
+Measured on ESP32-S31 @ 320 MHz, OCT PSRAM @ 250 MHz (nsnet3, 16 ms frame shift):
+
+.. list-table::
+   :header-rows: 1
+   :widths: 22 22 26 26
+
+   * - Model (frame shift)
+     - Channels
+     - Time per Frame (us)
+     - CPU Usage (%)
+   * - nsnet3 (16 ms)
+     - 1
+     - 4368
+     - 27.30
+   * - nsnet3 (16 ms)
+     - 4 (shared mask)
+     - 5396
+     - 33.72
+
+.. note::
+
+   - nsnet3 also scores a sample-by-sample SNR of 44.55 dB on ESP32-S31 (against the official golden streaming output, identical to ESP32-P4).
+   - nsnet3 occupies about 270 KB of internal SRAM at runtime (about 100 KB of weights copied from the model partition on ``create()``).

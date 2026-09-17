@@ -10,7 +10,7 @@ The ESP-SR DOA (Direction of Arrival) module estimates the direction of a sound 
 
 .. note::
 
-   The embedded DOA module described in this document is currently only supported on ESP32-P4.
+   The embedded DOA module described in this document is supported on ESP32-P4 and ESP32-S31.
 
 The embedded DOA module has the following features:
 
@@ -188,4 +188,27 @@ The following table shows typical resource usage and performance data (16 kHz sa
 
       - Frame length is 8 ms (128 samples per channel at 16 kHz).
       - Test setting: ESP32-P4 @ 400 MHz, HEX PSRAM @ 250 MHz, 4-mic uniform circular array (radius 5 cm).
+      - Actual resource consumption may vary slightly depending on the number of microphones, compiler optimization level, and specific configuration.
+
+.. only:: esp32s31
+
+    .. list-table::
+      :header-rows: 1
+      :widths: 20 15 15 20 20
+
+      * - Microphones
+        - Internal RAM (KB)
+        - PSRAM (KB)
+        - Time per Frame (ms)
+        - CPU Usage (%)
+      * - 4
+        - 58.9
+        - 148.3
+        - 0.82 / 8
+        - 10.3
+
+    .. note::
+
+      - Frame length is 8 ms (128 samples per channel at 16 kHz).
+      - Test setting: ESP32-S31 @ 320 MHz, OCT PSRAM @ 250 MHz, 4-mic uniform circular array (radius 5 cm).
       - Actual resource consumption may vary slightly depending on the number of microphones, compiler optimization level, and specific configuration.
