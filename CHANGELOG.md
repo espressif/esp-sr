@@ -1,7 +1,8 @@
 # Change log for esp-sr
 
-#unreleased
-- Add wn10_hiesp and wn10_alexa
+# 2.5.4
+- Add wn10_hiesp(en), wn10_alexa(en) and wn10_airisu
+- Add nsnet3
 
 # 2.5.3
 - Fix wakenet10 memory bug
