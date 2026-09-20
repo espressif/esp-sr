@@ -90,7 +90,7 @@ Constraints and compatibility notes:
 nsnet3 Weight Loading
 ---------------------
 
-nsnet3 ships its weights as a private binary in the ``model`` partition (``nsnet3_data`` / ``nsnet3_index``, packaged and flashed when the ``SR_NSN_NSNET3`` Kconfig option is selected). On ``create()``, the weights are copied tensor by tensor into **internal SRAM** (about 100 KB, with per-tensor name and length verification), so weight reads run at the same speed as on-chip rodata and never touch PSRAM bandwidth. Including streaming state and activation buffers, nsnet3 occupies about 270 KB of internal SRAM at runtime.
+nsnet3 ships its weights as a private binary in the ``model`` partition (``nsnet3_data`` / ``nsnet3_index``, packaged and flashed when the ``SR_NSN_NSNET3`` Kconfig option is selected). On ``create()``, the weights are copied out tensor by tensor (with per-tensor name and length verification). With the default configuration (``SR_NSNET3_MEM_PSRAM=y``), the weights, streaming state and activation buffers all live in **PSRAM** (about 240 KB total) and use almost no internal SRAM; disabling the option moves everything into internal SRAM (about 270 KB), where weight reads run at the same speed as on-chip rodata. Targets without PSRAM automatically use internal SRAM.
 
 Examples
 --------
@@ -109,31 +109,46 @@ The ``examples/nsnet`` application demonstrates both interfaces:
 Resource Consumption
 --------------------
 
-Measured on ESP32-P4 @ 400 MHz:
+Measured on ESP32-P4 @ 400 MHz (OCT PSRAM @ 250 MHz, flash @ 80 MHz):
 
 .. list-table::
    :header-rows: 1
-   :widths: 22 22 26 26
+   :widths: 20 16 18 22 24
 
    * - Model (frame shift)
      - Channels
+     - Memory
      - Time per Frame (us)
      - CPU Usage (%)
    * - nsnet2 (32 ms)
      - 1
+     - internal SRAM
      - 4534
      - 14.2
    * - nsnet2 (32 ms)
      - 4 (shared mask)
+     - internal SRAM
      - 6476
      - 20.2
    * - nsnet3 (16 ms)
      - 1
-     - 3209
-     - 20.05
+     - PSRAM (default)
+     - 3418
+     - 21.37
+   * - nsnet3 (16 ms)
+     - 1
+     - internal SRAM
+     - 3206
+     - 20.04
    * - nsnet3 (16 ms)
      - 4 (shared mask)
-     - 4017
+     - PSRAM (default)
+     - 4318
+     - 26.99
+   * - nsnet3 (16 ms)
+     - 4 (shared mask)
+     - internal SRAM
+     - 4018
      - 25.11
 
 .. note::
@@ -142,26 +157,39 @@ Measured on ESP32-P4 @ 400 MHz:
    - nsnet3 scores a sample-by-sample SNR of 44.55 dB against the official golden streaming output.
    - For general model resource occupancy, see :doc:`Resource Occupancy <../benchmark/README>`.
 
-Measured on ESP32-S31 @ 320 MHz, OCT PSRAM @ 250 MHz (nsnet3, 16 ms frame shift):
+Measured on ESP32-S31 @ 320 MHz, OCT PSRAM @ 250 MHz (nsnet3, 16 ms frame shift, flash @ 80 MHz):
 
 .. list-table::
    :header-rows: 1
-   :widths: 22 22 26 26
+   :widths: 20 16 18 22 24
 
    * - Model (frame shift)
      - Channels
+     - Memory
      - Time per Frame (us)
      - CPU Usage (%)
    * - nsnet3 (16 ms)
      - 1
-     - 4368
-     - 27.30
+     - PSRAM (default)
+     - 5680
+     - 35.50
+   * - nsnet3 (16 ms)
+     - 1
+     - internal SRAM
+     - 4353
+     - 27.21
    * - nsnet3 (16 ms)
      - 4 (shared mask)
-     - 5396
-     - 33.72
+     - PSRAM (default)
+     - 6815
+     - 42.59
+   * - nsnet3 (16 ms)
+     - 4 (shared mask)
+     - internal SRAM
+     - 5387
+     - 33.67
 
 .. note::
 
    - nsnet3 also scores a sample-by-sample SNR of 44.55 dB on ESP32-S31 (against the official golden streaming output, identical to ESP32-P4).
-   - nsnet3 occupies about 270 KB of internal SRAM at runtime (about 100 KB of weights copied from the model partition on ``create()``).
+   - With the default configuration (``SR_NSNET3_MEM_PSRAM=y``), nsnet3 occupies about 240 KB of PSRAM and almost no internal SRAM at runtime; with the option disabled it occupies about 270 KB of internal SRAM (about 100 KB of weights copied from the model partition on ``create()``), and CPU usage follows the "internal SRAM" rows above.
