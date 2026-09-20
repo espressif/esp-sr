@@ -90,7 +90,7 @@ NSNet 目前提供两个模型：**追求极致的人工智能语音降噪效果
 nsnet3 权重加载
 ---------------
 
-nsnet3 的权重以私有二进制形式存放在 ``model`` 分区（``nsnet3_data`` / ``nsnet3_index``，由 Kconfig 选项 ``SR_NSN_NSNET3`` 触发打包烧录）。``create()`` 时将其逐张量拷贝到 internal SRAM（约 100 KB，拷贝时按名字与长度逐条校验），因此权重读取与片上 rodata 同速，不占用 PSRAM 带宽。连同流式状态与激活缓冲，nsnet3 运行时内部 SRAM 总占用约 270 KB。
+nsnet3 的权重以私有二进制形式存放在 ``model`` 分区（``nsnet3_data`` / ``nsnet3_index``，由 Kconfig 选项 ``SR_NSN_NSNET3`` 触发打包烧录）。``create()`` 时将其逐张量拷贝出来（拷贝时按名字与长度逐条校验）。默认配置（``SR_NSNET3_MEM_PSRAM=y``）下，权重、流式状态与激活缓冲全部位于 PSRAM（约 240 KB），几乎不占用内部 SRAM；关闭该选项则全部位于内部 SRAM（约 270 KB），权重读取与片上 rodata 同速。无 PSRAM 的目标自动使用内部 SRAM。
 
 示例
 ----
@@ -109,31 +109,46 @@ nsnet3 的权重以私有二进制形式存放在 ``model`` 分区（``nsnet3_da
 资源消耗
 --------
 
-在 ESP32-P4 @ 400 MHz 上实测：
+在 ESP32-P4 @ 400 MHz 上实测（OCT PSRAM @ 250 MHz，flash @ 80 MHz）：
 
 .. list-table::
    :header-rows: 1
-   :widths: 22 22 26 26
+   :widths: 20 16 18 22 24
 
    * - 模型（帧移）
      - 通道数
+     - 内存位置
      - 每帧耗时 (us)
      - CPU 占用 (%)
    * - nsnet2（32 ms）
      - 1
+     - 内部 SRAM
      - 4534
      - 14.2
    * - nsnet2（32 ms）
      - 4（共享掩码）
+     - 内部 SRAM
      - 6476
      - 20.2
    * - nsnet3（16 ms）
      - 1
-     - 3209
-     - 20.05
+     - PSRAM（默认）
+     - 3418
+     - 21.37
+   * - nsnet3（16 ms）
+     - 1
+     - 内部 SRAM
+     - 3206
+     - 20.04
    * - nsnet3（16 ms）
      - 4（共享掩码）
-     - 4017
+     - PSRAM（默认）
+     - 4318
+     - 26.99
+   * - nsnet3（16 ms）
+     - 4（共享掩码）
+     - 内部 SRAM
+     - 4018
      - 25.11
 
 .. note::
@@ -142,27 +157,40 @@ nsnet3 的权重以私有二进制形式存放在 ``model`` 分区（``nsnet3_da
    - nsnet3 对官方金标准音频的逐样本信噪比为 44.55 dB（与离线参考流式输出比对）。
    - 模型的一般资源占用情况参见 :doc:`资源占用 <../benchmark/README>`。
 
-在 ESP32-S31 @ 320 MHz、OCT PSRAM @ 250 MHz 上实测（nsnet3，16 ms 帧移）：
+在 ESP32-S31 @ 320 MHz、OCT PSRAM @ 250 MHz 上实测（nsnet3，16 ms 帧移，flash @ 80 MHz）：
 
 .. list-table::
    :header-rows: 1
-   :widths: 22 22 26 26
+   :widths: 20 16 18 22 24
 
    * - 模型（帧移）
      - 通道数
+     - 内存位置
      - 每帧耗时 (us)
      - CPU 占用 (%)
    * - nsnet3（16 ms）
      - 1
-     - 4368
-     - 27.30
+     - PSRAM（默认）
+     - 5680
+     - 35.50
+   * - nsnet3（16 ms）
+     - 1
+     - 内部 SRAM
+     - 4353
+     - 27.21
    * - nsnet3（16 ms）
      - 4（共享掩码）
-     - 5396
-     - 33.72
+     - PSRAM（默认）
+     - 6815
+     - 42.59
+   * - nsnet3（16 ms）
+     - 4（共享掩码）
+     - 内部 SRAM
+     - 5387
+     - 33.67
 
 .. note::
 
    - nsnet3 在 ESP32-S31 上的逐样本信噪比同样为 44.55 dB（与离线参考流式输出比对，与 ESP32-P4 一致）。
-   - nsnet3 运行时内部 SRAM 总占用约 270 KB（权重约 100 KB 于 ``create()`` 时从 model 分区拷入）。
+   - 默认配置（``SR_NSNET3_MEM_PSRAM=y``）下 nsnet3 运行时占用 PSRAM 约 240 KB、内部 SRAM 几乎为 0；关闭该选项则占用内部 SRAM 约 270 KB（权重约 100 KB 于 ``create()`` 时从 model 分区拷入），CPU 占用如上表"内部 SRAM"行。
 
