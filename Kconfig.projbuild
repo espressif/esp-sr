@@ -136,6 +136,14 @@ menu "Load Multiple Wake Words (WakeNet9 or WakeNet10)"
     bool "アイリス (wn10_ja_airisu)"
     default n
 
+    config SR_WN_WN10_EN_HEYBUDDY
+    bool "Hey,Buddy (wn10_en_heybuddy)"
+    default n
+
+    config SR_WN_WN10_ES_HOLAESP
+    bool "Hola ESP (wn10_es_holaesp)"
+    default n
+
     config SR_WN_WN9L_JA_KONNICHIHAESP_TTS3
     bool "こんにちは ESP (wn9l_ja_konnichihaesp_tts3)"
     default n
