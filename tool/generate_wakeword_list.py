@@ -18,14 +18,18 @@ MODEL_INFO_PATTERN = re.compile(
 )
 
 WAKE_WORD_ALIASES = {
+    "alexa": "Alexa",
     "Bonjourespfr": "Bonjour ESP",
+    "hey buddy": "Hey,Buddy",
     "heyhermes": "Hey,Hermes",
     "heynova": "Hey,Nova",
+    "hiesp": "Hi,ESP",
     "Konnichihaespja": "こんにちは ESP",
     "Linaiban": "璃奈板",
     "mosaico": "Mosaico",
     "Ni3Hao3Xiao3Rui4": "你好小瑞",
     "Ni3Hao3Xiao3Zhi4": "你好小智",
+    "tu2tu2ni3hao3": "涂涂你好",
     "Xiaoaitongxue": "小爱同学",
     "hitelly": "Hi, Telly",
     "nihaoxiaoan": "你好小安",

@@ -31,6 +31,7 @@ IGNORE_WARNINGS = [
     r'\'task_stack\' defined but not used',
     r'\'task_state\' defined but not used',
     r'missing initializer for member \'jpeg_encode_cfg_t::pixel_reverse\'',
+    r"unused variable 'can_split'",
 ]
 
 def _get_idf_version():
