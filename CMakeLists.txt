@@ -78,12 +78,10 @@ if(("${IDF_TARGET}" STREQUAL "esp32s3") OR ("${IDF_TARGET}" STREQUAL "esp32p4") 
     add_prebuilt_library(vadnet "${CMAKE_CURRENT_SOURCE_DIR}/lib/${TARGET_LIB_PATH}/libvadnet.a" PRIV_REQUIRES ${COMPONENT_NAME})
     add_prebuilt_library(wakenet "${CMAKE_CURRENT_SOURCE_DIR}/lib/${TARGET_LIB_PATH}/libwakenet.a" PRIV_REQUIRES ${COMPONENT_NAME})
     add_prebuilt_library(nsnet "${CMAKE_CURRENT_SOURCE_DIR}/lib/${TARGET_LIB_PATH}/libnsnet.a" PRIV_REQUIRES ${COMPONENT_NAME})
-    idf_component_get_property(esp_dsp_lib espressif__esp-dsp COMPONENT_LIB)
     idf_component_get_property(dl_fft_lib espressif__dl_fft COMPONENT_LIB)
     idf_component_get_property(cjson_lib espressif__cjson COMPONENT_LIB)
 
     set(sr_libs 
-        $<TARGET_FILE:${esp_dsp_lib}>
         $<TARGET_FILE:${dl_fft_lib}>
         $<TARGET_FILE:${cjson_lib}>
         dl_lib

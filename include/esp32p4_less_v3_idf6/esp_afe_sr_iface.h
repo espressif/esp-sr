@@ -150,6 +150,44 @@ typedef int (*esp_afe_sr_iface_op_set_wakenet_threshold_t)(esp_afe_sr_data_t *af
 typedef int (*esp_afe_sr_iface_op_reset_wakenet_threshold_t)(esp_afe_sr_data_t *afe, int index);
 
 /**
+ * @brief Set vadnet detection threshold
+ *
+ * @param afe           The AFE_SR object to query
+ * @param threshold     The vadnet detection threshold, the value is between 0.5 and 0.9999.
+ * @return             -1: fail, 1: success
+ */
+typedef int (*esp_afe_sr_iface_op_set_vadnet_threshold_t)(esp_afe_sr_data_t *afe, float threshold);
+
+/**
+ * @brief Get vadnet detection threshold
+ *
+ * @param afe           The AFE_SR object to query
+ * @return              The vadnet detection threshold, or -1 if vadnet is not initialized
+ */
+typedef float (*esp_afe_sr_iface_op_get_vadnet_threshold_t)(esp_afe_sr_data_t *afe);
+
+/**
+ * @brief Set vad energy threshold
+ *
+ * The energy of every input frame is averaged over a window covering
+ * vad_min_speech_ms. Speech is only reported once this average reaches the
+ * threshold while the vad model triggers as well.
+ *
+ * @param afe           The AFE_SR object to query
+ * @param threshold     The averaged frame energy threshold in dBFS, the value is between -100 and 0.
+ * @return             -1: fail, 1: success
+ */
+typedef int (*esp_afe_sr_iface_op_set_vad_energy_threshold_t)(esp_afe_sr_data_t *afe, float threshold);
+
+/**
+ * @brief Get vad energy threshold
+ *
+ * @param afe           The AFE_SR object to query
+ * @return              The averaged frame energy threshold in dBFS, or 1 if vadnet is not initialized
+ */
+typedef float (*esp_afe_sr_iface_op_get_vad_energy_threshold_t)(esp_afe_sr_data_t *afe);
+
+/**
  * @brief Reset one function/module/algorithm.
  *
  * @param afe          The AFE_SR object to query
@@ -215,6 +253,10 @@ typedef struct {
     esp_afe_sr_iface_op_get_samp_rate_t get_samp_rate;
     esp_afe_sr_iface_op_set_wakenet_threshold_t set_wakenet_threshold;
     esp_afe_sr_iface_op_reset_wakenet_threshold_t reset_wakenet_threshold;
+    esp_afe_sr_iface_op_set_vadnet_threshold_t set_vadnet_threshold;
+    esp_afe_sr_iface_op_get_vadnet_threshold_t get_vadnet_threshold;
+    esp_afe_sr_iface_op_set_vad_energy_threshold_t set_vad_energy_threshold;
+    esp_afe_sr_iface_op_get_vad_energy_threshold_t get_vad_energy_threshold;
     esp_afe_sr_iface_op_disable_func_t disable_wakenet;
     esp_afe_sr_iface_op_enable_func_t enable_wakenet;
     esp_afe_sr_iface_op_disable_func_t disable_aec;
