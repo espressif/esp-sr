@@ -1,6 +1,13 @@
 # Change log for esp-sr
 
-# 2.5.4
+
+# 2.5.5
+- Fix nsnet3 memory bug
+- Reduce esp-sr bin size
+- Add more wakenet10 models
+- Update AFE interface
+
+# 2.5.4(yanked)
 - Add wn10_hiesp(en), wn10_alexa(en) and wn10_airisu
 - Add nsnet3
 
