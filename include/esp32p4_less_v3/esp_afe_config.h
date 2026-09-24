@@ -126,8 +126,8 @@ typedef struct {
     float vad_energy_threshold; // The minimum averaged frame energy in dBFS required to report speech. Speech is only
                                 // reported when the energy of the last vad_min_speech_ms reaches this threshold and the
                                 // vad model triggers as well. A higher value suppresses more low level noise, but quiet
-                                // speech may be missed. It is only applied when a vad model is used, and only when afe
-                                // is created, runtime switching is not supported.
+                                // speech may be missed. It is only applied when a vad model is used. After afe is
+                                // created, use set_vad_energy_threshold to change it at runtime.
 
     /********** WakeNet(Wake Word Engine) **********/
     bool wakenet_init;
