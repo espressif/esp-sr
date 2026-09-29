@@ -48,8 +48,9 @@ The following wake word models have been tested:
 |:----------|:---------|:----------|
 | Hi,乐鑫 | wn9_hilexin | wn10_hilexin |
 | Hi,ESP | wn9_hiesp | wn10_hiesp |
-| こんにちは ESP | wn9l_ja_konnichihaesp_tts3 | |
-| Bonjour ESP | wn9l_fr_bonjouresp_tts3 | |
+| こんにちは ESP | wn9l_ja_konnichihaesp_tts3 | wn10_ja_konnichihaesp |
+| Bonjour ESP | wn9l_fr_bonjouresp_tts3 | wn10_fr_bonjouresp |
+| Hallo ESP | | wn10_de_halloesp |
 | Hola ESP | | wn10_es_holaesp |
 | 你好小智 | wn9_nihaoxiaozhi_tts | wn10_nihaoxiaozhi |
 | 小爱同学 | wn9_xiaoaitongxue | wn10_xiaoaitongxue |
