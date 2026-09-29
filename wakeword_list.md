@@ -93,13 +93,16 @@ There are two ways to load a wake word model:
 | Hi,乐鑫 | `wn9s_hilexin` |
 | 你好小智 | `wn9s_nihaoxiaozhi` |
 | Alexa | `wn10_alexa` |
+| Hallo ESP | `wn10_de_halloesp` |
 | Hey,Buddy | `wn10_en_heybuddy` |
 | Hola ESP | `wn10_es_holaesp` |
+| Bonjour ESP | `wn10_fr_bonjouresp` |
 | Hey,Hermes | `wn10_heyhermes` |
 | Hey,Nova | `wn10_heynova` |
 | Hi,ESP | `wn10_hiesp` |
 | Hi,乐鑫 | `wn10_hilexin_int16` |
 | アイリス | `wn10_ja_airisu` |
+| こんにちは ESP | `wn10_ja_konnichihaesp` |
 | Mosaico | `wn10_mosaico` |
 | 你好小智 | `wn10_nihaoxiaozhi` |
 | 你好小智 | `wn10_nihaoxiaozhi_int16` |
@@ -107,4 +110,4 @@ There are two ways to load a wake word model:
 | 小爱同学 | `wn10_xiaoaitongxue` |
 | 小爱同学 | `wn10_xiaoaitongxue_int16` |
 
-Generated at: 2026-09-23T20:46:28+08:00
+Generated at: 2026-09-29T16:06:41+08:00
