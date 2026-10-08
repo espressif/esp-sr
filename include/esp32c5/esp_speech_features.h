@@ -23,7 +23,7 @@ void esp_mfcc_free(void *ptr);
 
 /**
  * @brief Initialize FFT table
- * @warning For ESP-PLATFORM, use esp-dsp fft
+ * @warning For ESP-PLATFORM, use dl_fft
  *          For Other platform, use kiss fft
  *
  * @param nfft  The input samples number
@@ -33,7 +33,7 @@ void *esp_fft_init(int nfft);
 
 /**
  * @brief Free FFT table
- * @warning For ESP-PLATFORM, use esp-dsp fft
+ * @warning For ESP-PLATFORM, use dl_fft
  *          For Other platform, use kiss fft
  *
  * @param fft_table  The fft table initialized by esp_fft_init
