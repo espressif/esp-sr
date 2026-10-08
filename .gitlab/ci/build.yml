@@ -117,7 +117,6 @@ build_esp32c5:
   parallel:
     matrix:
       - IMAGE:
-          - espressif/idf:release-v5.4
           - espressif/idf:release-v5.5
           - espressif/idf:release-v6.0
         EXAMPLES_PATH: "test_apps/esp32c5"
