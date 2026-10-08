@@ -25,7 +25,6 @@
 #include "esp_system.h"
 #include "esp_heap_caps.h"
 #include "sdkconfig.h"
-#define DL_SPIRAM_SUPPORT 1
 #endif
 
 #ifdef CONFIG_IDF_TARGET_ESP32S3

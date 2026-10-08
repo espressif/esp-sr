@@ -88,6 +88,41 @@ typedef int (*esp_vadn_iface_op_set_det_threshold_t)(model_iface_data_t *model, 
 typedef float (*esp_vadn_iface_op_get_det_threshold_t)(model_iface_data_t *model);
 
 /**
+ * @brief Set the energy threshold to suppress the speech triggered on
+ * low level audio
+ *
+ * The energy of every input frame is averaged over a window covering
+ * min_speech_ms, and speech is only reported once this average reaches the
+ * threshold while the model output triggers as well. The gate is skipped when
+ * the model is fed by the detect_mfcc function, because no waveform is
+ * available to measure.
+ *
+ * @param model The model object to query
+ * @param energy_threshold The averaged frame energy threshold in dBFS, the
+ * range of energy_threshold is -100~0
+ * @return 0: setting failed, 1: setting success
+ */
+typedef int (*esp_vadn_iface_op_set_energy_threshold_t)(model_iface_data_t *model, float energy_threshold);
+
+/**
+ * @brief Get the energy threshold used to suppress the speech triggered on
+ * low level audio
+ *
+ * @param model The model object to query
+ * @returns the averaged frame energy threshold in dBFS
+ */
+typedef float (*esp_vadn_iface_op_get_energy_threshold_t)(model_iface_data_t *model);
+
+/**
+ * @brief Get the averaged frame energy of one input channel
+ *
+ * @param model The model object to query
+ * @param channel Channel index, starting from zero
+ * @returns the averaged mean square energy in raw sample^2 units
+ */
+typedef float (*esp_vadn_iface_op_get_energy_t)(model_iface_data_t *model, int channel);
+
+/**
  * @brief Feed samples of an audio stream to the vad model and detect whether is
  * voice.
  *
@@ -127,6 +162,16 @@ typedef dl_convq_queue_t* (*esp_vadn_iface_op_get_mfcc_data_t)(model_iface_data_
 typedef int (*esp_vadn_iface_op_get_triggered_channel_t)(model_iface_data_t *model);
 
 /**
+ * @brief Get the current VAD state for one input channel.
+ *
+ * @param model   The model object to query
+ * @param channel Channel index, starting from zero
+ * @return VAD_SPEECH or VAD_SILENCE
+ */
+typedef vad_state_t (*esp_vadn_iface_op_get_channel_state_t)(
+    model_iface_data_t *model, int channel);
+
+/**
  * @brief Clean all states of model
  *
  * @param model The model object to query
@@ -157,6 +202,10 @@ typedef struct {
     esp_vadn_iface_op_get_mfcc_data_t get_mfcc_data;
     esp_vadn_iface_op_clean_t clean;
     esp_vadn_iface_op_destroy_t destroy;
+    esp_vadn_iface_op_get_channel_state_t get_channel_state;
+    esp_vadn_iface_op_set_energy_threshold_t set_energy_threshold;
+    esp_vadn_iface_op_get_energy_threshold_t get_energy_threshold;
+    esp_vadn_iface_op_get_energy_t get_energy;
 } esp_vadn_iface_t;
 
 #ifdef __cplusplus

@@ -53,26 +53,27 @@ def copy_models_from_sdkconfig_path(sdkconfig_path, target_path):
 
 
 def copy_wn10_model(model_path, target_path, target):
+    # p1/p2 are PIE builds. Every other target, including esp32c5, uses the C build (p0).
     pie_versions = {
         "esp32s3": "p1",
         "esp32p4": "p2",
         "esp32s31": "p2",
     }
-    if target not in pie_versions:
-        raise ValueError(f"Invalid target for WN10 model: {target}")
-
-    pie_version = pie_versions[target]
+    pie_version = pie_versions.get(target, "p0")
     selected_files = {
         f"wn10_data_{pie_version}": "wn10_data",
         f"_MODEL_INFO_{pie_version}": "_MODEL_INFO_",
     }
+    missing = [name for name in selected_files if not os.path.exists(os.path.join(model_path, name))]
+    if missing:
+        raise ValueError(f"WN10 model {model_path} has no {pie_version} build for {target}: {missing}")
 
     os.makedirs(target_path)
     for file_name in os.listdir(model_path):
         source = os.path.join(model_path, file_name)
         if file_name in selected_files:
             destination = os.path.join(target_path, selected_files[file_name])
-        elif file_name.endswith("_p1") or file_name.endswith("_p2"):
+        elif file_name.endswith(("_p0", "_p1", "_p2")):
             continue
         else:
             destination = os.path.join(target_path, file_name)

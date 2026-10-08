@@ -23,13 +23,12 @@ typedef enum
 //The probability of being wake words is increased with increasing mode, 
 //As a consequence also the false alarm rate goes up
 typedef enum {
-	DET_MODE_90 = 0,       // Normal
-	DET_MODE_95 = 1,       // Aggressive
-    DET_MODE_2CH_90 = 2,
-    DET_MODE_2CH_95 = 3,
-    DET_MODE_3CH_90 = 4,
-    DET_MODE_3CH_95 = 5,
-	DET_MODE_90_COPY_PARAMS = 6,       // Aggressive
+	DET_MODE_90 = 0,       // Normal, Load from flash, just for wakenet10
+	DET_MODE_95 = 1,       // Aggressive, Load from psram
+    DET_MODE_2CH_90 = 2,   // Normal, Load from flash, 2 channels, just for wakenet10
+    DET_MODE_2CH_95 = 3,   // Aggressive, Load from psram, 2 channels
+    DET_MODE_3CH_90 = 4,   // Normal, Load from flash, 3 channels, just for wakenet10
+    DET_MODE_3CH_95 = 5,   // Aggressive, Load from psram, 3 channels
 } det_mode_t;
 
 typedef struct {

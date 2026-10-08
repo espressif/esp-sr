@@ -35,6 +35,7 @@ typedef enum {
     AFE_TYPE_SR = 0, // Speech recognition scenarios, excluding nonlinear noise suppression
     AFE_TYPE_VC = 1, // Voice communication scenarios, 16KHz input, including nonlinear noise suppression
     AFE_TYPE_VC_8K = 2, // Voice communication scenarios, 8KHz input, note that the input data must be 8KHz
+    AFE_TYPE_FD = 3, // Full duplex scenarios, including nonlinear noise suppression
 } afe_type_t;
 
 typedef enum {
@@ -91,11 +92,17 @@ typedef struct {
 } afe_debug_hook_t;
 
 #define AFE_MAX_WAKEWORD_NUM 3
+
+// The averaged frame energy in dBFS required to report speech, see vad_energy_threshold
+#define AFE_VAD_ENERGY_THRESHOLD_DEFAULT (-60.0f)
+#define AFE_VAD_ENERGY_THRESHOLD_MIN (-100.0f)
+
 typedef struct {
     /********** AEC(Acoustic Echo Cancellation) **********/
     bool aec_init;         // Whether to init aec
     aec_mode_t aec_mode;   // The mode of aec, AEC_MODE_SR_LOW_COST or AEC_MODE_SR_HIGH_PERF
     int aec_filter_length; // The filter length of aec
+    aec_nlp_level_t aec_nlp_level;     // The nlp level of aec, which is used to control the echo suppression level. default: AEC_NLP_LEVEL_AGGR
 
     /********** SE(Speech Enhancement, microphone array processing) **********/
     bool se_init; // Whether to init se
@@ -116,6 +123,11 @@ typedef struct {
                             // If you find vad cache can not cover all speech, please increase this value.
     bool vad_mute_playback; // If true, the playback will be muted for vad detection. default: false
     bool vad_enable_channel_trigger; // If true, the vad will be used to choose the channel id. default: false
+    float vad_energy_threshold; // The minimum averaged frame energy in dBFS required to report speech. Speech is only
+                                // reported when the energy of the last vad_min_speech_ms reaches this threshold and the
+                                // vad model triggers as well. A higher value suppresses more low level noise, but quiet
+                                // speech may be missed. It is only applied when a vad model is used. After afe is
+                                // created, use set_vad_energy_threshold to change it at runtime.
 
     /********** WakeNet(Wake Word Engine) **********/
     bool wakenet_init;
