@@ -98,7 +98,7 @@ AFE API 使用
 .. code-block:: c
 
     // 获取句柄
-    esp_afe_sr_iface_t *afe_handle = esp_afe_handle_from_config(afe_config);
+    const esp_afe_sr_iface_t *afe_handle = esp_afe_handle_from_config(afe_config);
     // 创建实例
     esp_afe_sr_data_t *afe_data = afe_handle->create_from_config(afe_config);
 

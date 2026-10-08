@@ -36,7 +36,7 @@
 
    .. code-block:: c
 
-      esp_afe_sr_iface_t *afe_handle = esp_afe_handle_from_config(afe_config);
+      const esp_afe_sr_iface_t *afe_handle = esp_afe_handle_from_config(afe_config);
 
 .. note::
 
