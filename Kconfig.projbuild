@@ -156,6 +156,14 @@ menu "Load Multiple Wake Words (WakeNet9 or WakeNet10)"
     bool "Hallo ESP (wn10_de_halloesp)"
     default n
 
+    config SR_WN_WN10_PT_OLAESP
+    bool "Olá ESP (wn10_pt_olaesp)"
+    default n
+
+    config SR_WN_WN10_HEYPAMET
+    bool "Hey,Pamet (wn10_heypamet)"
+    default n
+
     config SR_WN_WN9L_JA_KONNICHIHAESP_TTS3
     bool "こんにちは ESP (wn9l_ja_konnichihaesp_tts3)"
     default n
