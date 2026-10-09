@@ -23,7 +23,14 @@ ops:
   - StreamingCache
 
 kernels:
-  # esp32p4
+  # c (esp32, esp32s2, esp32c3, esp32c5, esp32c6): p0 WakeNet, same tensor-wise
+  # shapes as esp32s3. c_align is PIE-only, so aligned and unaligned 1x1 share one kernel.
+  - dl_c_s16_conv2d_11cn
+  - dl_c_s16_depthwise_conv2d_hwc1
+  - dl_c_s16_tail_bias_linear
+  - dl_c_s16_tail_linear
+  - dl_c_w8a16_conv2d_11cn
+  # esp32p4 / esp32s31
   - dl_esp32p4_s16_conv2d_per_channel_11cn
   - dl_esp32p4_s16_conv2d_per_channel_11cn_bias
   - dl_esp32p4_s16_depthwise_conv2d_per_channel_hwc1_bias

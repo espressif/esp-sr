@@ -98,14 +98,6 @@ if(("${IDF_TARGET}" STREQUAL "esp32s3") OR ("${IDF_TARGET}" STREQUAL "esp32p4") 
         vadnet
         wakenet)
 
-    # esp32 / esp32s2 / esp32c3 / esp32c5 / esp32c6 still use esp-dsp FFT.
-    if("${IDF_TARGET}" STREQUAL "esp32" OR "${IDF_TARGET}" STREQUAL "esp32s2"
-            OR "${IDF_TARGET}" STREQUAL "esp32c3" OR "${IDF_TARGET}" STREQUAL "esp32c5"
-            OR "${IDF_TARGET}" STREQUAL "esp32c6")
-        idf_component_get_property(esp_dsp_lib espressif__esp-dsp COMPONENT_LIB)
-        list(APPEND sr_libs $<TARGET_FILE:${esp_dsp_lib}>)
-    endif()
-
     if("${IDF_TARGET}" STREQUAL "esp32")
         add_prebuilt_library(multinet2_ch "${CMAKE_CURRENT_SOURCE_DIR}/lib/${TARGET_LIB_PATH}/libmultinet2_ch.a" PRIV_REQUIRES ${COMPONENT_NAME})
         list(APPEND sr_libs multinet2_ch)

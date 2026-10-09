@@ -63,6 +63,10 @@ menu "Load Multiple Wake Words (WakeNet9s)"
     bool "Hi,乐鑫 (wn9s_hilexin)"
     default n
 
+    config SR_WN_WN10S_HILEXIN
+    bool "Hi,乐鑫 (wn10s_hilexin)"
+    default n
+
     config SR_WN_WN9S_HIESP
     bool "Hi,ESP (wn9s_hiesp)"
     default n
@@ -154,6 +158,14 @@ menu "Load Multiple Wake Words (WakeNet9 or WakeNet10)"
 
     config SR_WN_WN10_DE_HALLOESP
     bool "Hallo ESP (wn10_de_halloesp)"
+    default n
+
+    config SR_WN_WN10_PT_OLAESP
+    bool "Olá ESP (wn10_pt_olaesp)"
+    default n
+
+    config SR_WN_WN10_HEYPAMET
+    bool "Hey,Pamet (wn10_heypamet)"
     default n
 
     config SR_WN_WN9L_JA_KONNICHIHAESP_TTS3

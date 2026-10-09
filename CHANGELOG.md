@@ -1,5 +1,9 @@
 # Change log for esp-sr
 
+# 2.6.0
+- Support wakenet10s on ESP32C3, ESP32C5, ESP32C6
+- Add more wakenet10 models
+- Remove esp-dsp
 
 # 2.5.5
 - Fix nsnet3 memory bug

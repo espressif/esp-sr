@@ -21,6 +21,8 @@ These algorithms are provided in the form of a component, so they can be integra
 
 News
 ----
+- [2026/10/09]: Starting from ESP-SR v2.6.0, we support WakeNet10s, which can run on chips without PIE (SIMD) instructions, such as ESP32, ESP32-C3, ESP32-C5, and ESP32-C6.
+- [2026/9/30]: WakeNet10 now supports Chinese, English, Japanese, French, German, Spanish, and Portuguese. You're welcome to try it out and share your feedback with us.
 - [2026/08/28]: We added the [GSC beamforming algorithm](https://docs.espressif.com/projects/esp-sr/en/latest/esp32p4/gsc_beamforming/README.html) and updated the [DOA algorithm](https://docs.espressif.com/projects/esp-sr/en/latest/esp32p4/direction_of_arrival/README.html).
 - [2026/08/17]: We have released the new WakeNet10 model and optimized the TTS pipeline to improve the final model's generalization performance. WakeNet10 is currently available in w16a16 and w8a16(default) quantization by [esp-dl](https://github.com/espressif/esp-dl).
 - [2026/05/09]: Preliminary support for ESP32-S31 target.
@@ -46,12 +48,13 @@ The following wake word models have been tested:
 
 | Wake word | WakeNet9 | WakeNet10 |
 |:----------|:---------|:----------|
-| Hi,乐鑫 | wn9_hilexin | wn10_hilexin |
+| Hi,乐鑫 | wn9_hilexin | wn10_hilexin/wn10s_hilexin |
 | Hi,ESP | wn9_hiesp | wn10_hiesp |
 | こんにちは ESP | wn9l_ja_konnichihaesp_tts3 | wn10_ja_konnichihaesp |
 | Bonjour ESP | wn9l_fr_bonjouresp_tts3 | wn10_fr_bonjouresp |
 | Hallo ESP | | wn10_de_halloesp |
 | Hola ESP | | wn10_es_holaesp |
+| Olá ESP | | wn10_pt_olaesp |
 | 你好小智 | wn9_nihaoxiaozhi_tts | wn10_nihaoxiaozhi |
 | 小爱同学 | wn9_xiaoaitongxue | wn10_xiaoaitongxue |
 | Alexa | wn9_alexa | wn10_alexa |
