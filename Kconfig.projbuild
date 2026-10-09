@@ -63,6 +63,10 @@ menu "Load Multiple Wake Words (WakeNet9s)"
     bool "Hi,乐鑫 (wn9s_hilexin)"
     default n
 
+    config SR_WN_WN10S_HILEXIN
+    bool "Hi,乐鑫 (wn10s_hilexin)"
+    default n
+
     config SR_WN_WN9S_HIESP
     bool "Hi,ESP (wn9s_hiesp)"
     default n
