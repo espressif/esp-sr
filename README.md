@@ -52,6 +52,7 @@ The following wake word models have been tested:
 | Bonjour ESP | wn9l_fr_bonjouresp_tts3 | wn10_fr_bonjouresp |
 | Hallo ESP | | wn10_de_halloesp |
 | Hola ESP | | wn10_es_holaesp |
+| Olá ESP | | wn10_pt_olaesp |
 | 你好小智 | wn9_nihaoxiaozhi_tts | wn10_nihaoxiaozhi |
 | 小爱同学 | wn9_xiaoaitongxue | wn10_xiaoaitongxue |
 | Alexa | wn9_alexa | wn10_alexa |
