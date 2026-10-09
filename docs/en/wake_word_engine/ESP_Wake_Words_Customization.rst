@@ -3,6 +3,12 @@ Espressif Speech Wake-up Solution Customization Process
 
 :link_to_translation:`zh_CN:[中文]`
 
+.. important::
+
+    **Contact us:** For wake word customization and pricing, please email our sales team at `sales@espressif.com <mailto:sales@espressif.com>`_.
+
+    Espressif charges **only a one-time customization fee**. No license fee is charged based on the number of devices or the period of use.
+
 Wake Word Customization Process
 -------------------------------
 
@@ -12,21 +18,23 @@ Espressif provides users with the **wake word customization** :
 
     -  Espressif also plans to provide more wake words that are free for commercial use soon.
 
-#. Offline wake word customization can also be provided by Espressif:
+#. Offline wake word customization can also be provided by Espressif. Currently, three customization methods are available:
 
-    -  Training corpus provided by customer
+    #. **Customization with TTS samples only**
+
+        -  The wake word model is trained entirely on TTS (text-to-speech) samples. No real human recordings are required.
+
+    #. **Customization with Espressif crowdsourced recordings + TTS samples**
+
+        -  Espressif uses its audio crowdsourcing solution to record samples from about 500 speakers, and trains the model on these recordings together with TTS samples.
+        -  The time required to collect the recordings needs to be discussed separately. After the corpus is ready, it usually takes two to three weeks for Espressif to train and optimize the model.
+
+    #. **Customization with customer-provided corpus**
 
         -  Customer must provide at least 20,000 qualified corpus entries. See detailed requirements in Section :ref:`corpus-requirement` .
         -  It usually takes two to three weeks for Espressif to train and optimize the received corpus.
-        -  A fee will be charged for training and optimizing the corpus.
 
-    -  Training corpus provided by Espressif
-
-        -  Espressif provides all the corpus required for training.
-        -  The time required to collect corpus needs to be discussed separately. After the corpus is ready, it usually takes two to three weeks for Espressif to train and optimize the received corpus.
-        -  A fee will be charged for training and optimizing the corpus. A separate fee will be changed for collecting the corpus.
-
-    -  The actual fee and time for your customization depend on the **number of wake words you need** and the **scale of your mass production**. For details, please contact our `sales person <sales@espressif.com>`_ .
+    -  The fee differs for each method. Espressif charges **only a one-time customization fee**, and does not charge any license fee based on the number of devices or the period of use. For specific pricing, please email our sales team at `sales@espressif.com <mailto:sales@espressif.com>`_ to discuss and agree on the terms.
 
 #. About Espressif wake word engine WakeNet:
 
