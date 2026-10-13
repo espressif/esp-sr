@@ -19,6 +19,7 @@ ESP-SR 用户指南
     声学回声消除 (AEC) <acoustic_echo_cancellation/README>
     声源定向 (DOA) <direction_of_arrival/README>
     GSC 波束形成 <gsc_beamforming/README>
+    深度学习波束形成 <nn_beamforming/README>
     语音唤醒 WakeNet <wake_word_engine/index>
     VAD vadnet <vadnet/README>
     噪声抑制 NSNet <nsnet/README>
