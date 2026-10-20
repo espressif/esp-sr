@@ -438,9 +438,11 @@ srmodel_list_t *srmodel_sdcard_init(const char *base_path)
                 fp = fopen(info_file, "r");
                 if (fp != NULL) {
                     model_num++; // If _MODLE_INFO_ file exists, model_num ++
+                    printf("%s -> %s\n", sub_path, info_file);
+                    fclose(fp);
+                } else {
+                    printf("%s doesn't contain _MODEL_INFO_\n", sub_path);
                 }
-                printf("%s -> %s\n", sub_path, info_file);
-                fclose(fp);
                 free(sub_path);
                 free(info_file);
             }
@@ -481,8 +483,8 @@ srmodel_list_t *srmodel_sdcard_init(const char *base_path)
                     models->model_info[idx] = get_model_info(data, file_size);
                     free(data);
                     idx++;
+                    fclose(fp);
                 }
-                fclose(fp);
                 free(sub_path);
                 free(info_file);
             }
