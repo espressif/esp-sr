@@ -8,7 +8,7 @@ NSNet is a deep-learning-based noise suppression model for low-power embedded MC
 Overview
 --------
 
-NSNet currently offers two models: **for maximum AI noise-suppression performance, use nsnet2; for a balance between noise reduction and speech distortion, use nsnet3.**
+NSNet currently offers three models: **for maximum AI noise-suppression performance, use nsnet2; for a balance between noise reduction and speech distortion, use nsnet3; for the lowest CPU and internal-SRAM footprint on chips with a PIE coprocessor, use nsnet4.**
 
 ``nsnet2`` is a quantized neural noise suppression model with the following features:
 
@@ -27,9 +27,19 @@ NSNet currently offers two models: **for maximum AI noise-suppression performanc
 - Supported chips: ESP32-P4 and ESP32-S31 (both measured; the interface also builds for the ESP32-S3 target)
 - About 20% single-core CPU usage (measured on ESP32-P4 @ 400 MHz)
 
+``nsnet4`` is an int16-quantized noise suppression model (GTCRN architecture) with the following features:
+
+- Sample rate: 16 kHz, 16-bit PCM
+- Frame length: 512 samples (32 ms), frame shift: 256 samples (16 ms), same as nsnet3
+- ERB-based complex ratio mask (CRM): int16 fixed-point inference accelerated by the PIE coprocessor
+- Weights (about 194 KB) are loaded from the model partition, reside in PSRAM and are shared between instances; almost no internal SRAM is used
+- Single-channel processing only: there is no multi-channel shared-mask backend (``create_mc()`` / ``process_mc()`` are ``NULL``)
+- Supported chips: ESP32-P4 and ESP32-S31
+- About 16% single-core CPU usage (measured on ESP32-P4 @ 400 MHz)
+
 .. note::
 
-   Select the model via ``idf.py menuconfig`` -> ``ESP Speech Recognition`` -> ``Select noise suppression model`` -> ``Deep noise suppression v2 (nsnet2)`` or ``Deep noise suppression v3 (nsnet3)``.
+   Select the model via ``idf.py menuconfig`` -> ``ESP Speech Recognition`` -> ``Select noise suppression model`` -> ``Deep noise suppression v2 (nsnet2)``, ``Deep noise suppression v3 (nsnet3)`` or ``Deep noise suppression v4 (nsnet4)``.
 
 Use NSNet
 ---------
@@ -84,13 +94,18 @@ For multi-channel inputs (e.g., a microphone array), ``esp_nsn_iface_t`` provide
 Constraints and compatibility notes:
 
 - ``channel_num`` ranges from 1 to 8; ``ref_channel`` must be smaller than ``channel_num``.
-- ``create_mc()`` / ``process_mc()`` are appended at the end of ``esp_nsn_iface_t`` and are ``NULL`` for models that do not support multi-channel processing — check them before use (as done in the ``examples/nsnet`` application).
+- ``create_mc()`` / ``process_mc()`` are appended at the end of ``esp_nsn_iface_t`` and are ``NULL`` for models that do not support multi-channel processing — check them before use (as done in the ``examples/nsnet`` application). nsnet4 has no multi-channel backend; use the single-channel ``create()`` / ``process()`` (per channel if needed).
 - The single-channel ``create()`` is equivalent to ``create_mc(model_name, 1, 0)``; single-channel behavior is bit-exact with previous versions, and channel 0 of a multi-channel run is bit-identical to a single-channel run of the same input.
 
 nsnet3 Weight Loading
 ---------------------
 
 nsnet3 ships its weights as a private binary in the ``model`` partition (``nsnet3_data`` / ``nsnet3_index``, packaged and flashed when the ``SR_NSN_NSNET3`` Kconfig option is selected). The first instance's ``create()`` allocates one memory block and copies the weights into it tensor by tensor (with per-tensor name and length verification); the block is freed again when the last instance is destroyed, so a program that never uses nsnet3 pays nothing. The weights, streaming state and activation buffers all live in **PSRAM** (about 240 KB total) and use almost no internal SRAM. Targets without PSRAM automatically use internal SRAM.
+
+nsnet4 Weight Loading and Memory Placement
+------------------------------------------
+
+nsnet4 ships its int16 weights as a private binary in the ``model`` partition (packaged and flashed when the ``SR_NSN_NSNET4`` Kconfig option is selected, ESP32-P4/S31 only). On the first instance's ``create()`` the weight block (about 184 KB, including the activation LUTs derived from the model file) is parsed, verified record by record and placed in one shared heap block, reference-counted across instances and freed on the last ``destroy()``. Per-instance state (streaming history and the frame scratch area) adds about 170 KB per instance. By default everything lives in **PSRAM** (about 350 KB for a single instance) and the internal-SRAM footprint is effectively zero; enabling ``SR_NSN_NSNET4_WEIGHTS_INTERNAL`` moves the shared weight block into internal SRAM for about 15-20% faster inference in multi-instance pipelines such as nn_beamforming_v2.
 
 Examples
 --------
@@ -150,11 +165,17 @@ Measured on ESP32-P4 @ 400 MHz (OCT PSRAM @ 250 MHz, flash @ 80 MHz):
      - internal SRAM
      - 4018
      - 25.11
+   * - nsnet4 (16 ms)
+     - 1
+     - PSRAM
+     - 2623
+     - 16.39
 
 .. note::
 
    - With the shared-mask mode, each additional channel costs far less than an independent instance (about +1.7 CPU percentage points per channel for nsnet3).
    - nsnet3 scores a sample-by-sample SNR of 44.55 dB against the official golden streaming output.
+   - nsnet4 (int16, PIE-accelerated) runs a single instance in about 350 KB of PSRAM with effectively zero internal-SRAM usage; its streaming output is bit-exact between ESP32-P4 and ESP32-S31.
    - For general model resource occupancy, see :doc:`Resource Occupancy <../benchmark/README>`.
 
 Measured on ESP32-S31 @ 320 MHz, OCT PSRAM @ 250 MHz (nsnet3, 16 ms frame shift, flash @ 80 MHz):
@@ -188,8 +209,14 @@ Measured on ESP32-S31 @ 320 MHz, OCT PSRAM @ 250 MHz (nsnet3, 16 ms frame shift,
      - internal SRAM
      - 5387
      - 33.67
+   * - nsnet4 (16 ms)
+     - 1
+     - PSRAM
+     - 4370
+     - 27.32
 
 .. note::
 
    - nsnet3 also scores a sample-by-sample SNR of 44.55 dB on ESP32-S31 (against the official golden streaming output, identical to ESP32-P4).
    - At runtime nsnet3 occupies about 240 KB of PSRAM (about 100 KB of weights copied dynamically from the model partition on the first instance's ``create()`` and freed on the last ``destroy()``) and almost no internal SRAM; CPU usage follows the table above.
+   - nsnet4 on ESP32-S31 uses the same memory layout as on ESP32-P4 (about 350 KB PSRAM, almost no internal SRAM) and produces bit-exact output.

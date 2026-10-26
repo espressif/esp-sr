@@ -152,7 +152,34 @@ Two objective evaluations were performed with on-device streaming on ESP32-P4 @ 
      - 3.401
      - 3.928
 
-NN Beamforming improves the mean OVL by +0.196 over the baseline. The per-SNR gains are +0.238 at -5 dB, +0.190 at 0 dB, and +0.159 at +5 dB — the stronger the noise, the larger the advantage.
+Per-SNR breakdown:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 16 16 16 16 16
+
+   * - SNR
+     - raw OVL
+     - nsnet3 OVL
+     - NNBF OVL
+     - Delta
+   * - -5 dB
+     - 1.742
+     - 2.538
+     - 2.776
+     - +0.238
+   * - 0 dB
+     - 1.933
+     - 2.710
+     - 2.900
+     - +0.190
+   * - +5 dB
+     - 2.127
+     - 2.817
+     - 2.975
+     - +0.159
+
+NN Beamforming improves the mean OVL by +0.196 over the baseline — the stronger the noise, the larger the advantage.
 
 **Real-world recordings (15 samples)**
 
@@ -180,3 +207,113 @@ NN Beamforming improves the mean OVL by +0.196 over the baseline. The per-SNR ga
      - 4.026
 
 NN Beamforming improves the mean OVL by +0.129 over the baseline, with consistent gains at both incidence angles (+0.155 at 0°, +0.131 at 45°).
+
+NN Beamforming v2
+=================
+
+Overview
+--------
+
+NN Beamforming v2 combines neural-network noise suppression with multi-channel spatial filtering: a neural network first estimates the speech and noise components on the reference channel, and the multi-channel inputs are then adaptively fused into the single-channel enhanced speech output using the spatial information across channels.
+
+NN Beamforming v2 has the following features:
+
+- Sample rate: 16 kHz, 16-bit PCM; frame shift 256 samples (16 ms)
+- Multi-channel input (2–8 channels), single-channel output; planar (per-channel) input layout
+- End-to-end algorithmic latency: 16 ms
+- Model weights reside in PSRAM; runtime data prefers internal RAM and falls back to PSRAM automatically; zero malloc on the processing path
+- Supported chips: ESP32-P4 and ESP32-S31
+
+Usage
+-----
+
+The interface is defined in ``esp_nnbf2.h``. Before use, load the neural network model and obtain the model name via ``esp_srmodel_init()`` / ``esp_srmodel_filter()``, then:
+
+.. code-block:: c
+
+   #include "esp_nsn_models.h"
+   #include "model_path.h"
+   #include "esp_nnbf2.h"
+
+   srmodel_list_t *models = esp_srmodel_init("model");
+   char *model_name = esp_srmodel_filter(models, ESP_NSNET_PREFIX, NULL);
+
+   esp_nnbf2_config_t cfg;
+   esp_nnbf2_default_config(&cfg);   /* default: 4 channels, ref channel 0 */
+   esp_nnbf2_data_t *bf = esp_nnbf2_create(model_name, &cfg);
+
+   int chunk = esp_nnbf2_get_samp_chunksize(bf);  /* 256 */
+   int16_t *in[4] = {ch0, ch1, ch2, ch3};         /* each entry: chunk samples */
+   int16_t out[chunk];
+   esp_nnbf2_process(bf, in, out);
+
+   esp_nnbf2_destroy(bf);
+
+Common ``esp_nnbf2_config_t`` parameters:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 22 14 64
+
+   * - Parameter
+     - Default
+     - Description
+   * - ``channel_num``
+     - 4
+     - Number of input channels, 2–8 (``ESP_NNBF2_MAX_CHANNELS``)
+   * - ``ref_channel``
+     - 0
+     - Reference channel the target speech is anchored to
+
+.. note::
+
+   The remaining fields of the configuration structure are algorithm tuning parameters; keeping the default values is recommended.
+
+Examples
+--------
+
+The ``examples/nn_beamforming_v2`` application streams multi-channel audio between a host PC and the chip: the host sends 16 kHz 16-bit multi-channel PCM frame by frame, and the chip returns the single-channel processed output. On ESP32-P4 the console is USB_SERIAL_JTAG; on ESP32-S31 it is the UART port (custom baud rate 921600, pass ``--baud`` accordingly):
+
+.. code-block:: bash
+
+   cd examples/nn_beamforming_v2
+   idf.py build flash -p /dev/ttyACM0                          # ESP32-P4
+   python3 stream_host.py --port /dev/ttyACM0 --in test_4ch_in.wav --out out.wav
+
+   idf.py --preview -DIDF_TARGET=esp32s31 build flash -p /dev/ttyUSB2   # ESP32-S31
+   python3 stream_host.py --port /dev/ttyUSB2 --baud 921600 --in test_4ch_in.wav --out out.wav
+
+   # batch-process a directory of multi-channel WAVs
+   python3 stream_host.py --port <port> --batch <wav_dir> --out_dir <out_dir>
+
+When streaming finishes, the host script prints the average per-frame time, CPU and memory usage statistics.
+
+Resource Consumption
+--------------------
+
+Measured with 4-channel real-audio streaming (cafe scene, weights in PSRAM):
+
+.. list-table::
+   :header-rows: 1
+   :widths: 24 20 20 22 20
+
+   * - Chip
+     - Time per Frame (us / 16 ms)
+     - CPU Usage (%)
+     - Internal SRAM (B)
+     - PSRAM (B)
+   * - ESP32-P4 @ 400 MHz
+     - 7225
+     - 45.2
+     - 79784
+     - 520900
+   * - ESP32-S31 @ 320 MHz
+     - 10434
+     - 65.2
+     - 79784
+     - 520900
+
+.. note::
+
+   - The PSRAM footprint includes the model weights (about 194 KB, loaded when the first instance is created) and runtime buffers; the internal SRAM holds the per-frame runtime state data.
+   - Unit test (create/destroy loop) result: 0 B leak in 8-bit/internal/PSRAM heaps on both chips; all test cases pass.

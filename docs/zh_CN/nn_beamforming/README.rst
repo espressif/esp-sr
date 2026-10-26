@@ -152,7 +152,34 @@ NN Beamforming 具有以下特点：
      - 3.401
      - 3.928
 
-NN Beamforming 平均 OVL 较基线提升 +0.196；分信噪比提升为 -5 dB 时 +0.238、0 dB 时 +0.190、+5 dB 时 +0.159，噪声越强优势越明显。
+分 SNR 明细：
+
+.. list-table::
+   :header-rows: 1
+   :widths: 16 16 16 16 16
+
+   * - SNR
+     - raw OVL
+     - nsnet3 OVL
+     - NNBF OVL
+     - 差值
+   * - -5 dB
+     - 1.742
+     - 2.538
+     - 2.776
+     - +0.238
+   * - 0 dB
+     - 1.933
+     - 2.710
+     - 2.900
+     - +0.190
+   * - +5 dB
+     - 2.127
+     - 2.817
+     - 2.975
+     - +0.159
+
+NN Beamforming 平均 OVL 较基线提升 +0.196，噪声越强优势越明显。
 
 **真实录音（15 组样本）**
 
@@ -180,3 +207,113 @@ NN Beamforming 平均 OVL 较基线提升 +0.196；分信噪比提升为 -5 dB �
      - 4.026
 
 NN Beamforming 平均 OVL 较基线提升 +0.129，且在 0° 与 45° 两个入射角度均稳定提升（+0.155 / +0.131）。
+
+NN Beamforming v2
+=================
+
+概述
+----
+
+NN Beamforming v2 将神经网络降噪与多通道空间滤波相结合：先由神经网络估计参考通道中的语音与噪声成分，再利用各通道间的空间信息将多路输入自适应融合，输出单通道增强语音。
+
+NN Beamforming v2 具有以下特点：
+
+- 采样率：16 kHz，16-bit PCM；帧移 256 个采样点（16 ms）
+- 多通道输入（2~8 通道），单通道输出；输入为按通道平面排布（planar）
+- 端到端算法延迟：16 ms
+- 模型权重驻留 PSRAM；运行时数据优先使用内部 RAM，不足时自动回退 PSRAM；处理路径零 malloc
+- 支持芯片：ESP32-P4 和 ESP32-S31
+
+使用方法
+--------
+
+接口定义在 ``esp_nnbf2.h`` 中。使用前先通过 ``esp_srmodel_init()`` / ``esp_srmodel_filter()`` 加载神经网络模型并获取模型名，然后：
+
+.. code-block:: c
+
+   #include "esp_nsn_models.h"
+   #include "model_path.h"
+   #include "esp_nnbf2.h"
+
+   srmodel_list_t *models = esp_srmodel_init("model");
+   char *model_name = esp_srmodel_filter(models, ESP_NSNET_PREFIX, NULL);
+
+   esp_nnbf2_config_t cfg;
+   esp_nnbf2_default_config(&cfg);   /* 默认：4 通道，参考通道 0 */
+   esp_nnbf2_data_t *bf = esp_nnbf2_create(model_name, &cfg);
+
+   int chunk = esp_nnbf2_get_samp_chunksize(bf);  /* 256 */
+   int16_t *in[4] = {ch0, ch1, ch2, ch3};         /* 每个指针指向 chunk 个采样点 */
+   int16_t out[chunk];
+   esp_nnbf2_process(bf, in, out);
+
+   esp_nnbf2_destroy(bf);
+
+``esp_nnbf2_config_t`` 常用参数：
+
+.. list-table::
+   :header-rows: 1
+   :widths: 22 14 64
+
+   * - 参数
+     - 默认值
+     - 说明
+   * - ``channel_num``
+     - 4
+     - 输入通道数，2~8（``ESP_NNBF2_MAX_CHANNELS``）
+   * - ``ref_channel``
+     - 0
+     - 目标语音锚定的参考通道
+
+.. note::
+
+   配置结构体中的其余参数为算法调优参数，建议使用默认值。
+
+示例
+----
+
+``examples/nn_beamforming_v2`` 应用在 PC 主机与芯片之间流式传输多通道音频：主机逐帧下发 16 kHz 16-bit 多通道 PCM，板端处理后回传单通道结果。ESP32-P4 的控制台为 USB_SERIAL_JTAG；ESP32-S31 为 UART 口（自定义波特率 921600，请相应传入 ``--baud``）：
+
+.. code-block:: bash
+
+   cd examples/nn_beamforming_v2
+   idf.py build flash -p /dev/ttyACM0                          # ESP32-P4
+   python3 stream_host.py --port /dev/ttyACM0 --in test_4ch_in.wav --out out.wav
+
+   idf.py --preview -DIDF_TARGET=esp32s31 build flash -p /dev/ttyUSB2   # ESP32-S31
+   python3 stream_host.py --port /dev/ttyUSB2 --baud 921600 --in test_4ch_in.wav --out out.wav
+
+   # 批处理一个目录下的多通道 WAV
+   python3 stream_host.py --port <port> --batch <wav_dir> --out_dir <out_dir>
+
+流式结束后，主机脚本会打印每帧平均耗时、CPU 与内存占用等统计信息。
+
+资源消耗
+--------
+
+4 通道真实音频流式实测（cafe 场景，权重位于 PSRAM）：
+
+.. list-table::
+   :header-rows: 1
+   :widths: 24 20 20 22 20
+
+   * - 芯片
+     - 每帧耗时 (us / 16 ms)
+     - CPU 占用 (%)
+     - 内部 SRAM (B)
+     - PSRAM (B)
+   * - ESP32-P4 @ 400 MHz
+     - 7225
+     - 45.2
+     - 79784
+     - 520900
+   * - ESP32-S31 @ 320 MHz
+     - 10434
+     - 65.2
+     - 79784
+     - 520900
+
+.. note::
+
+   - PSRAM 占用包含模型权重（约 194 KB，于首个实例创建时加载）与运行时缓冲；内部 SRAM 为每帧运行状态数据。
+   - 单元测试（create/destroy 循环）结果：两款芯片 8-bit/internal/PSRAM 三个堆均为 0 B 泄漏，全部测试用例通过。
