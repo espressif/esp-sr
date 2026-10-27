@@ -112,6 +112,22 @@ if(("${IDF_TARGET}" STREQUAL "esp32s3") OR ("${IDF_TARGET}" STREQUAL "esp32p4") 
         list(APPEND sr_libs nsnet3)
     endif()
 
+    # libnsnet4.a only exists on targets whose libnsnet.a references esp_nsnet4
+    # (esp32p4* / esp32s31).
+    set(nsnet4_lib_path "${CMAKE_CURRENT_SOURCE_DIR}/lib/${TARGET_LIB_PATH}/libnsnet4.a")
+    if(EXISTS "${nsnet4_lib_path}")
+        add_prebuilt_library(nsnet4 "${nsnet4_lib_path}" PRIV_REQUIRES ${COMPONENT_NAME})
+        list(APPEND sr_libs nsnet4)
+    endif()
+
+    # libnn_beamforming_v2.a (GTCRN-MVDR pipeline) ships with the same targets
+    # as nsnet4 (esp32p4* / esp32s31).
+    set(nn_beamforming_v2_lib_path "${CMAKE_CURRENT_SOURCE_DIR}/lib/${TARGET_LIB_PATH}/libnn_beamforming_v2.a")
+    if(EXISTS "${nn_beamforming_v2_lib_path}")
+        add_prebuilt_library(nn_beamforming_v2 "${nn_beamforming_v2_lib_path}" PRIV_REQUIRES ${COMPONENT_NAME})
+        list(APPEND sr_libs nn_beamforming_v2)
+    endif()
+
     target_link_libraries(${COMPONENT_TARGET} "-Wl,--start-group"
         ${sr_libs}
         "-Wl,--end-group")
