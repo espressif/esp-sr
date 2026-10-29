@@ -1,5 +1,10 @@
 # Change log for esp-sr
 
+# 2.6.1
+- Fix missing kernel for wn10_hiesp
+- Add more wakenet10 models
+
+
 # 2.6.0
 - Support wakenet10s on ESP32C3, ESP32C5, ESP32C6
 - Add more wakenet10 models

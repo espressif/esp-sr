@@ -102,14 +102,17 @@ There are two ways to load a wake word model:
 | Hey,Pamet | `wn10_heypamet` |
 | Hi,ESP | `wn10_hiesp` |
 | Hi,乐鑫 | `wn10_hilexin_int16` |
+| Hi/Hey Muse | `wn10_himuse` |
 | アイリス | `wn10_ja_airisu` |
 | こんにちは ESP | `wn10_ja_konnichihaesp` |
 | Mosaico | `wn10_mosaico` |
 | 你好小智 | `wn10_nihaoxiaozhi` |
 | 你好小智 | `wn10_nihaoxiaozhi_int16` |
 | Olá ESP | `wn10_pt_olaesp` |
+| 双儿 | `wn10_shuang1er2` |
 | 涂涂你好 | `wn10_tu2tu2ni3hao3` |
 | 小爱同学 | `wn10_xiaoaitongxue` |
 | 小爱同学 | `wn10_xiaoaitongxue_int16` |
+| hai1le4xin1 | `wn10s_hilexin` |
 
-Generated at: 2026-10-08T17:04:46+08:00
+Generated at: 2026-10-29T11:26:35+08:00

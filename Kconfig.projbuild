@@ -176,6 +176,14 @@ menu "Load Multiple Wake Words (WakeNet9 or WakeNet10)"
     bool "Hey,Pamet (wn10_heypamet)"
     default n
 
+    config SR_WN_WN10_SHUANG1ER2
+    bool "双儿 (wn10_shuang1er2)"
+    default n
+
+    config SR_WN_WN10_HIMUSE
+    bool "Hi/Hey Muse (wn10_himuse)"
+    default n
+
     config SR_WN_WN9L_JA_KONNICHIHAESP_TTS3
     bool "こんにちは ESP (wn9l_ja_konnichihaesp_tts3)"
     default n
