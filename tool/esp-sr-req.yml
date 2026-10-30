@@ -36,9 +36,11 @@ kernels:
   - dl_esp32p4_s16_depthwise_conv2d_per_channel_hwc1_bias
   - dl_esp32p4_s16_unaligned_conv2d_per_channel_11cn
   - dl_esp32p4_w8a16_conv2d_per_channel_11cn_bias
+  - dl_esp32p4_w8a16_conv2d_per_channel_11cn
   # esp32s3
   - dl_tie728_s16_conv2d_11cn
   - dl_tie728_s16_conv2d_11cn_bias
   - dl_tie728_s16_depthwise_conv2d_hwc1_bias
   - dl_tie728_s16_unaligned_conv2d_11cn
   - dl_tie728_w8a16_conv2d_11cn_bias
+  - dl_tie728_w8a16_conv2d_11cn
