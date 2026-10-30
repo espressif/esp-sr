@@ -178,6 +178,8 @@ def copy_nsnet_from_sdkconfig(model_path, sdkconfig_path, target_path):
         models.append('nsnet2')
     if "CONFIG_SR_NSN_NSNET3" in models_string:
         models.append('nsnet3')
+    if "CONFIG_SR_NSN_NSNET4" in models_string:
+        models.append('nsnet4')
 
     for item in models:
         shutil.copytree(model_path + '/nsnet_model/' + item, target_path+'/'+item)

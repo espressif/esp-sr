@@ -8,7 +8,7 @@ NSNet 是一个基于深度学习的噪声抑制模型，面向低功耗嵌入�
 概述
 ----
 
-NSNet 目前提供两个模型：**追求极致的人工智能语音降噪效果建议使用 nsnet2，降噪与语音失真达到平衡建议使用 nsnet3。**
+NSNet 目前提供三个模型：**追求极致的人工智能语音降噪效果建议使用 nsnet2，降噪与语音失真达到平衡建议使用 nsnet3，在带 PIE 协处理器的芯片上追求最低 CPU 与内部 SRAM 占用建议使用 nsnet4。**
 
 ``nsnet2`` 是一个量化后的神经网络降噪模型，具有以下特点：
 
@@ -27,9 +27,19 @@ NSNet 目前提供两个模型：**追求极致的人工智能语音降噪效果
 - 支持芯片：ESP32-P4 和 ESP32-S31（均已实测；接口同样面向 ESP32-S3 目标编译）
 - 单核 CPU 占用约 20%（ESP32-P4 @ 400 MHz 实测）
 
+``nsnet4`` 是一个 int16 量化的降噪模型（GTCRN 架构），具有以下特点：
+
+- 采样率：16 kHz，16-bit PCM
+- 帧长：512 个采样点（32 ms），帧移：256 个采样点（16 ms），与 nsnet3 相同
+- 基于 ERB 的复数比掩码（CRM）：int16 定点推理，由 PIE 协处理器加速
+- 权重（约 194 KB）从 model 分区加载，驻留 PSRAM 并在实例间共享；几乎不占用内部 SRAM
+- 仅支持单通道处理：无多通道共享掩码后端（``create_mc()`` / ``process_mc()`` 为 ``NULL``）
+- 支持芯片：ESP32-P4 和 ESP32-S31
+- 单核 CPU 占用约 16%（ESP32-P4 @ 400 MHz 实测）
+
 .. note::
 
-   通过 ``idf.py menuconfig`` -> ``ESP Speech Recognition`` -> ``Select noise suppression model`` -> ``Deep noise suppression v2 (nsnet2)`` 或 ``Deep noise suppression v3 (nsnet3)`` 选择模型。
+   通过 ``idf.py menuconfig`` -> ``ESP Speech Recognition`` -> ``Select noise suppression model`` -> ``Deep noise suppression v2 (nsnet2)``、``Deep noise suppression v3 (nsnet3)`` 或 ``Deep noise suppression v4 (nsnet4)`` 选择模型。
 
 使用 NSNet
 ----------
@@ -84,13 +94,18 @@ NSNet 目前提供两个模型：**追求极致的人工智能语音降噪效果
 约束与兼容性说明：
 
 - ``channel_num`` 取值范围为 1 至 8；``ref_channel`` 必须小于 ``channel_num``。
-- ``create_mc()`` / ``process_mc()`` 追加在 ``esp_nsn_iface_t`` 末尾，不支持多通道处理的模型中这两个指针为 ``NULL``，使用前请先检查（``examples/nsnet`` 应用中即是如此）。
+- ``create_mc()`` / ``process_mc()`` 追加在 ``esp_nsn_iface_t`` 末尾，不支持多通道处理的模型中这两个指针为 ``NULL``，使用前请先检查（``examples/nsnet`` 应用中即是如此）。nsnet4 无多通道后端，请使用单通道 ``create()`` / ``process()`` （如有需要可逐通道调用）。
 - 单通道 ``create()`` 等价于 ``create_mc(model_name, 1, 0)``；单通道行为与之前版本保持 bit 级一致，多通道运行的通道 0 输出与相同输入的单通道运行结果 bit 级一致。
 
 nsnet3 权重加载
 ---------------
 
 nsnet3 的权重以私有二进制形式存放在 ``model`` 分区（``nsnet3_data`` / ``nsnet3_index``，由 Kconfig 选项 ``SR_NSN_NSNET3`` 触发打包烧录）。第一个实例 ``create()`` 时动态分配一整块内存并将权重逐张量拷入（拷贝时按名字与长度逐条校验），最后一个实例 ``destroy()`` 后该块被释放——从不使用 nsnet3 的程序不占用这部分内存。权重、流式状态与激活缓冲全部位于 PSRAM（约 240 KB），几乎不占用内部 SRAM；无 PSRAM 的目标自动使用内部 SRAM。
+
+nsnet4 权重加载与内存放置
+-------------------------
+
+nsnet4 的 int16 权重以私有二进制形式存放在 ``model`` 分区（由 Kconfig 选项 ``SR_NSN_NSNET4`` 触发打包烧录，仅 ESP32-P4/S31）。第一个实例 ``create()`` 时解析权重块（约 184 KB，含由模型文件导出的激活查找表），逐条记录校验后放入一个共享堆块，跨实例引用计数，最后一个实例 ``destroy()`` 后释放。每实例状态（流式历史与帧工作区）另需约 170 KB。默认全部位于 PSRAM（单实例约 350 KB），内部 SRAM 占用几乎为零；开启 ``SR_NSN_NSNET4_WEIGHTS_INTERNAL`` 可把共享权重块移入内部 SRAM，在 nn_beamforming_v2 这类多实例管线中推理可提速约 15-20%。
 
 示例
 ----
@@ -150,11 +165,17 @@ nsnet3 的权重以私有二进制形式存放在 ``model`` 分区（``nsnet3_da
      - 内部 SRAM
      - 4018
      - 25.11
+   * - nsnet4（16 ms）
+     - 1
+     - PSRAM
+     - 2623
+     - 16.39
 
 .. note::
 
    - 采用共享掩码模式时，每增加一路通道的开销远小于运行一个独立实例（nsnet3 每通道约 +1.7 个百分点 CPU）。
    - nsnet3 对官方金标准音频的逐样本信噪比为 44.55 dB（与离线参考流式输出比对）。
+   - nsnet4（int16，PIE 加速）单实例运行占用约 350 KB PSRAM，内部 SRAM 占用几乎为零；其流式输出在 ESP32-P4 与 ESP32-S31 之间逐位一致。
    - 模型的一般资源占用情况参见 :doc:`资源占用 <../benchmark/README>`。
 
 在 ESP32-S31 @ 320 MHz、OCT PSRAM @ 250 MHz 上实测（nsnet3，16 ms 帧移，flash @ 80 MHz）：
@@ -188,9 +209,15 @@ nsnet3 的权重以私有二进制形式存放在 ``model`` 分区（``nsnet3_da
      - 内部 SRAM
      - 5387
      - 33.67
+   * - nsnet4（16 ms）
+     - 1
+     - PSRAM
+     - 4370
+     - 27.32
 
 .. note::
 
    - nsnet3 在 ESP32-S31 上的逐样本信噪比同样为 44.55 dB（与离线参考流式输出比对，与 ESP32-P4 一致）。
    - nsnet3 运行时占用 PSRAM 约 240 KB（权重约 100 KB 于第一个实例 ``create()`` 时从 model 分区动态拷入，最后一个实例 ``destroy()`` 后释放）、内部 SRAM 几乎为 0，CPU 占用如上表。
+   - nsnet4 在 ESP32-S31 上的内存布局与 ESP32-P4 相同（约 350 KB PSRAM，内部 SRAM 几乎为 0），输出逐位一致。
 
