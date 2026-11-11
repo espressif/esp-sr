@@ -184,6 +184,18 @@ menu "Load Multiple Wake Words (WakeNet9 or WakeNet10)"
     bool "Hi/Hey Muse (wn10_himuse)"
     default n
 
+    config SR_WN_WN10_DEEPSEEK
+    bool "DeepSeek (wn10_deepseek)"
+    default n
+
+    config SR_WN_WN10_DOU4BAO1DOU4BAO1
+    bool "豆包豆包 (wn10_dou4bao1dou4bao1)"
+    default n
+
+    config SR_WN_WN10_SOPHIA
+    bool "Sophia (wn10_sophia)"
+    default n
+
     config SR_WN_WN9L_JA_KONNICHIHAESP_TTS3
     bool "こんにちは ESP (wn9l_ja_konnichihaesp_tts3)"
     default n
