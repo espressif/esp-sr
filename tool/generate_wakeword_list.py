@@ -19,6 +19,9 @@ MODEL_INFO_PATTERN = re.compile(
 
 WAKE_WORD_ALIASES = {
     "alexa": "Alexa",
+    "deepseek": "DeepSeek",
+    "dou4bao1dou4bao1": "豆包豆包",
+    "sophia": "Sophia",
     "Bonjourespfr": "Bonjour ESP",
     "halloespde": "Hallo ESP",
     "hey buddy": "Hey,Buddy",
