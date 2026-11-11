@@ -4,4 +4,4 @@ dependencies:
     version: '>=5.0'
   # libesp_gsc_doa.a is built against dl_fft 0.6.0
   espressif/dl_fft:
-    version: '==0.6.0'
+    version: '>=0.6.0'
